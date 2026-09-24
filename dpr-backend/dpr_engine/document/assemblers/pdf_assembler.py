@@ -1,0 +1,34 @@
+import os
+from typing import Dict, Any
+from playwright.async_api import async_playwright
+
+class PDFAssembler:
+    """
+    Renders standalone HTML into production A4 PDF document using Chromium browser.
+    """
+
+    @classmethod
+    async def assemble_pdf_from_html(cls, html_content: str, output_filepath: str) -> Dict[str, Any]:
+        os.makedirs(os.path.dirname(output_filepath), exist_ok=True)
+
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(
+                headless=True,
+                args=["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"]
+            )
+            page = await browser.new_page()
+
+            try:
+                await page.set_content(html_content, wait_until="networkidle")
+                pdf_bytes = await page.pdf(
+                    format="A4",
+                    print_background=True,
+                    margin={"top": "0.58in", "bottom": "0.58in", "left": "0.58in", "right": "0.58in"}
+                )
+                with open(output_filepath, "wb") as f:
+                    f.write(pdf_bytes)
+            finally:
+                await browser.close()
+
+        file_size = os.path.getsize(output_filepath)
+        return {"output_filepath": output_filepath, "file_size_bytes": file_size}

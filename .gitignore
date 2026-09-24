@@ -1,0 +1,43 @@
+# Python / Virtual Environment
+.venv/
+venv/
+ENV/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Node.js / Next.js
+node_modules/
+dpr-frontend/node_modules/
+.next/
+dpr-frontend/.next/
+out/
+build/
+dist/
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.production
+*.env
+
+# SQLite & Uploads / Generated Temp Files
+*.db
+*.sqlite
+*.sqlite3
+dpr-backend/uploads/*.pdf
+dpr-backend/uploads/*.html
+dpr-backend/uploads/visual_cards/
+dpr-backend/uploads/charts/
+dpr-backend/uploads/documents/
+scratch/
+
+# IDE & OS Files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
