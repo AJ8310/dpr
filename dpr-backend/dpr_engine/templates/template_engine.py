@@ -74,18 +74,36 @@ class DPRTemplateCompositionEngine:
         def resolve_to_b64(path_val):
             if not path_val:
                 return None
-            p_str = str(path_val)
-            if p_str.startswith("data:image") or p_str.startswith("http"):
+            p_str = str(path_val).strip()
+            if not p_str:
+                return None
+            if p_str.startswith("data:image"):
                 return p_str
-            # Check relative path in upload_dir
-            if not os.path.isabs(p_str):
-                abs_u = os.path.join(upload_dir, os.path.basename(p_str))
-                if os.path.exists(abs_u):
-                    p_str = abs_u
+
+            clean_name = os.path.basename(p_str.split("?")[0])
+            abs_u = os.path.join(upload_dir, clean_name)
+            if os.path.exists(abs_u) and os.path.isfile(abs_u):
+                ext = os.path.splitext(abs_u)[1].lower().replace(".", "")
+                mime = "jpeg" if ext in ["jpg", "jpeg"] else "png"
+                return cls._file_to_base64_uri(abs_u, f"image/{mime}")
+
             if os.path.exists(p_str) and os.path.isfile(p_str):
                 ext = os.path.splitext(p_str)[1].lower().replace(".", "")
                 mime = "jpeg" if ext in ["jpg", "jpeg"] else "png"
                 return cls._file_to_base64_uri(p_str, f"image/{mime}")
+
+            if p_str.startswith("http://") or p_str.startswith("https://"):
+                try:
+                    import urllib.request
+                    req = urllib.request.Request(p_str, headers={'User-Agent': 'Mozilla/5.0'})
+                    with urllib.request.urlopen(req, timeout=5) as resp:
+                        ctype = resp.headers.get('Content-Type', 'image/png')
+                        b64 = base64.b64encode(resp.read()).decode("utf-8")
+                        return f"data:{ctype};base64,{b64}"
+                except Exception as e:
+                    print(f"Error downloading remote logo {p_str}: {e}")
+                    return p_str
+
             return None
 
         # Resolve logo: prioritize user uploaded logo over default logo

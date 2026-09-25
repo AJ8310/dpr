@@ -180,22 +180,26 @@ class CalculationService:
         # Load User Uploaded Logo or Fallback to Default Organization Logo
         import os
         import base64
-        user_logo_val = data.get("logo_path") or data.get("logo") or data.get("logo_url") or data.get("user_logo")
+        import urllib.request
+
+        user_logo_val = data.get("logo_path") or data.get("logo") or data.get("logo_url") or data.get("user_logo") or data.get("company_logo")
         logo_b64_uri = None
 
         if user_logo_val:
-            user_logo_str = str(user_logo_val)
-            if user_logo_str.startswith("data:image") or user_logo_str.startswith("http"):
+            user_logo_str = str(user_logo_val).strip()
+            if user_logo_str.startswith("data:image"):
                 logo_b64_uri = user_logo_str
             else:
+                clean_filename = os.path.basename(user_logo_str.split("?")[0])
+                uploads_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "uploads"))
                 possible_paths = [
+                    os.path.join(uploads_dir, clean_filename),
                     user_logo_str,
                     os.path.abspath(user_logo_str),
-                    os.path.join(os.path.dirname(__file__), "..", "uploads", os.path.basename(user_logo_str)),
                     os.path.join(os.path.dirname(__file__), "..", user_logo_str)
                 ]
                 for p_path in possible_paths:
-                    if os.path.exists(p_path) and os.path.isfile(p_path):
+                    if p_path and os.path.exists(p_path) and os.path.isfile(p_path):
                         try:
                             ext = os.path.splitext(p_path)[1].lower().replace(".", "")
                             mime = "jpeg" if ext in ["jpg", "jpeg"] else ("png" if ext == "png" else "png")
@@ -205,6 +209,16 @@ class CalculationService:
                                 break
                         except Exception as e:
                             print("Error reading user logo file:", e)
+
+                if not logo_b64_uri and (user_logo_str.startswith("http://") or user_logo_str.startswith("https://")):
+                    try:
+                        req = urllib.request.Request(user_logo_str, headers={'User-Agent': 'Mozilla/5.0'})
+                        with urllib.request.urlopen(req, timeout=5) as resp:
+                            ctype = resp.headers.get('Content-Type', 'image/png')
+                            b64 = base64.b64encode(resp.read()).decode("utf-8")
+                            logo_b64_uri = f"data:{ctype};base64,{b64}"
+                    except Exception as e:
+                        print("Error fetching remote logo URL:", e)
 
         if not logo_b64_uri:
             default_logo_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "templates", "assets", "vkf_official_logo.png"))
