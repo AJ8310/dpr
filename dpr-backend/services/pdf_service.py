@@ -12,7 +12,7 @@ def _generate_pdf_sync(html_content: str, output_path: str) -> str:
             args=["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"]
         )
         page = browser.new_page()
-        page.set_content(html_content, wait_until="networkidle")
+        page.set_content(html_content, wait_until="load", timeout=15000)
         page.pdf(
             path=output_path,
             format="A4",
@@ -57,7 +57,7 @@ class PDFService:
                     args=["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"]
                 )
                 page = await browser.new_page(viewport={"width": 1280, "height": 1024})
-                await page.set_content(html_content, wait_until="networkidle")
+                await page.set_content(html_content, wait_until="load", timeout=15000)
                 await page.pdf(
                     path=output_path,
                     format="A4",

@@ -19,7 +19,7 @@ class PDFAssembler:
             page = await browser.new_page()
 
             try:
-                await page.set_content(html_content, wait_until="networkidle")
+                await page.set_content(html_content, wait_until="load", timeout=15000)
                 pdf_bytes = await page.pdf(
                     format="A4",
                     print_background=True,
