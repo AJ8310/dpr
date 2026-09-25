@@ -12,25 +12,31 @@
         
         @page {
             size: A4 portrait;
-            margin: 0.60in;
+            margin: 0.55in;
         }
         body {
             font-family: 'Times New Roman', Times, serif;
             line-height: 1.5;
-            padding: 0;
+            padding: 0.20in 0.25in;
             font-size: 11pt;
             color: #1a1a1a;
             position: relative;
             background: white;
         }
+
+        p {
+            orphans: 3;
+            widows: 3;
+            margin-bottom: 0.75rem;
+        }
         
         /* PROFESSIONAL PAGE BORDER */
         .pdf-page-border-overlay {
             position: fixed;
-            top: -0.25in;
-            left: -0.25in;
-            right: -0.25in;
-            bottom: -0.25in;
+            top: -0.22in;
+            left: -0.22in;
+            right: -0.22in;
+            bottom: -0.22in;
             border: 2.5px solid #0F172A;
             outline: 1.5px solid #1E3A8A;
             outline-offset: -5px;
