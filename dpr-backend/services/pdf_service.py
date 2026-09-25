@@ -1,25 +1,43 @@
 import os
 import asyncio
+import gc
 from typing import Dict, Any, Optional
 from dpr_engine.data_model import DPRDocumentModel
 from dpr_engine.templates.template_engine import DPRTemplateCompositionEngine
 
+CHROMIUM_LOW_MEM_FLAGS = [
+    "--no-sandbox",
+    "--disable-setuid-sandbox",
+    "--disable-dev-shm-usage",
+    "--disable-gpu",
+    "--no-zygote",
+    "--single-process",
+    "--disable-extensions",
+    "--disable-background-networking",
+    "--disable-default-apps",
+    "--disable-sync",
+    "--no-first-run"
+]
+
 def _generate_pdf_sync(html_content: str, output_path: str) -> str:
     from playwright.sync_api import sync_playwright
-    with sync_playwright() as p:
-        browser = p.chromium.launch(
-            headless=True,
-            args=["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"]
-        )
-        page = browser.new_page()
-        page.set_content(html_content, wait_until="load", timeout=15000)
-        page.pdf(
-            path=output_path,
-            format="A4",
-            print_background=True,
-            margin={"top": "0in", "right": "0in", "bottom": "0in", "left": "0in"}
-        )
-        browser.close()
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(
+                headless=True,
+                args=CHROMIUM_LOW_MEM_FLAGS
+            )
+            page = browser.new_page()
+            page.set_content(html_content, wait_until="load", timeout=15000)
+            page.pdf(
+                path=output_path,
+                format="A4",
+                print_background=True,
+                margin={"top": "0in", "right": "0in", "bottom": "0in", "left": "0in"}
+            )
+            browser.close()
+    finally:
+        gc.collect()
     return output_path
 
 class PDFService:
@@ -54,7 +72,7 @@ class PDFService:
             async with async_playwright() as p:
                 browser = await p.chromium.launch(
                     headless=True,
-                    args=["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"]
+                    args=CHROMIUM_LOW_MEM_FLAGS
                 )
                 page = await browser.new_page(viewport={"width": 1280, "height": 1024})
                 await page.set_content(html_content, wait_until="load", timeout=15000)
@@ -65,6 +83,7 @@ class PDFService:
                     margin={"top": "0in", "right": "0in", "bottom": "0in", "left": "0in"}
                 )
                 await browser.close()
+            gc.collect()
             return output_path
         except Exception as e:
             safe_msg = str(e).encode('ascii', 'ignore').decode('ascii')

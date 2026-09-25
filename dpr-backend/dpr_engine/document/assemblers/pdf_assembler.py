@@ -11,10 +11,14 @@ class PDFAssembler:
     async def assemble_pdf_from_html(cls, html_content: str, output_filepath: str) -> Dict[str, Any]:
         os.makedirs(os.path.dirname(output_filepath), exist_ok=True)
 
+        CHROMIUM_FLAGS = [
+            "--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage",
+            "--disable-gpu", "--no-zygote", "--single-process", "--disable-extensions"
+        ]
         async with async_playwright() as p:
             browser = await p.chromium.launch(
                 headless=True,
-                args=["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"]
+                args=CHROMIUM_FLAGS
             )
             page = await browser.new_page()
 
