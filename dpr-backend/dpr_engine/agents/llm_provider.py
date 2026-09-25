@@ -149,25 +149,20 @@ class GeminiLLMProvider(BaseLLMProvider):
 
         for m in self.models:
             endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent?key={self.api_key}"
-            for attempt in range(2):
-                req = urllib.request.Request(endpoint, data=payload_bytes, headers={"Content-Type": "application/json"})
-                try:
-                    with urllib.request.urlopen(req, timeout=60) as resp:
-                        data = json.loads(resp.read().decode("utf-8"))
-                        return data["candidates"][0]["content"]["parts"][0]["text"].strip()
-                except Exception as e:
-                    if attempt < 1:
-                        time.sleep(1)
-                        continue
-                    print(f"[GeminiLLMProvider Notice] Live API model '{m}' failed: {e}")
+            req = urllib.request.Request(endpoint, data=payload_bytes, headers={"Content-Type": "application/json"})
+            try:
+                with urllib.request.urlopen(req, timeout=8) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                    return data["candidates"][0]["content"]["parts"][0]["text"].strip()
+            except Exception as e:
+                print(f"[GeminiLLMProvider Notice] Live API model '{m}' notice: {e}")
 
-        print("[GeminiLLMProvider Notice] Live API call fallback to Mock Provider after trying all models.")
+        print("[GeminiLLMProvider Notice] Live API call fallback to Mock Provider.")
         return self.fallback_mock.generate(prompt, system_instruction)
 
     def structured_generate(self, prompt: str, output_schema: Dict[str, Any], system_instruction: Optional[str] = None) -> Dict[str, Any]:
         import urllib.request
         import json
-        import time
 
         schema_prompt = f"{system_instruction or ''}\n\nPrompt: {prompt}\n\nRespond strictly in valid JSON format matching schema: {json.dumps(output_schema)}"
         payload_bytes = json.dumps({
@@ -177,20 +172,16 @@ class GeminiLLMProvider(BaseLLMProvider):
 
         for m in self.models:
             endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent?key={self.api_key}"
-            for attempt in range(2):
-                req = urllib.request.Request(endpoint, data=payload_bytes, headers={"Content-Type": "application/json"})
-                try:
-                    with urllib.request.urlopen(req, timeout=60) as resp:
-                        data = json.loads(resp.read().decode("utf-8"))
-                        text_resp = data["candidates"][0]["content"]["parts"][0]["text"].strip()
-                        return json.loads(text_resp)
-                except Exception as e:
-                    if attempt < 1:
-                        time.sleep(1)
-                        continue
-                    print(f"[GeminiLLMProvider Notice] Live API structured model '{m}' failed: {e}")
+            req = urllib.request.Request(endpoint, data=payload_bytes, headers={"Content-Type": "application/json"})
+            try:
+                with urllib.request.urlopen(req, timeout=8) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                    text_resp = data["candidates"][0]["content"]["parts"][0]["text"].strip()
+                    return json.loads(text_resp)
+            except Exception as e:
+                print(f"[GeminiLLMProvider Notice] Live API structured model '{m}' notice: {e}")
 
-        print("[GeminiLLMProvider Notice] Live API call fallback to Mock Provider after trying all models.")
+        print("[GeminiLLMProvider Notice] Live API call fallback to Mock Provider.")
         return self.fallback_mock.structured_generate(prompt, output_schema, system_instruction)
 
 def get_llm_provider() -> BaseLLMProvider:
