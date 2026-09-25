@@ -27,7 +27,7 @@ class PDFAssembler:
                 pdf_bytes = await page.pdf(
                     format="A4",
                     print_background=True,
-                    margin={"top": "0.58in", "bottom": "0.58in", "left": "0.58in", "right": "0.58in"}
+                    margin={"top": "0.25in", "bottom": "0.25in", "left": "0.25in", "right": "0.25in"}
                 )
                 with open(output_filepath, "wb") as f:
                     f.write(pdf_bytes)

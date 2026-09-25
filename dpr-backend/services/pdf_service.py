@@ -33,7 +33,7 @@ def _generate_pdf_sync(html_content: str, output_path: str) -> str:
                 path=output_path,
                 format="A4",
                 print_background=True,
-                margin={"top": "0in", "right": "0in", "bottom": "0in", "left": "0in"}
+                margin={"top": "0.25in", "right": "0.25in", "bottom": "0.25in", "left": "0.25in"}
             )
             browser.close()
     finally:
@@ -80,7 +80,7 @@ class PDFService:
                     path=output_path,
                     format="A4",
                     print_background=True,
-                    margin={"top": "0in", "right": "0in", "bottom": "0in", "left": "0in"}
+                    margin={"top": "0.25in", "right": "0.25in", "bottom": "0.25in", "left": "0.25in"}
                 )
                 await browser.close()
             gc.collect()
