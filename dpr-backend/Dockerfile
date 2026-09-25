@@ -16,5 +16,5 @@ EXPOSE 5000
 ENV PORT=5000
 ENV PYTHONUNBUFFERED=1
 
-# Run FastAPI server with Uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000"]
+# Run FastAPI server with Uvicorn supporting dynamic PORT binding
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-5000}"]

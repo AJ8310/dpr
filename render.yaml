@@ -1,27 +1,21 @@
 services:
-  # ========== BACKEND - Node.js API ==========
+  # ========== BACKEND - Python FastAPI Docker ==========
   - type: web
     name: dpr-backend
-    runtime: node
+    runtime: docker
     plan: free
     rootDir: dpr-backend
-    buildCommand: npm install
-    startCommand: node server.js
+    dockerfilePath: Dockerfile
     envVars:
       - key: PORT
-        value: 10000
+        value: 5000
+      - key: SECRET_KEY
+        value: vkf_dpr_studio_super_secret_jwt_key_2026_prod
       - key: GEMINI_API_KEY
         sync: false
       - key: SUPABASE_URL
         sync: false
       - key: SUPABASE_ANON_KEY
         sync: false
-
-  # ========== FRONTEND - Static Site ==========
-  - type: web
-    name: dpr-frontend
-    runtime: static
-    plan: free
-    rootDir: dpr-frontend
-    buildCommand: echo "No build step needed"
-    publishPath: .
+      - key: DATABASE_URL
+        sync: false
