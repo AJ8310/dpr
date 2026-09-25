@@ -24,10 +24,12 @@ export default function ContentGenerationView({ projectId }: { projectId: string
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
+  const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://dpr-0eje.onrender.com';
+
   const fetchContent = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/projects/${projectId}/content`, {
+      const res = await fetch(`${apiBase}/api/projects/${projectId}/content`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -50,7 +52,7 @@ export default function ContentGenerationView({ projectId }: { projectId: string
     setMessage("Generating sections dynamically based on blueprint...");
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/projects/${projectId}/content/generate`, {
+      const res = await fetch(`${apiBase}/api/projects/${projectId}/content/generate`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
       });
@@ -69,7 +71,7 @@ export default function ContentGenerationView({ projectId }: { projectId: string
   const handleApprove = async (sectionKey: string) => {
     try {
       const token = localStorage.getItem("token");
-      await fetch(`http://localhost:5000/api/projects/${projectId}/content/${sectionKey}/approve`, {
+      await fetch(`${apiBase}/api/projects/${projectId}/content/${sectionKey}/approve`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` }
       });

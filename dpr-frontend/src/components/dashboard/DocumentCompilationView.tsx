@@ -21,10 +21,12 @@ export default function DocumentCompilationView({ projectId, snapshotId }: { pro
   const [selectedFormat, setSelectedFormat] = useState<"PDF" | "DOCX" | "HTML">("PDF");
   const [message, setMessage] = useState<string | null>(null);
 
+  const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://dpr-0eje.onrender.com';
+
   const fetchDocuments = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/projects/${projectId}/documents`, {
+      const res = await fetch(`${apiBase}/api/projects/${projectId}/documents`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -53,7 +55,7 @@ export default function DocumentCompilationView({ projectId, snapshotId }: { pro
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/projects/${projectId}/documents/compile`, {
+      const res = await fetch(`${apiBase}/api/projects/${projectId}/documents/compile`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
         body: JSON.stringify({ snapshot_id: snapshotId, format: selectedFormat })

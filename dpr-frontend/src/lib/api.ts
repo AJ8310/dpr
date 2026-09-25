@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { DPRFormData } from '@/types/dpr';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://dpr-0eje.onrender.com';
 
 const api = axios.create({
   baseURL: API_BASE_URL,

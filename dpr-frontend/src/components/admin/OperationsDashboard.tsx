@@ -6,7 +6,8 @@ export const OperationsDashboard: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/admin/health', {
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://dpr-0eje.onrender.com';
+    fetch(`${apiBase}/api/admin/health`, {
       headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
     })
       .then(res => res.json())
