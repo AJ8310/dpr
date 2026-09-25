@@ -74,4 +74,6 @@ class PDFService:
                 return pdf_path
             except Exception as e2:
                 print(f"Sync Playwright PDF compilation error: {e2}")
-                return html_path
+                if os.path.exists(output_path):
+                    return output_path
+                raise RuntimeError(f"Playwright PDF generation failed: {e2}")
