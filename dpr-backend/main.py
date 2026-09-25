@@ -11,8 +11,14 @@ from middleware.observability import RequestTracingMiddleware
 from middleware.security import HTTPSecurityHeadersMiddleware
 from routers import auth_router, dpr_router, assistant_router, payment_router, document_router, dpr_engine_router, dpr_blueprint_router, dpr_question_router, dpr_financial_router, dpr_agent_router, dpr_intelligence_router, dpr_content_router, dpr_document_compiler_router, admin_router, master_data_router, mudra_router
 
+from fastapi.responses import JSONResponse
+from fastapi import Request
+
 # Create database tables automatically
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"Warning: Database table initialization notice: {e}")
 
 app = FastAPI(
     title="Vision Karnataka Foundation DPR Studio API",
@@ -21,6 +27,14 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc"
 )
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    print(f"[ERROR] Unhandled Exception on {request.method} {request.url}: {exc}")
+    return JSONResponse(
+        status_code=500,
+        content={"success": False, "detail": "An internal server error occurred. Please try again or contact support."}
+    )
 
 app.add_middleware(RequestTracingMiddleware)
 app.add_middleware(HTTPSecurityHeadersMiddleware)
