@@ -9,12 +9,12 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         @page {
             size: A4 portrait;
-            margin: 0.55in;
+            margin: 0.65in 0.60in 0.65in 0.60in;
         }
         body {
             font-family: 'Inter', 'Roboto', sans-serif;
             line-height: 1.55;
-            padding: 0.25in 0.30in 0.25in 0.30in;
+            padding: 0.15in 0.20in 0.15in 0.20in;
             margin: 0;
             font-size: 9.2pt;
             color: #1E293B;
@@ -29,13 +29,22 @@
             margin-bottom: 0.75rem;
         }
 
-        /* Fixed Page Border Overlay - 100% visible double border on all 4 sides with equal ~20px gap clearance */
+        h1, h2, h3, h4, h5, .section-header, .chapter-title {
+            page-break-after: avoid !important;
+            break-after: avoid !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Fixed Page Border Overlay - Perfectly aligned with 36px white clearance gap on all 4 sides */
         .pdf-page-border-overlay {
             position: fixed;
-            top: -0.22in;
-            left: -0.22in;
-            right: -0.22in;
-            bottom: -0.22in;
+            top: -0.35in;
+            left: -0.30in;
+            right: -0.30in;
+            bottom: -0.35in;
             border: 2.5px solid #0F172A;
             outline: 1.5px solid #1E3A8A;
             outline-offset: -5px;
