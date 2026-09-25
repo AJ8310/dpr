@@ -272,7 +272,7 @@ class CalculationService:
 
             # 1. CAPEX Donut Chart
             try:
-                fig, ax = plt.subplots(figsize=(6, 3.8), dpi=180)
+                fig, ax = plt.subplots(figsize=(6, 3.8), dpi=90)
                 labels = ['Building Shed', 'Plant & Machinery', 'Electrification', 'Furniture & Office', 'Working Capital', 'Pre-operative']
                 vals = [building_cost, machinery_total, 1200000.0, furniture_cost, working_capital, other_cost]
                 if land_cost > 0:
@@ -285,7 +285,7 @@ class CalculationService:
                 ax.set_title('CAPITAL EXPENDITURE (CAPEX) BREAKDOWN', fontsize=9.5, fontweight='bold', color='#0F172A', pad=10)
                 
                 buf = io.BytesIO()
-                plt.savefig(buf, format='png', bbox_inches='tight', dpi=180)
+                plt.savefig(buf, format='png', bbox_inches='tight', dpi=90)
                 plt.close(fig)
                 buf.seek(0)
                 charts['capex_pie'] = "data:image/png;base64," + base64.b64encode(buf.read()).decode('utf-8')
@@ -294,7 +294,7 @@ class CalculationService:
 
             # 2. Means of Finance Donut Chart
             try:
-                fig, ax = plt.subplots(figsize=(6, 3.8), dpi=180)
+                fig, ax = plt.subplots(figsize=(6, 3.8), dpi=90)
                 f_labels = ['Promoter Equity', 'Bank Term Loan']
                 f_vals = [promoter_contrib, bank_loan]
                 f_colors = ['#059669', '#1E3A8A']
@@ -308,7 +308,7 @@ class CalculationService:
                 ax.set_title('MEANS OF FINANCE COMPOSITION', fontsize=9.5, fontweight='bold', color='#0F172A', pad=10)
                 
                 buf = io.BytesIO()
-                plt.savefig(buf, format='png', bbox_inches='tight', dpi=180)
+                plt.savefig(buf, format='png', bbox_inches='tight', dpi=90)
                 plt.close(fig)
                 buf.seek(0)
                 charts['finance_pie'] = "data:image/png;base64," + base64.b64encode(buf.read()).decode('utf-8')
@@ -317,7 +317,7 @@ class CalculationService:
 
             # 3. Revenue, EBITDA & PAT Bar Chart
             try:
-                fig, ax = plt.subplots(figsize=(6.5, 3.8), dpi=180)
+                fig, ax = plt.subplots(figsize=(6.5, 3.8), dpi=90)
                 if len(projections) >= 5:
                     years = [f"Yr {p['year']}" for p in projections[:5]]
                     revs = [p['revenue'] / 100000.0 for p in projections[:5]]
@@ -337,7 +337,7 @@ class CalculationService:
                     ax.legend(fontsize=7.5, loc='upper left')
                     
                     buf = io.BytesIO()
-                    plt.savefig(buf, format='png', bbox_inches='tight', dpi=180)
+                    plt.savefig(buf, format='png', bbox_inches='tight', dpi=90)
                     plt.close(fig)
                     buf.seek(0)
                     charts['revenue_ebitda'] = "data:image/png;base64," + base64.b64encode(buf.read()).decode('utf-8')
@@ -346,7 +346,7 @@ class CalculationService:
 
             # 4. DSCR Trajectory Curve Chart
             try:
-                fig, ax = plt.subplots(figsize=(6.5, 3.8), dpi=180)
+                fig, ax = plt.subplots(figsize=(6.5, 3.8), dpi=90)
                 if len(projections) >= 5:
                     years = [f"Yr {p['year']}" for p in projections[:5]]
                     dscrs = [p['dscr'] for p in projections[:5]]
@@ -363,7 +363,7 @@ class CalculationService:
                     ax.set_ylim(bottom=1.0, top=max(dscrs) * 1.25 if dscrs else 3.0)
                     
                     buf = io.BytesIO()
-                    plt.savefig(buf, format='png', bbox_inches='tight', dpi=180)
+                    plt.savefig(buf, format='png', bbox_inches='tight', dpi=90)
                     plt.close(fig)
                     buf.seek(0)
                     charts['dscr_curve'] = "data:image/png;base64," + base64.b64encode(buf.read()).decode('utf-8')
