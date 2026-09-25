@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     
     # Allowed CORS Origins
     CORS_ORIGINS: list[str] = [
+        "*",
         "http://localhost:3000",
         "http://localhost:5500",
         "http://localhost:5000",
