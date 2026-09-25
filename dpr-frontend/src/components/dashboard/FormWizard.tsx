@@ -259,6 +259,13 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
     }
   };
 
+  const resolveImageUrl = (path: string | undefined | null) => {
+    if (!path) return '';
+    if (path.startsWith('data:') || path.startsWith('http')) return path;
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://dpr-0eje.onrender.com';
+    return `${apiBase.replace(/\/$/, '')}${path.startsWith('/') ? '' : '/'}${path}`;
+  };
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: 'logo_path' | 'product_path' | 'facility_path' | 'team_path') => {
     if (!e.target.files?.[0]) return;
     const file = e.target.files[0];
@@ -1975,7 +1982,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                       <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'logo_path')} style={{ fontSize: '0.85rem' }} />
                       {formData.logo_path && (
                         <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#F0FDFA', padding: '0.4rem 0.6rem', borderRadius: '0.5rem', border: '1px solid #99F6E4' }}>
-                          <img src={formData.logo_path} alt="Logo Preview" style={{ width: '40px', height: '40px', objectFit: 'contain', borderRadius: '4px', background: '#fff', border: '1px solid #CBD5E1' }} />
+                          <img src={resolveImageUrl(formData.logo_path)} alt="Logo Preview" style={{ width: '40px', height: '40px', objectFit: 'contain', borderRadius: '4px', background: '#fff', border: '1px solid #CBD5E1' }} />
                           <span style={{ fontSize: '0.75rem', color: '#0D9488', fontWeight: 600 }}>✓ Saved & Applied to Report</span>
                         </div>
                       )}
@@ -1985,7 +1992,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                       <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'product_path')} style={{ fontSize: '0.85rem' }} />
                       {formData.product_path && (
                         <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#F0FDFA', padding: '0.4rem 0.6rem', borderRadius: '0.5rem', border: '1px solid #99F6E4' }}>
-                          <img src={formData.product_path} alt="Product Preview" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #CBD5E1' }} />
+                          <img src={resolveImageUrl(formData.product_path)} alt="Product Preview" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #CBD5E1' }} />
                           <span style={{ fontSize: '0.75rem', color: '#0D9488', fontWeight: 600 }}>✓ Saved & Applied to Report</span>
                         </div>
                       )}
@@ -1995,7 +2002,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                       <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'facility_path')} style={{ fontSize: '0.85rem' }} />
                       {formData.facility_path && (
                         <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#F0FDFA', padding: '0.4rem 0.6rem', borderRadius: '0.5rem', border: '1px solid #99F6E4' }}>
-                          <img src={formData.facility_path} alt="Facility Preview" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #CBD5E1' }} />
+                          <img src={resolveImageUrl(formData.facility_path)} alt="Facility Preview" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #CBD5E1' }} />
                           <span style={{ fontSize: '0.75rem', color: '#0D9488', fontWeight: 600 }}>✓ Saved & Applied to Report</span>
                         </div>
                       )}
@@ -2005,7 +2012,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                       <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'team_path')} style={{ fontSize: '0.85rem' }} />
                       {formData.team_path && (
                         <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#F0FDFA', padding: '0.4rem 0.6rem', borderRadius: '0.5rem', border: '1px solid #99F6E4' }}>
-                          <img src={formData.team_path} alt="Team Preview" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #CBD5E1' }} />
+                          <img src={resolveImageUrl(formData.team_path)} alt="Team Preview" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #CBD5E1' }} />
                           <span style={{ fontSize: '0.75rem', color: '#0D9488', fontWeight: 600 }}>✓ Saved & Applied to Report</span>
                         </div>
                       )}
