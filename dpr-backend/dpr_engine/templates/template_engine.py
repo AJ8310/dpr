@@ -71,34 +71,6 @@ class DPRTemplateCompositionEngine:
         upload_dir = os.path.join(os.path.dirname(templates_dir), "uploads")
         resolved_images = ImageManagementEngine.resolve_image_paths(doc, upload_dir)
 
-        # Resolve logo: prioritize user uploaded logo over default logo
-        user_logo_b64 = None
-        user_logo_path = resolved_images.get("logo") or doc.logo_path
-        if user_logo_path:
-            user_logo_str = str(user_logo_path)
-            if user_logo_str.startswith("data:image") or user_logo_str.startswith("http"):
-                user_logo_b64 = user_logo_str
-            elif os.path.exists(user_logo_str) and os.path.isfile(user_logo_str):
-                ext = os.path.splitext(user_logo_str)[1].lower().replace(".", "")
-                mime = "jpeg" if ext in ["jpg", "jpeg"] else "png"
-                user_logo_b64 = cls._file_to_base64_uri(user_logo_str, f"image/{mime}")
-
-        assets_dir = os.path.join(templates_dir, "assets")
-        banner_b64 = cls._file_to_base64_uri(os.path.join(assets_dir, "vkf_header_banner.png"), "image/png")
-        default_logo_b64 = cls._file_to_base64_uri(os.path.join(assets_dir, "vkf_official_logo.png"), "image/png")
-        logo_b64 = user_logo_b64 or default_logo_b64
-
-        prod1_b64 = cls._file_to_base64_uri(os.path.join(assets_dir, "product_sample_1.jpg"), "image/jpeg")
-        prod2_b64 = cls._file_to_base64_uri(os.path.join(assets_dir, "product_sample_2.jpg"), "image/jpeg")
-        prod3_b64 = cls._file_to_base64_uri(os.path.join(assets_dir, "product_sample_3.jpg"), "image/jpeg")
-
-        # Convert generated chart files to Base64 URIs
-        charts_b64: Dict[str, str] = {}
-        if doc.chart_paths:
-            for c_name, c_path in doc.chart_paths.items():
-                if c_path and os.path.exists(c_path):
-                    charts_b64[c_name] = cls._file_to_base64_uri(c_path, "image/png")
-
         def resolve_to_b64(path_val):
             if not path_val:
                 return None
@@ -115,6 +87,25 @@ class DPRTemplateCompositionEngine:
                 mime = "jpeg" if ext in ["jpg", "jpeg"] else "png"
                 return cls._file_to_base64_uri(p_str, f"image/{mime}")
             return None
+
+        # Resolve logo: prioritize user uploaded logo over default logo
+        user_logo_b64 = resolve_to_b64(resolved_images.get("logo") or doc.logo_path)
+
+        assets_dir = os.path.join(templates_dir, "assets")
+        banner_b64 = cls._file_to_base64_uri(os.path.join(assets_dir, "vkf_header_banner.png"), "image/png")
+        default_logo_b64 = cls._file_to_base64_uri(os.path.join(assets_dir, "vkf_official_logo.png"), "image/png")
+        logo_b64 = user_logo_b64 or default_logo_b64
+
+        prod1_b64 = cls._file_to_base64_uri(os.path.join(assets_dir, "product_sample_1.jpg"), "image/jpeg")
+        prod2_b64 = cls._file_to_base64_uri(os.path.join(assets_dir, "product_sample_2.jpg"), "image/jpeg")
+        prod3_b64 = cls._file_to_base64_uri(os.path.join(assets_dir, "product_sample_3.jpg"), "image/jpeg")
+
+        # Convert generated chart files to Base64 URIs
+        charts_b64: Dict[str, str] = {}
+        if doc.chart_paths:
+            for c_name, c_path in doc.chart_paths.items():
+                if c_path and os.path.exists(c_path):
+                    charts_b64[c_name] = cls._file_to_base64_uri(c_path, "image/png")
 
         user_product_b64 = resolve_to_b64(resolved_images.get("product") or doc.product_path)
         user_facility_b64 = resolve_to_b64(resolved_images.get("facility") or doc.facility_path)
