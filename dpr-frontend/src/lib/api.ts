@@ -144,6 +144,16 @@ export async function saveDPRData(dprData: DPRFormData) {
   return response.data;
 }
 
+export async function getLatestDraft() {
+  const response = await api.get('/api/dpr/latest-draft');
+  return response.data;
+}
+
+export async function getMyDPRs() {
+  const response = await api.get('/api/dpr/my-dprs');
+  return response.data;
+}
+
 export async function generatePDF(dprData: DPRFormData) {
   const response = await api.post('/api/dpr/generate-pdf', dprData, {
     responseType: 'blob',

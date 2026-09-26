@@ -7,6 +7,7 @@ import {
   uploadImage,
   generatePDF,
   saveDPRData,
+  getLatestDraft,
   autofillFromDocument,
   autofillFromURL,
   getMasterSectors,
@@ -154,6 +155,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
   const [resolvedBlueprint, setResolvedBlueprint] = useState<any>(null);
   const [blueprintQuestions, setBlueprintQuestions] = useState<QuestionSchema[]>([]);
   const [blueprintRules, setBlueprintRules] = useState<any>(null);
+  const [restoredNotice, setRestoredNotice] = useState<string>('');
 
   React.useEffect(() => {
     // Fetch Master Sectors & Project Types from backend
@@ -165,7 +167,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       .then((res) => setMasterProjectTypes(res.project_types || []))
       .catch((err) => console.warn('Master project types fallback:', err));
 
-    const stored = sessionStorage.getItem('dpr_session');
+    const stored = sessionStorage.getItem('dpr_session') || localStorage.getItem('dpr_session');
     if (stored) {
       try {
         const sess = JSON.parse(stored);
@@ -182,6 +184,54 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         console.error(e);
       }
     }
+
+    // Auto-restore user's saved draft from backend database (or local backup fallback)
+    getLatestDraft()
+      .then((res) => {
+        if (res && res.has_draft && res.data) {
+          setFormData((prev) => ({
+            ...prev,
+            ...res.data,
+          }));
+          if (typeof res.data.activeStep === 'number' && res.data.activeStep >= 0 && res.data.activeStep <= 13) {
+            setActiveStep(res.data.activeStep);
+          }
+          const busName = res.business_name || res.data.business_name || 'your project';
+          setRestoredNotice(`Restored your saved progress for "${busName}". You can resume filling from where you left off.`);
+        } else if (typeof window !== 'undefined') {
+          const localBackup = localStorage.getItem('dpr_draft_backup');
+          if (localBackup) {
+            try {
+              const parsed = JSON.parse(localBackup);
+              if (parsed) {
+                setFormData((prev) => ({ ...prev, ...parsed }));
+                if (typeof parsed.activeStep === 'number' && parsed.activeStep >= 0 && parsed.activeStep <= 13) {
+                  setActiveStep(parsed.activeStep);
+                }
+                setRestoredNotice('Restored your saved draft progress from local backup.');
+              }
+            } catch (e) {}
+          }
+        }
+      })
+      .catch((err) => {
+        console.warn('Draft auto-restore fallback:', err);
+        if (typeof window !== 'undefined') {
+          const localBackup = localStorage.getItem('dpr_draft_backup');
+          if (localBackup) {
+            try {
+              const parsed = JSON.parse(localBackup);
+              if (parsed) {
+                setFormData((prev) => ({ ...prev, ...parsed }));
+                if (typeof parsed.activeStep === 'number' && parsed.activeStep >= 0 && parsed.activeStep <= 13) {
+                  setActiveStep(parsed.activeStep);
+                }
+                setRestoredNotice('Restored your saved draft progress from local backup.');
+              }
+            } catch (e) {}
+          }
+        }
+      });
   }, []);
 
   // Synchronize formData.dpr_type whenever initialService changes from ServiceSelectionView
@@ -392,7 +442,13 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
   const handleSaveData = async () => {
     setSaving(true);
     try {
-      await saveDPRData(formData);
+      const payload = { ...formData, activeStep };
+      await saveDPRData(payload);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('dpr_draft_backup', JSON.stringify(payload));
+      }
+      setRestoredNotice('Progress saved successfully!');
+      setTimeout(() => setRestoredNotice(''), 4000);
     } catch (err) {
       console.warn('Backend save notice:', err);
     } finally {
@@ -745,7 +801,21 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
   };
 
   const handleSaveAndContinue = async () => {
-    await handleSaveData();
+    const nextStepIdx = activeStep < 13 ? activeStep + 1 : activeStep;
+    setSaving(true);
+    try {
+      const payload = { ...formData, activeStep: nextStepIdx };
+      await saveDPRData(payload);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('dpr_draft_backup', JSON.stringify(payload));
+      }
+      setRestoredNotice('Progress saved successfully!');
+      setTimeout(() => setRestoredNotice(''), 4000);
+    } catch (err) {
+      console.warn('Backend save notice:', err);
+    } finally {
+      setSaving(false);
+    }
     nextStep();
   };
 
@@ -793,6 +863,44 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
 
   return (
     <div>
+      {/* DRAFT RESTORED / SAVED NOTIFICATION BANNER */}
+      {restoredNotice && (
+        <div
+          style={{
+            background: 'linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)',
+            border: '1.5px solid #10B981',
+            borderRadius: '14px',
+            padding: '1rem 1.4rem',
+            marginBottom: '1.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            boxShadow: '0 4px 14px rgba(16, 185, 129, 0.12)',
+            color: '#065F46',
+            fontWeight: 600,
+            fontSize: '0.95rem',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <i className="fas fa-check-circle" style={{ fontSize: '1.2rem', color: '#10B981' }}></i>
+            <span>{restoredNotice}</span>
+          </div>
+          <button
+            onClick={() => setRestoredNotice('')}
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: '#065F46',
+              fontSize: '1.1rem',
+              padding: '0 0.3rem',
+            }}
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* SMART DOCUMENT AUTO-FILL UPLOAD BANNER */}
       <div
         style={{

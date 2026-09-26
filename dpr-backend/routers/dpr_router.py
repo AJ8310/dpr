@@ -17,6 +17,26 @@ UPLOAD_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "uploads")
 TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "templates")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
+from typing import Optional
+from fastapi.security import OAuth2PasswordBearer
+from jose import jwt, JWTError
+from config import settings
+from models.database_models import UserDB, DPRSubmissionDB
+
+oauth2_scheme_optional = OAuth2PasswordBearer(tokenUrl="/api/auth/login", auto_error=False)
+
+def get_optional_user(token: Optional[str] = Depends(oauth2_scheme_optional), db: Session = Depends(get_db)) -> Optional[UserDB]:
+    if not token:
+        return None
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        user_id: str = payload.get("sub")
+        if user_id:
+            return db.query(UserDB).filter(UserDB.id == user_id).first()
+    except Exception:
+        pass
+    return None
+
 @router.get("/health")
 async def health_check():
     return {"status": "ok", "service": "FastAPI DPR Engine", "version": "2.0.0"}
@@ -28,17 +48,33 @@ async def calculate_dpr_projections(payload: DPRDataPayload):
     return {"success": True, "data": calculated}
 
 @router.post("/save")
-async def save_dpr_submission(payload: DPRDataPayload, db: Session = Depends(get_db)):
+async def save_dpr_submission(
+    payload: DPRDataPayload,
+    db: Session = Depends(get_db),
+    current_user: Optional[UserDB] = Depends(get_optional_user)
+):
     data_dict = payload.model_dump()
     b_name = payload.business_name or "Untitled Business"
     d_type = payload.dpr_type or "Bank Loan DPR"
+    user_id = current_user.id if current_user else None
     
-    submission = DPRSubmissionDB(
-        dpr_type=d_type,
-        business_name=b_name,
-        full_form_json=data_dict
-    )
-    db.add(submission)
+    submission = None
+    if user_id:
+        submission = db.query(DPRSubmissionDB).filter(DPRSubmissionDB.user_id == user_id).order_by(DPRSubmissionDB.updated_at.desc()).first()
+
+    if submission:
+        submission.business_name = b_name
+        submission.dpr_type = d_type
+        submission.full_form_json = data_dict
+    else:
+        submission = DPRSubmissionDB(
+            user_id=user_id,
+            dpr_type=d_type,
+            business_name=b_name,
+            full_form_json=data_dict
+        )
+        db.add(submission)
+
     db.commit()
     db.refresh(submission)
     
@@ -46,18 +82,48 @@ async def save_dpr_submission(payload: DPRDataPayload, db: Session = Depends(get
         "success": True,
         "message": "DPR Form data successfully saved to database.",
         "id": submission.id,
-        "created_at": submission.created_at
+        "user_id": user_id,
+        "created_at": submission.created_at,
+        "updated_at": submission.updated_at
+    }
+
+@router.get("/latest-draft")
+async def get_latest_draft(
+    db: Session = Depends(get_db),
+    current_user: Optional[UserDB] = Depends(get_optional_user)
+):
+    if not current_user:
+        return {"has_draft": False, "data": None}
+
+    submission = db.query(DPRSubmissionDB).filter(DPRSubmissionDB.user_id == current_user.id).order_by(DPRSubmissionDB.updated_at.desc()).first()
+    if not submission:
+        return {"has_draft": False, "data": None}
+
+    return {
+        "has_draft": True,
+        "id": submission.id,
+        "business_name": submission.business_name,
+        "dpr_type": submission.dpr_type,
+        "updated_at": submission.updated_at,
+        "data": submission.full_form_json
     }
 
 @router.get("/my-dprs")
-async def list_my_dprs(db: Session = Depends(get_db)):
-    submissions = db.query(DPRSubmissionDB).order_by(DPRSubmissionDB.created_at.desc()).all()
+async def list_my_dprs(
+    db: Session = Depends(get_db),
+    current_user: Optional[UserDB] = Depends(get_optional_user)
+):
+    query = db.query(DPRSubmissionDB)
+    if current_user:
+        query = query.filter(DPRSubmissionDB.user_id == current_user.id)
+    submissions = query.order_by(DPRSubmissionDB.created_at.desc()).all()
     return [
         {
             "id": s.id,
             "business_name": s.business_name,
             "dpr_type": s.dpr_type,
             "created_at": s.created_at,
+            "updated_at": s.updated_at,
             "data": s.full_form_json
         } for s in submissions
     ]
