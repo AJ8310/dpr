@@ -17,6 +17,16 @@ from fastapi import Request
 # Create database tables automatically
 try:
     Base.metadata.create_all(bind=engine)
+    # Enable Row Level Security (RLS) on PostgreSQL / Supabase tables
+    if str(engine.url).startswith("postgresql"):
+        with engine.connect() as conn:
+            for table_name in Base.metadata.tables.keys():
+                try:
+                    conn.execute(text(f'ALTER TABLE IF EXISTS public."{table_name}" ENABLE ROW LEVEL SECURITY;'))
+                except Exception as tbl_err:
+                    pass
+            conn.commit()
+        print("[Security] Row Level Security (RLS) enabled across PostgreSQL database tables.")
 except Exception as e:
     print(f"Warning: Database table initialization notice: {e}")
 
