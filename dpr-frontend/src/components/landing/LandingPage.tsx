@@ -14,6 +14,12 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
   const [authView, setAuthView] = useState<'login' | 'register'>('login');
   const [activeSectorTab, setActiveSectorTab] = useState<'dairy' | 'food' | 'solar'>('dairy');
 
+  React.useEffect(() => {
+    // Pre-warm backend server silently on page load to eliminate cold-start latency
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://dpr-0eje.onrender.com';
+    fetch(`${apiBase.replace(/\/$/, '')}/health/live`).catch(() => {});
+  }, []);
+
   const scrollToAuth = () => {
     const el = document.getElementById('auth-panel');
     if (el) {

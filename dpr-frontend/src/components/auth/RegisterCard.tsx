@@ -34,9 +34,7 @@ export default function RegisterCard({ onRegisterSuccess, onSwitchToLogin }: Reg
           token: data.access_token,
         };
         sessionStorage.setItem('dpr_session', JSON.stringify(session));
-        setTimeout(() => {
-          onRegisterSuccess(session);
-        }, 800);
+        onRegisterSuccess(session);
       }
     } catch (err: any) {
       const detail = err.response?.data?.detail;

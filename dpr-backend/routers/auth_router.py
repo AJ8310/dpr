@@ -23,7 +23,7 @@ VALID_ROLES = {"ADMIN", "PROMOTER", "REVIEWER", "SUPER_ADMIN"}
 def hash_password(password: str) -> str:
     try:
         pwd_bytes = password.encode('utf-8')[:72]
-        salt = bcrypt.gensalt()
+        salt = bcrypt.gensalt(rounds=10)
         return bcrypt.hashpw(pwd_bytes, salt).decode('utf-8')
     except Exception:
         return pwd_context.hash(password)
@@ -92,7 +92,6 @@ async def register_user(payload: UserRegister, db: Session = Depends(get_db)):
     )
     db.add(user)
     db.commit()
-    db.refresh(user)
     
     token = create_access_token({"sub": user.id, "email": email, "role": user.role})
     user_resp = UserResponse(
@@ -115,7 +114,6 @@ async def login_user(payload: UserLogin, db: Session = Depends(get_db)):
     
     user.last_login_at = datetime.utcnow()
     db.commit()
-    db.refresh(user)
 
     token = create_access_token({"sub": user.id, "email": email, "role": user.role})
     user_resp = UserResponse(
