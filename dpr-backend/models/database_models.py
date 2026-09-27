@@ -24,19 +24,19 @@ class DPRSubmissionDB(Base):
     __tablename__ = "dpr_submissions"
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
-    user_id = Column(String(36), ForeignKey("users.id"), nullable=True)
+    user_id = Column(String(36), ForeignKey("users.id"), nullable=True, index=True)
     dpr_type = Column(String(100), nullable=False)
     business_name = Column(String(255), nullable=False)
     full_form_json = Column(JSON, nullable=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now(), index=True)
 
 class DPRJobDB(Base):
     __tablename__ = "dpr_jobs"
 
     id = Column(String(64), primary_key=True)
-    dpr_id = Column(String(36), nullable=True)
-    user_id = Column(String(36), nullable=True)
+    dpr_id = Column(String(36), nullable=True, index=True)
+    user_id = Column(String(36), nullable=True, index=True)
     dpr_type = Column(String(100), nullable=False)
     dpr_depth = Column(String(50), nullable=False, default="standard")
     status = Column(String(50), nullable=False, default="QUEUED")  # QUEUED, PROCESSING, RETRYING, COMPLETED, FAILED, CANCELLED

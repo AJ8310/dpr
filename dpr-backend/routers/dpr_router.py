@@ -144,14 +144,45 @@ async def upload_balance_sheet(file: UploadFile = File(...)):
 @router.post("/upload-image")
 async def upload_dpr_image(image: UploadFile = File(...)):
     ext = os.path.splitext(image.filename)[1].lower()
-    if ext not in [".jpg", ".jpeg", ".png", ".gif"]:
-        raise HTTPException(status_code=400, detail="Invalid image type.")
+    allowed_exts = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"]
+    if ext not in allowed_exts:
+        raise HTTPException(status_code=400, detail=f"Invalid image type '{ext}'. Allowed formats: {', '.join(allowed_exts)}")
     
     filename = f"img_{uuid.uuid4().hex[:10]}{ext}"
     filepath = os.path.join(UPLOAD_DIR, filename)
+    file_bytes = await image.read()
     
-    with open(filepath, "wb") as f:
-        f.write(await image.read())
+    # Process and optimize image via Pillow if raster format
+    if ext in [".jpg", ".jpeg", ".png", ".webp"]:
+        try:
+            import io
+            from PIL import Image, ImageOps
+            img = Image.open(io.BytesIO(file_bytes))
+            img = ImageOps.exif_transpose(img)  # Auto-rotate phone camera orientation
+            
+            # Scale down high-resolution images to max 1400px
+            max_dim = 1400
+            if img.width > max_dim or img.height > max_dim:
+                img.thumbnail((max_dim, max_dim), Image.Resampling.LANCZOS)
+                
+            if ext in [".jpg", ".jpeg"]:
+                if img.mode in ("RGBA", "P"):
+                    img = img.convert("RGB")
+                img.save(filepath, "JPEG", quality=88, optimize=True)
+            elif ext == ".png":
+                img.save(filepath, "PNG", optimize=True)
+            elif ext == ".webp":
+                img.save(filepath, "WEBP", quality=88)
+            else:
+                with open(filepath, "wb") as f:
+                    f.write(file_bytes)
+        except Exception as e:
+            print(f"PIL image optimization fallback for {image.filename}: {e}")
+            with open(filepath, "wb") as f:
+                f.write(file_bytes)
+    else:
+        with open(filepath, "wb") as f:
+            f.write(file_bytes)
         
     return {
         "success": True,

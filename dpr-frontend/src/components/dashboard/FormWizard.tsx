@@ -15,6 +15,7 @@ import {
   getMasterProjectTypes,
   resolveMasterBlueprint,
 } from '@/lib/api';
+import { compressImageClientSide } from '@/lib/imageCompressor';
 import DPRGenerationModal from './DPRGenerationModal';
 import DynamicQuestionRenderer, { QuestionSchema } from './DynamicQuestionRenderer';
 import ProgressiveSectorWrapper, { QuestionGroup } from './ProgressiveSectorWrapper';
@@ -318,14 +319,19 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: 'logo_path' | 'product_path' | 'facility_path' | 'team_path') => {
     if (!e.target.files?.[0]) return;
-    const file = e.target.files[0];
+    const rawFile = e.target.files[0];
+    setUploadStatus(`Optimizing and uploading ${rawFile.name}...`);
     try {
-      const res = await uploadImage(file);
+      const compressedFile = await compressImageClientSide(rawFile);
+      const res = await uploadImage(compressedFile);
       if (res.url) {
         setFormData((prev) => ({ ...prev, [fieldName]: res.url }));
+        setUploadStatus(`Image uploaded successfully!`);
+        setTimeout(() => setUploadStatus(''), 3000);
       }
     } catch (err) {
-      alert('Image upload failed.');
+      alert('Image upload failed. Please try a different image format.');
+      setUploadStatus('');
     }
   };
 
