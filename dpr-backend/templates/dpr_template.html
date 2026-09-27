@@ -246,7 +246,9 @@
             table-layout: fixed;
             border-collapse: collapse;
             margin: 12px 0 16px 0;
-            font-size: 8.0pt;
+            font-size: 7.8pt;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
         }
         table.dpr-table thead {
             display: table-header-group;
@@ -268,6 +270,7 @@
         }
         table.dpr-table th.num-col, table.dpr-table td.num-col {
             text-align: right !important;
+            white-space: nowrap !important;
         }
         table.dpr-table th {
             background-color: #1E3A8A;
@@ -822,7 +825,7 @@
     </div>
     <table class="dpr-table" style="margin-top: 10px;">
         <thead>
-            <tr><th style="width: 28%;">Working Capital Parameter</th><th style="width: 12%;">Holding Period</th><th style="width: 12%;" class="num-col">Year 1 (₹)</th><th style="width: 12%;" class="num-col">Year 2 (₹)</th><th style="width: 12%;" class="num-col">Year 3 (₹)</th><th style="width: 12%;" class="num-col">Year 4 (₹)</th><th style="width: 12%;" class="num-col">Year 5 (₹)</th></tr>
+            <tr><th style="width: 26%;">Working Capital Parameter</th><th style="width: 10%;">Holding Period</th><th style="width: 12.8%;" class="num-col">Year 1 (₹)</th><th style="width: 12.8%;" class="num-col">Year 2 (₹)</th><th style="width: 12.8%;" class="num-col">Year 3 (₹)</th><th style="width: 12.8%;" class="num-col">Year 4 (₹)</th><th style="width: 12.8%;" class="num-col">Year 5 (₹)</th></tr>
         </thead>
         <tbody>
             <tr><td>Raw Material Stock Holding</td><td>30 Days</td><td class="num-col">₹{{ (total_cost * 0.12) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.14) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.16) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.18) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.20) | inr }}</td></tr>
@@ -846,7 +849,7 @@
     </div>
     <table class="dpr-table" style="margin-top: 10px;">
         <thead>
-            <tr><th style="width: 28%;">Asset Block</th><th style="width: 12%;" class="num-col">Depr Rate (%)</th><th style="width: 12%;" class="num-col">Year 1 (₹)</th><th style="width: 12%;" class="num-col">Year 2 (₹)</th><th style="width: 12%;" class="num-col">Year 3 (₹)</th><th style="width: 12%;" class="num-col">Year 4 (₹)</th><th style="width: 12%;" class="num-col">Year 5 (₹)</th></tr>
+            <tr><th style="width: 25%;">Asset Block</th><th style="width: 9%;" class="num-col">Depr Rate (%)</th><th style="width: 13.2%;" class="num-col">Year 1 (₹)</th><th style="width: 13.2%;" class="num-col">Year 2 (₹)</th><th style="width: 13.2%;" class="num-col">Year 3 (₹)</th><th style="width: 13.2%;" class="num-col">Year 4 (₹)</th><th style="width: 13.2%;" class="num-col">Year 5 (₹)</th></tr>
         </thead>
         <tbody>
             <tr><td>Building & Civil Works</td><td class="num-col">10.0%</td><td class="num-col">₹{{ (building_cost * 0.10) | inr }}</td><td class="num-col">₹{{ (building_cost * 0.09) | inr }}</td><td class="num-col">₹{{ (building_cost * 0.081) | inr }}</td><td class="num-col">₹{{ (building_cost * 0.0729) | inr }}</td><td class="num-col">₹{{ (building_cost * 0.0656) | inr }}</td></tr>
