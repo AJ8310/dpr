@@ -12,12 +12,12 @@
         
         @page {
             size: A4 portrait;
-            margin: 0.55in 0.50in 0.55in 0.50in;
+            margin: 0.35in 0.30in 0.35in 0.30in;
         }
         body {
             font-family: 'Times New Roman', Times, serif;
             line-height: 1.5;
-            padding: 0;
+            padding: 0.15in 0.12in 0.15in 0.12in;
             font-size: 11pt;
             color: #1a1a1a;
             position: relative;
@@ -43,15 +43,16 @@
         /* PROFESSIONAL PAGE BORDER */
         .pdf-page-border-overlay {
             position: fixed;
-            top: -22px;
-            left: -18px;
-            right: -18px;
-            bottom: -22px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             border: 2px solid #0F172A;
             outline: 1px solid #1E3A8A;
             outline-offset: -4px;
             pointer-events: none;
             z-index: 9999;
+            box-sizing: border-box;
         }
         
         /* VKF HEADER - Top Right Corner (Text Only) */

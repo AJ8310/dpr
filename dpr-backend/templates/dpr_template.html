@@ -9,12 +9,12 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         @page {
             size: A4 portrait;
-            margin: 0.55in 0.50in 0.55in 0.50in;
+            margin: 0.35in 0.30in 0.35in 0.30in;
         }
         body {
             font-family: 'Inter', 'Roboto', sans-serif;
             line-height: 1.55;
-            padding: 0;
+            padding: 0.15in 0.12in 0.15in 0.12in;
             margin: 0;
             font-size: 9.2pt;
             color: #1E293B;
@@ -34,22 +34,23 @@
             break-after: avoid !important;
             page-break-inside: avoid !important;
             break-inside: avoid !important;
-            margin-top: 1rem;
+            margin-top: 1.1rem;
             margin-bottom: 0.5rem;
         }
 
-        /* Fixed Page Border Overlay - Generous 22px clearance from content on all 4 sides across all pages */
+        /* Fixed Page Border Overlay - Perfectly aligned double line border around printable page box */
         .pdf-page-border-overlay {
             position: fixed;
-            top: -22px;
-            left: -18px;
-            right: -18px;
-            bottom: -22px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             border: 2px solid #0F172A;
             outline: 1px solid #1E3A8A;
             outline-offset: -4px;
             pointer-events: none;
             z-index: 9999;
+            box-sizing: border-box;
         }
         
         /* Cover Page Single VKF Organization Logo (Clean, Centered, Prominent) */
