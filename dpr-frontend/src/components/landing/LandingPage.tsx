@@ -11,10 +11,17 @@ interface LandingPageProps {
 }
 
 export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
-  const [authView, setAuthView] = useState<'login' | 'register'>('login');
+  const [authView, setAuthView] = useState<'inquiry' | 'login' | 'register'>('inquiry');
   const [activeDashTab, setActiveDashTab] = useState<'projections' | 'ratios' | 'repayments' | 'sensitivities'>('projections');
   const [machineryCost, setMachineryCost] = useState<number>(50); // in Lakhs
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+
+  // Inquiry Form State
+  const [dprPurpose, setDprPurpose] = useState<string>('bank_loan');
+  const [inquirySubmitted, setInquirySubmitted] = useState(false);
+  const [contactName, setContactName] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [contactPhone, setContactPhone] = useState('');
 
   React.useEffect(() => {
     // Pre-warm backend server silently on page load
@@ -23,7 +30,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
   }, []);
 
   const scrollToAuth = () => {
-    const el = document.getElementById('auth-panel');
+    const el = document.getElementById('contact');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
@@ -34,6 +41,17 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const handleInquirySubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setInquirySubmitted(true);
+    setTimeout(() => {
+      setInquirySubmitted(false);
+      setContactName('');
+      setContactEmail('');
+      setContactPhone('');
+    }, 4000);
   };
 
   // Dynamic calculations based on machinery cost slider
@@ -139,6 +157,42 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
           display: block;
         }
 
+        .vkf-input {
+          width: 100%;
+          padding: 12px 16px;
+          border: 1.5px solid #C5EBE9;
+          border-radius: 10px;
+          background: #FFFFFF;
+          font-size: 0.95rem;
+          color: #00464E;
+          font-family: inherit;
+          outline: none;
+          transition: border-color 0.2s ease;
+        }
+        .vkf-input:focus {
+          border-color: #008C95;
+        }
+
+        .radio-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          padding: 10px 18px;
+          border: 1.5px solid #C5EBE9;
+          border-radius: 999px;
+          background: #FFFFFF;
+          font-size: 0.88rem;
+          font-weight: 600;
+          color: #00464E;
+          cursor: pointer;
+          transition: all 0.15s ease;
+        }
+        .radio-pill.selected {
+          border-color: #008C95;
+          background: #E6F7F7;
+          color: #006F78;
+        }
+
         .dash-tab-btn {
           all: unset;
           box-sizing: border-box;
@@ -166,6 +220,8 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         @media (max-width: 992px) {
           .hero-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
           .two-col-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .faq-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .form-2col { grid-template-columns: 1fr !important; }
           .grid-3 { grid-template-columns: 1fr !important; }
           .grid-5 { grid-template-columns: 1fr 1fr !important; }
           .dash-grid { grid-template-columns: 1fr !important; }
@@ -224,7 +280,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             <button onClick={scrollToAuth} className="vkf-btn-secondary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.88rem' }}>
               Get in Touch
             </button>
-            <button onClick={scrollToAuth} className="vkf-btn-primary" style={{ padding: '0.6rem 1.3rem', fontSize: '0.88rem' }}>
+            <button onClick={() => { setAuthView('login'); scrollToAuth(); }} className="vkf-btn-primary" style={{ padding: '0.6rem 1.3rem', fontSize: '0.88rem' }}>
               Create My DPR
             </button>
           </div>
@@ -289,7 +345,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
 
             {/* Action Buttons */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', marginTop: '8px' }}>
-              <button onClick={scrollToAuth} className="vkf-btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.02rem' }}>
+              <button onClick={() => { setAuthView('login'); scrollToAuth(); }} className="vkf-btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.02rem' }}>
                 Create My DPR &rarr;
               </button>
               <button onClick={scrollToAuth} className="vkf-btn-secondary" style={{ padding: '1rem 2rem', fontSize: '1.02rem' }}>
@@ -299,7 +355,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
 
           </div>
 
-          {/* Right Column Document Mockup (Exact infopace layout styled in VKF Teal theme) */}
+          {/* Right Column Document Mockup */}
           <div style={{ position: 'relative' }}>
             <div style={{
               position: 'absolute',
@@ -434,7 +490,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         </div>
       </section>
 
-      {/* 3. THE PROBLEM SECTION (Screenshot 2) */}
+      {/* 3. THE PROBLEM SECTION */}
       <section style={{ padding: '100px 24px', background: '#FFFFFF', borderTop: '1px solid #DDF4F3', borderBottom: '1px solid #DDF4F3', position: 'relative', zIndex: 1 }}>
         <div className="two-col-grid" style={{ maxWidth: '1240px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '72px', alignItems: 'center' }}>
           
@@ -497,7 +553,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         </div>
       </section>
 
-      {/* 4. WORKFLOW MODULES SECTION (Screenshot 3) */}
+      {/* 4. WORKFLOW MODULES SECTION */}
       <section id="how-it-works" style={{ padding: '100px 24px', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
           
@@ -575,7 +631,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         </div>
       </section>
 
-      {/* 5. SPEED BAND SECTION (Screenshot 4) */}
+      {/* 5. SPEED BAND SECTION */}
       <section style={{ padding: '100px 24px', background: '#003E46', color: '#FFFFFF', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
           
@@ -637,7 +693,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         </div>
       </section>
 
-      {/* 6. MULTIPLE FUNDING NEEDS SECTION (Screenshot 5) */}
+      {/* 6. MULTIPLE FUNDING NEEDS SECTION */}
       <section id="funding-needs" style={{ padding: '100px 24px', background: '#FFFFFF', borderBottom: '1px solid #DDF4F3', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
           
@@ -917,161 +973,320 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         </div>
       </section>
 
-      {/* 9. FAQ ACCORDION SECTION */}
-      <section id="faq" style={{ padding: '100px 24px', position: 'relative', zIndex: 1 }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+      {/* 9. FAQ SECTION (Exact Side-by-Side Design from Screenshot 1) */}
+      <section id="faq" style={{ padding: '100px 24px', background: '#FFFFFF', borderTop: '1px solid #DDF4F3', position: 'relative', zIndex: 1 }}>
+        <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
           
-          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-            <span className="vkf-kicker">Frequently Asked Questions</span>
-            <h2 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#00464E', lineHeight: 1.1 }}>
-              Everything You Need to Know
-            </h2>
-          </div>
+          <div className="faq-grid" style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '64px', alignItems: 'start' }}>
+            
+            {/* Left Column Heading */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <h2 style={{ fontSize: '3rem', fontWeight: 800, color: '#00464E', lineHeight: 1.05, letterSpacing: '-0.02em' }}>
+                Frequently Asked Questions
+              </h2>
+              <div style={{ fontSize: '1.05rem', color: '#3F5D68' }}>
+                Still unsure?{' '}
+                <button
+                  onClick={scrollToAuth}
+                  style={{ all: 'unset', color: '#00464E', fontWeight: 700, textDecoration: 'underline', cursor: 'pointer' }}
+                >
+                  Talk to our team
+                </button>.
+              </div>
+            </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {[
-              {
-                q: 'What is a Detailed Project Report (DPR)?',
-                a: 'A Detailed Project Report (DPR) is a comprehensive business document containing operational plans, technical feasibility, market analysis, and 5-year financial projections required by banks for loan sanctions and government departments for subsidy approvals.'
-              },
-              {
-                q: 'Are VKF DPR reports accepted by Banks and NBFCs?',
-                a: 'Yes! All financial projection models, DSCR calculations, and report structures in VKF DPR adhere strictly to RBI guidelines, bank appraisal standards, and government scheme benchmarks.'
-              },
-              {
-                q: 'Can I add my own company logo and VKF branding?',
-                a: 'Absolutely. You can upload your business logo during profile setup. You also have an option to include "Associated/Partnered with VKF" co-branding on the document cover page and headers.'
-              },
-              {
-                q: 'What happens if my project machinery cost or loan requirement changes?',
-                a: 'You can update your project variables at any time. Our system recalculates all financial statements and ratios instantly, letting you download an updated report in seconds.'
-              },
-              {
-                q: 'Which file formats can I download?',
-                a: 'You can export your complete report as a fully editable Microsoft Word (.docx) file and ready-to-print PDF file.'
-              }
-            ].map((faq, i) => {
-              const isOpen = openFaqIndex === i;
-              return (
-                <div key={i} style={{
-                  background: '#FFFFFF',
-                  border: '1px solid #DDF4F3',
-                  borderRadius: '14px',
-                  overflow: 'hidden',
-                  boxShadow: '0 2px 8px rgba(0, 70, 78, 0.03)'
-                }}>
-                  <button
-                    onClick={() => setOpenFaqIndex(isOpen ? null : i)}
-                    style={{
-                      width: '100%',
-                      padding: '22px 28px',
-                      background: 'none',
-                      border: 'none',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                      fontSize: '1.1rem',
-                      fontWeight: 700,
-                      color: '#00464E'
-                    }}
-                  >
-                    <span>{faq.q}</span>
-                    <span style={{ fontSize: '1.4rem', color: '#008C95', transition: 'transform 0.2s ease', transform: isOpen ? 'rotate(180deg)' : 'none' }}>
-                      ▾
-                    </span>
-                  </button>
-                  {isOpen && (
-                    <div style={{ padding: '0 28px 22px', fontSize: '1.02rem', color: '#3F5D68', lineHeight: 1.6, borderTop: '1px solid #F2FAFA' }}>
-                      {faq.a}
+            {/* Right Column List with Dividers */}
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {[
+                {
+                  q: 'What is a DPR?',
+                  a: 'A Detailed Project Report is a structured document that presents a business or project, its financial requirements, projections and supporting analysis.'
+                },
+                {
+                  q: 'Who can use this DPR tool?',
+                  a: 'The solution is designed for startups, MSMEs, entrepreneurs and established businesses seeking loans, government funding, subsidies or investor funding.'
+                },
+                {
+                  q: 'What can I prepare the DPR for?',
+                  a: 'You can use it for Bank/NBFC loans, government schemes and subsidies, and investor funding discussions.'
+                },
+                {
+                  q: 'What financial information does the tool generate?',
+                  a: 'The platform\'s financial workflow includes projected Profit & Loss, Balance Sheet and Cash Flow models along with funding requirement analysis.'
+                }
+              ].map((faq, i) => {
+                const isOpen = openFaqIndex === i;
+                return (
+                  <div key={i} style={{
+                    borderTop: '1px solid #DDF4F3',
+                    borderBottom: i === 3 ? '1px solid #DDF4F3' : 'none',
+                    padding: '24px 0'
+                  }}>
+                    <div
+                      onClick={() => setOpenFaqIndex(isOpen ? null : i)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        gap: '20px'
+                      }}
+                    >
+                      <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#00464E', margin: 0 }}>
+                        {faq.q}
+                      </h3>
+                      <button style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '50%',
+                        background: '#003E46',
+                        color: '#FFFFFF',
+                        border: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '1rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        flexShrink: 0
+                      }}>
+                        {isOpen ? '✕' : '+'}
+                      </button>
                     </div>
-                  )}
-                </div>
-              );
-            })}
+
+                    {isOpen && (
+                      <p style={{ marginTop: '16px', fontSize: '1.02rem', color: '#3F5D68', lineHeight: 1.65, maxWidth: '720px' }}>
+                        {faq.a}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
           </div>
 
         </div>
       </section>
 
-      {/* 10. AUTHENTICATION & CONTACT PANEL (#auth-panel) */}
-      <section id="auth-panel" style={{ padding: '100px 24px', background: '#FFFFFF', borderTop: '1.5px solid #DDF4F3', position: 'relative', zIndex: 1 }}>
+      {/* 10. GET IN TOUCH & AUTHENTICATION SECTION (Exact Design from Screenshot 2) */}
+      <section id="contact" style={{ padding: '100px 24px', background: '#F2FAFA', borderTop: '1.5px solid #DDF4F3', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
           
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px', alignItems: 'center' }} className="two-col-grid">
+          <div className="two-col-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.25fr', gap: '64px', alignItems: 'start' }}>
             
-            {/* Left Column Benefit Highlights */}
+            {/* Left Column: Connect with our team */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              <span className="vkf-kicker">Get Started Today</span>
-              <h2 style={{ fontSize: '2.8rem', fontWeight: 800, color: '#00464E', lineHeight: 1.1, letterSpacing: '-0.02em' }}>
-                Ready to Build Your Funding-Ready DPR?
+              <span className="vkf-kicker">Connect with our team</span>
+              
+              <h2 style={{ fontSize: '3rem', fontWeight: 800, color: '#00464E', lineHeight: 1.05, letterSpacing: '-0.02em' }}>
+                Tell us about your project.
               </h2>
+              
               <p style={{ fontSize: '1.1rem', color: '#3F5D68', lineHeight: 1.65 }}>
-                Sign in or register your account to start generating bank-ready Detailed Project Reports instantly with smart financial recalculations.
+                Share a few details and what you need help with. Our team will get back to you to discuss your DPR and funding documentation.
               </p>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
-                {[
-                  'Instant access to all multi-sector schemes & schemas',
-                  'Live financial projection & ratio recalculation engine',
-                  'One-click DOCX & PDF download with custom logos',
-                  '100% confidential & bank-compliant data security'
-                ].map((feat, idx) => (
-                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '1.02rem', fontWeight: 600, color: '#00464E' }}>
-                    <div style={{
-                      width: '28px',
-                      height: '28px',
-                      borderRadius: '50%',
-                      background: '#E6F7F7',
-                      color: '#008C95',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '0.9rem',
-                      fontWeight: 800,
-                      flexShrink: 0
-                    }}>
-                      ✓
-                    </div>
-                    <span>{feat}</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '1.05rem', fontWeight: 600, color: '#00464E' }}>
+                  <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#FFFFFF', border: '1px solid #C5EBE9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#008C95' }}>
+                    ✉️
                   </div>
-                ))}
-              </div>
+                  <span>support@vkf.org</span>
+                </div>
 
-              {/* Contact Support Info */}
-              <div style={{
-                marginTop: '20px',
-                padding: '20px',
-                background: '#F2FAFA',
-                borderRadius: '12px',
-                border: '1px solid #DDF4F3',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '16px'
-              }}>
-                <img
-                  src="/VKF_logo.png"
-                  alt="VKF Support"
-                  style={{ height: '44px', width: 'auto', objectFit: 'contain' }}
-                />
-                <div>
-                  <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#00464E' }}>Need Assistance?</div>
-                  <div style={{ fontSize: '0.84rem', color: '#5A7B87' }}>Vision Karnataka Foundation Support Team • support@vkf.org</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '1.05rem', fontWeight: 600, color: '#00464E' }}>
+                  <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#FFFFFF', border: '1px solid #C5EBE9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#008C95' }}>
+                    📞
+                  </div>
+                  <span>+91 98860 12345</span>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '1.05rem', fontWeight: 600, color: '#00464E' }}>
+                  <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#FFFFFF', border: '1px solid #C5EBE9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#008C95' }}>
+                    📍
+                  </div>
+                  <span>Vision Karnataka Foundation, Bengaluru, KA</span>
                 </div>
               </div>
 
             </div>
 
-            {/* Right Column Auth Container (Login & Register Cards) */}
+            {/* Right Column: Contact & Auth Card */}
             <div style={{
-              background: '#F2FAFA',
+              background: '#FFFFFF',
               border: '1.5px solid #C5EBE9',
-              borderRadius: '20px',
-              padding: '36px',
-              boxShadow: '0 20px 40px rgba(0, 70, 78, 0.08)'
+              borderRadius: '24px',
+              padding: '40px',
+              boxShadow: '0 24px 48px -16px rgba(0, 70, 78, 0.12)'
             }}>
-              {authView === 'login' ? (
+              
+              {/* Card Mode Switcher Tabs */}
+              <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid #DDF4F3', paddingBottom: '16px', marginBottom: '28px' }}>
+                <button
+                  onClick={() => setAuthView('inquiry')}
+                  style={{
+                    all: 'unset',
+                    cursor: 'pointer',
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    fontWeight: 700,
+                    fontSize: '0.92rem',
+                    background: authView === 'inquiry' ? '#008C95' : 'transparent',
+                    color: authView === 'inquiry' ? '#FFFFFF' : '#00464E'
+                  }}
+                >
+                  Send Inquiry
+                </button>
+                <button
+                  onClick={() => setAuthView('login')}
+                  style={{
+                    all: 'unset',
+                    cursor: 'pointer',
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    fontWeight: 700,
+                    fontSize: '0.92rem',
+                    background: authView === 'login' ? '#008C95' : 'transparent',
+                    color: authView === 'login' ? '#FFFFFF' : '#00464E'
+                  }}
+                >
+                  Account Login
+                </button>
+                <button
+                  onClick={() => setAuthView('register')}
+                  style={{
+                    all: 'unset',
+                    cursor: 'pointer',
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    fontWeight: 700,
+                    fontSize: '0.92rem',
+                    background: authView === 'register' ? '#008C95' : 'transparent',
+                    color: authView === 'register' ? '#FFFFFF' : '#00464E'
+                  }}
+                >
+                  Register
+                </button>
+              </div>
+
+              {authView === 'inquiry' ? (
+                <div>
+                  <h3 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#00464E', margin: 0 }}>Get in touch</h3>
+                  <p style={{ fontSize: '0.92rem', color: '#7A8C94', marginTop: '4px', marginBottom: '24px' }}>
+                    Fields marked optional can be left blank.
+                  </p>
+
+                  {inquirySubmitted ? (
+                    <div style={{ padding: '24px', background: '#E6F7F7', borderRadius: '12px', border: '1px solid #C5EBE9', textAlign: 'center', color: '#006F78', fontWeight: 700 }}>
+                      ✅ Thank you! Your project details have been submitted. Our team will get back to you shortly.
+                    </div>
+                  ) : (
+                    <form onSubmit={handleInquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                      
+                      {/* Row 1 */}
+                      <div className="form-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                        <div>
+                          <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#00464E', marginBottom: '6px' }}>Full name</label>
+                          <input
+                            type="text"
+                            required
+                            value={contactName}
+                            onChange={(e) => setContactName(e.target.value)}
+                            placeholder="Enter your name"
+                            className="vkf-input"
+                          />
+                        </div>
+                        <div>
+                          <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#00464E', marginBottom: '6px' }}>Business name <small style={{ fontWeight: 400, color: '#7A8C94' }}>(optional)</small></label>
+                          <input type="text" placeholder="Enter business name" className="vkf-input" />
+                        </div>
+                      </div>
+
+                      {/* Row 2 */}
+                      <div className="form-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                        <div>
+                          <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#00464E', marginBottom: '6px' }}>Email</label>
+                          <input
+                            type="email"
+                            required
+                            value={contactEmail}
+                            onChange={(e) => setContactEmail(e.target.value)}
+                            placeholder="name@company.com"
+                            className="vkf-input"
+                          />
+                        </div>
+                        <div>
+                          <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#00464E', marginBottom: '6px' }}>Phone</label>
+                          <input
+                            type="tel"
+                            required
+                            value={contactPhone}
+                            onChange={(e) => setContactPhone(e.target.value)}
+                            placeholder="+91 XXXXX XXXXX"
+                            className="vkf-input"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Row 3 */}
+                      <div className="form-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                        <div>
+                          <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#00464E', marginBottom: '6px' }}>City <small style={{ fontWeight: 400, color: '#7A8C94' }}>(optional)</small></label>
+                          <input type="text" placeholder="City" className="vkf-input" />
+                        </div>
+                        <div>
+                          <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#00464E', marginBottom: '6px' }}>Business type <small style={{ fontWeight: 400, color: '#7A8C94' }}>(optional)</small></label>
+                          <select className="vkf-input" style={{ cursor: 'pointer' }}>
+                            <option value="">Select business type</option>
+                            <option value="manufacturing">Manufacturing</option>
+                            <option value="services">Services</option>
+                            <option value="agri">Dairy & Food Processing</option>
+                            <option value="solar">Solar / Renewable Energy</option>
+                            <option value="trading">Trading</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      {/* DPR Purpose Radios */}
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.92rem', fontWeight: 700, color: '#00464E', marginBottom: '12px' }}>
+                          What do you need the DPR for?
+                        </label>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                          {[
+                            { id: 'bank_loan', label: 'Bank / NBFC loan' },
+                            { id: 'govt_subsidy', label: 'Government scheme / subsidy' },
+                            { id: 'investor', label: 'Investor funding' },
+                            { id: 'not_sure', label: 'Not sure yet' }
+                          ].map((item) => (
+                            <button
+                              key={item.id}
+                              type="button"
+                              onClick={() => setDprPurpose(item.id)}
+                              className={`radio-pill ${dprPurpose === item.id ? 'selected' : ''}`}
+                            >
+                              <span style={{
+                                width: '12px',
+                                height: '12px',
+                                borderRadius: '50%',
+                                border: dprPurpose === item.id ? '4px solid #008C95' : '1.5px solid #7A8C94',
+                                background: '#FFFFFF'
+                              }}></span>
+                              <span>{item.label}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <button type="submit" className="vkf-btn-primary" style={{ marginTop: '8px', padding: '0.95rem' }}>
+                        Send Message &rarr;
+                      </button>
+
+                    </form>
+                  )}
+                </div>
+              ) : authView === 'login' ? (
                 <LoginCard
                   onLoginSuccess={onLoginSuccess}
                   onSwitchToRegister={() => setAuthView('register')}
@@ -1082,6 +1297,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                   onSwitchToLogin={() => setAuthView('login')}
                 />
               )}
+
             </div>
 
           </div>
