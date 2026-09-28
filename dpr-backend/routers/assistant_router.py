@@ -6,33 +6,198 @@ router = APIRouter(prefix="/api/assistant", tags=["Interactive AI Assistant"])
 def generate_intelligent_assistant_reply(message: str, current_section: str = None) -> str:
     msg_lower = message.lower().strip()
     sec_lower = (current_section or "").lower().strip()
-    words = set(msg_lower.replace("?", "").replace("!", "").replace(",", "").split())
+    words = set(msg_lower.replace("?", "").replace("!", "").replace(",", "").replace("/", " ").split())
 
     # =============================================================
-    # 1. USER ACCOUNT, LOGIN, PASSWORD & PROFILE QUERIES
+    # 1. SUBSIDIES & SCHEMES (PMEGP, PMFME, KARNATAKA STATE, PM-KUSUM, AIF, STAND-UP INDIA, CLCSS)
+    # =============================================================
+    
+    # 1.1 PMEGP Subsidy
+    if any(k in msg_lower for k in ["pmegp", "kvic", "margin money subsidy"]):
+        return (
+            "🏛️ <strong>PMEGP Government Subsidy Overview & Rules:</strong><br><br>"
+            "• <strong>Max Project Cost</strong>: Up to <strong>₹50 Lakhs</strong> (Manufacturing) & <strong>₹20 Lakhs</strong> (Service/Business).<br>"
+            "• <strong>Rural Location Subsidy</strong>: <strong>35% Grant</strong> for Special Category (Women, SC/ST, OBC, PH, Ex-Servicemen) / <strong>25% Grant</strong> for General Category.<br>"
+            "• <strong>Urban Location Subsidy</strong>: <strong>25% Grant</strong> for Special Category / <strong>15% Grant</strong> for General Category.<br>"
+            "• <strong>Promoter Margin (Equity)</strong>: 5% of project cost for Special Category / 10% for General Category.<br>"
+            "• <strong>EDP Training</strong>: 10-day mandatory EDP training provided prior to subsidy lock-in release (3-year lock-in period)."
+        )
+
+    # 1.2 PMFME Food Processing Subsidy
+    if any(k in msg_lower for k in ["pmfme", "food processing subsidy", "odop", "one district one product"]):
+        return (
+            "🍞 <strong>PMFME (PM Formalisation of Micro Food Processing Enterprises):</strong><br><br>"
+            "• <strong>Capital Subsidy Rate</strong>: <strong>35% credit-linked subsidy</strong> up to a maximum of <strong>₹10 Lakhs</strong> per unit.<br>"
+            "• <strong>Promoter Contribution</strong>: Minimum 10% of total project cost.<br>"
+            "• <strong>Group / SHG / FPO Beneficiaries</strong>: 35% capital subsidy with seed capital grant of ₹40,000 per member for working capital.<br>"
+            "• <strong>Eligible Activities</strong>: Bakery, Dairy processing, Spice grinding, Flour mill, Fruit juice, Pickles, Oil extraction, etc."
+        )
+
+    # 1.3 Karnataka Industrial Policy State Subsidies
+    if any(k in msg_lower for k in ["karnataka", "state subsidy", "kadap", "industrial policy", "stamp duty", "electricity duty"]):
+        return (
+            "🌾 <strong>Karnataka State Industrial Policy Incentives & Subsidies:</strong><br><br>"
+            "• <strong>Investment Promotion Subsidy (IPS)</strong>: 20% to 30% subsidy on Fixed Assets Value (VFA) for Micro & Small Enterprises.<br>"
+            "• <strong>Stamp Duty Reimbursement</strong>: 100% exemption/reimbursement on land purchase & lease deeds.<br>"
+            "• <strong>Electricity Duty Exemption</strong>: 100% exemption on electricity duty for 5 to 7 years.<br>"
+            "• <strong>Land Conversion Fee</strong>: 100% reimbursement of agricultural land conversion charges.<br>"
+            "• <strong>Anchor Unit & SC/ST Incentives</strong>: Additional 5% capital subsidy for SC/ST & women entrepreneurs."
+        )
+
+    # 1.4 PM-KUSUM & Solar Subsidies
+    if any(k in msg_lower for k in ["kusum", "solar subsidy", "rooftop solar", "solar pump"]):
+        return (
+            "☀️ <strong>PM-KUSUM & Solar Power Subsidies:</strong><br><br>"
+            "• <strong>Component B (Solar Pumps)</strong>: 30% Central Financial Assistance (CFA) + 30% State Govt Subsidy (Total <strong>60% Subsidy</strong>).<br>"
+            "• <strong>Component A & C (Grid Solar)</strong>: Up to 30% capital subsidy for farmers & cooperatives installing up to 2 MW solar plants.<br>"
+            "• <strong>Rooftop Commercial Solar</strong>: Accelerated Depreciation (40%) + GST concessional rate benefits."
+        )
+
+    # 1.5 Agriculture Infrastructure Fund (AIF)
+    if any(k in msg_lower for k in ["aif", "agriculture infrastructure fund", "agri fund", "cold storage subsidy"]):
+        return (
+            "🌾 <strong>Agriculture Infrastructure Fund (AIF) Scheme:</strong><br><br>"
+            "• <strong>Interest Subvention</strong>: <strong>3% p.a. interest rebate</strong> for bank loans up to <strong>₹2 Crores</strong>.<br>"
+            "• <strong>Subvention Duration</strong>: Benefit applicable for a maximum period of <strong>7 years</strong>.<br>"
+            "• <strong>CGTMSE Coverage</strong>: Government pays credit guarantee fee for loans up to ₹2 Cr.<br>"
+            "• <strong>Eligible Projects</strong>: Cold storage, Warehouses, Sorting & Grading units, Primary Processing centers."
+        )
+
+    # 1.6 General / Other Subsidies & Schemes Summary
+    if any(k in msg_lower for k in ["subsidy", "subsidies", "govt scheme", "government schemes", "incentive"]):
+        return (
+            "🏛️ <strong>Government Subsidy & Support Schemes Available:</strong><br><br>"
+            "1. <strong>PMEGP</strong>: 15% to 35% margin money subsidy up to ₹50 Lakhs project cost.<br>"
+            "2. <strong>PMFME</strong>: 35% credit-linked capital subsidy up to ₹10 Lakhs for Food Processing units.<br>"
+            "3. <strong>Karnataka Industrial Policy</strong>: 20%-30% IPS subsidy + 100% Stamp Duty exemption.<br>"
+            "4. <strong>PM-KUSUM Solar</strong>: Up to 60% subsidy for solar pump & rooftop installations.<br>"
+            "5. <strong>Agri Infrastructure Fund (AIF)</strong>: 3% interest subvention up to ₹2 Crores.<br>"
+            "6. <strong>CGTMSE</strong>: Collateral-free bank loan guarantee up to ₹5 Crores.<br><br>"
+            "<em>Tip: Our DPR engine automatically factors eligible subsidy amounts into your project's Means of Finance!</em>"
+        )
+
+    # =============================================================
+    # 2. INTEREST RATES & BANK LOAN NORMS
+    # =============================================================
+
+    # 2.1 Loan Interest Rates
+    if any(k in msg_lower for k in ["interest rate", "rate of interest", "roi", "bank interest", "loan rate"]):
+        return (
+            "💰 <strong>Bank Loan Interest Rates & Benchmark Norms (2026):</strong><br><br>"
+            "• <strong>MUDRA Loans (PMMY)</strong>: <strong>8.50% to 11.50% p.a.</strong> (No collateral required).<br>"
+            "• <strong>PSU Bank Term Loans (SBI, Canara, Union)</strong>: <strong>8.75% to 10.75% p.a.</strong><br>"
+            "• <strong>Private Bank Term Loans (HDFC, ICICI, Axis)</strong>: <strong>9.50% to 12.50% p.a.</strong><br>"
+            "• <strong>Working Capital Cash Credit (CC)</strong>: <strong>9.00% to 12.00% p.a.</strong><br>"
+            "• <strong>Interest Subvention</strong>: 2% to 3% interest rebate available under GST MSME / AIF / PMEGP schemes."
+        )
+
+    # 2.2 Repayment Tenure & Moratorium
+    if any(k in msg_lower for k in ["repayment", "tenure", "moratorium", "grace period", "loan period", "emi"]):
+        return (
+            "⏳ <strong>Loan Repayment Tenure & Moratorium Period:</strong><br><br>"
+            "• <strong>Term Loan Tenure</strong>: Typically <strong>5 to 7 years</strong> (60 to 84 monthly EMIs).<br>"
+            "• <strong>Moratorium (Grace Period)</strong>: <strong>6 to 12 months</strong> during project construction/implementation where only interest is payable.<br>"
+            "• <strong>Working Capital (CC/OD)</strong>: Annual renewable facility with monthly interest servicing."
+        )
+
+    # =============================================================
+    # 3. PROMOTER EQUITY %, DEBT-EQUITY RATIO & FINANCIAL RATIOS
+    # =============================================================
+
+    # 3.1 Equity / Promoter Contribution Rate
+    if any(k in msg_lower for k in ["equity rate", "promoter equity", "promoter contribution", "margin money", "own investment", "my share"]):
+        return (
+            "💵 <strong>Promoter Equity & Margin Money Requirements:</strong><br><br>"
+            "• <strong>Special Category (Women, SC/ST, OBC, PH)</strong>: <strong>5% to 10%</strong> of total project cost.<br>"
+            "• <strong>General Category MSME Loans</strong>: <strong>15% to 25%</strong> of total project cost.<br>"
+            "• <strong>Large Commercial Projects</strong>: <strong>25% to 33%</strong> promoter equity.<br><br>"
+            "<em>Example: For a ₹50 Lakh project, promoter contribution is ₹2.5L–₹5L (Special) or ₹7.5L–₹12.5L (General), with remainder funded via Bank Loan & Subsidy.</em>"
+        )
+
+    # 3.2 Debt-Equity Ratio (DER)
+    if any(k in msg_lower for k in ["debt equity", "der", "debt-equity ratio", "leverage ratio"]):
+        return (
+            "⚖️ <strong>Debt-Equity Ratio (DER) Guidelines:</strong><br><br>"
+            "• <strong>Formula</strong>: <code>Total Long-Term Debt / Total Promoter Equity</code><br>"
+            "• <strong>Ideal Bank Range</strong>: <strong>2.00 : 1 to 3.00 : 1</strong>.<br>"
+            "• <strong>Maximum Allowed Limit</strong>: <strong>3.00 : 1</strong> for MSME loans.<br>"
+            "• A DER of 2:1 means for every ₹1 of your equity, bank provides ₹2 of loan."
+        )
+
+    # 3.3 DSCR (Debt Service Coverage Ratio)
+    if any(k in msg_lower for k in ["dscr", "debt service", "coverage ratio"]):
+        return (
+            "📊 <strong>Debt Service Coverage Ratio (DSCR) Benchmark:</strong><br><br>"
+            "• <strong>Formula</strong>: <code>(Net Profit + Interest + Depreciation) / (Interest + Annual Principal Repayment)</code><br>"
+            "• <strong>Ideal Bank Range</strong>: <strong>1.50 to 2.00</strong>.<br>"
+            "• <strong>Minimum Acceptable Limit</strong>: <strong>1.25</strong>.<br>"
+            "• Our DPR engine calculates year-by-year DSCR automatically for bank loan sanction."
+        )
+
+    # 3.4 Break-Even Point (BEP) & Ratios (IRR, NPV)
+    if any(k in msg_lower for k in ["bep", "break even", "irr", "npv", "financial ratios"]):
+        return (
+            "📉 <strong>Key Financial Ratios & Benchmarks:</strong><br><br>"
+            "• <strong>Break-Even Point (BEP %)</strong>: <strong>40% to 60%</strong> (lower percentage indicates higher safety margin).<br>"
+            "• <strong>Internal Rate of Return (IRR)</strong>: Benchmark <strong>15% to 25%</strong> p.a.<br>"
+            "• <strong>Net Present Value (NPV)</strong>: Positive value calculated at bank discount rate (10%-12%).<br>"
+            "• <strong>Gross Profit Margin</strong>: 20% to 35% depending on sector."
+        )
+
+    # =============================================================
+    # 4. TYPES OF DPR REPORTS (TYPE DPR)
+    # =============================================================
+    if any(k in msg_lower for k in ["type dpr", "types of dpr", "dpr types", "dpr report type", "which dpr", "different dpr"]):
+        return (
+            "📑 <strong>Types of DPR Reports Available on VKF DPR:</strong><br><br>"
+            "1. 🏦 <strong>Bank Loan DPR (CMA Format)</strong>: Designed for SBI, Canara, HDFC, ICICI with Credit Monitoring Arrangement (CMA), DSCR, P&L, Balance Sheet, and Debt Amortization.<br>"
+            "2. 🏛️ <strong>Government Scheme & Subsidy DPR</strong>: Formatted specifically for KVIC, DIC, PMFME, PMEGP, KADAP, PM-KUSUM.<br>"
+            "3. 💳 <strong>MUDRA Loan DPR</strong>: Simplified structure for Shishu (up to ₹50k), Kishore (₹50k-₹5L), and Tarun (₹5L-₹10L).<br>"
+            "4. 💼 <strong>Investor Pitch DPR</strong>: Focuses on TAM/SAM/SOM, Unit Economics, CAGR, Runway, and Valuation.<br>"
+            "5. 🏭 <strong>Multi-Sector Tailored DPRs</strong>: Pre-configured models for Dairy, Food Processing, Solar Energy, Manufacturing, Textiles, Cold Storage, Services, etc."
+        )
+
+    # =============================================================
+    # 5. TYPES OF GOVERNMENT SCHEMES SUMMARY
+    # =============================================================
+    if any(k in msg_lower for k in ["type of govt scheme", "types of govt schemes", "govt schemes", "all schemes", "schemes list"]):
+        return (
+            "📜 <strong>Complete List of Supported Government Schemes:</strong><br><br>"
+            "• <strong>PMEGP</strong>: Up to ₹50 Lakhs project funding with 15%-35% subsidy.<br>"
+            "• <strong>PMFME</strong>: 35% subsidy up to ₹10 Lakhs for Micro Food Enterprises.<br>"
+            "• <strong>MUDRA (PMMY)</strong>: Collateral-free loan up to ₹10 Lakhs (Shishu, Kishore, Tarun).<br>"
+            "• <strong>CGTMSE</strong>: Collateral-free bank credit guarantee up to ₹5 Crores.<br>"
+            "• <strong>Agri Infra Fund (AIF)</strong>: 3% interest subvention up to ₹2 Crores.<br>"
+            "• <strong>Stand-Up India</strong>: ₹10L to ₹1 Cr for SC/ST & Women entrepreneurs.<br>"
+            "• <strong>PM-KUSUM</strong>: 60% combined subsidy for Solar Pumps & Solar Power.<br>"
+            "• <strong>Karnataka Industrial Policy</strong>: IPS capital subsidy & 100% stamp duty exemption."
+        )
+
+    # =============================================================
+    # 6. USER ACCOUNT, LOGIN, PASSWORD & PROFILE QUERIES
     # =============================================================
     if any(k in msg_lower for k in ["password", "profile", "account", "login", "sign in", "sign up", "register", "logout", "my dashboard"]):
         return (
             "👤 <strong>User Account & Profile Help:</strong><br><br>"
-            "• <strong>Log In / Sign Up</strong>: Click the <strong>User Profile</strong> icon at the top right of the navigation bar.<br>"
+            "• <strong>Log In / Sign Up</strong>: Click the <strong>User Profile</strong> icon or 'Create My DPR' at the top navigation bar.<br>"
             "• <strong>Password Reset</strong>: Use the 'Forgot Password' link on the login popup to receive a password reset link.<br>"
             "• <strong>Saved Reports</strong>: Registered users can view, manage, and re-download all past generated DPR reports directly from their user dashboard."
         )
 
     # =============================================================
-    # 2. DOWNLOADING & EXPORTING PDF / DOCX REPORTS
+    # 7. DOWNLOADING & EXPORTING PDF / DOCX REPORTS
     # =============================================================
     if any(k in msg_lower for k in ["download", "export", "pdf", "docx", "save report", "get report", "print report", "how to get file"]):
         return (
             "📥 <strong>How to Download Your DPR Report:</strong><br><br>"
             "1. Complete the form steps (or click <em>'Load Test Data'</em> to generate an instant report).<br>"
-            "2. Navigate to <strong>Step 14 (Summary & Generate)</strong> or click the <strong>Generate DPR</strong> button.<br>"
+            "2. Navigate to <strong>Step 14 (Summary & Export)</strong> or click the <strong>Generate DPR</strong> button.<br>"
             "3. Click <strong>Download PDF</strong> for a high-definition print-ready report, or <strong>Download DOCX</strong> for an editable Word document.<br>"
             "4. Your file will download directly to your device within 3–5 seconds!"
         )
 
     # =============================================================
-    # 3. EDITING FORM DATA & GOING BACK
+    # 8. EDITING FORM DATA & GOING BACK
     # =============================================================
     if any(k in msg_lower for k in ["edit", "modify", "change", "correct", "wrong input", "go back", "previous step", "update data", "fix input"]):
         return (
@@ -43,7 +208,7 @@ def generate_intelligent_assistant_reply(message: str, current_section: str = No
         )
 
     # =============================================================
-    # 4. SAVING FORM PROGRESS & AUTO-SAVE
+    # 9. SAVING FORM PROGRESS & AUTO-SAVE
     # =============================================================
     if any(k in msg_lower for k in ["save progress", "draft", "resume", "auto save", "continue later"]):
         return (
@@ -54,173 +219,62 @@ def generate_intelligent_assistant_reply(message: str, current_section: str = No
         )
 
     # =============================================================
-    # 5. CONTACT SUPPORT, HELPDESK & ADDRESS
+    # 10. VKF CO-BRANDING / LOGO CHECKBOX
+    # =============================================================
+    if any(k in msg_lower for k in ["vkf logo", "partnered with vkf", "associated with vkf", "logo", "branding", "co-branding"]):
+        return (
+            "🖼️ <strong>Logo & VKF Co-Branding Options:</strong><br><br>"
+            "• <strong>Unchecked (Default)</strong>: ONLY your uploaded business logo is displayed on the cover page and headers.<br>"
+            "• <strong>Checked ('Associated/Partnered with VKF')</strong>: BOTH your uploaded business logo AND the official VKF logo are displayed side-by-side on the cover page banner and running header.<br>"
+            "• You can toggle this checkbox at the bottom of the form inputs before downloading your report!"
+        )
+
+    # =============================================================
+    # 11. CONTACT SUPPORT, HELPDESK & ADDRESS
     # =============================================================
     if any(k in msg_lower for k in ["contact", "support", "helpdesk", "phone number", "email id", "address", "office location", "customer care"]):
         return (
             "📞 <strong>Vision Karnataka Foundation Support Desk:</strong><br><br>"
-            "• <strong>Helpline Phone</strong>: +91 98450 12345 / 080-23456789<br>"
-            "• <strong>Email Support</strong>: support@visionkarnataka.org / dpr@visionkarnataka.org<br>"
-            "• <strong>Office Address</strong>: Vision Karnataka Foundation SME Desk, Peenya Industrial Area, Bengaluru, Karnataka 560058.<br>"
+            "• <strong>Helpline Phone</strong>: +91 98860 12345 / 080-23456789<br>"
+            "• <strong>Email Support</strong>: support@vkf.org / dpr@visionkarnataka.org<br>"
+            "• <strong>Office Address</strong>: Vision Karnataka Foundation SME Desk, Bengaluru, Karnataka.<br>"
             "• <strong>Working Hours</strong>: Monday – Saturday (9:30 AM to 6:30 PM IST)."
         )
 
     # =============================================================
-    # 6. PRICING, PAYMENTS & GST INVOICES
-    # =============================================================
-    if any(k in msg_lower for k in ["pricing", "payment", "razorpay", "invoice", "receipt", "gst invoice", "is it free"]):
-        return (
-            "💳 <strong>Pricing & Instant Invoice Access:</strong><br><br>"
-            "• <strong>Free Live Preview</strong>: Form filling and live financial calculations are 100% free.<br>"
-            "• <strong>Bank-Grade DPR Export</strong>: Full 17-section institutional report with 300 DPI multi-color charts, working capital schedules, depreciation tables, and loan amortization.<br>"
-            "• <strong>Instant GST Invoice</strong>: An official GST tax invoice is generated automatically upon report download."
-        )
-
-    # =============================================================
-    # 7. SPECIFIC FORM & SECTION HELP (MACHINERY, HSN, MANPOWER, LAND)
-    # =============================================================
-
-    # 7.1 Machinery & Equipment
-    if any(k in msg_lower for k in ["machinery", "machine", "equipment", "vendor", "quotation"]):
-        return (
-            "🏭 <strong>Plant & Machinery Input Guide (Section 5):</strong><br><br>"
-            "• Enter each major machine name, unit price (₹), and required quantity.<br>"
-            "• <strong>Tip</strong>: Use values from your official GST supplier quotation.<br>"
-            "• Include 5%–10% extra for machine electrification, cabling, transformer, and foundation erection costs."
-        )
-
-    # 7.2 HSN Code
-    if any(k in msg_lower for k in ["hsn", "hsn code", "sac code", "tariff code"]):
-        return (
-            "🏷️ <strong>What is HSN Code & How to Find It:</strong><br><br>"
-            "• <strong>HSN (Harmonized System of Nomenclature)</strong> is an 8-digit GST commodity classification code.<br>"
-            "• <em>Examples:</em> Spices (0910), CNC Gears (8483), Solar Modules (8541), Packaged Food (2106).<br>"
-            "• You can search your product's 4 to 8-digit HSN code on <code>cbic-gst.gov.in</code>."
-        )
-
-    # 7.3 Land & Building
-    if any(k in msg_lower for k in ["land cost", "building cost", "civil shed", "construction cost", "rent shed", "lease agreement"]):
-        return (
-            "🏗️ <strong>Land & Civil Building Estimation (Section 5 & 8):</strong><br><br>"
-            "• <strong>Owned Land</strong>: Enter the total land purchase price or current market valuation.<br>"
-            "• <strong>Leased/Rented Shed</strong>: Enter ₹0 for land cost and add monthly lease rent under operational overheads.<br>"
-            "• <strong>Industrial Shed Construction</strong>: Average industrial civil shed construction cost ranges from ₹1,200 to ₹1,800 per sq. ft."
-        )
-
-    # 7.4 Manpower & Staffing
-    if any(k in msg_lower for k in ["manpower", "staff count", "salary", "wages", "employee count", "labor cost"]):
-        return (
-            "👥 <strong>Manpower & Staffing Plan (Section 7):</strong><br><br>"
-            "• Group staff into 5 categories: Management, Supervisory, Skilled Workers, Unskilled Staff, Admin.<br>"
-            "• Ensure monthly salary inputs comply with Karnataka Minimum Wages Act.<br>"
-            "• Our DPR engine automatically factors in statutory 15% EPF & ESI benefits overheads."
-        )
-
-    # =============================================================
-    # 8. BANKING BENCHMARKS & SUBSIDY RULES
-    # =============================================================
-
-    if any(k in msg_lower for k in ["dscr", "debt service", "coverage ratio"]):
-        return (
-            "📊 <strong>Debt Service Coverage Ratio (DSCR) Benchmark:</strong><br><br>"
-            "• <strong>Formula</strong>: <code>(Net Profit + Interest + Depreciation) / (Interest + Annual Principal Repayment)</code><br>"
-            "• <strong>Ideal Bank Range</strong>: <strong>1.50 to 2.00</strong>.<br>"
-            "• <strong>Minimum Acceptable Limit</strong>: <strong>1.25</strong>.<br>"
-            "• Our DPR engine calculates year-by-year DSCR automatically for bank loan sanction."
-        )
-
-    if any(k in msg_lower for k in ["pmegp", "subsidy", "kvic", "dic"]):
-        return (
-            "🏛️ <strong>PMEGP Government Subsidy Rules:</strong><br><br>"
-            "• <strong>Max Project Cost</strong>: Up to <strong>₹50 Lakhs</strong> (Manufacturing) & <strong>₹20 Lakhs</strong> (Service).<br>"
-            "• <strong>Rural Location</strong>: 35% Subsidy Grant (Special Category: Women, SC/ST/OBC) / 25% (General).<br>"
-            "• <strong>Urban Location</strong>: 25% Subsidy Grant (Special Category) / 15% (General).<br>"
-            "• 10-day EDP training is mandatory before subsidy lock-in release."
-        )
-
-    if any(k in msg_lower for k in ["mudra", "shishu", "kishore", "tarun"]):
-        return (
-            "🏦 <strong>MUDRA Loan Categories & Limits:</strong><br><br>"
-            "1. <strong>Shishu</strong>: Loans up to ₹50,000 (Micro startups).<br>"
-            "2. <strong>Kishore</strong>: Loans from ₹50,000 to ₹5 Lakhs (Equipment & working capital).<br>"
-            "3. <strong>Tarun</strong>: Loans from ₹5 Lakhs to ₹10 Lakhs (Expansion units).<br>"
-            "• Zero collateral required under CGTMSE guarantee scheme."
-        )
-
-    if any(k in msg_lower for k in ["cgtmse", "collateral", "guarantee"]):
-        return (
-            "🛡️ <strong>CGTMSE Collateral-Free Guarantee:</strong><br><br>"
-            "• <strong>Limit</strong>: Up to <strong>₹5 Crore</strong> credit facility without third-party collateral.<br>"
-            "• <strong>Guarantee Cover</strong>: 75% to 85% covered by CGTMSE Trust.<br>"
-            "• Eligible for new & existing Micro and Small Enterprises (MSEs)."
-        )
-
-    if any(k in msg_lower for k in ["working capital", "cash credit", "cc limit", "nayak"]):
-        return (
-            "💳 <strong>Working Capital (Nayak Committee Method):</strong><br><br>"
-            "• <strong>Bank Cash Credit Limit</strong> = <strong>20% of Projected Annual Turnover</strong>.<br>"
-            "• <strong>Promoter Margin</strong> = <strong>5% of Projected Turnover</strong>.<br>"
-            "• Includes inventory holding calculations for Raw Materials (30 days), WIP (15 days), Finished Goods (30 days), and Debtors (30 days)."
-        )
-
-    if any(k in msg_lower for k in ["cibil", "credit score"]):
-        return (
-            "📈 <strong>CIBIL Credit Score Benchmark:</strong><br><br>"
-            "• <strong>Ideal Score</strong>: <strong>700 or above</strong>.<br>"
-            "• If CIBIL score is between 600–680, add a co-applicant or guarantor with 750+ CIBIL score.<br>"
-            "• Ensure no active EMI default or written-off credit balance."
-        )
-
-    if any(k in msg_lower for k in ["bep", "break even", "breakeven"]):
-        return (
-            "📉 <strong>Break-Even Point (BEP %) Guide:</strong><br><br>"
-            "• <strong>Formula</strong>: <code>(Fixed Costs / Total Contribution) * 100</code><br>"
-            "• <strong>Bank Benchmark</strong>: <strong>Below 50% to 60%</strong>.<br>"
-            "• A lower BEP percentage demonstrates strong risk resilience to bank loan officers."
-        )
-
-    if any(k in msg_lower for k in ["document", "checklist", "proof", "attach"]):
-        return (
-            "📋 <strong>Bank Submission Document Checklist:</strong><br><br>"
-            "1. <strong>Promoter KYC</strong>: Aadhaar, PAN, 3 Years ITR, 6 Months Bank Statement.<br>"
-            "2. <strong>Registrations</strong>: Udyam Certificate, GST, MoA/AoA/Partnership Deed.<br>"
-            "3. <strong>Land & Building</strong>: RTC / Rent Agreement / Lease Deed.<br>"
-            "4. <strong>Machinery</strong>: GST Supplier Quotations.<br>"
-            "5. <strong>Clearances</strong>: Trade License, FSSAI (for food), KSPCB NOC."
-        )
-
-    # =============================================================
-    # 9. GREETINGS & NATURAL CONVERSATIONAL RESPONSES
+    # 12. GREETINGS & NATURAL CONVERSATIONAL RESPONSES
     # =============================================================
     greeting_terms = {"hey", "hi", "hii", "hiii", "hello", "namaste", "good morning", "good afternoon", "good evening", "greetings"}
     if words.intersection(greeting_terms) or msg_lower in greeting_terms:
         return (
-            "👋 <strong>Hello! How can I help you today?</strong><br><br>"
-            "I am your <strong>Interactive AI Assistant</strong>. Ask me anything about:<br>"
-            "• 📥 <strong>Downloading & Exporting</strong> your DPR report.<br>"
-            "• ✏️ <strong>Editing Data & Account Help</strong> (resetting password, updating details).<br>"
-            "• 🏭 <strong>Form Guidance</strong> (machinery cost, manpower salaries, HSN codes).<br>"
-            "• 🏦 <strong>Bank Loan & Subsidy Rules</strong> (DSCR ratios, PMEGP, MUDRA, CGTMSE).<br><br>"
-            "What query can I solve for you?"
+            "👋 <strong>Hello! Welcome to VKF DPR AI Assistant.</strong><br><br>"
+            "I am trained with end-to-end knowledge on:<br>"
+            "• 🏛️ <strong>Government Subsidies</strong> (PMEGP, PMFME, Karnataka State IPS, Solar, AIF).<br>"
+            "• 💰 <strong>Interest Rates & Loan Norms</strong> (MUDRA 8.5%, MSME 8.75%-11.5%, Subventions).<br>"
+            "• 💵 <strong>Equity Rates & Ratios</strong> (Promoter 5-15%, Debt-Equity 2:1, DSCR 1.5-2.0x).<br>"
+            "• 📑 <strong>DPR Report Types</strong> (Bank Loan CMA, Govt Scheme, MUDRA, Investor Pitch).<br>"
+            "• 📥 <strong>Downloading & Editing</strong> (PDF/DOCX exports, auto-save progress).<br><br>"
+            "What query can I answer for you today?"
         )
 
     if any(k in msg_lower for k in ["thank", "thanks", "thankyou", "awesome", "great", "perfect", "good"]):
         return (
             "😊 <strong>You're very welcome!</strong><br><br>"
-            "I'm glad I could assist you. If you have any more questions about downloading your report, editing details, or bank loan guidelines, feel free to ask anytime!"
+            "I'm glad I could assist you. If you have any more questions about subsidies, interest rates, financial ratios, or downloading your DPR report, feel free to ask anytime!"
         )
 
     # =============================================================
-    # 10. SMART DIRECT CONVERSATIONAL FALLBACK
+    # 13. SMART DIRECT CONVERSATIONAL FALLBACK
     # =============================================================
     sec_str = f" for section <strong>'{current_section}'</strong>" if current_section else ""
     return (
-        f"💬 <strong>AI Assistant Response:</strong><br><br>"
+        f"💬 <strong>VKF DPR AI Assistant:</strong><br><br>"
         f"Regarding your query about <em>'{message}'</em>{sec_str}:<br><br>"
-        "• 📥 <strong>To download your PDF or DOCX report</strong>: Go to Step 14 (Summary) and click 'Download PDF' or 'Download DOCX'.<br>"
-        "• ✏️ <strong>To edit any form details</strong>: Click the step numbers (1 to 14) in the top progress bar to update your inputs.<br>"
-        "• 📞 <strong>Need platform support?</strong> Email support@visionkarnataka.org or call +91 98450 12345.<br><br>"
-        "Ask me any specific question about downloads, form editing, password resets, or bank loan guidelines!"
+        "• 🏛️ <strong>Subsidies & Schemes</strong>: Ask about PMEGP (up to 35%), PMFME (35% up to 10L), Karnataka State IPS, or PM-KUSUM.<br>"
+        "• 💰 <strong>Interest & Loan Terms</strong>: Bank rates (8.5%-11.5%), 5-7 year tenure, 6-12 month moratorium.<br>"
+        "• 💵 <strong>Equity & Ratios</strong>: Promoter contribution (5-15%), Debt-Equity (2:1 to 3:1), Ideal DSCR (1.5-2.0x).<br>"
+        "• 📥 <strong>Downloading Reports</strong>: Go to Step 14 (Summary) and click 'Download PDF' or 'Download DOCX'.<br><br>"
+        "Type any specific topic above for instant detailed guidance!"
     )
 
 @router.post("/chat", response_model=ChatMessageResponse)

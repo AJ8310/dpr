@@ -23,7 +23,7 @@ export default function FloatingChatbotWidget({
   const [messages, setMessages] = useState<Message[]>([
     {
       sender: 'bot',
-      text: '<strong>Welcome to Vision Karnataka Foundation</strong><br>I am your live DPR Expert. Ask me any question about downloading reports, editing form fields, DSCR ratios, subsidies, or account settings!',
+      text: '<strong>Welcome to Vision Karnataka Foundation AI Assistant</strong><br>I am your end-to-end DPR Advisor. Ask me anything about <strong>Subsidies (PMEGP, PMFME, State IPS)</strong>, <strong>Bank Interest Rates</strong>, <strong>Promoter Equity %</strong>, <strong>Types of DPR Reports</strong>, or <strong>Downloading Reports</strong>!',
     },
   ]);
   const [inputText, setInputText] = useState('');
@@ -115,7 +115,7 @@ export default function FloatingChatbotWidget({
     if (sec.includes('working capital')) {
       return ['Working Capital Cycle', 'Nayak Committee Norms', 'Inventory Days limit'];
     }
-    return ['How to download PDF?', 'How to edit form data?', 'What is DSCR Ratio?', 'PMEGP Subsidy details'];
+    return ['PMEGP & PMFME Subsidies', 'Bank Loan Interest Rates', 'Promoter Equity & DSCR', 'Types of DPR Reports', 'Karnataka State Subsidies', 'How to Download PDF/DOCX', 'How to Edit Form Data'];
   };
 
   const suggestions = getContextualSuggestions();
