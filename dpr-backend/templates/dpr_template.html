@@ -587,13 +587,13 @@
             <tr><th style="width: 60%;">Project Expenditure Head</th><th style="width: 25%;" class="num-col">Amount (₹)</th><th style="width: 15%;" class="num-col">% of Total</th></tr>
         </thead>
         <tbody>
-            <tr><td>Land & Site Development</td><td class="num-col">₹{{land_cost | inr}}</td><td class="num-col">-</td></tr>
-            <tr><td>Civil Works & Building Shed</td><td class="num-col">₹{{building_cost | inr}}</td><td class="num-col">-</td></tr>
-            <tr><td>Plant, Machinery & Equipment</td><td class="num-col">₹{{machinery_total | default(total_cost * 0.4) | inr}}</td><td class="num-col">-</td></tr>
-            <tr><td>Electrification & Utility Setup</td><td class="num-col">₹{{electrification_cost | default(600000) | inr}}</td><td class="num-col">-</td></tr>
-            <tr><td>Furniture, Office & Fixtures</td><td class="num-col">₹{{furniture_cost | inr}}</td><td class="num-col">-</td></tr>
-            <tr><td>Working Capital Margin</td><td class="num-col">₹{{working_capital | inr}}</td><td class="num-col">-</td></tr>
-            <tr><td>Pre-operative Expenses</td><td class="num-col">₹{{other_cost | inr}}</td><td class="num-col">-</td></tr>
+            <tr><td>Land & Site Development</td><td class="num-col">₹{{land_cost | inr}}</td><td class="num-col">{{ (((land_cost / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>Civil Works & Building Shed</td><td class="num-col">₹{{building_cost | inr}}</td><td class="num-col">{{ (((building_cost / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>Plant, Machinery & Equipment</td><td class="num-col">₹{{machinery_total | inr}}</td><td class="num-col">{{ (((machinery_total / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>Electrification & Utility Setup</td><td class="num-col">₹{{electrification_cost | default(0) | inr}}</td><td class="num-col">{{ ((((electrification_cost | default(0)) / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>Furniture, Office & Fixtures</td><td class="num-col">₹{{furniture_cost | default(0) | inr}}</td><td class="num-col">{{ ((((furniture_cost | default(0)) / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>Working Capital Margin</td><td class="num-col">₹{{working_capital | inr}}</td><td class="num-col">{{ (((working_capital / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>Pre-operative Expenses</td><td class="num-col">₹{{other_cost | default(0) | inr}}</td><td class="num-col">{{ ((((other_cost | default(0)) / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
             <tr class="total-row">
                 <td>TOTAL PROJECT COST</td>
                 <td class="num-col">₹{{total_cost | inr}}</td>
@@ -1212,9 +1212,9 @@
     <table class="dpr-table">
         <thead><tr><th>Funding Source</th><th class="num-col">Amount (₹)</th><th class="num-col">% Share</th></tr></thead>
         <tbody>
-            <tr><td>Promoter Equity Capital</td><td class="num-col">₹{{promoter_contribution | inr}}</td><td class="num-col">{{promoter_percent | default("30.0%")}}</td></tr>
-            <tr><td>Term Loan / Debt Funding</td><td class="num-col">₹{{bank_loan | inr}}</td><td class="num-col">{{loan_percent | default("70.0%")}}</td></tr>
-            <tr><td>Government Capital Subsidy</td><td class="num-col">₹{{subsidy | inr}}</td><td class="num-col">{{subsidy_percent | default("14.0%")}}</td></tr>
+            <tr><td>Promoter Equity Capital</td><td class="num-col">₹{{promoter_contribution | inr}}</td><td class="num-col">{{ (((promoter_contribution / total_cost) * 100) | round(1)) if total_cost > 0 else 30.0 }}%</td></tr>
+            <tr><td>Term Loan / Debt Funding</td><td class="num-col">₹{{bank_loan | inr}}</td><td class="num-col">{{ (((bank_loan / total_cost) * 100) | round(1)) if total_cost > 0 else 70.0 }}%</td></tr>
+            <tr><td>Government Capital Subsidy</td><td class="num-col">₹{{subsidy | inr}}</td><td class="num-col">{{ (((subsidy / total_cost) * 100) | round(1)) if total_cost > 0 else 0.0 }}%</td></tr>
             <tr class="total-row"><td>TOTAL MEANS OF FINANCE</td><td class="num-col"><strong>₹{{total_funds | default(total_cost) | inr}}</strong></td><td class="num-col"><strong>100.0%</strong></td></tr>
         </tbody>
     </table>
@@ -1288,7 +1288,17 @@
         <thead><tr><th>Liabilities / Assets</th><th class="num-col">Year 1 (₹)</th><th class="num-col">Year 3 (₹)</th><th class="num-col">Year 5 (₹)</th><th class="num-col">Year 10 (₹)</th></tr></thead>
         <tbody>
             <tr><td>Promoter Equity Capital</td><td class="num-col">₹{{promoter_contribution | inr}}</td><td class="num-col">₹{{promoter_contribution | inr}}</td><td class="num-col">₹{{promoter_contribution | inr}}</td><td class="num-col">₹{{promoter_contribution | inr}}</td></tr>
+            {% if projections_10yr and projections_10yr|length >= 10 %}
+            <tr>
+                <td>Reserves & Surplus (PAT)</td>
+                <td class="num-col">₹{{ projections_10yr[0].pat | inr }}</td>
+                <td class="num-col">₹{{ (projections_10yr[0].pat + projections_10yr[1].pat + projections_10yr[2].pat) | inr }}</td>
+                <td class="num-col">₹{{ (projections_10yr[0].pat + projections_10yr[1].pat + projections_10yr[2].pat + projections_10yr[3].pat + projections_10yr[4].pat) | inr }}</td>
+                <td class="num-col">₹{{ (projections_10yr[0].pat + projections_10yr[1].pat + projections_10yr[2].pat + projections_10yr[3].pat + projections_10yr[4].pat + projections_10yr[5].pat + projections_10yr[6].pat + projections_10yr[7].pat + projections_10yr[8].pat + projections_10yr[9].pat) | inr }}</td>
+            </tr>
+            {% else %}
             <tr><td>Reserves & Surplus (PAT)</td><td class="num-col">₹{{ (total_cost * 0.14) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.45) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.90) | inr }}</td><td class="num-col">₹{{ (total_cost * 2.20) | inr }}</td></tr>
+            {% endif %}
             <tr><td>Term Loan Outstanding</td><td class="num-col">₹{{ (bank_loan * 0.80) | inr }}</td><td class="num-col">₹{{ (bank_loan * 0.40) | inr }}</td><td class="num-col">₹0</td><td class="num-col">₹0</td></tr>
         </tbody>
     </table>
