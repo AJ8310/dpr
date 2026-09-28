@@ -536,7 +536,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       </head>
       <body>
         <div class="cover-page">
-          <div class="cover-badge">VISION KARNATAKA FOUNDATION</div>
+          ${data.associated_with_vkf ? '<div class="cover-badge">VISION KARNATAKA FOUNDATION</div>' : ''}
           <div class="cover-title" style="margin-top: 40px;">DETAILED PROJECT REPORT (DPR)</div>
           <div class="cover-sub">${data.business_name || 'Commercial Enterprise Unit'}</div>
           <p><strong>Primary Product:</strong> ${data.primary_product || 'Industrial Products'}</p>

@@ -187,3 +187,4 @@ class DPRDataPayload(BaseModel):
     designation: Optional[str] = ""
     place: Optional[str] = ""
     declaration_date: Optional[str] = ""
+    associated_with_vkf: Optional[bool] = False
