@@ -120,6 +120,7 @@ class DPRDocumentModel(BaseModel):
     dpr_type: DPRTypeEnum = DPRTypeEnum.BANK_LOAN
     dpr_depth: DPRDepthEnum = DPRDepthEnum.STANDARD
     industry: IndustryCategoryEnum = IndustryCategoryEnum.MANUFACTURING
+    associated_with_vkf: bool = False
 
     @field_validator('dpr_type', mode='before')
     @classmethod

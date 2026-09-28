@@ -196,6 +196,7 @@ export interface DPRFormData {
   designation: string;
   place: string;
   declaration_date: string;
+  associated_with_vkf?: boolean;
 }
 
 export interface UserSession {

@@ -365,14 +365,21 @@
 
 <!-- COVER PAGE LOGO BANNER -->
 <div class="cover">
-    <div class="cover-logo-banner">
-        <img src="{{user_logo_b64 | default(org_logo_b64) | default(vkf_official_logo_b64) | default('assets/vkf_official_logo.png')}}" alt="Enterprise Logo" onerror="this.style.display='none'">
+    <div class="cover-logo-banner" style="display: flex; justify-content: center; align-items: center; gap: 20px;">
+        {% if user_logo_b64 %}
+        <img src="{{user_logo_b64}}" alt="Enterprise Logo" style="max-height: 110px; max-width: 45%; object-fit: contain;">
+        {% endif %}
+        {% if associated_with_vkf and vkf_official_logo_b64 %}
+        <img src="{{vkf_official_logo_b64}}" alt="VKF Logo" style="max-height: 110px; max-width: 45%; object-fit: contain;">
+        {% endif %}
     </div>
 
     <h1>DETAILED PROJECT REPORT</h1>
     <div class="unit-title">{{primary_product | default(business_name)}} Manufacturing Unit</div>
 
+    {% if associated_with_vkf %}
     <div class="by-publisher">By Vision Karnataka Foundation</div>
+    {% endif %}
     <div class="year-badge">2026</div>
 
     <table class="cover-details-table">
@@ -389,8 +396,13 @@
 <div class="page-break"></div>
 
 <!-- TOP RUNNING HEADER FOR SUBSEQUENT PAGES -->
-<div class="running-header">
-    <img src="{{user_logo_b64 | default(org_logo_b64) | default(vkf_official_logo_b64) | default('assets/vkf_official_logo.png')}}" alt="Enterprise Logo" onerror="this.style.display='none'">
+<div class="running-header" style="display: flex; justify-content: center; align-items: center; gap: 15px;">
+    {% if user_logo_b64 %}
+    <img src="{{user_logo_b64}}" alt="Enterprise Logo" style="max-height: 70px; max-width: 45%; object-fit: contain;">
+    {% endif %}
+    {% if associated_with_vkf and vkf_official_logo_b64 %}
+    <img src="{{vkf_official_logo_b64}}" alt="VKF Logo" style="max-height: 70px; max-width: 45%; object-fit: contain;">
+    {% endif %}
 </div>
 
 <!-- PAGE 2: TABLE OF CONTENT -->

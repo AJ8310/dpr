@@ -106,13 +106,14 @@ class DPRTemplateCompositionEngine:
 
             return None
 
-        # Resolve logo: prioritize user uploaded logo over default logo
-        user_logo_b64 = resolve_to_b64(resolved_images.get("logo") or doc.logo_path)
+        # Resolve logo: prioritize user uploaded logo
+        user_logo_b64 = resolve_to_b64(resolved_images.get("logo") or doc.logo_path) or ""
 
         assets_dir = os.path.join(templates_dir, "assets")
         banner_b64 = cls._file_to_base64_uri(os.path.join(assets_dir, "vkf_header_banner.png"), "image/png")
         default_logo_b64 = cls._file_to_base64_uri(os.path.join(assets_dir, "vkf_official_logo.png"), "image/png")
-        logo_b64 = user_logo_b64 or default_logo_b64
+
+        associated_with_vkf = getattr(doc, 'associated_with_vkf', False)
 
         prod1_b64 = cls._file_to_base64_uri(os.path.join(assets_dir, "product_sample_1.jpg"), "image/jpeg")
         prod2_b64 = cls._file_to_base64_uri(os.path.join(assets_dir, "product_sample_2.jpg"), "image/jpeg")
@@ -145,10 +146,11 @@ class DPRTemplateCompositionEngine:
         context["narratives"] = narratives
         context["diagrams"] = diagrams
         context["charts_b64"] = charts_b64
+        context["associated_with_vkf"] = associated_with_vkf
         context["vkf_header_banner_b64"] = banner_b64
-        context["vkf_official_logo_b64"] = logo_b64
-        context["user_logo_b64"] = logo_b64
-        context["org_logo_b64"] = logo_b64
+        context["vkf_official_logo_b64"] = default_logo_b64 if associated_with_vkf else ""
+        context["user_logo_b64"] = user_logo_b64
+        context["org_logo_b64"] = user_logo_b64 or (default_logo_b64 if associated_with_vkf else "")
         context["user_product_b64"] = user_product_b64
         context["user_facility_b64"] = user_facility_b64
         context["user_team_b64"] = user_team_b64

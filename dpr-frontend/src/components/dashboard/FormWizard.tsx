@@ -144,7 +144,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
     designation: '',
     place: '',
     declaration_date: new Date().toISOString().split('T')[0],
-    dpr_depth: 'enterprise'
+    dpr_depth: 'enterprise',
+    associated_with_vkf: false
   });
 
   const [generating, setGenerating] = useState(false);
@@ -2228,26 +2229,42 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                 title: 'User Approval & Report Generation',
                 description: 'Compile publication-ready PDF or editable Word DOCX report',
                 content: (
-                  <div style={{ display: 'flex', justifyContent: 'center', gap: '1.2rem', flexWrap: 'wrap', paddingTop: '1rem' }}>
-                    <button
-                      type="button"
-                      onClick={handleGeneratePDF}
-                      disabled={generating}
-                      className="btn-next-spacious"
-                      style={{ padding: '1.1rem 2.2rem', fontSize: '1rem', background: 'linear-gradient(135deg, #008C95 0%, #006F78 100%)', boxShadow: '0 8px 25px rgba(0, 140, 149, 0.35)' }}
-                    >
-                      <i className="fas fa-file-pdf"></i> {generating ? 'Compiling PDF Engine Report...' : 'APPROVE & COMPILE FINAL PDF REPORT'}
-                    </button>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.2rem', paddingTop: '0.8rem' }}>
+                    <div style={{ background: '#F8FAFC', border: '1.5px solid #CBD5E1', padding: '0.8rem 1.4rem', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', userSelect: 'none' }}>
+                      <input
+                        type="checkbox"
+                        id="associated_with_vkf"
+                        name="associated_with_vkf"
+                        checked={!!formData.associated_with_vkf}
+                        onChange={(e) => setFormData((prev) => ({ ...prev, associated_with_vkf: e.target.checked }))}
+                        style={{ width: '18px', height: '18px', accentColor: '#008C95', cursor: 'pointer' }}
+                      />
+                      <label htmlFor="associated_with_vkf" style={{ fontSize: '0.92rem', fontWeight: 700, color: '#0F172A', cursor: 'pointer', margin: 0 }}>
+                        Associated / Partnered with VKF
+                      </label>
+                    </div>
 
-                    <button
-                      type="button"
-                      onClick={() => downloadClientReport(formData, 'docx')}
-                      disabled={generating}
-                      className="btn-next-spacious"
-                      style={{ padding: '1.1rem 2.2rem', fontSize: '1rem', background: 'linear-gradient(135deg, #FF7A00 0%, #EA580C 100%)', boxShadow: '0 8px 25px rgba(255, 122, 0, 0.35)' }}
-                    >
-                      <i className="fas fa-file-word"></i> {generating ? 'Compiling Word DOCX...' : 'APPROVE & COMPILE EDITABLE DOCX'}
-                    </button>
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: '1.2rem', flexWrap: 'wrap', width: '100%' }}>
+                      <button
+                        type="button"
+                        onClick={handleGeneratePDF}
+                        disabled={generating}
+                        className="btn-next-spacious"
+                        style={{ padding: '1.1rem 2.2rem', fontSize: '1rem', background: 'linear-gradient(135deg, #008C95 0%, #006F78 100%)', boxShadow: '0 8px 25px rgba(0, 140, 149, 0.35)' }}
+                      >
+                        <i className="fas fa-file-pdf"></i> {generating ? 'Compiling PDF Engine Report...' : 'APPROVE & COMPILE FINAL PDF REPORT'}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => downloadClientReport(formData, 'docx')}
+                        disabled={generating}
+                        className="btn-next-spacious"
+                        style={{ padding: '1.1rem 2.2rem', fontSize: '1rem', background: 'linear-gradient(135deg, #FF7A00 0%, #EA580C 100%)', boxShadow: '0 8px 25px rgba(255, 122, 0, 0.35)' }}
+                      >
+                        <i className="fas fa-file-word"></i> {generating ? 'Compiling Word DOCX...' : 'APPROVE & COMPILE EDITABLE DOCX'}
+                      </button>
+                    </div>
                   </div>
                 ),
               },
