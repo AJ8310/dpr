@@ -1028,7 +1028,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
               {
                 id: 'sector_activity',
                 title: 'Business Sector & Activity Selection',
-                description: 'Select your sector & sub-activity for dynamic blueprint schema resolution',
+                description: 'Select your sector & sub-activity for dynamic schema resolution',
                 content: (
                   <div style={{ background: 'linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)', border: '1.5px solid #FF7A00', borderRadius: '16px', padding: '1.4rem 1.6rem' }}>
                     <div className="grid-3">
