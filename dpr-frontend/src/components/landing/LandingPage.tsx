@@ -1333,11 +1333,11 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               <div>
                 <h3 style={{ margin: '0 0 6px 0', fontSize: '1.25rem', color: '#102536', fontWeight: 800 }}>Team</h3>
                 <div style={{ color: '#66798A', fontSize: '0.78rem', minHeight: '34px', lineHeight: 1.4, fontWeight: 500 }}>Growth-stage businesses & MSMEs</div>
-                <div style={{ display: 'inline-block', padding: '6px 12px', borderRadius: '10px', background: '#E4F8F1', color: '#08785F', fontWeight: 900, fontSize: '1.6rem', marginTop: '16px', marginBottom: '8px' }}>
-                  ₹14,999 <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#66798A' }}>/ DPR</span>
+                <div style={{ display: 'inline-block', padding: '6px 12px', borderRadius: '10px', background: '#E4F8F1', color: '#08785F', fontWeight: 900, fontSize: '1.4rem', marginTop: '16px', marginBottom: '8px' }}>
+                  Custom Scope
                 </div>
                 <p style={{ fontSize: '0.78rem', color: '#66798A', lineHeight: 1.5, margin: '8px 0 16px' }}>Advanced DPR depth with detailed financial analysis and funding requirement analysis.</p>
-                <button onClick={() => { setAuthView('register'); scrollToAuth(); }} className="apple-btn-primary" style={{ width: '100%', padding: '0.7rem', fontSize: '0.86rem', justifyContent: 'center', borderRadius: '10px' }}>Create Advanced DPR</button>
+                <button onClick={scrollToAuth} className="apple-btn-primary" style={{ width: '100%', padding: '0.7rem', fontSize: '0.86rem', justifyContent: 'center', borderRadius: '10px' }}>Contact Team</button>
               </div>
               <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '14px', marginTop: '16px' }}>
                 <strong style={{ fontSize: '0.7rem', color: '#164E5B', letterSpacing: '0.4px', textTransform: 'uppercase' }}>INCLUDES</strong>
