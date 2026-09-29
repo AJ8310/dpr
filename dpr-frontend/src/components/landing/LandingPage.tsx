@@ -1080,101 +1080,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         </div>
       </section>
 
-      {/* 9. FAQ SECTION */}
-      <section id="faq" style={{ padding: '100px 24px', background: '#FFFFFF', borderTop: '1px solid rgba(0, 0, 0, 0.06)', position: 'relative', zIndex: 1 }}>
-        <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
-          
-          <div className="faq-grid" style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '64px', alignItems: 'start' }}>
-            
-            {/* Left Column Heading */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <h2 style={{ fontSize: '3rem', fontWeight: 700, color: '#1D1D1F', lineHeight: 1.05, letterSpacing: '-0.03em' }}>
-                Frequently Asked Questions
-              </h2>
-              <div style={{ fontSize: '1.05rem', color: '#86868B' }}>
-                Have questions?{' '}
-                <button
-                  onClick={scrollToAuth}
-                  style={{ all: 'unset', color: '#0071E3', fontWeight: 600, cursor: 'pointer' }}
-                >
-                  Talk to our team &rarr;
-                </button>
-              </div>
-            </div>
 
-            {/* Right Column List with Dividers */}
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {[
-                {
-                  q: 'What is a Detailed Project Report (DPR)?',
-                  a: 'A Detailed Project Report is an official comprehensive document that details a enterprise setup, its capital expenditure heads, operational parameters, 10-year projected financials, and debt service viability for institutional sanction.'
-                },
-                {
-                  q: 'Who can use this DPR tool?',
-                  a: 'The DPR Studio is built for MSMEs, entrepreneurs, chartered accountants, and consultants preparing bank loans, subsidy applications, and investor presentations.'
-                },
-                {
-                  q: 'Which government subsidy schemes are supported?',
-                  a: 'The engine supports central and state government schemes including PMEGP, PMFME, State Industrial Policy capital subsidies, AIF, and PM-KUSUM.'
-                },
-                {
-                  q: 'What formats can I export my DPR to?',
-                  a: 'You can generate fully formatted Microsoft Word (.docx) documents with option for custom enterprise co-branding.'
-                }
-              ].map((faq, i) => {
-                const isOpen = openFaqIndex === i;
-                return (
-                  <div key={i} style={{
-                    borderTop: '1px solid rgba(0, 0, 0, 0.08)',
-                    borderBottom: i === 3 ? '1px solid rgba(0, 0, 0, 0.08)' : 'none',
-                    padding: '24px 0'
-                  }}>
-                    <div
-                      onClick={() => setOpenFaqIndex(isOpen ? null : i)}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        gap: '20px'
-                      }}
-                    >
-                      <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#1D1D1F', margin: 0 }}>
-                        {faq.q}
-                      </h3>
-                      <button style={{
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '50%',
-                        background: '#1D1D1F',
-                        color: '#FFFFFF',
-                        border: 'none',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '1rem',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        flexShrink: 0
-                      }}>
-                        {isOpen ? '✕' : '+'}
-                      </button>
-                    </div>
-
-                    {isOpen && (
-                      <p style={{ marginTop: '16px', fontSize: '1.02rem', color: '#515154', lineHeight: 1.6, maxWidth: '720px' }}>
-                        {faq.a}
-                      </p>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-          </div>
-
-        </div>
-      </section>
 
       {/* 9.5 COMPLETE DPR PRICING SECTION (FROM dpr-pricing-page 5.html) */}
       <section id="pricing" style={{ padding: '100px 24px', background: 'linear-gradient(180deg, #F4FBFC 0%, #FFFFFF 46%)', borderTop: '1px solid rgba(0, 0, 0, 0.08)', position: 'relative', zIndex: 1 }}>
@@ -1606,6 +1512,102 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                 />
               )}
 
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* 10.5. FAQ SECTION (AT END OF LANDING PAGE) */}
+      <section id="faq" style={{ padding: '100px 24px', background: '#FFFFFF', borderTop: '1px solid rgba(0, 0, 0, 0.06)', position: 'relative', zIndex: 1 }}>
+        <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
+          
+          <div className="faq-grid" style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '64px', alignItems: 'start' }}>
+            
+            {/* Left Column Heading */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <h2 style={{ fontSize: '3rem', fontWeight: 700, color: '#1D1D1F', lineHeight: 1.05, letterSpacing: '-0.03em' }}>
+                Frequently Asked Questions
+              </h2>
+              <div style={{ fontSize: '1.05rem', color: '#86868B' }}>
+                Have questions?{' '}
+                <button
+                  onClick={scrollToAuth}
+                  style={{ all: 'unset', color: '#0071E3', fontWeight: 600, cursor: 'pointer' }}
+                >
+                  Talk to our team &rarr;
+                </button>
+              </div>
+            </div>
+
+            {/* Right Column List with Dividers */}
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {[
+                {
+                  q: 'What is a Detailed Project Report (DPR)?',
+                  a: 'A Detailed Project Report is an official comprehensive document that details a enterprise setup, its capital expenditure heads, operational parameters, 10-year projected financials, and debt service viability for institutional sanction.'
+                },
+                {
+                  q: 'Who can use this DPR tool?',
+                  a: 'The DPR Studio is built for MSMEs, entrepreneurs, chartered accountants, and consultants preparing bank loans, subsidy applications, and investor presentations.'
+                },
+                {
+                  q: 'Which government subsidy schemes are supported?',
+                  a: 'The engine supports central and state government schemes including PMEGP, PMFME, State Industrial Policy capital subsidies, AIF, and PM-KUSUM.'
+                },
+                {
+                  q: 'What formats can I export my DPR to?',
+                  a: 'You can generate fully formatted Microsoft Word (.docx) documents with option for custom enterprise co-branding.'
+                }
+              ].map((faq, i) => {
+                const isOpen = openFaqIndex === i;
+                return (
+                  <div key={i} style={{
+                    borderTop: '1px solid rgba(0, 0, 0, 0.08)',
+                    borderBottom: i === 3 ? '1px solid rgba(0, 0, 0, 0.08)' : 'none',
+                    padding: '24px 0'
+                  }}>
+                    <div
+                      onClick={() => setOpenFaqIndex(isOpen ? null : i)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        gap: '20px'
+                      }}
+                    >
+                      <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#1D1D1F', margin: 0 }}>
+                        {faq.q}
+                      </h3>
+                      <button style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '50%',
+                        background: '#1D1D1F',
+                        color: '#FFFFFF',
+                        border: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '1rem',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        flexShrink: 0
+                      }}>
+                        {isOpen ? '✕' : '+'}
+                      </button>
+                    </div>
+
+                    {isOpen && (
+                      <p style={{ marginTop: '16px', fontSize: '1.02rem', color: '#515154', lineHeight: 1.6, maxWidth: '720px' }}>
+                        {faq.a}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
           </div>
