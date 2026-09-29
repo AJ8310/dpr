@@ -1111,47 +1111,14 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             </p>
           </div>
 
-          {/* 5 PLAN TIER CARDS GRID */}
+          {/* 4 PLAN TIER CARDS GRID */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '18px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+            gap: '20px',
             alignItems: 'stretch',
             marginBottom: '72px'
           }}>
-            
-            {/* CARD 1: FREE */}
-            <div style={{
-              background: 'linear-gradient(180deg, #FFFFFF 0%, #FBFEFE 100%)',
-              border: '1px solid #D8E3E8',
-              borderTop: '4px solid #93AEB7',
-              borderRadius: '18px',
-              padding: '24px 20px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              boxShadow: '0 5px 16px rgba(0, 65, 80, 0.04)'
-            }}>
-              <div>
-                <h3 style={{ margin: '0 0 6px 0', fontSize: '1.25rem', color: '#102536', fontWeight: 800 }}>Free</h3>
-                <div style={{ color: '#66798A', fontSize: '0.78rem', minHeight: '34px', lineHeight: 1.4, fontWeight: 500 }}>Idea & pre-startup projects</div>
-                <div style={{ display: 'inline-block', padding: '6px 12px', borderRadius: '10px', background: '#EEF3F5', color: '#526973', fontWeight: 900, fontSize: '1.6rem', marginTop: '16px', marginBottom: '8px' }}>
-                  ₹0 <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#66798A' }}>/ forever</span>
-                </div>
-                <p style={{ fontSize: '0.78rem', color: '#66798A', lineHeight: 1.5, margin: '8px 0 16px' }}>Start with a funding-readiness assessment before building a full DPR.</p>
-                <button onClick={() => { setAuthView('register'); scrollToAuth(); }} className="apple-btn-secondary" style={{ width: '100%', padding: '0.7rem', fontSize: '0.86rem', justifyContent: 'center', borderRadius: '10px' }}>Start Free</button>
-              </div>
-              <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '14px', marginTop: '16px' }}>
-                <strong style={{ fontSize: '0.7rem', color: '#164E5B', letterSpacing: '0.4px', textTransform: 'uppercase' }}>INCLUDES</strong>
-                <ul style={{ padding: 0, margin: '8px 0 0 0', listStyle: 'none', fontSize: '0.78rem', color: '#435B67' }}>
-                  {['Funding-readiness assessment', '1 DPR / preview', 'Self-service support', 'Basic DPR preview', 'Project viability snapshot', 'Funding-purpose guidance', 'Key assumptions checklist'].map((item, idx) => (
-                    <li key={idx} style={{ margin: '6px 0', paddingLeft: '16px', position: 'relative' }}>
-                      <span style={{ position: 'absolute', left: 0, color: '#008C95', fontWeight: 900 }}>✓</span> {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
 
             {/* CARD 2: ENTRY */}
             <div style={{
