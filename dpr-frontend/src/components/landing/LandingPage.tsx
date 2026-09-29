@@ -274,10 +274,10 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             />
             <div>
               <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1D1D1F', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-                VKF DPR Studio
+                DPRPro AI
               </div>
               <div style={{ fontSize: '0.76rem', color: '#86868B', fontWeight: 500, letterSpacing: '0.2px' }}>
-                Bankable Reports. Reimagined.
+                Create Professional DPR Reports in Less Time
               </div>
             </div>
           </div>
@@ -1280,44 +1280,11 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               </div>
             </div>
 
-            {/* CARD 3: CORE */}
-            <div style={{
-              background: 'linear-gradient(180deg, #FFFFFF 0%, #FBFEFE 100%)',
-              border: '1px solid #D8E3E8',
-              borderTop: '4px solid #3488D0',
-              borderRadius: '18px',
-              padding: '24px 20px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              boxShadow: '0 5px 16px rgba(0, 65, 80, 0.04)'
-            }}>
-              <div>
-                <h3 style={{ margin: '0 0 6px 0', fontSize: '1.25rem', color: '#102536', fontWeight: 800 }}>Core</h3>
-                <div style={{ color: '#66798A', fontSize: '0.78rem', minHeight: '34px', lineHeight: 1.4, fontWeight: 500 }}>Growing businesses</div>
-                <div style={{ display: 'inline-block', padding: '6px 12px', borderRadius: '10px', background: '#EAF3FF', color: '#216DA9', fontWeight: 900, fontSize: '1.6rem', marginTop: '16px', marginBottom: '8px' }}>
-                  ₹7,999 <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#66798A' }}>/ DPR</span>
-                </div>
-                <p style={{ fontSize: '0.78rem', color: '#66798A', lineHeight: 1.5, margin: '8px 0 16px' }}>A complete DPR with projections and funding analysis for growing businesses.</p>
-                <button onClick={() => { setAuthView('register'); scrollToAuth(); }} className="apple-btn-secondary" style={{ width: '100%', padding: '0.7rem', fontSize: '0.86rem', justifyContent: 'center', borderRadius: '10px' }}>Create DPR</button>
-              </div>
-              <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '14px', marginTop: '16px' }}>
-                <strong style={{ fontSize: '0.7rem', color: '#164E5B', letterSpacing: '0.4px', textTransform: 'uppercase' }}>INCLUDES</strong>
-                <ul style={{ padding: 0, margin: '8px 0 0 0', listStyle: 'none', fontSize: '0.78rem', color: '#435B67' }}>
-                  {['Complete DPR', '1 DPR', 'Standard support', 'Executive summary & profile', 'Market & competitor analysis', 'Detailed financial projections', 'Revenue & expense assumptions', 'Funding requirement analysis', 'Break-even analysis', 'Repayment / viability analysis', 'Risk & mitigation section'].map((item, idx) => (
-                    <li key={idx} style={{ margin: '6px 0', paddingLeft: '16px', position: 'relative' }}>
-                      <span style={{ position: 'absolute', left: 0, color: '#008C95', fontWeight: 900 }}>✓</span> {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* CARD 4: TEAM (MOST USED FEATURED) */}
+            {/* CARD 3: CORE (MOST USED FEATURED) */}
             <div style={{
               background: 'linear-gradient(180deg, #FFFFFF 0%, #FBFEFE 100%)',
               border: '2px solid #008C95',
-              borderTop: '4px solid #0B9B86',
+              borderTop: '4px solid #3488D0',
               borderRadius: '18px',
               padding: '24px 20px',
               position: 'relative',
@@ -1331,13 +1298,46 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                 MOST USED
               </div>
               <div>
+                <h3 style={{ margin: '0 0 6px 0', fontSize: '1.25rem', color: '#102536', fontWeight: 800 }}>Core</h3>
+                <div style={{ color: '#66798A', fontSize: '0.78rem', minHeight: '34px', lineHeight: 1.4, fontWeight: 500 }}>Growing businesses</div>
+                <div style={{ display: 'inline-block', padding: '6px 12px', borderRadius: '10px', background: '#EAF3FF', color: '#216DA9', fontWeight: 900, fontSize: '1.6rem', marginTop: '16px', marginBottom: '8px' }}>
+                  ₹7,999 <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#66798A' }}>/ DPR</span>
+                </div>
+                <p style={{ fontSize: '0.78rem', color: '#66798A', lineHeight: 1.5, margin: '8px 0 16px' }}>A complete DPR with projections and funding analysis for growing businesses.</p>
+                <button onClick={() => { setAuthView('register'); scrollToAuth(); }} className="apple-btn-primary" style={{ width: '100%', padding: '0.7rem', fontSize: '0.86rem', justifyContent: 'center', borderRadius: '10px' }}>Create DPR</button>
+              </div>
+              <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '14px', marginTop: '16px' }}>
+                <strong style={{ fontSize: '0.7rem', color: '#164E5B', letterSpacing: '0.4px', textTransform: 'uppercase' }}>INCLUDES</strong>
+                <ul style={{ padding: 0, margin: '8px 0 0 0', listStyle: 'none', fontSize: '0.78rem', color: '#435B67' }}>
+                  {['Complete DPR', '1 DPR', 'Standard support', 'Executive summary & profile', 'Market & competitor analysis', 'Detailed financial projections', 'Revenue & expense assumptions', 'Funding requirement analysis', 'Break-even analysis', 'Repayment / viability analysis', 'Risk & mitigation section'].map((item, idx) => (
+                    <li key={idx} style={{ margin: '6px 0', paddingLeft: '16px', position: 'relative' }}>
+                      <span style={{ position: 'absolute', left: 0, color: '#008C95', fontWeight: 900 }}>✓</span> {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* CARD 4: TEAM */}
+            <div style={{
+              background: 'linear-gradient(180deg, #FFFFFF 0%, #FBFEFE 100%)',
+              border: '1px solid #D8E3E8',
+              borderTop: '4px solid #0B9B86',
+              borderRadius: '18px',
+              padding: '24px 20px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              boxShadow: '0 5px 16px rgba(0, 65, 80, 0.04)'
+            }}>
+              <div>
                 <h3 style={{ margin: '0 0 6px 0', fontSize: '1.25rem', color: '#102536', fontWeight: 800 }}>Team</h3>
                 <div style={{ color: '#66798A', fontSize: '0.78rem', minHeight: '34px', lineHeight: 1.4, fontWeight: 500 }}>Growth-stage businesses & MSMEs</div>
                 <div style={{ display: 'inline-block', padding: '6px 12px', borderRadius: '10px', background: '#E4F8F1', color: '#08785F', fontWeight: 900, fontSize: '1.4rem', marginTop: '16px', marginBottom: '8px' }}>
                   Custom Scope
                 </div>
                 <p style={{ fontSize: '0.78rem', color: '#66798A', lineHeight: 1.5, margin: '8px 0 16px' }}>Advanced DPR depth with detailed financial analysis and funding requirement analysis.</p>
-                <button onClick={scrollToAuth} className="apple-btn-primary" style={{ width: '100%', padding: '0.7rem', fontSize: '0.86rem', justifyContent: 'center', borderRadius: '10px' }}>Contact Team</button>
+                <button onClick={scrollToAuth} className="apple-btn-secondary" style={{ width: '100%', padding: '0.7rem', fontSize: '0.86rem', justifyContent: 'center', borderRadius: '10px' }}>Contact Team</button>
               </div>
               <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '14px', marginTop: '16px' }}>
                 <strong style={{ fontSize: '0.7rem', color: '#164E5B', letterSpacing: '0.4px', textTransform: 'uppercase' }}>INCLUDES</strong>
@@ -1632,8 +1632,8 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                 style={{ height: '48px', width: 'auto', filter: 'brightness(0) invert(1)' }}
               />
               <div>
-                <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#FFFFFF' }}>VKF DPR Studio</div>
-                <div style={{ fontSize: '0.78rem', color: '#86868B' }}>Vision Karnataka Foundation</div>
+                <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#FFFFFF' }}>DPRPro AI</div>
+                <div style={{ fontSize: '0.78rem', color: '#86868B' }}>Create Professional DPR Reports in Less Time</div>
               </div>
             </div>
 
