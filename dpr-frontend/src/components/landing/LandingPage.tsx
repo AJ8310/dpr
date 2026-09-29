@@ -14,6 +14,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
   const [authView, setAuthView] = useState<'inquiry' | 'login' | 'register'>('inquiry');
   const [activeDashTab, setActiveDashTab] = useState<'projections' | 'ratios' | 'repayments' | 'sensitivities'>('projections');
   const [machineryCost, setMachineryCost] = useState<number>(50); // in Lakhs
+  const [heroRightTab, setHeroRightTab] = useState<'video' | 'blueprint'>('video');
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   // Inquiry Form State
@@ -370,7 +371,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
 
           </div>
 
-          {/* Right Column: macOS DPR Studio Window Mockup */}
+          {/* Right Column: macOS DPR Studio Window & High-Clarity Video Player */}
           <div style={{ position: 'relative' }}>
             <div style={{
               position: 'relative',
@@ -378,117 +379,208 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               background: '#FFFFFF',
               border: '1px solid rgba(0, 0, 0, 0.08)',
               borderRadius: '24px',
-              boxShadow: '0 30px 60px -15px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.04)',
-              overflow: 'hidden'
+              boxShadow: '0 30px 70px -15px rgba(0, 113, 227, 0.22), 0 0 0 1px rgba(0, 0, 0, 0.04)',
+              overflow: 'hidden',
+              transform: 'translateZ(0)',
+              WebkitFontSmoothing: 'antialiased'
             }}>
               
-              {/* macOS Window Header Bar */}
+              {/* macOS Window Header Bar with Mode Switcher */}
               <div style={{
-                background: 'rgba(245, 245, 247, 0.9)',
-                backdropFilter: 'blur(10px)',
+                background: 'rgba(245, 245, 247, 0.95)',
+                backdropFilter: 'blur(16px)',
                 padding: '12px 18px',
                 borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '8px'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FF5F56', display: 'inline-block' }}></span>
                   <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FFBD2E', display: 'inline-block' }}></span>
                   <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#27C93F', display: 'inline-block' }}></span>
                 </div>
-                <div style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.78rem', color: '#86868B', fontWeight: 500 }}>
-                  DPR_Studio_Appraisal_Report.docx
+
+                {/* Switcher Pills */}
+                <div style={{ display: 'flex', background: 'rgba(0, 0, 0, 0.05)', borderRadius: '9999px', padding: '3px' }}>
+                  <button
+                    type="button"
+                    onClick={() => setHeroRightTab('video')}
+                    style={{
+                      background: heroRightTab === 'video' ? '#FFFFFF' : 'transparent',
+                      color: heroRightTab === 'video' ? '#0071E3' : '#6E6E73',
+                      border: 'none',
+                      borderRadius: '9999px',
+                      padding: '4px 14px',
+                      fontSize: '0.78rem',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      boxShadow: heroRightTab === 'video' ? '0 2px 8px rgba(0,0,0,0.08)' : 'none',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    🎥 Studio Demo
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setHeroRightTab('blueprint')}
+                    style={{
+                      background: heroRightTab === 'blueprint' ? '#FFFFFF' : 'transparent',
+                      color: heroRightTab === 'blueprint' ? '#0071E3' : '#6E6E73',
+                      border: 'none',
+                      borderRadius: '9999px',
+                      padding: '4px 14px',
+                      fontSize: '0.78rem',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      boxShadow: heroRightTab === 'blueprint' ? '0 2px 8px rgba(0,0,0,0.08)' : 'none',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    📄 Report Blueprint
+                  </button>
                 </div>
-                <span style={{ padding: '4px 10px', background: 'rgba(52, 199, 89, 0.12)', color: '#248A3D', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 600 }}>
-                  Institutional Ready
+
+                <span style={{ padding: '4px 10px', background: 'rgba(0, 113, 227, 0.1)', color: '#0071E3', borderRadius: '9999px', fontSize: '0.74rem', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#0071E3' }}></span> HD AI Walkthrough
                 </span>
               </div>
 
-              {/* macOS Window Main Body */}
-              <div style={{ padding: '28px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                
-                {/* Project Title Row */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div>
-                    <span style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.78rem', color: '#0071E3', fontWeight: 600 }}>DETAILED PROJECT REPORT</span>
-                    <div style={{ fontSize: '1.4rem', fontWeight: 700, color: '#1D1D1F', marginTop: '2px' }}>[Your Enterprise Unit]</div>
-                  </div>
-                </div>
-
-                {/* TOC Items List */}
-                <div style={{ borderTop: '1px solid rgba(0,0,0,0.06)', borderBottom: '1px solid rgba(0,0,0,0.06)', padding: '10px 0' }}>
-                  {[
-                    { id: '01', title: 'Business & Promoter Profile', active: false },
-                    { id: '02', title: 'Project Overview & Capital Head', active: false },
-                    { id: '03', title: 'Financial Projections (10-Year P&L)', active: true },
-                    { id: '04', title: 'Funding & Subsidy Allocation Matrix', active: false },
-                    { id: '05', title: 'Feasibility & DSCR Amortization', active: false },
-                  ].map((item) => (
-                    <div key={item.id} style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '14px',
-                      padding: '8px 12px',
-                      borderRadius: '10px',
-                      fontSize: '0.88rem',
-                      background: item.active ? 'rgba(0, 113, 227, 0.08)' : 'transparent',
-                      color: item.active ? '#0071E3' : '#6E6E73',
-                      fontWeight: item.active ? 600 : 400
-                    }}>
-                      <span style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.78rem', color: item.active ? '#0071E3' : '#A1A1A6' }}>{item.id}</span>
-                      <span>{item.title}</span>
+              {/* VIDEO VIEW */}
+              {heroRightTab === 'video' && (
+                <div style={{ position: 'relative', width: '100%', background: '#000000', overflow: 'hidden' }}>
+                  <video
+                    src="/gemini_generated_video_ff7aa1fe.mp4"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="auto"
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      maxHeight: '480px',
+                      display: 'block',
+                      objectFit: 'cover',
+                      filter: 'contrast(1.05) brightness(1.03) saturate(1.06)',
+                      WebkitTransform: 'translateZ(0)',
+                      transform: 'translateZ(0)',
+                      backfaceVisibility: 'hidden'
+                    }}
+                  />
+                  {/* Subtle Glass Bottom Banner */}
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    padding: '12px 18px',
+                    background: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%)',
+                    backdropFilter: 'blur(4px)',
+                    color: '#FFFFFF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    fontSize: '0.82rem',
+                    fontWeight: 500
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ color: '#0071E3', fontSize: '1rem' }}>✨</span>
+                      <span>AI-Powered Financial & Detailed Project Report Generator</span>
                     </div>
-                  ))}
-                </div>
-
-                {/* Bar Chart Preview */}
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#86868B', marginBottom: '12px' }}>
-                    <span>Projected Revenue & Net Profit (Y1 - Y5)</span>
-                    <span style={{ fontFamily: 'SF Mono, monospace', fontWeight: 600, color: '#0071E3' }}>Auto-calculated</span>
+                    <span style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.74rem', opacity: 0.85 }}>VKF DPR Studio 2.0</span>
                   </div>
+                </div>
+              )}
+
+              {/* BLUEPRINT VIEW */}
+              {heroRightTab === 'blueprint' && (
+                <div style={{ padding: '28px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                   
-                  {/* 5 Vertical Apple Blue Gradient Bars */}
-                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '14px', height: '100px', padding: '10px 0', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+                  {/* Project Title Row */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <span style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.78rem', color: '#0071E3', fontWeight: 600 }}>DETAILED PROJECT REPORT</span>
+                      <div style={{ fontSize: '1.4rem', fontWeight: 700, color: '#1D1D1F', marginTop: '2px' }}>[Your Enterprise Unit]</div>
+                    </div>
+                  </div>
+
+                  {/* TOC Items List */}
+                  <div style={{ borderTop: '1px solid rgba(0,0,0,0.06)', borderBottom: '1px solid rgba(0,0,0,0.06)', padding: '10px 0' }}>
                     {[
-                      { h: '45%', label: 'Y1' },
-                      { h: '60%', label: 'Y2' },
-                      { h: '75%', label: 'Y3' },
-                      { h: '88%', label: 'Y4' },
-                      { h: '100%', label: 'Y5', highlight: true }
-                    ].map((bar, i) => (
-                      <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', height: '100%', justifyContent: 'flex-end' }}>
-                        <div style={{
-                          width: '100%',
-                          height: bar.h,
-                          background: bar.highlight ? 'linear-gradient(180deg, #0071E3 0%, #005BB5 100%)' : 'rgba(0, 0, 0, 0.08)',
-                          borderRadius: '6px 6px 0 0',
-                          transition: 'height 0.3s ease'
-                        }}></div>
-                        <span style={{ fontSize: '0.72rem', color: '#86868B', fontFamily: 'SF Mono, monospace' }}>{bar.label}</span>
+                      { id: '01', title: 'Business & Promoter Profile', active: false },
+                      { id: '02', title: 'Project Overview & Capital Head', active: false },
+                      { id: '03', title: 'Financial Projections (10-Year P&L)', active: true },
+                      { id: '04', title: 'Funding & Subsidy Allocation Matrix', active: false },
+                      { id: '05', title: 'Feasibility & DSCR Amortization', active: false },
+                    ].map((item) => (
+                      <div key={item.id} style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '14px',
+                        padding: '8px 12px',
+                        borderRadius: '10px',
+                        fontSize: '0.88rem',
+                        background: item.active ? 'rgba(0, 113, 227, 0.08)' : 'transparent',
+                        color: item.active ? '#0071E3' : '#6E6E73',
+                        fontWeight: item.active ? 600 : 400
+                      }}>
+                        <span style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.78rem', color: item.active ? '#0071E3' : '#A1A1A6' }}>{item.id}</span>
+                        <span>{item.title}</span>
                       </div>
                     ))}
                   </div>
 
-                  {/* Sub-summary Cards */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginTop: '14px' }}>
-                    <div style={{ padding: '10px', background: '#F5F5F7', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.04)' }}>
-                      <div style={{ fontSize: '0.68rem', color: '#86868B' }}>Project Cost</div>
-                      <div style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.85rem', fontWeight: 700, color: '#1D1D1F' }}>₹ 80.0 Lakhs</div>
+                  {/* Bar Chart Preview */}
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#86868B', marginBottom: '12px' }}>
+                      <span>Projected Revenue & Net Profit (Y1 - Y5)</span>
+                      <span style={{ fontFamily: 'SF Mono, monospace', fontWeight: 600, color: '#0071E3' }}>Auto-calculated</span>
                     </div>
-                    <div style={{ padding: '10px', background: '#F5F5F7', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.04)' }}>
-                      <div style={{ fontSize: '0.68rem', color: '#86868B' }}>Bank Loan</div>
-                      <div style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.85rem', fontWeight: 700, color: '#1D1D1F' }}>₹ 56.0 Lakhs</div>
+                    
+                    {/* 5 Vertical Apple Blue Gradient Bars */}
+                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: '14px', height: '100px', padding: '10px 0', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+                      {[
+                        { h: '45%', label: 'Y1' },
+                        { h: '60%', label: 'Y2' },
+                        { h: '75%', label: 'Y3' },
+                        { h: '88%', label: 'Y4' },
+                        { h: '100%', label: 'Y5', highlight: true }
+                      ].map((bar, i) => (
+                        <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', height: '100%', justifyContent: 'flex-end' }}>
+                          <div style={{
+                            width: '100%',
+                            height: bar.h,
+                            background: bar.highlight ? 'linear-gradient(180deg, #0071E3 0%, #005BB5 100%)' : 'rgba(0, 0, 0, 0.08)',
+                            borderRadius: '6px 6px 0 0',
+                            transition: 'height 0.3s ease'
+                          }}></div>
+                          <span style={{ fontSize: '0.72rem', color: '#86868B', fontFamily: 'SF Mono, monospace' }}>{bar.label}</span>
+                        </div>
+                      ))}
                     </div>
-                    <div style={{ padding: '10px', background: 'rgba(0, 113, 227, 0.06)', borderRadius: '10px', border: '1px solid rgba(0, 113, 227, 0.12)' }}>
-                      <div style={{ fontSize: '0.68rem', color: '#0071E3' }}>Govt Subsidy</div>
-                      <div style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.85rem', fontWeight: 700, color: '#0071E3' }}>₹ 17.5 Lakhs</div>
+
+                    {/* Sub-summary Cards */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginTop: '14px' }}>
+                      <div style={{ padding: '10px', background: '#F5F5F7', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.04)' }}>
+                        <div style={{ fontSize: '0.68rem', color: '#86868B' }}>Project Cost</div>
+                        <div style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.85rem', fontWeight: 700, color: '#1D1D1F' }}>₹ 80.0 Lakhs</div>
+                      </div>
+                      <div style={{ padding: '10px', background: '#F5F5F7', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.04)' }}>
+                        <div style={{ fontSize: '0.68rem', color: '#86868B' }}>Bank Loan</div>
+                        <div style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.85rem', fontWeight: 700, color: '#1D1D1F' }}>₹ 56.0 Lakhs</div>
+                      </div>
+                      <div style={{ padding: '10px', background: 'rgba(0, 113, 227, 0.06)', borderRadius: '10px', border: '1px solid rgba(0, 113, 227, 0.12)' }}>
+                        <div style={{ fontSize: '0.68rem', color: '#0071E3' }}>Govt Subsidy</div>
+                        <div style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.85rem', fontWeight: 700, color: '#0071E3' }}>₹ 17.5 Lakhs</div>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-              </div>
+                </div>
+              )}
 
             </div>
           </div>
