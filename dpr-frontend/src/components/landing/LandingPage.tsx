@@ -1071,132 +1071,346 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         </div>
       </section>
 
-      {/* 9.5 FUNDING PRICING BY PURPOSE SECTION */}
-      <section id="pricing" style={{ padding: '100px 24px', background: '#F5F5F7', borderTop: '1px solid rgba(0, 0, 0, 0.08)', position: 'relative', zIndex: 1 }}>
+      {/* 9.5 COMPLETE DPR PRICING SECTION (FROM dpr-pricing-page 5.html) */}
+      <section id="pricing" style={{ padding: '100px 24px', background: 'linear-gradient(180deg, #F4FBFC 0%, #FFFFFF 46%)', borderTop: '1px solid rgba(0, 0, 0, 0.08)', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
           
-          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-            <span className="apple-kicker">Transparent Pricing</span>
-            <h2 style={{ fontSize: '3rem', fontWeight: 700, color: '#1D1D1F', letterSpacing: '-0.03em', margin: 0 }}>
-              Funding Pricing by Purpose
+          {/* HERO HEADER */}
+          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+            <span style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              color: '#008C95',
+              fontWeight: 800,
+              fontSize: '0.82rem',
+              background: '#DFF8F6',
+              border: '1px solid #B7ECE8',
+              padding: '6px 16px',
+              borderRadius: '9999px',
+              marginBottom: '16px'
+            }}>
+              ✦ Simple, transparent DPR pricing
+            </span>
+            <h2 style={{ fontSize: '3rem', fontWeight: 700, color: '#1D1D1F', letterSpacing: '-0.03em', margin: 0, lineHeight: 1.15 }}>
+              Choose the DPR that fits your funding need
             </h2>
-            <p style={{ fontSize: '1.15rem', color: '#515154', marginTop: '12px', maxWidth: '650px', margin: '12px auto 0' }}>
-              Choose your funding purpose and project size to see the applicable DPR price.
+            <p style={{ fontSize: '1.15rem', color: '#66798A', marginTop: '14px', maxWidth: '720px', margin: '14px auto 0', lineHeight: 1.6 }}>
+              Build professional Detailed Project Reports with financial projections, funding analysis and lender/investor-ready documentation.
             </p>
           </div>
 
-          {/* PRICING TABLE CONTAINER */}
+          {/* 5 PLAN TIER CARDS GRID */}
           <div style={{
-            background: '#FFFFFF',
-            borderRadius: '24px',
-            border: '1px solid rgba(0, 0, 0, 0.08)',
-            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.04)',
-            overflow: 'hidden',
-            marginBottom: '32px'
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '18px',
+            alignItems: 'stretch',
+            marginBottom: '72px'
           }}>
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center', minWidth: '850px' }}>
-                <thead>
-                  <tr style={{ background: '#EDF9F8', borderBottom: '1.5px solid #CBD5E1' }}>
-                    <th style={{ padding: '20px 24px', textAlign: 'left', fontSize: '0.85rem', fontWeight: 800, color: '#008C95', textTransform: 'uppercase', letterSpacing: '0.05em', width: '25%' }}>
-                      FUNDING PURPOSE
-                    </th>
-                    <th style={{ padding: '20px 16px', fontSize: '0.92rem', fontWeight: 700, color: '#334155' }}>₹5L – ₹25L</th>
-                    <th style={{ padding: '20px 16px', fontSize: '0.92rem', fontWeight: 700, color: '#334155' }}>₹25L – ₹1CR</th>
-                    <th style={{ padding: '20px 16px', fontSize: '0.92rem', fontWeight: 700, color: '#334155' }}>₹1CR – ₹5CR</th>
-                    <th style={{ padding: '20px 16px', fontSize: '0.92rem', fontWeight: 700, color: '#334155' }}>₹5CR – ₹25CR</th>
-                    <th style={{ padding: '20px 16px', fontSize: '0.92rem', fontWeight: 700, color: '#334155' }}>₹25CR+</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {/* ROW 1: GOVT SCHEME / SUBSIDY */}
-                  <tr style={{ borderBottom: '1px solid #E2E8F0', transition: 'background 0.2s' }}>
-                    <td style={{ padding: '22px 24px', textAlign: 'left', fontWeight: 700, color: '#0F172A', fontSize: '1rem', background: '#FAFDFD' }}>
-                      Government Scheme / Subsidy
-                    </td>
-                    <td style={{ padding: '22px 16px', fontWeight: 800, color: '#16A34A', fontSize: '1.1rem' }}>₹3,999</td>
-                    <td style={{ padding: '22px 16px', fontWeight: 800, color: '#16A34A', fontSize: '1.1rem' }}>₹7,999</td>
-                    <td style={{ padding: '22px 16px', fontWeight: 800, color: '#16A34A', fontSize: '1.1rem' }}>₹14,999</td>
-                    <td style={{ padding: '22px 16px', fontWeight: 800, color: '#16A34A', fontSize: '1.1rem' }}>₹24,999</td>
-                    <td style={{ padding: '22px 16px' }}>
-                      <span style={{ background: '#F3E8FF', color: '#7E22CE', fontWeight: 800, padding: '6px 16px', borderRadius: '9999px', fontSize: '0.95rem', display: 'inline-block' }}>
-                        Custom
-                      </span>
-                    </td>
-                  </tr>
-
-                  {/* ROW 2: BANK / NBFC LOAN */}
-                  <tr style={{ borderBottom: '1px solid #E2E8F0', transition: 'background 0.2s' }}>
-                    <td style={{ padding: '22px 24px', textAlign: 'left', fontWeight: 700, color: '#0F172A', fontSize: '1rem', background: '#FAFDFD' }}>
-                      Bank / NBFC Loan
-                    </td>
-                    <td style={{ padding: '22px 16px', fontWeight: 800, color: '#2563EB', fontSize: '1.1rem' }}>₹4,999</td>
-                    <td style={{ padding: '22px 16px', fontWeight: 800, color: '#2563EB', fontSize: '1.1rem' }}>₹9,999</td>
-                    <td style={{ padding: '22px 16px', fontWeight: 800, color: '#2563EB', fontSize: '1.1rem' }}>₹14,999</td>
-                    <td style={{ padding: '22px 16px', fontWeight: 800, color: '#2563EB', fontSize: '1.1rem' }}>₹24,999</td>
-                    <td style={{ padding: '22px 16px', fontWeight: 800, color: '#2563EB', fontSize: '1.1rem' }}>₹39,999+</td>
-                  </tr>
-
-                  {/* ROW 3: INVESTOR FUNDING */}
-                  <tr style={{ transition: 'background 0.2s' }}>
-                    <td style={{ padding: '22px 24px', textAlign: 'left', fontWeight: 700, color: '#0F172A', fontSize: '1rem', background: '#FAFDFD' }}>
-                      Investor Funding
-                    </td>
-                    <td style={{ padding: '22px 16px', fontWeight: 800, color: '#D97706', fontSize: '1.1rem' }}>₹9,999</td>
-                    <td style={{ padding: '22px 16px', fontWeight: 800, color: '#D97706', fontSize: '1.1rem' }}>₹14,999</td>
-                    <td style={{ padding: '22px 16px', fontWeight: 800, color: '#D97706', fontSize: '1.1rem' }}>₹19,999</td>
-                    <td style={{ padding: '22px 16px', fontWeight: 800, color: '#D97706', fontSize: '1.1rem' }}>₹29,999</td>
-                    <td style={{ padding: '22px 16px', fontWeight: 800, color: '#D97706', fontSize: '1.1rem' }}>₹39,999+</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* 3 BOTTOM CARDS */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px', marginBottom: '28px' }}>
             
-            <div style={{ background: '#FFFFFF', border: '1px solid rgba(0, 0, 0, 0.08)', borderRadius: '20px', padding: '24px', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)' }}>
-              <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0F172A', marginBottom: '8px' }}>
-                Custom / Enterprise · ₹5Cr–₹25Cr
+            {/* CARD 1: FREE */}
+            <div style={{
+              background: 'linear-gradient(180deg, #FFFFFF 0%, #FBFEFE 100%)',
+              border: '1px solid #D8E3E8',
+              borderTop: '4px solid #93AEB7',
+              borderRadius: '18px',
+              padding: '24px 20px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              boxShadow: '0 5px 16px rgba(0, 65, 80, 0.04)'
+            }}>
+              <div>
+                <h3 style={{ margin: '0 0 6px 0', fontSize: '1.25rem', color: '#102536', fontWeight: 800 }}>Free</h3>
+                <div style={{ color: '#66798A', fontSize: '0.78rem', minHeight: '34px', lineHeight: 1.4, fontWeight: 500 }}>Idea & pre-startup projects</div>
+                <div style={{ display: 'inline-block', padding: '6px 12px', borderRadius: '10px', background: '#EEF3F5', color: '#526973', fontWeight: 900, fontSize: '1.6rem', marginTop: '16px', marginBottom: '8px' }}>
+                  ₹0 <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#66798A' }}>/ forever</span>
+                </div>
+                <p style={{ fontSize: '0.78rem', color: '#66798A', lineHeight: 1.5, margin: '8px 0 16px' }}>Start with a funding-readiness assessment before building a full DPR.</p>
+                <button onClick={() => { setAuthView('register'); scrollToAuth(); }} className="apple-btn-secondary" style={{ width: '100%', padding: '0.7rem', fontSize: '0.86rem', justifyContent: 'center', borderRadius: '10px' }}>Start Free</button>
               </div>
-              <div style={{ fontSize: '0.92rem', color: '#64748B', lineHeight: 1.5 }}>
-                ₹24,999–₹39,999 depending on report depth, projections, schedules and analysis required.
+              <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '14px', marginTop: '16px' }}>
+                <strong style={{ fontSize: '0.7rem', color: '#164E5B', letterSpacing: '0.4px', textTransform: 'uppercase' }}>INCLUDES</strong>
+                <ul style={{ padding: 0, margin: '8px 0 0 0', listStyle: 'none', fontSize: '0.78rem', color: '#435B67' }}>
+                  {['Funding-readiness assessment', '1 DPR / preview', 'Self-service support', 'Basic DPR preview', 'Project viability snapshot', 'Funding-purpose guidance', 'Key assumptions checklist'].map((item, idx) => (
+                    <li key={idx} style={{ margin: '6px 0', paddingLeft: '16px', position: 'relative' }}>
+                      <span style={{ position: 'absolute', left: 0, color: '#008C95', fontWeight: 900 }}>✓</span> {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
 
-            <div style={{ background: '#FFFFFF', border: '1px solid rgba(0, 0, 0, 0.08)', borderRadius: '20px', padding: '24px', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)' }}>
-              <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0F172A', marginBottom: '8px' }}>
-                ₹25Cr+ Projects
+            {/* CARD 2: ENTRY */}
+            <div style={{
+              background: 'linear-gradient(180deg, #FFFFFF 0%, #FBFEFE 100%)',
+              border: '1px solid #D8E3E8',
+              borderTop: '4px solid #22A6B3',
+              borderRadius: '18px',
+              padding: '24px 20px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              boxShadow: '0 5px 16px rgba(0, 65, 80, 0.04)'
+            }}>
+              <div>
+                <h3 style={{ margin: '0 0 6px 0', fontSize: '1.25rem', color: '#102536', fontWeight: 800 }}>Entry</h3>
+                <div style={{ color: '#66798A', fontSize: '0.78rem', minHeight: '34px', lineHeight: 1.4, fontWeight: 500 }}>Early-stage projects</div>
+                <div style={{ display: 'inline-block', padding: '6px 12px', borderRadius: '10px', background: '#E5F8F7', color: '#007B86', fontWeight: 900, fontSize: '1.6rem', marginTop: '16px', marginBottom: '8px' }}>
+                  ₹3,999 <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#66798A' }}>/ DPR</span>
+                </div>
+                <p style={{ fontSize: '0.78rem', color: '#66798A', lineHeight: 1.5, margin: '8px 0 16px' }}>A standard DPR for early-stage projects and smaller funding requirements.</p>
+                <button onClick={() => { setAuthView('register'); scrollToAuth(); }} className="apple-btn-secondary" style={{ width: '100%', padding: '0.7rem', fontSize: '0.86rem', justifyContent: 'center', borderRadius: '10px' }}>Create DPR</button>
               </div>
-              <div style={{ fontSize: '0.92rem', color: '#64748B', lineHeight: 1.5 }}>
-                Starting at ₹39,999+ with custom scope, enterprise financial modelling and additional schedules.
+              <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '14px', marginTop: '16px' }}>
+                <strong style={{ fontSize: '0.7rem', color: '#164E5B', letterSpacing: '0.4px', textTransform: 'uppercase' }}>INCLUDES</strong>
+                <ul style={{ padding: 0, margin: '8px 0 0 0', listStyle: 'none', fontSize: '0.78rem', color: '#435B67' }}>
+                  {['Standard DPR structure', '1 DPR', 'Basic support', 'Business / project profile', 'Executive summary', 'Market & project overview', 'Basic financial projections', 'Cost & funding requirement', 'Implementation plan', 'Basic risk assessment'].map((item, idx) => (
+                    <li key={idx} style={{ margin: '6px 0', paddingLeft: '16px', position: 'relative' }}>
+                      <span style={{ position: 'absolute', left: 0, color: '#008C95', fontWeight: 900 }}>✓</span> {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
 
-            <div style={{ background: '#FFFFFF', border: '1px solid rgba(0, 0, 0, 0.08)', borderRadius: '20px', padding: '24px', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)' }}>
-              <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0F172A', marginBottom: '8px' }}>
-                Enterprise report depth
+            {/* CARD 3: CORE */}
+            <div style={{
+              background: 'linear-gradient(180deg, #FFFFFF 0%, #FBFEFE 100%)',
+              border: '1px solid #D8E3E8',
+              borderTop: '4px solid #3488D0',
+              borderRadius: '18px',
+              padding: '24px 20px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              boxShadow: '0 5px 16px rgba(0, 65, 80, 0.04)'
+            }}>
+              <div>
+                <h3 style={{ margin: '0 0 6px 0', fontSize: '1.25rem', color: '#102536', fontWeight: 800 }}>Core</h3>
+                <div style={{ color: '#66798A', fontSize: '0.78rem', minHeight: '34px', lineHeight: 1.4, fontWeight: 500 }}>Growing businesses</div>
+                <div style={{ display: 'inline-block', padding: '6px 12px', borderRadius: '10px', background: '#EAF3FF', color: '#216DA9', fontWeight: 900, fontSize: '1.6rem', marginTop: '16px', marginBottom: '8px' }}>
+                  ₹7,999 <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#66798A' }}>/ DPR</span>
+                </div>
+                <p style={{ fontSize: '0.78rem', color: '#66798A', lineHeight: 1.5, margin: '8px 0 16px' }}>A complete DPR with projections and funding analysis for growing businesses.</p>
+                <button onClick={() => { setAuthView('register'); scrollToAuth(); }} className="apple-btn-secondary" style={{ width: '100%', padding: '0.7rem', fontSize: '0.86rem', justifyContent: 'center', borderRadius: '10px' }}>Create DPR</button>
               </div>
-              <div style={{ fontSize: '0.92rem', color: '#64748B', lineHeight: 1.5 }}>
-                Typically 40–60+ pages, with final length based on project complexity and annexures.
+              <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '14px', marginTop: '16px' }}>
+                <strong style={{ fontSize: '0.7rem', color: '#164E5B', letterSpacing: '0.4px', textTransform: 'uppercase' }}>INCLUDES</strong>
+                <ul style={{ padding: 0, margin: '8px 0 0 0', listStyle: 'none', fontSize: '0.78rem', color: '#435B67' }}>
+                  {['Complete DPR', '1 DPR', 'Standard support', 'Executive summary & profile', 'Market & competitor analysis', 'Detailed financial projections', 'Revenue & expense assumptions', 'Funding requirement analysis', 'Break-even analysis', 'Repayment / viability analysis', 'Risk & mitigation section'].map((item, idx) => (
+                    <li key={idx} style={{ margin: '6px 0', paddingLeft: '16px', position: 'relative' }}>
+                      <span style={{ position: 'absolute', left: 0, color: '#008C95', fontWeight: 900 }}>✓</span> {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* CARD 4: TEAM (MOST USED FEATURED) */}
+            <div style={{
+              background: 'linear-gradient(180deg, #FFFFFF 0%, #FBFEFE 100%)',
+              border: '2px solid #008C95',
+              borderTop: '4px solid #0B9B86',
+              borderRadius: '18px',
+              padding: '24px 20px',
+              position: 'relative',
+              boxShadow: '0 12px 30px rgba(0, 77, 91, 0.12)',
+              transform: 'scale(1.03)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between'
+            }}>
+              <div style={{ position: 'absolute', top: '-13px', left: '18px', background: '#008C95', color: '#FFFFFF', padding: '4px 12px', borderRadius: '9999px', fontSize: '0.68rem', fontWeight: 900, letterSpacing: '0.5px' }}>
+                MOST USED
+              </div>
+              <div>
+                <h3 style={{ margin: '0 0 6px 0', fontSize: '1.25rem', color: '#102536', fontWeight: 800 }}>Team</h3>
+                <div style={{ color: '#66798A', fontSize: '0.78rem', minHeight: '34px', lineHeight: 1.4, fontWeight: 500 }}>Growth-stage businesses & MSMEs</div>
+                <div style={{ display: 'inline-block', padding: '6px 12px', borderRadius: '10px', background: '#E4F8F1', color: '#08785F', fontWeight: 900, fontSize: '1.6rem', marginTop: '16px', marginBottom: '8px' }}>
+                  ₹14,999 <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#66798A' }}>/ DPR</span>
+                </div>
+                <p style={{ fontSize: '0.78rem', color: '#66798A', lineHeight: 1.5, margin: '8px 0 16px' }}>Advanced DPR depth with detailed financial analysis and funding requirement analysis.</p>
+                <button onClick={() => { setAuthView('register'); scrollToAuth(); }} className="apple-btn-primary" style={{ width: '100%', padding: '0.7rem', fontSize: '0.86rem', justifyContent: 'center', borderRadius: '10px' }}>Create Advanced DPR</button>
+              </div>
+              <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '14px', marginTop: '16px' }}>
+                <strong style={{ fontSize: '0.7rem', color: '#164E5B', letterSpacing: '0.4px', textTransform: 'uppercase' }}>INCLUDES</strong>
+                <ul style={{ padding: 0, margin: '8px 0 0 0', listStyle: 'none', fontSize: '0.78rem', color: '#435B67' }}>
+                  {['Advanced DPR', '1 DPR + revisions', 'Priority support', 'Detailed project & market analysis', 'Detailed financial projections', 'Cash-flow analysis', 'Profitability & break-even analysis', 'DSCR / repayment analysis', 'Funding requirement analysis', 'Risk matrix & mitigation plan', 'Implementation milestone plan', 'Revision support'].map((item, idx) => (
+                    <li key={idx} style={{ margin: '6px 0', paddingLeft: '16px', position: 'relative' }}>
+                      <span style={{ position: 'absolute', left: 0, color: '#008C95', fontWeight: 900 }}>✓</span> {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* CARD 5: ENTERPRISE */}
+            <div style={{
+              background: 'linear-gradient(180deg, #FFFFFF 0%, #FBFEFE 100%)',
+              border: '1px solid #D8E3E8',
+              borderTop: '4px solid #7256C9',
+              borderRadius: '18px',
+              padding: '24px 20px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              boxShadow: '0 5px 16px rgba(0, 65, 80, 0.04)'
+            }}>
+              <div>
+                <h3 style={{ margin: '0 0 6px 0', fontSize: '1.25rem', color: '#102536', fontWeight: 800 }}>Enterprise</h3>
+                <div style={{ color: '#66798A', fontSize: '0.78rem', minHeight: '34px', lineHeight: 1.4, fontWeight: 500 }}>Established & large businesses</div>
+                <div style={{ display: 'inline-block', padding: '6px 12px', borderRadius: '10px', background: '#EEE9FF', color: '#6045AE', fontWeight: 900, fontSize: '1.4rem', marginTop: '16px', marginBottom: '8px' }}>
+                  Custom Scope
+                </div>
+                <p style={{ fontSize: '0.78rem', color: '#66798A', lineHeight: 1.5, margin: '8px 0 16px' }}>Custom DPR depth, detailed projections and analysis based on project scope.</p>
+                <button onClick={scrollToAuth} className="apple-btn-secondary" style={{ width: '100%', padding: '0.7rem', fontSize: '0.86rem', justifyContent: 'center', borderRadius: '10px' }}>Contact Team</button>
+              </div>
+              <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '14px', marginTop: '16px' }}>
+                <strong style={{ fontSize: '0.7rem', color: '#164E5B', letterSpacing: '0.4px', textTransform: 'uppercase' }}>INCLUDES</strong>
+                <ul style={{ padding: 0, margin: '8px 0 0 0', listStyle: 'none', fontSize: '0.78rem', color: '#435B67' }}>
+                  {['Advanced / custom DPR', 'Custom DPR scope', 'Dedicated support', '40–60+ page report structure', 'Detailed business & market analysis', '10-year financial projections', 'Detailed cash-flow analysis', 'DSCR & repayment analysis', 'BOQ / capex schedules', 'Funding & capital structure', 'Risk matrix & mitigation plan', 'Customized lender analysis'].map((item, idx) => (
+                    <li key={idx} style={{ margin: '6px 0', paddingLeft: '16px', position: 'relative' }}>
+                      <span style={{ position: 'absolute', left: 0, color: '#008C95', fontWeight: 900 }}>✓</span> {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
 
           </div>
 
-          {/* FOOTER NOTICE BOX */}
+          {/* FUNDING PRICING BY PURPOSE MATRIX SECTION */}
           <div style={{
-            background: '#F0FDFA',
-            border: '1.5px solid #CCFBF1',
-            borderRadius: '16px',
-            padding: '18px 24px',
-            fontSize: '0.92rem',
-            color: '#0F766E',
-            lineHeight: 1.5,
-            fontWeight: 500
+            background: 'linear-gradient(135deg, #F4FBFB 0%, #F8F9FF 55%, #FFF8F0 100%)',
+            border: '1px solid #CFE2E5',
+            borderRadius: '24px',
+            padding: '44px 32px',
+            boxShadow: '0 14px 36px rgba(20, 70, 90, 0.08)'
           }}>
-            <strong>Report depth varies by plan.</strong> Page counts are indicative rather than a hard document limit. Final length can vary with project complexity, financial schedules, annexures and funding purpose.
+            <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+              <h2 style={{ fontSize: '2.2rem', fontWeight: 800, color: '#12384A', margin: 0 }}>
+                Funding Pricing by Purpose
+              </h2>
+              <p style={{ fontSize: '1.02rem', color: '#66798A', marginTop: '8px' }}>
+                Choose your funding purpose and project size to see the applicable DPR price.
+              </p>
+            </div>
+
+            {/* MATRIX TABLE */}
+            <div style={{
+              background: '#FFFFFF',
+              borderRadius: '18px',
+              border: '1px solid #C9E4E7',
+              boxShadow: '0 8px 25px rgba(0, 77, 91, 0.06)',
+              overflow: 'hidden',
+              marginBottom: '28px'
+            }}>
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center', minWidth: '800px' }}>
+                  <thead>
+                    <tr>
+                      <th style={{ background: '#E5F5F4', color: '#075764', padding: '18px 20px', textAlign: 'left', fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase' }}>
+                        Funding Purpose
+                      </th>
+                      <th style={{ background: '#EDF1FF', color: '#304F9D', padding: '18px 16px', fontSize: '0.9rem', fontWeight: 700 }}>₹5L–₹25L</th>
+                      <th style={{ background: '#EDF1FF', color: '#304F9D', padding: '18px 16px', fontSize: '0.9rem', fontWeight: 700 }}>₹25L–₹1Cr</th>
+                      <th style={{ background: '#EDF1FF', color: '#304F9D', padding: '18px 16px', fontSize: '0.9rem', fontWeight: 700 }}>₹1Cr–₹5Cr</th>
+                      <th style={{ background: '#EDF1FF', color: '#304F9D', padding: '18px 16px', fontSize: '0.9rem', fontWeight: 700 }}>₹5Cr–₹25Cr</th>
+                      <th style={{ background: '#EDF1FF', color: '#304F9D', padding: '18px 16px', fontSize: '0.9rem', fontWeight: 700 }}>₹25Cr+</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style={{ borderBottom: '1px solid #D8E3E8' }}>
+                      <td style={{ padding: '20px 20px', textAlign: 'left', fontWeight: 800, color: '#173B4B', fontSize: '0.95rem' }}>
+                        Government Scheme / Subsidy
+                      </td>
+                      <td style={{ padding: '20px 16px', fontWeight: 900, color: '#07896F', fontSize: '1.05rem', background: '#F4FBFB' }}>₹3,999</td>
+                      <td style={{ padding: '20px 16px', fontWeight: 900, color: '#07896F', fontSize: '1.05rem', background: '#F4FBFB' }}>₹7,999</td>
+                      <td style={{ padding: '20px 16px', fontWeight: 900, color: '#07896F', fontSize: '1.05rem', background: '#F4FBFB' }}>₹14,999</td>
+                      <td style={{ padding: '20px 16px', fontWeight: 900, color: '#07896F', fontSize: '1.05rem', background: '#F4FBFB' }}>₹24,999</td>
+                      <td style={{ padding: '20px 16px', background: '#F4FBFB' }}>
+                        <span style={{ color: '#7656D6', background: '#F5F1FF', fontWeight: 800, padding: '5px 14px', borderRadius: '7px', fontSize: '0.9rem', display: 'inline-block' }}>
+                          Custom
+                        </span>
+                      </td>
+                    </tr>
+
+                    <tr style={{ borderBottom: '1px solid #D8E3E8' }}>
+                      <td style={{ padding: '20px 20px', textAlign: 'left', fontWeight: 800, color: '#173B4B', fontSize: '0.95rem' }}>
+                        Bank / NBFC Loan
+                      </td>
+                      <td style={{ padding: '20px 16px', fontWeight: 900, color: '#3567D6', fontSize: '1.05rem', background: '#FBFCFF' }}>₹4,999</td>
+                      <td style={{ padding: '20px 16px', fontWeight: 900, color: '#3567D6', fontSize: '1.05rem', background: '#FBFCFF' }}>₹9,999</td>
+                      <td style={{ padding: '20px 16px', fontWeight: 900, color: '#3567D6', fontSize: '1.05rem', background: '#FBFCFF' }}>₹14,999</td>
+                      <td style={{ padding: '20px 16px', fontWeight: 900, color: '#3567D6', fontSize: '1.05rem', background: '#FBFCFF' }}>₹24,999</td>
+                      <td style={{ padding: '20px 16px', fontWeight: 900, color: '#3567D6', fontSize: '1.05rem', background: '#FBFCFF' }}>₹39,999+</td>
+                    </tr>
+
+                    <tr>
+                      <td style={{ padding: '20px 20px', textAlign: 'left', fontWeight: 800, color: '#173B4B', fontSize: '0.95rem' }}>
+                        Investor Funding
+                      </td>
+                      <td style={{ padding: '20px 16px', fontWeight: 900, color: '#C76A1A', fontSize: '1.05rem', background: '#FFF8F0' }}>₹9,999</td>
+                      <td style={{ padding: '20px 16px', fontWeight: 900, color: '#C76A1A', fontSize: '1.05rem', background: '#FFF8F0' }}>₹14,999</td>
+                      <td style={{ padding: '20px 16px', fontWeight: 900, color: '#C76A1A', fontSize: '1.05rem', background: '#FFF8F0' }}>₹19,999</td>
+                      <td style={{ padding: '20px 16px', fontWeight: 900, color: '#C76A1A', fontSize: '1.05rem', background: '#FFF8F0' }}>₹29,999</td>
+                      <td style={{ padding: '20px 16px', fontWeight: 900, color: '#C76A1A', fontSize: '1.05rem', background: '#FFF8F0' }}>₹39,999+</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* ENTERPRISE NOTE CARDS */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '14px',
+              marginBottom: '20px'
+            }}>
+              <div style={{ background: '#FFFFFF', border: '1px solid #DCE6EA', borderRadius: '12px', padding: '16px 18px' }}>
+                <strong style={{ display: 'block', color: '#173B4B', fontSize: '0.88rem', marginBottom: '4px', fontWeight: 800 }}>
+                  Custom / Enterprise · ₹5Cr–₹25Cr
+                </strong>
+                <span style={{ fontSize: '0.84rem', color: '#687D87', lineHeight: 1.5 }}>
+                  ₹24,999–₹39,999 depending on report depth, projections, schedules and analysis required.
+                </span>
+              </div>
+
+              <div style={{ background: '#FFFFFF', border: '1px solid #DCE6EA', borderRadius: '12px', padding: '16px 18px' }}>
+                <strong style={{ display: 'block', color: '#173B4B', fontSize: '0.88rem', marginBottom: '4px', fontWeight: 800 }}>
+                  ₹25Cr+ Projects
+                </strong>
+                <span style={{ fontSize: '0.84rem', color: '#687D87', lineHeight: 1.5 }}>
+                  Starting at ₹39,999+ with custom scope, enterprise financial modelling and additional schedules.
+                </span>
+              </div>
+
+              <div style={{ background: '#FFFFFF', border: '1px solid #DCE6EA', borderRadius: '12px', padding: '16px 18px' }}>
+                <strong style={{ display: 'block', color: '#173B4B', fontSize: '0.88rem', marginBottom: '4px', fontWeight: 800 }}>
+                  Enterprise report depth
+                </strong>
+                <span style={{ fontSize: '0.84rem', color: '#687D87', lineHeight: 1.5 }}>
+                  Typically 40–60+ pages, with final length based on project complexity and annexures.
+                </span>
+              </div>
+            </div>
+
+            {/* NOTICE BANNER */}
+            <div style={{
+              padding: '14px 18px',
+              border: '1px solid #C4E7E1',
+              background: 'linear-gradient(90deg, #EFFBF8, #F4FBFF)',
+              borderRadius: '12px',
+              color: '#526A75',
+              fontSize: '0.85rem',
+              lineHeight: 1.5
+            }}>
+              <strong style={{ color: '#12384A' }}>Report depth varies by plan.</strong> Page counts are indicative rather than a hard document limit. Final length can vary with project complexity, financial schedules, annexures and funding purpose.
+            </div>
+
           </div>
 
         </div>
