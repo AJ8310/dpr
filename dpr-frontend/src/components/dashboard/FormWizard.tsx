@@ -8,6 +8,7 @@ import {
   generatePDF,
   saveDPRData,
   getLatestDraft,
+  clearDraft,
   autofillFromDocument,
   autofillFromURL,
   getMasterSectors,
@@ -912,7 +913,139 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
     }
   };
 
-
+  const handleClearFormAndDraft = async () => {
+    try {
+      await clearDraft();
+    } catch (e) {
+      console.warn('Backend clear draft error:', e);
+    }
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('dpr_draft_backup');
+      sessionStorage.removeItem('dpr_draft_backup');
+    }
+    setFormData({
+      dpr_type: initialService || 'Bank Loan DPR',
+      sector_id: 'manufacturing',
+      activity_id: 'cnc_machining',
+      project_type_id: 'new_project',
+      project_scale: 'medium',
+      business_name: '',
+      group_name: '',
+      business_desc: '',
+      entity_type: 'Proprietorship',
+      cin: '',
+      gst_no: '',
+      pan_no: '',
+      udyam_no: '',
+      fssai_no: '',
+      village: '',
+      block: '',
+      district: '',
+      state: '',
+      contact_name: '',
+      contact_number: '',
+      email: '',
+      bank_name: '',
+      bank_branch: '',
+      account_number: '',
+      ifsc: '',
+      members: [],
+      primary_product: '',
+      hsn_code: '',
+      daily_capacity: 0,
+      capacity_unit: 'kg',
+      selling_price: 0,
+      raw_materials: '',
+      input_cost: 0,
+      working_days: 300,
+      market_growth: 0,
+      usp: '',
+      machinery: [],
+      supplier_name: '',
+      supplier_location: '',
+      target_customers: '',
+      sales_location: '',
+      competitors: '',
+      mgmt_count: 0,
+      mgmt_salary: 0,
+      sup_count: 0,
+      sup_salary: 0,
+      skill_count: 0,
+      skill_salary: 0,
+      unskill_count: 0,
+      unskill_salary: 0,
+      admin_count: 0,
+      admin_salary: 0,
+      land_area: '',
+      land_cost: 0,
+      building_area: '',
+      building_cost: 0,
+      furniture_cost: 0,
+      working_capital: 0,
+      other_cost: 0,
+      promoter_contribution: 0,
+      bank_loan: 0,
+      subsidy: 0,
+      cash_in_hand: 0,
+      bank_balance: 0,
+      inventory_value: 0,
+      receivables: 0,
+      fixed_land: 0,
+      fixed_building: 0,
+      fixed_machinery: 0,
+      fixed_furniture: 0,
+      short_term_loan: 0,
+      creditors: 0,
+      long_term_loan: 0,
+      owner_capital: 0,
+      retained_earnings: 0,
+      cap_year1: 60,
+      cap_year2: 75,
+      cap_year3: 85,
+      cap_year4: 90,
+      cap_year5: 95,
+      int_year1: 0,
+      int_year2: 0,
+      int_year3: 0,
+      int_year4: 0,
+      int_year5: 0,
+      dep_year1: 0,
+      dep_year2: 0,
+      dep_year3: 0,
+      dep_year4: 0,
+      dep_year5: 0,
+      workspace: '',
+      builtup_area: 0,
+      power_required: 0,
+      water_required: 0,
+      monthly_rent: 0,
+      start_time: 0,
+      strengths: '',
+      weaknesses: '',
+      opportunities: '',
+      threats: '',
+      local_employment: 0,
+      women_employment: 0,
+      youth_employment: 0,
+      eco_friendly: '',
+      training: '',
+      eco_description: '',
+      cibil_score: 0,
+      loan_before: '',
+      existing_loan: 0,
+      outstanding: 0,
+      default_history: '',
+      declarant_name: '',
+      designation: '',
+      place: '',
+      declaration_date: new Date().toISOString().split('T')[0],
+      dpr_depth: 'enterprise',
+      associated_with_vkf: false
+    });
+    setActiveStep(0);
+    setRestoredNotice('Form reset successfully. All saved test data and drafts cleared.');
+    setTimeout(() => setRestoredNotice(''), 4000);
+  };
 
   const nextStep = () => {
     if (activeStep < 13) setActiveStep(activeStep + 1);
@@ -999,23 +1132,45 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
             fontSize: '0.95rem',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
             <i className="fas fa-check-circle" style={{ fontSize: '1.2rem', color: '#10B981' }}></i>
             <span>{restoredNotice}</span>
           </div>
-          <button
-            onClick={() => setRestoredNotice('')}
-            style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              color: '#065F46',
-              fontSize: '1.1rem',
-              padding: '0 0.3rem',
-            }}
-          >
-            ✕
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <button
+              type="button"
+              onClick={handleClearFormAndDraft}
+              style={{
+                background: '#EF4444',
+                color: '#FFFFFF',
+                border: 'none',
+                padding: '0.45rem 0.9rem',
+                borderRadius: '8px',
+                fontWeight: 700,
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                boxShadow: '0 2px 8px rgba(239, 68, 68, 0.25)',
+              }}
+            >
+              <i className="fas fa-trash-alt"></i> Clear Draft & Start Fresh
+            </button>
+            <button
+              onClick={() => setRestoredNotice('')}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: '#065F46',
+                fontSize: '1.1rem',
+                padding: '0 0.3rem',
+              }}
+            >
+              ✕
+            </button>
+          </div>
         </div>
       )}
 
@@ -1059,7 +1214,26 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
           </div>
 
           <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap' }}>
-
+            <button
+              type="button"
+              onClick={handleClearFormAndDraft}
+              style={{
+                background: '#FFFFFF',
+                color: '#EF4444',
+                border: '1.5px solid #FCA5A5',
+                padding: '0.8rem 1.2rem',
+                borderRadius: '12px',
+                fontWeight: 700,
+                fontSize: '0.88rem',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <i className="fas fa-trash-alt"></i> Reset Form
+            </button>
 
             <label
               style={{

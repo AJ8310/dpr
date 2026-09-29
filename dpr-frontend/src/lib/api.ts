@@ -149,6 +149,11 @@ export async function getLatestDraft() {
   return response.data;
 }
 
+export async function clearDraft() {
+  const response = await api.post('/api/dpr/clear-draft');
+  return response.data;
+}
+
 export async function getMyDPRs() {
   const response = await api.get('/api/dpr/my-dprs');
   return response.data;

@@ -108,6 +108,16 @@ async def get_latest_draft(
         "data": submission.full_form_json
     }
 
+@router.post("/clear-draft")
+async def clear_latest_draft(
+    db: Session = Depends(get_db),
+    current_user: Optional[UserDB] = Depends(get_optional_user)
+):
+    if current_user:
+        db.query(DPRSubmissionDB).filter(DPRSubmissionDB.user_id == current_user.id).delete()
+        db.commit()
+    return {"success": True, "message": "Draft cleared successfully."}
+
 @router.get("/my-dprs")
 async def list_my_dprs(
     db: Session = Depends(get_db),
