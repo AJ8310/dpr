@@ -1307,21 +1307,9 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                   <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#FFFFFF', border: '1px solid rgba(0, 0, 0, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#0071E3' }}>
                     ✉️
                   </div>
-                  <span>support@vkf.org</span>
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '1.05rem', fontWeight: 500, color: '#1D1D1F' }}>
-                  <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#FFFFFF', border: '1px solid rgba(0, 0, 0, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#0071E3' }}>
-                    📞
-                  </div>
-                  <span>+91 98860 12345</span>
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '1.05rem', fontWeight: 500, color: '#1D1D1F' }}>
-                  <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#FFFFFF', border: '1px solid rgba(0, 0, 0, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#0071E3' }}>
-                    📍
-                  </div>
-                  <span>Vision Karnataka Foundation, Bengaluru, KA</span>
+                  <a href="mailto:support@infopaceindia.com" style={{ color: '#1D1D1F', textDecoration: 'none' }}>
+                    support@infopaceindia.com
+                  </a>
                 </div>
               </div>
 
