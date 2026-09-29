@@ -912,76 +912,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
     }
   };
 
-  const fillTestData = () => {
-    setFormData((prev) => ({
-      ...prev,
-      business_name: 'Vyshnavi Automation & Robotics Pvt Ltd',
-      group_name: 'Vyshnavi Industrial Group',
-      business_desc: 'Manufacturer of high-precision CNC robotic components and automated industrial sub-assemblies.',
-      entity_type: 'Private Limited Company',
-      cin: 'U28990KA2026PTC098765',
-      gst_no: '29AAACV9876A1Z3',
-      pan_no: 'AAACV9876A',
-      udyam_no: 'UDYAM-KR-03-0098765',
-      fssai_no: '11224999000888',
-      village: 'Peenya Industrial Area Phase IV',
-      block: 'Bengaluru North Taluk',
-      district: 'Bengaluru Urban',
-      state: 'Karnataka',
-      contact_name: 'Dr. R. Vyshnavi',
-      contact_number: '+91 9880011223',
-      email: 'vyshnavi@vyshnaviautomation.com',
-      bank_name: 'State Bank of India',
-      bank_branch: 'Peenya Industrial Branch',
-      account_number: '39887766554',
-      ifsc: 'SBIN0001234',
-      members: [
-        { id: '1', name: 'Dr. R. Vyshnavi', designation: 'Managing Director', gender: 'Female', age: '42', qualification: 'Ph.D. Robotics Engg', experience: '18 Years' },
-        { id: '2', name: 'Siddharth Rao', designation: 'Executive Director & CTO', gender: 'Male', age: '44', qualification: 'M.Tech Automation', experience: '20 Years' }
-      ],
-      primary_product: 'Automated CNC Robotic Arm Components',
-      hsn_code: '84799090',
-      daily_capacity: 250,
-      capacity_unit: 'units',
-      selling_price: 3500,
-      raw_materials: 'High-grade Stainless Steel SS316L, Aluminum Alloy 6061-T6, Servo Drives',
-      input_cost: 1600,
-      working_days: 300,
-      market_growth: 16.5,
-      usp: 'Sub-micron precision tolerance with inline automated 3D CMM inspection.',
-      machinery: [
-        { id: '1', name: 'Haas 5-Axis VMC Milling Machine', quantity: 2, price: 5500000, total: 11000000 },
-        { id: '2', name: 'Ace Micromatic CNC Turning Center', quantity: 3, price: 2200000, total: 6600000 }
-      ],
-      supplier_name: 'Ace Micromatic Group & Haas India',
-      supplier_location: 'Peenya Bengaluru / Coimbatore',
-      target_customers: 'Automotive OEMs, Aerospace Tier-1 Suppliers, Defense Contractors',
-      sales_location: 'Karnataka, Tamil Nadu, Maharashtra, Export (Europe)',
-      competitors: 'Regional precision job shops and imported Tier-2 component suppliers',
-      mgmt_count: 3, mgmt_salary: 75000,
-      sup_count: 4, sup_salary: 35000,
-      skill_count: 12, skill_salary: 25000,
-      unskill_count: 6, unskill_salary: 17000,
-      admin_count: 3, admin_salary: 28000,
-      land_area: '5000 sq.ft.', land_cost: 2500000,
-      building_area: '3500 sq.ft.', building_cost: 4500000,
-      electrification_cost: 1200000, furniture_cost: 600000,
-      working_capital: 2000000, other_cost: 800000,
-      promoter_contribution: 8700000, bank_loan: 20500000, subsidy: 0,
-      interest_rate_percent: 10.5, repayment_tenure_years: 5, moratorium_period_months: 6,
-      primary_lending_bank: 'State Bank of India', bank_loan_scheme_name: 'Commercial Term Loan & Cash Credit', collateral_offered: 'CGTMSE Guarantee Cover',
-      workspace: 'Owned Industrial Shed', builtup_area: 3500, power_required: 45, water_required: 3000, monthly_rent: 0, start_time: 3,
-      strengths: 'State-of-the-art 5-axis CNC machinery, high precision standards, experienced promoter board.',
-      weaknesses: 'Capital intensive setup and initial capacity ramp-up timeline.',
-      opportunities: 'Make in India defense manufacturing incentives and surging EV component demand.',
-      threats: 'Global raw material price fluctuations and import competition.',
-      local_employment: 28, women_employment: 10, youth_employment: 14,
-      eco_friendly: 'Yes', training: 'Yes', eco_description: 'Zero liquid effluent discharge, solar rooftop power offset, and scrap recycling.',
-      cibil_score: 798, loan_before: 'No', existing_loan: 0, outstanding: 0, default_history: 'No',
-      declarant_name: 'Dr. R. Vyshnavi', designation: 'Managing Director', place: 'Bengaluru', declaration_date: '2026-08-24'
-    }));
-    alert('All 14 Form Sections populated with 100% complete test data.');
-  };
+
 
   const nextStep = () => {
     if (activeStep < 13) setActiveStep(activeStep + 1);
@@ -1128,27 +1059,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
           </div>
 
           <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap' }}>
-            <button
-              type="button"
-              onClick={fillTestData}
-              style={{
-                background: 'linear-gradient(135deg, #FF7A00 0%, #EA580C 100%)',
-                color: '#FFFFFF',
-                border: 'none',
-                padding: '0.8rem 1.4rem',
-                borderRadius: '12px',
-                fontWeight: 800,
-                fontSize: '0.88rem',
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                boxShadow: '0 6px 18px rgba(255, 122, 0, 0.3)',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              <i className="fas fa-bolt"></i> Fill All Test Data
-            </button>
+
 
             <label
               style={{
