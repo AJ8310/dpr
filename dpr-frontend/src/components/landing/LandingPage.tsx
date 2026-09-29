@@ -478,23 +478,19 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                     zIndex: 15,
                     background: 'rgba(255, 255, 255, 0.96)',
                     backdropFilter: 'blur(12px)',
-                    border: '1px solid rgba(255, 255, 255, 0.8)',
-                    padding: '6px 14px',
-                    borderRadius: '14px',
+                    border: '1px solid rgba(255, 255, 255, 0.9)',
+                    padding: '8px 12px',
+                    borderRadius: '16px',
                     boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.15)',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '10px'
+                    justifyContent: 'center'
                   }}>
                     <img
-                      src="/VKF_logo.png"
+                      src="/VKF.png"
                       alt="Vision Karnataka Foundation Logo"
-                      style={{ height: '34px', width: 'auto', objectFit: 'contain' }}
+                      style={{ height: '46px', width: 'auto', objectFit: 'contain' }}
                     />
-                    <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1D1D1F', letterSpacing: '-0.01em' }}>VKF DPR Studio</span>
-                      <span style={{ fontSize: '0.64rem', fontWeight: 600, color: '#0071E3' }}>Official AI Engine</span>
-                    </div>
                   </div>
 
                   {/* Subtle Glass Bottom Left Info Bar */}
