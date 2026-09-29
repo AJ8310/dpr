@@ -322,3 +322,52 @@ body {
   background: #FFEDD5;
   box-shadow: 0 4px 12px rgba(234, 88, 12, 0.15);
 }
+
+/* Visibility Utilities */
+.mobile-only {
+  display: none !important;
+}
+.desktop-only {
+  display: block !important;
+}
+
+/* Mobile & Tablet Responsive Media Queries */
+@media (max-width: 992px) {
+  .mobile-only {
+    display: flex !important;
+  }
+  .desktop-only {
+    display: none !important;
+  }
+  .dpr-section-card {
+    padding: 1.4rem 1.1rem;
+    border-radius: 14px;
+    margin-bottom: 1.2rem;
+  }
+  .grid-2, .grid-3, .grid-4 {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+  .meta-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  .meta-table {
+    min-width: 600px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Prevent iOS Safari input auto-zoom on field focus by using 16px minimum font size */
+  input, select, textarea, .input-modern, .apple-input {
+    font-size: 16px !important;
+  }
+  .btn-next-spacious, .btn-secondary-modern {
+    width: 100%;
+    justify-content: center;
+    padding: 0.85rem 1.2rem;
+  }
+}
+

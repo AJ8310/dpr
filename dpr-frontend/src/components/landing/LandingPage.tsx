@@ -233,19 +233,25 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         }
 
         @media (max-width: 992px) {
-          .hero-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
-          .two-col-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
-          .faq-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .hero-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+          .two-col-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+          .faq-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
           .form-2col { grid-template-columns: 1fr !important; }
           .grid-3 { grid-template-columns: 1fr !important; }
           .grid-5 { grid-template-columns: 1fr 1fr !important; }
           .dash-grid { grid-template-columns: 1fr !important; }
           .flow-grid { grid-template-columns: 1fr 1fr !important; }
           .nav-links { display: none !important; }
+          .header-tagline { display: none !important; }
+          .hero-section-padding { padding: 40px 16px 60px !important; }
+          .hero-title-responsive { font-size: 2.1rem !important; line-height: 1.15 !important; }
+          .hero-video-container { max-height: 320px !important; }
+          .pricing-grid-responsive { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
         }
         @media (max-width: 576px) {
           .grid-5 { grid-template-columns: 1fr !important; }
           .flow-grid { grid-template-columns: 1fr !important; }
+          .header-btn-secondary { display: none !important; }
         }
       `}</style>
 
@@ -261,22 +267,22 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         backdropFilter: 'blur(20px) saturate(180%)',
         WebkitBackdropFilter: 'blur(20px) saturate(180%)',
         borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
-        padding: '0.85rem 2rem'
+        padding: '0.85rem 1.5rem'
       }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           
           {/* Logo / Brand */}
-          <div onClick={() => scrollToSection('hero')} style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }}>
+          <div onClick={() => scrollToSection('hero')} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
             <img
               src="/VKF_logo.png"
               alt="Vision Karnataka Foundation Logo"
-              style={{ height: '48px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 2px 8px rgba(0, 0, 0, 0.08))' }}
+              style={{ height: '42px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 2px 8px rgba(0, 0, 0, 0.08))' }}
             />
             <div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1D1D1F', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+              <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#1D1D1F', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
                 DPRPro AI
               </div>
-              <div style={{ fontSize: '0.76rem', color: '#86868B', fontWeight: 500, letterSpacing: '0.2px' }}>
+              <div className="header-tagline" style={{ fontSize: '0.74rem', color: '#86868B', fontWeight: 500, letterSpacing: '0.2px' }}>
                 Create Professional DPR Reports in Less Time
               </div>
             </div>
@@ -1112,7 +1118,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
           </div>
 
           {/* 4 PLAN TIER CARDS GRID */}
-          <div style={{
+          <div className="pricing-grid-responsive" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
             gap: '20px',

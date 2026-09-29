@@ -23,6 +23,7 @@ export default function ProgressHeader({
 
   return (
     <div
+      className="progress-header-container"
       style={{
         background: '#FFFFFF',
         borderRadius: '1.2rem',
@@ -37,13 +38,35 @@ export default function ProgressHeader({
         border: '1.5px solid #E2E8F0',
       }}
     >
+      <style jsx>{`
+        @media (max-width: 768px) {
+          .progress-header-container {
+            padding: 0.85rem 1rem !important;
+            border-radius: 0.9rem !important;
+            margin-bottom: 1rem !important;
+          }
+          .progress-left-group, .progress-right-group {
+            width: 100% !important;
+            justify-content: space-between !important;
+          }
+          .progress-bar-wrapper {
+            flex: 1 !important;
+            min-width: 100px !important;
+          }
+          .track-dropdown-pill, .depth-dropdown-pill {
+            flex: 1 !important;
+            justify-content: center !important;
+          }
+        }
+      `}</style>
+
       {/* Left: Step Progress & Bar */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', flexWrap: 'wrap' }}>
+      <div className="progress-left-group" style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', flexWrap: 'wrap' }}>
         <span
           style={{
             background: '#F0FDFA',
             borderRadius: '2rem',
-            padding: '0.4rem 1.1rem',
+            padding: '0.4rem 0.9rem',
             fontWeight: 800,
             fontSize: '0.82rem',
             color: '#008C95',
@@ -57,7 +80,7 @@ export default function ProgressHeader({
         </span>
 
         {/* Progress Bar */}
-        <div style={{ width: '200px', height: '9px', background: '#E2E8F0', borderRadius: '1rem', overflow: 'hidden' }}>
+        <div className="progress-bar-wrapper" style={{ width: '180px', height: '9px', background: '#E2E8F0', borderRadius: '1rem', overflow: 'hidden' }}>
           <div
             style={{
               width: `${progressPercent}%`,
@@ -69,15 +92,15 @@ export default function ProgressHeader({
           ></div>
         </div>
 
-        <span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#123B4A' }}>
-          Step {currentStep + 1} of {totalSteps} <span style={{ color: '#008C95', fontSize: '0.82rem' }}>({progressPercent}%)</span>
+        <span style={{ fontWeight: 800, fontSize: '0.86rem', color: '#123B4A' }}>
+          Step {currentStep + 1}/{totalSteps} <span style={{ color: '#008C95', fontSize: '0.8rem' }}>({progressPercent}%)</span>
         </span>
       </div>
 
       {/* Right: Corporate Track Switcher & Depth Selector */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', flexWrap: 'wrap' }}>
+      <div className="progress-right-group" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
         {/* Track Selector Dropdown */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', background: '#FFF7ED', padding: '0.35rem 0.85rem', borderRadius: '2rem', border: '1px solid #FFEDD5' }}>
+        <div className="track-dropdown-pill" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', background: '#FFF7ED', padding: '0.35rem 0.85rem', borderRadius: '2rem', border: '1px solid #FFEDD5' }}>
           <i className="fas fa-file-contract" style={{ color: '#FF7A00', fontSize: '0.85rem' }} />
           <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#C2410C' }}>Track:</span>
           <select
@@ -100,7 +123,7 @@ export default function ProgressHeader({
         </div>
 
         {/* DPR Depth Selector Dropdown */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', background: '#F0FDFA', padding: '0.35rem 0.85rem', borderRadius: '2rem', border: '1px solid #CCFBF1' }}>
+        <div className="depth-dropdown-pill" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', background: '#F0FDFA', padding: '0.35rem 0.85rem', borderRadius: '2rem', border: '1px solid #CCFBF1' }}>
           <i className="fas fa-book-open" style={{ color: '#008C95', fontSize: '0.85rem' }} />
           <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F766E' }}>Depth:</span>
           <select

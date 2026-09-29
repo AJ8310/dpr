@@ -8,6 +8,8 @@ interface FixedSidebarProps {
   onSelectStep: (index: number) => void;
   onChangeService: () => void;
   onLogout: () => void;
+  isMobileOpen?: boolean;
+  onCloseMobile?: () => void;
 }
 
 const SECTION_NAV_ITEMS = [
@@ -33,9 +35,12 @@ export default function FixedSidebar({
   onSelectStep,
   onChangeService,
   onLogout,
+  isMobileOpen = false,
+  onCloseMobile,
 }: FixedSidebarProps) {
   return (
     <aside
+      className={`dpr-sidebar-container ${isMobileOpen ? 'mobile-open' : ''}`}
       style={{
         width: '280px',
         background: 'linear-gradient(180deg, #123B4A 0%, #006F78 100%)',
@@ -49,15 +54,29 @@ export default function FixedSidebar({
         msOverflowStyle: 'none',
         scrollbarWidth: 'none',
         boxShadow: '4px 0 25px rgba(0, 111, 120, 0.25)',
-        zIndex: 100,
+        zIndex: 1000,
         padding: '1.2rem 0',
         borderRight: '1px solid rgba(221, 244, 243, 0.15)',
+        transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
       }}
     >
       <style jsx>{`
         aside::-webkit-scrollbar {
           display: none;
         }
+
+        @media (max-width: 992px) {
+          .dpr-sidebar-container {
+            transform: translateX(-100%);
+            width: 280px !important;
+            max-width: 85vw !important;
+          }
+          .dpr-sidebar-container.mobile-open {
+            transform: translateX(0) !important;
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5) !important;
+          }
+        }
+
 
         .sidebar-brand-logo {
           transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -136,7 +155,33 @@ export default function FixedSidebar({
       `}</style>
 
       {/* Brand Header */}
-      <div style={{ padding: '0 1.2rem 1rem 1.2rem', borderBottom: '1px solid rgba(255, 255, 255, 0.12)', marginBottom: '0.8rem' }}>
+      <div style={{ padding: '0 1.2rem 1rem 1.2rem', borderBottom: '1px solid rgba(255, 255, 255, 0.12)', marginBottom: '0.8rem', position: 'relative' }}>
+        {/* Mobile Close Button */}
+        {onCloseMobile && (
+          <button
+            onClick={onCloseMobile}
+            className="mobile-only"
+            aria-label="Close sidebar"
+            style={{
+              position: 'absolute',
+              top: '-0.4rem',
+              right: '0.8rem',
+              background: 'rgba(255, 255, 255, 0.15)',
+              border: 'none',
+              color: '#FFFFFF',
+              width: '30px',
+              height: '30px',
+              borderRadius: '50%',
+              cursor: 'pointer',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '0.9rem',
+            }}
+          >
+            <i className="fas fa-times" />
+          </button>
+        )}
+
         <div className="sidebar-brand-logo" style={{ textAlign: 'center', marginBottom: '0.4rem', cursor: 'pointer' }}>
           <img src="/VKF_logo.png" alt="VISION KARNATAKA FOUNDATION" style={{ maxWidth: '100%', height: 'auto', maxHeight: '50px', objectFit: 'contain' }} />
         </div>
@@ -153,7 +198,10 @@ export default function FixedSidebar({
         {/* Action Buttons */}
         <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.6rem' }}>
           <button
-            onClick={onChangeService}
+            onClick={() => {
+              onChangeService();
+              if (onCloseMobile) onCloseMobile();
+            }}
             className="sidebar-btn-track"
             style={{
               flex: 1,
@@ -174,7 +222,10 @@ export default function FixedSidebar({
             <i className="fas fa-arrows-rotate" style={{ transition: 'transform 0.3s ease' }}></i> Change Track
           </button>
           <button
-            onClick={onLogout}
+            onClick={() => {
+              onLogout();
+              if (onCloseMobile) onCloseMobile();
+            }}
             className="sidebar-btn-exit"
             style={{
               background: 'rgba(239, 68, 68, 0.2)',
@@ -204,10 +255,14 @@ export default function FixedSidebar({
           return (
             <button
               key={idx}
-              onClick={() => onSelectStep(idx)}
+              onClick={() => {
+                onSelectStep(idx);
+                if (onCloseMobile) onCloseMobile();
+              }}
               className={`sidebar-step-item ${isActive ? 'active-step' : ''}`}
               style={{
                 width: '100%',
+
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',

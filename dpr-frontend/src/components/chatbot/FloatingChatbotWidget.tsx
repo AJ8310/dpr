@@ -122,9 +122,29 @@ export default function FloatingChatbotWidget({
 
   return (
     <>
+      <style jsx global>{`
+        @media (max-width: 576px) {
+          .chatbot-trigger-btn {
+            bottom: 16px !important;
+            right: 16px !important;
+            padding: 0.5rem 0.9rem !important;
+          }
+          .chatbot-modal-window {
+            bottom: 75px !important;
+            right: 16px !important;
+            left: 16px !important;
+            width: calc(100vw - 32px) !important;
+            max-width: 420px !important;
+            height: 75vh !important;
+            max-height: 560px !important;
+          }
+        }
+      `}</style>
+
       {/* Floating Trigger Button */}
       <button
         onClick={toggleModal}
+        className="chatbot-trigger-btn"
         style={{
           position: 'fixed',
           bottom: '25px',
@@ -139,7 +159,7 @@ export default function FloatingChatbotWidget({
           alignItems: 'center',
           gap: '0.65rem',
           cursor: 'pointer',
-          zIndex: 10000,
+          zIndex: 900,
           transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         }}
       >
@@ -155,6 +175,7 @@ export default function FloatingChatbotWidget({
       {/* Floating Chatbot Modal */}
       {isOpen && (
         <div
+          className="chatbot-modal-window"
           style={{
             position: 'fixed',
             bottom: '90px',

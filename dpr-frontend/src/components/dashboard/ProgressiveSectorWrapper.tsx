@@ -171,7 +171,38 @@ export default function ProgressiveSectorWrapper({
           </div>
 
           {/* QUESTION STEP PILLS */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', alignItems: 'center' }}>
+          <div className="question-step-pills-bar">
+            <style jsx>{`
+              .question-step-pills-bar {
+                display: flex;
+                gap: 0.4rem;
+                align-items: center;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 0.3rem;
+                scrollbar-width: thin;
+              }
+              .question-step-pills-bar::-webkit-scrollbar {
+                height: 4px;
+              }
+              .question-step-pills-bar::-webkit-scrollbar-thumb {
+                background: #CCFBF1;
+                border-radius: 4px;
+              }
+              @media (max-width: 768px) {
+                .question-step-pills-bar button {
+                  flex-shrink: 0;
+                }
+                .inner-nav-actions {
+                  flex-direction: column-reverse !important;
+                  gap: 0.75rem !important;
+                }
+                .inner-nav-actions button {
+                  width: 100% !important;
+                  justify-content: center !important;
+                }
+              }
+            `}</style>
             {questions.map((q, idx) => {
               const isActive = idx === currentIdx;
               const isPast = idx < currentIdx;
@@ -202,6 +233,7 @@ export default function ProgressiveSectorWrapper({
                     alignItems: 'center',
                     gap: '0.35rem',
                     transition: 'all 0.15s ease',
+                    flexShrink: 0,
                   }}
                 >
                   {isPast ? (
@@ -371,6 +403,7 @@ export default function ProgressiveSectorWrapper({
 
           {/* INNER NAVIGATION BUTTONS */}
           <div
+            className="inner-nav-actions"
             style={{
               display: 'flex',
               alignItems: 'center',
