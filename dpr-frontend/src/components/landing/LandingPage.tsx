@@ -470,7 +470,34 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                       backfaceVisibility: 'hidden'
                     }}
                   />
-                  {/* Subtle Glass Bottom Banner */}
+                  {/* VKF Logo Watermark Mask Overlay (Bottom Right) */}
+                  <div style={{
+                    position: 'absolute',
+                    bottom: '14px',
+                    right: '14px',
+                    zIndex: 15,
+                    background: 'rgba(255, 255, 255, 0.96)',
+                    backdropFilter: 'blur(12px)',
+                    border: '1px solid rgba(255, 255, 255, 0.8)',
+                    padding: '6px 14px',
+                    borderRadius: '14px',
+                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.15)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px'
+                  }}>
+                    <img
+                      src="/VKF_logo.png"
+                      alt="Vision Karnataka Foundation Logo"
+                      style={{ height: '34px', width: 'auto', objectFit: 'contain' }}
+                    />
+                    <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1D1D1F', letterSpacing: '-0.01em' }}>VKF DPR Studio</span>
+                      <span style={{ fontSize: '0.64rem', fontWeight: 600, color: '#0071E3' }}>Official AI Engine</span>
+                    </div>
+                  </div>
+
+                  {/* Subtle Glass Bottom Left Info Bar */}
                   <div style={{
                     position: 'absolute',
                     bottom: 0,
@@ -482,15 +509,15 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                     color: '#FFFFFF',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'space-between',
+                    justifyContent: 'flex-start',
                     fontSize: '0.82rem',
-                    fontWeight: 500
+                    fontWeight: 500,
+                    pointerEvents: 'none'
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <span style={{ color: '#0071E3', fontSize: '1rem' }}>✨</span>
                       <span>AI-Powered Financial & Detailed Project Report Generator</span>
                     </div>
-                    <span style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.74rem', opacity: 0.85 }}>VKF DPR Studio 2.0</span>
                   </div>
                 </div>
               )}
