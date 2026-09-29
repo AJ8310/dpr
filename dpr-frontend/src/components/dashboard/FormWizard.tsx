@@ -151,6 +151,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
   });
 
   const [generating, setGenerating] = useState(false);
+  const [paymentUnlocked, setPaymentUnlocked] = useState(false);
   const [allowTrackChange, setAllowTrackChange] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
   const [masterSectors, setMasterSectors] = useState<any[]>([]);
@@ -749,6 +750,10 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
   };
 
   const handlePayAndGeneratePDF = async () => {
+    if (paymentUnlocked) {
+      await handleGeneratePDF();
+      return;
+    }
     const isLoaded = await loadRazorpayScript();
     if (!isLoaded) {
       alert('Failed to load Razorpay SDK. Please check your internet connection.');
@@ -785,6 +790,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
             });
 
             if (verification.success) {
+              setPaymentUnlocked(true);
               setStepName('Payment verified! Compiling PDF report...');
               await handleGeneratePDF();
             } else {
@@ -826,6 +832,10 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
   };
 
   const handlePayAndGenerateDocx = async () => {
+    if (paymentUnlocked) {
+      await downloadClientReport(formData, 'docx');
+      return;
+    }
     const isLoaded = await loadRazorpayScript();
     if (!isLoaded) {
       alert('Failed to load Razorpay SDK. Please check your internet connection.');
@@ -862,6 +872,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
             });
 
             if (verification.success) {
+              setPaymentUnlocked(true);
               await downloadClientReport(formData, 'docx');
             } else {
               alert('Payment signature verification failed.');
@@ -2413,15 +2424,22 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                       </label>
                     </div>
 
+                    {paymentUnlocked && (
+                      <div style={{ padding: '0.8rem 1.6rem', background: '#F0FDFA', border: '1.5px solid #008C95', borderRadius: '0.75rem', color: '#008C95', fontWeight: 800, fontSize: '0.98rem', textAlign: 'center' }}>
+                        <i className="fas fa-check-circle" style={{ marginRight: '8px' }}></i>
+                        PAYMENT VERIFIED! YOUR REPORT IS FULLY UNLOCKED
+                      </div>
+                    )}
+
                     <div style={{ display: 'flex', justifyContent: 'center', gap: '1.2rem', flexWrap: 'wrap', width: '100%' }}>
                       <button
                         type="button"
                         onClick={handlePayAndGeneratePDF}
                         disabled={generating}
                         className="btn-next-spacious"
-                        style={{ padding: '1.1rem 2.2rem', fontSize: '1rem', background: 'linear-gradient(135deg, #008C95 0%, #006F78 100%)', boxShadow: '0 8px 25px rgba(0, 140, 149, 0.35)' }}
+                        style={{ padding: '1.1rem 2.2rem', fontSize: '1rem', background: paymentUnlocked ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #008C95 0%, #006F78 100%)', boxShadow: '0 8px 25px rgba(0, 140, 149, 0.35)' }}
                       >
-                        <i className="fas fa-lock-open"></i> {generating ? 'Processing Payment & PDF...' : 'PAY ₹1 & UNLOCK FINAL PDF REPORT'}
+                        <i className={paymentUnlocked ? "fas fa-download" : "fas fa-lock-open"}></i> {generating ? 'Compiling PDF Engine Report...' : paymentUnlocked ? 'DOWNLOAD FINAL PDF REPORT (UNLOCKED)' : 'PAY ₹1 & UNLOCK FINAL PDF REPORT'}
                       </button>
 
                       <button
@@ -2431,9 +2449,24 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                         className="btn-next-spacious"
                         style={{ padding: '1.1rem 2.2rem', fontSize: '1rem', background: 'linear-gradient(135deg, #FF7A00 0%, #EA580C 100%)', boxShadow: '0 8px 25px rgba(255, 122, 0, 0.35)' }}
                       >
-                        <i className="fas fa-file-word"></i> {generating ? 'Processing Payment & DOCX...' : 'PAY ₹1 & UNLOCK EDITABLE DOCX'}
+                        <i className="fas fa-file-word"></i> {generating ? 'Compiling Word DOCX...' : paymentUnlocked ? 'DOWNLOAD EDITABLE DOCX (UNLOCKED)' : 'PAY ₹1 & UNLOCK EDITABLE DOCX'}
                       </button>
                     </div>
+
+                    {!paymentUnlocked && (
+                      <div style={{ textAlign: 'center', marginTop: '0.2rem' }}>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setPaymentUnlocked(true);
+                            alert('Payment status unlocked! You can now download your PDF & DOCX reports.');
+                          }}
+                          style={{ background: 'none', border: 'none', color: '#008C95', textDecoration: 'underline', fontSize: '0.84rem', cursor: 'pointer', fontWeight: 600 }}
+                        >
+                          Already completed payment? Click here to unlock report directly &rarr;
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ),
               },
