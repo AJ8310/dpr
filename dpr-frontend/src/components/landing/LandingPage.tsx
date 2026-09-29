@@ -305,7 +305,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
 
       {/* 2. APPLE STUDIO HERO SECTION */}
       <section id="hero" style={{ padding: '80px 24px 100px', position: 'relative', zIndex: 1 }}>
-        <div className="hero-grid" style={{ maxWidth: '1240px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '56px', alignItems: 'center' }}>
+        <div className="hero-grid" style={{ maxWidth: '1280px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1.15fr', gap: '48px', alignItems: 'center' }}>
           
           {/* Left Column Copy */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -442,10 +442,6 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                     📄 Report Blueprint
                   </button>
                 </div>
-
-                <span style={{ padding: '4px 10px', background: 'rgba(0, 113, 227, 0.1)', color: '#0071E3', borderRadius: '9999px', fontSize: '0.74rem', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#0071E3' }}></span> HD AI Walkthrough
-                </span>
               </div>
 
               {/* VIDEO VIEW */}
@@ -461,7 +457,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                     style={{
                       width: '100%',
                       height: 'auto',
-                      maxHeight: '480px',
+                      maxHeight: '650px',
                       display: 'block',
                       objectFit: 'cover',
                       filter: 'contrast(1.05) brightness(1.03) saturate(1.06)',
@@ -476,13 +472,13 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                     alt="Vision Karnataka Foundation Logo"
                     style={{
                       position: 'absolute',
-                      bottom: '16px',
-                      right: '16px',
+                      bottom: '20px',
+                      right: '20px',
                       zIndex: 15,
-                      height: '52px',
+                      height: '64px',
                       width: 'auto',
                       objectFit: 'contain',
-                      filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5))',
+                      filter: 'drop-shadow(0 4px 14px rgba(0, 0, 0, 0.6))',
                       pointerEvents: 'none'
                     }}
                   />
