@@ -470,28 +470,22 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                       backfaceVisibility: 'hidden'
                     }}
                   />
-                  {/* VKF Logo Watermark Mask Overlay (Bottom Right) */}
-                  <div style={{
-                    position: 'absolute',
-                    bottom: '14px',
-                    right: '14px',
-                    zIndex: 15,
-                    background: 'rgba(255, 255, 255, 0.96)',
-                    backdropFilter: 'blur(12px)',
-                    border: '1px solid rgba(255, 255, 255, 0.9)',
-                    padding: '8px 12px',
-                    borderRadius: '16px',
-                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.15)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <img
-                      src="/VKF.png"
-                      alt="Vision Karnataka Foundation Logo"
-                      style={{ height: '46px', width: 'auto', objectFit: 'contain' }}
-                    />
-                  </div>
+                  {/* VKF Logo Watermark Overlay (Bottom Right - Pure Logo without white box) */}
+                  <img
+                    src="/VKF.png"
+                    alt="Vision Karnataka Foundation Logo"
+                    style={{
+                      position: 'absolute',
+                      bottom: '16px',
+                      right: '16px',
+                      zIndex: 15,
+                      height: '52px',
+                      width: 'auto',
+                      objectFit: 'contain',
+                      filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5))',
+                      pointerEvents: 'none'
+                    }}
+                  />
 
                   {/* Subtle Glass Bottom Left Info Bar */}
                   <div style={{
