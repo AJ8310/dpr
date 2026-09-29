@@ -8,7 +8,7 @@ from config import settings
 router = APIRouter(prefix="/api/payment", tags=["Razorpay Payment Gateway"])
 
 class CreateOrderRequest(BaseModel):
-    amount: float = 500.0  # Amount in INR (e.g. ₹500)
+    amount: float = 1.0  # Amount in INR (e.g. ₹1)
     currency: str = "INR"
     receipt: Optional[str] = None
     project_id: Optional[str] = None

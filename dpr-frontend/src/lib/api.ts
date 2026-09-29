@@ -228,7 +228,7 @@ export async function getPaymentConfig() {
   return response.data;
 }
 
-export async function createRazorpayOrder(amount: number = 500, projectId?: string) {
+export async function createRazorpayOrder(amount: number = 1, projectId?: string) {
   const response = await api.post('/api/payment/create-order', {
     amount,
     currency: 'INR',

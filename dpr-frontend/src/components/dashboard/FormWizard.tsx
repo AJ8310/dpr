@@ -759,7 +759,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       setGenerating(true);
       setStepName('Initializing Razorpay Order...');
 
-      const orderData = await createRazorpayOrder(500);
+      const orderData = await createRazorpayOrder(1);
       setGenerating(false);
 
       if (!orderData.success || !orderData.order_id) {
@@ -836,7 +836,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       setGenerating(true);
       setStepName('Initializing Razorpay Order...');
 
-      const orderData = await createRazorpayOrder(500);
+      const orderData = await createRazorpayOrder(1);
       setGenerating(false);
 
       if (!orderData.success || !orderData.order_id) {
@@ -2421,7 +2421,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                         className="btn-next-spacious"
                         style={{ padding: '1.1rem 2.2rem', fontSize: '1rem', background: 'linear-gradient(135deg, #008C95 0%, #006F78 100%)', boxShadow: '0 8px 25px rgba(0, 140, 149, 0.35)' }}
                       >
-                        <i className="fas fa-lock-open"></i> {generating ? 'Processing Payment & PDF...' : 'PAY ₹500 & UNLOCK FINAL PDF REPORT'}
+                        <i className="fas fa-lock-open"></i> {generating ? 'Processing Payment & PDF...' : 'PAY ₹1 & UNLOCK FINAL PDF REPORT'}
                       </button>
 
                       <button
@@ -2431,7 +2431,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                         className="btn-next-spacious"
                         style={{ padding: '1.1rem 2.2rem', fontSize: '1rem', background: 'linear-gradient(135deg, #FF7A00 0%, #EA580C 100%)', boxShadow: '0 8px 25px rgba(255, 122, 0, 0.35)' }}
                       >
-                        <i className="fas fa-file-word"></i> {generating ? 'Processing Payment & DOCX...' : 'PAY ₹500 & UNLOCK EDITABLE DOCX'}
+                        <i className="fas fa-file-word"></i> {generating ? 'Processing Payment & DOCX...' : 'PAY ₹1 & UNLOCK EDITABLE DOCX'}
                       </button>
                     </div>
                   </div>
