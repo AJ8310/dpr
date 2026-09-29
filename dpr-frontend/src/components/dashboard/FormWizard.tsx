@@ -820,7 +820,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       rzp.open();
     } catch (err: any) {
       setGenerating(false);
-      alert('Error initiating Razorpay checkout: ' + (err.message || err));
+      const detailMsg = err?.response?.data?.detail || err?.message || err;
+      alert('Error initiating Razorpay checkout: ' + detailMsg);
     }
   };
 
@@ -895,7 +896,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       rzp.open();
     } catch (err: any) {
       setGenerating(false);
-      alert('Error initiating Razorpay checkout: ' + (err.message || err));
+      const detailMsg = err?.response?.data?.detail || err?.message || err;
+      alert('Error initiating Razorpay checkout: ' + detailMsg);
     }
   };
 

@@ -60,6 +60,8 @@ async def create_razorpay_order(payload: CreateOrderRequest):
             "key_id": settings.RAZORPAY_KEY_ID,
             "receipt": order.get("receipt")
         }
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Failed to create Razorpay Order: {str(e)}")
 
