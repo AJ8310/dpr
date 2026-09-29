@@ -1,4 +1,22 @@
 :root {
+  /* Apple Design System & Theme Tokens */
+  --apple-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Inter", sans-serif;
+  --apple-mono: "SF Mono", "JetBrains Mono", monospace;
+  --apple-bg: #F5F5F7;
+  --apple-dark-bg: #000000;
+  --apple-card-bg: #FFFFFF;
+  --apple-dark-text: #1D1D1F;
+  --apple-secondary-text: #86868B;
+  --apple-subtle-border: rgba(0, 0, 0, 0.08);
+  --apple-blue: #0071E3;
+  --apple-blue-hover: #0077ED;
+  --apple-glass-bg: rgba(255, 255, 255, 0.78);
+  --apple-glass-dark: rgba(29, 29, 31, 0.82);
+  --apple-hairline-border: rgba(0, 0, 0, 0.08);
+  --apple-shadow-subtle: 0 8px 30px rgba(0, 0, 0, 0.04);
+  --apple-shadow-elevated: 0 24px 48px -12px rgba(0, 0, 0, 0.12);
+
+  /* Legacy & VKF Brand Mapping */
   --vkf-deep-teal: #008C95;
   --vkf-dark-teal: #006F78;
   --vkf-medium-teal: #36B5B8;
@@ -7,19 +25,18 @@
   --vkf-white: #FFFFFF;
   --vkf-orange-accent: #FF7A00;
   --vkf-soft-orange: #FFA45B;
-  --vkf-dark-text: #123B4A;
-  --vkf-secondary-text: #64748B;
-  --vkf-card-border: #DDF4F3;
-  --vkf-shadow-subtle: 0 10px 30px rgba(0, 140, 149, 0.07);
+  --vkf-dark-text: #1D1D1F;
+  --vkf-secondary-text: #86868B;
+  --vkf-card-border: rgba(0, 0, 0, 0.08);
+  --vkf-shadow-subtle: 0 8px 30px rgba(0, 0, 0, 0.04);
 
-  /* Legacy & Helper Mapping */
   --vkf-primary-teal: #008C95;
   --vkf-saffron: #FF7A00;
-  --vkf-royal-blue: #008C95;
-  --vkf-primary-navy: #123B4A;
-  --vkf-bg-light: #F8FAFC;
+  --vkf-royal-blue: #0071E3;
+  --vkf-primary-navy: #1D1D1F;
+  --vkf-bg-light: #F5F5F7;
 
-  --vkf-teal-gradient: linear-gradient(135deg, #008C95 0%, #006F78 100%);
+  --vkf-teal-gradient: linear-gradient(135deg, #0071E3 0%, #005BB5 100%);
   --vkf-saffron-gradient: linear-gradient(135deg, #FF7A00 0%, #EA580C 100%);
 }
 
@@ -30,15 +47,16 @@
 }
 
 body, input, select, textarea, button, label {
-  font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Inter", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.015em;
 }
 
 body {
-  background-color: #F8FAFC;
-  color: var(--vkf-dark-text);
-  line-height: 1.5;
+  background-color: var(--apple-bg);
+  color: var(--apple-dark-text);
+  line-height: 1.47059;
 }
 
 /* Custom Scrollbar */

@@ -62,159 +62,173 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
   const avgDscr = (1.75 + machineryCost / 400).toFixed(2);
 
   return (
-    <div style={{ minHeight: '100vh', position: 'relative', background: '#F2FAFA', color: '#123B4A', fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif" }}>
+    <div style={{
+      minHeight: '100vh',
+      position: 'relative',
+      background: '#F5F5F7',
+      color: '#1D1D1F',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Inter, sans-serif'
+    }}>
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
-        
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         
-        .vkf-nav-link {
+        .apple-nav-link {
           background: none;
           border: none;
-          color: #00464E;
-          font-weight: 600;
-          font-size: 0.95rem;
+          color: #1D1D1F;
+          font-weight: 500;
+          font-size: 0.92rem;
           cursor: pointer;
           transition: color 0.15s ease;
-          padding: 0.4rem 0.6rem;
+          padding: 0.4rem 0.8rem;
+          border-radius: 9999px;
         }
-        .vkf-nav-link:hover {
-          color: #008C95;
+        .apple-nav-link:hover {
+          color: #0071E3;
+          background: rgba(0, 113, 227, 0.05);
         }
 
-        .vkf-btn-primary {
-          background: linear-gradient(135deg, #008C95 0%, #006F78 100%);
+        .apple-btn-primary {
+          background: #0071E3;
           color: #FFFFFF;
           border: none;
-          padding: 0.85rem 1.6rem;
-          border-radius: 10px;
-          font-weight: 700;
-          font-size: 0.95rem;
+          padding: 0.8rem 1.6rem;
+          border-radius: 9999px;
+          font-weight: 600;
+          font-size: 0.92rem;
           cursor: pointer;
-          box-shadow: 0 4px 16px rgba(0, 140, 149, 0.28);
-          transition: all 0.2s ease;
+          box-shadow: 0 4px 14px rgba(0, 113, 227, 0.28);
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
           display: inline-flex;
           align-items: center;
           gap: 8px;
         }
-        .vkf-btn-primary:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(0, 140, 149, 0.38);
+        .apple-btn-primary:hover {
+          background: #0077ED;
+          transform: scale(1.02);
+          box-shadow: 0 6px 20px rgba(0, 113, 227, 0.38);
         }
 
-        .vkf-btn-secondary {
-          background: #FFFFFF;
-          color: #00464E;
-          border: 1.5px solid #00464E;
-          padding: 0.85rem 1.6rem;
-          border-radius: 10px;
-          font-weight: 700;
-          font-size: 0.95rem;
+        .apple-btn-secondary {
+          background: rgba(255, 255, 255, 0.8);
+          color: #1D1D1F;
+          border: 1px solid rgba(0, 0, 0, 0.12);
+          padding: 0.8rem 1.6rem;
+          border-radius: 9999px;
+          font-weight: 600;
+          font-size: 0.92rem;
           cursor: pointer;
-          transition: all 0.2s ease;
+          backdrop-filter: blur(10px);
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
           display: inline-flex;
           align-items: center;
           gap: 8px;
         }
-        .vkf-btn-secondary:hover {
-          background: #00464E;
-          color: #FFFFFF;
-        }
-
-        .vkf-card {
+        .apple-btn-secondary:hover {
           background: #FFFFFF;
-          border: 1px solid #DDF4F3;
-          border-radius: 16px;
-          padding: 32px;
-          box-shadow: 0 8px 24px rgba(0, 70, 78, 0.04);
-          transition: all 0.25s ease;
-        }
-        .vkf-card:hover {
-          border-color: #008C95;
-          transform: translateY(-3px);
-          box-shadow: 0 12px 32px rgba(0, 140, 149, 0.12);
+          border-color: rgba(0, 0, 0, 0.25);
+          transform: scale(1.02);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
         }
 
-        .vkf-pill {
+        .apple-bento-card {
+          background: #FFFFFF;
+          border: 1px solid rgba(0, 0, 0, 0.06);
+          border-radius: 28px;
+          padding: 36px;
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .apple-bento-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+          border-color: rgba(0, 113, 227, 0.2);
+        }
+
+        .apple-pill {
           padding: 8px 16px;
-          background: #FFFFFF;
-          border: 1px solid #C5EBE9;
-          border-radius: 8px;
-          font-size: 0.9rem;
-          font-weight: 600;
-          color: #00464E;
+          background: rgba(255, 255, 255, 0.9);
+          border: 1px solid rgba(0, 0, 0, 0.08);
+          border-radius: 9999px;
+          font-size: 0.88rem;
+          font-weight: 500;
+          color: #1D1D1F;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
         }
 
-        .vkf-kicker {
-          font-family: 'IBM Plex Mono', monospace;
-          font-size: 0.82rem;
+        .apple-kicker {
+          font-family: 'SF Mono', 'JetBrains Mono', monospace;
+          font-size: 0.8rem;
           font-weight: 600;
-          letter-spacing: 0.08em;
-          color: #008C95;
+          letter-spacing: 0.06em;
+          color: #0071E3;
           text-transform: uppercase;
-          margin-bottom: 8px;
+          margin-bottom: 10px;
           display: block;
         }
 
-        .vkf-input {
+        .apple-input {
           width: 100%;
-          padding: 12px 16px;
-          border: 1.5px solid #C5EBE9;
-          border-radius: 10px;
+          padding: 14px 18px;
+          border: 1px solid rgba(0, 0, 0, 0.12);
+          border-radius: 14px;
           background: #FFFFFF;
           font-size: 0.95rem;
-          color: #00464E;
+          color: #1D1D1F;
           font-family: inherit;
           outline: none;
-          transition: border-color 0.2s ease;
+          transition: all 0.2s ease;
         }
-        .vkf-input:focus {
-          border-color: #008C95;
+        .apple-input:focus {
+          border-color: #0071E3;
+          box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.15);
         }
 
-        .radio-pill {
+        .radio-pill-apple {
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          padding: 10px 18px;
-          border: 1.5px solid #C5EBE9;
-          border-radius: 999px;
+          padding: 10px 20px;
+          border: 1px solid rgba(0, 0, 0, 0.12);
+          border-radius: 9999px;
           background: #FFFFFF;
           font-size: 0.88rem;
-          font-weight: 600;
-          color: #00464E;
+          font-weight: 500;
+          color: #1D1D1F;
           cursor: pointer;
-          transition: all 0.15s ease;
+          transition: all 0.2s ease;
         }
-        .radio-pill.selected {
-          border-color: #008C95;
-          background: #E6F7F7;
-          color: #006F78;
+        .radio-pill-apple.selected {
+          border-color: #0071E3;
+          background: rgba(0, 113, 227, 0.06);
+          color: #0071E3;
+          font-weight: 600;
         }
 
-        .dash-tab-btn {
+        .dash-tab-btn-apple {
           all: unset;
           box-sizing: border-box;
           cursor: pointer;
           display: flex;
           gap: 14px;
           padding: 20px 24px;
-          border-bottom: 1px solid #DDF4F3;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.06);
           position: relative;
-          transition: background 0.15s ease;
+          transition: background 0.2s ease;
         }
-        .dash-tab-btn[aria-selected="true"] {
+        .dash-tab-btn-apple[aria-selected="true"] {
           background: #FFFFFF;
         }
-        .dash-tab-btn[aria-selected="true"]::before {
+        .dash-tab-btn-apple[aria-selected="true"]::before {
           content: "";
           position: absolute;
           left: 0;
           top: 0;
           bottom: 0;
-          width: 4px;
-          background: #008C95;
+          width: 3.5px;
+          background: #0071E3;
+          border-radius: 0 4px 4px 0;
         }
 
         @media (max-width: 992px) {
@@ -237,16 +251,16 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
       {/* Vector Background Waves */}
       <BackgroundWaves />
 
-      {/* 1. STICKY NAVIGATION HEADER */}
+      {/* 1. APPLE FROSTED GLASS STICKY HEADER */}
       <header style={{
         position: 'sticky',
         top: 0,
         zIndex: 100,
-        background: 'rgba(255, 255, 255, 0.94)',
-        backdropFilter: 'blur(16px)',
-        borderBottom: '1px solid #DDF4F3',
-        padding: '0.85rem 2rem',
-        boxShadow: '0 4px 20px rgba(0, 111, 120, 0.05)'
+        background: 'rgba(255, 255, 255, 0.78)',
+        backdropFilter: 'blur(20px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
+        padding: '0.85rem 2rem'
       }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           
@@ -255,39 +269,39 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             <img
               src="/VKF_logo.png"
               alt="Vision Karnataka Foundation Logo"
-              style={{ height: '56px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 2px 8px rgba(0, 70, 78, 0.12))' }}
+              style={{ height: '48px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 2px 8px rgba(0, 0, 0, 0.08))' }}
             />
             <div>
-              <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#00464E', letterSpacing: '-0.3px', lineHeight: 1.1 }}>
-                VKF DPR
+              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1D1D1F', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+                VKF DPR Studio
               </div>
-              <div style={{ fontSize: '0.78rem', color: '#008C95', fontWeight: 600, letterSpacing: '0.2px' }}>
-                Smart Reports. Stronger Decisions.
+              <div style={{ fontSize: '0.76rem', color: '#86868B', fontWeight: 500, letterSpacing: '0.2px' }}>
+                Bankable Reports. Reimagined.
               </div>
             </div>
           </div>
 
           {/* Navigation Items */}
-          <nav className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '1.8rem' }}>
-            <button onClick={() => scrollToSection('how-it-works')} className="vkf-nav-link">How it works</button>
-            <button onClick={() => scrollToSection('funding-needs')} className="vkf-nav-link">Funding needs</button>
-            <button onClick={() => scrollToSection('why-digital')} className="vkf-nav-link">Why digital</button>
-            <button onClick={() => scrollToSection('faq')} className="vkf-nav-link">FAQ</button>
+          <nav className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
+            <button onClick={() => scrollToSection('how-it-works')} className="apple-nav-link">Overview</button>
+            <button onClick={() => scrollToSection('funding-needs')} className="apple-nav-link">Funding Needs</button>
+            <button onClick={() => scrollToSection('why-digital')} className="apple-nav-link">Financial Studio</button>
+            <button onClick={() => scrollToSection('faq')} className="apple-nav-link">FAQ</button>
           </nav>
 
           {/* Header Action Buttons */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <button onClick={scrollToAuth} className="vkf-btn-secondary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.88rem' }}>
-              Get in Touch
+            <button onClick={scrollToAuth} className="apple-btn-secondary" style={{ padding: '0.55rem 1.2rem', fontSize: '0.86rem' }}>
+              Contact Team
             </button>
-            <button onClick={() => { setAuthView('login'); scrollToAuth(); }} className="vkf-btn-primary" style={{ padding: '0.6rem 1.3rem', fontSize: '0.88rem' }}>
-              Create My DPR
+            <button onClick={() => { setAuthView('login'); scrollToAuth(); }} className="apple-btn-primary" style={{ padding: '0.55rem 1.3rem', fontSize: '0.86rem' }}>
+              Create My DPR &rarr;
             </button>
           </div>
         </div>
       </header>
 
-      {/* 2. HERO SECTION */}
+      {/* 2. APPLE STUDIO HERO SECTION */}
       <section id="hero" style={{ padding: '80px 24px 100px', position: 'relative', zIndex: 1 }}>
         <div className="hero-grid" style={{ maxWidth: '1240px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '56px', alignItems: 'center' }}>
           
@@ -300,188 +314,179 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               alignSelf: 'flex-start',
               alignItems: 'center',
               gap: '10px',
-              padding: '8px 16px',
-              background: '#FFFFFF',
-              border: '1.5px solid #C5EBE9',
-              borderRadius: '999px',
-              fontSize: '0.88rem',
-              fontWeight: 600,
-              boxShadow: '0 2px 10px rgba(0, 140, 149, 0.08)'
+              padding: '6px 16px',
+              background: 'rgba(0, 113, 227, 0.08)',
+              border: '1px solid rgba(0, 113, 227, 0.18)',
+              borderRadius: '9999px',
+              fontSize: '0.85rem',
+              fontWeight: 500,
+              backdropFilter: 'blur(10px)'
             }}>
-              <span style={{ color: '#7A8C94', textDecoration: 'line-through' }}>3 weeks manual prep</span>
-              <span style={{ color: '#008C95', fontWeight: 700 }}>⚡ &lt; 10 mins flow</span>
+              <span style={{ color: '#86868B', textDecoration: 'line-through' }}>3 weeks manual prep</span>
+              <span style={{ color: '#0071E3', fontWeight: 600 }}>⚡ &lt; 10 mins flow</span>
             </div>
 
             {/* Main Headline */}
             <h1 style={{
-              fontSize: '3.4rem',
-              fontWeight: 800,
-              color: '#00464E',
-              lineHeight: 1.08,
-              letterSpacing: '-0.03em'
+              fontSize: '3.6rem',
+              fontWeight: 700,
+              color: '#1D1D1F',
+              lineHeight: 1.05,
+              letterSpacing: '-0.038em'
             }}>
               Build Your Funding-Ready DPR, Smarter.
             </h1>
 
             {/* Subtitle */}
-            <p style={{ fontSize: '1.12rem', color: '#3F5D68', lineHeight: 1.65, maxWidth: '560px' }}>
-              Turn your business, project and financial information into a professionally structured Detailed Project Report (DPR) — without weeks of manual preparation.
+            <p style={{ fontSize: '1.18rem', color: '#515154', lineHeight: 1.5, maxWidth: '560px', fontWeight: 400 }}>
+              Turn your business, project and financial information into a professionally structured Detailed Project Report (DPR) — formatted for institutional credit appraisal.
             </p>
 
             {/* DPR For Tags */}
             <div>
-              <div style={{ fontSize: '0.86rem', fontWeight: 700, color: '#00464E', marginBottom: '10px' }}>
+              <div style={{ fontSize: '0.86rem', fontWeight: 600, color: '#1D1D1F', marginBottom: '10px' }}>
                 Prepare your DPR for
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                <span className="vkf-pill">Bank & NBFC Loans</span>
-                <span className="vkf-pill">Government Schemes & Subsidies</span>
-                <span className="vkf-pill">Investor Funding</span>
+                <span className="apple-pill">Bank & NBFC Loans</span>
+                <span className="apple-pill">Government Schemes & Subsidies</span>
+                <span className="apple-pill">Investor Funding</span>
               </div>
-              <div style={{ fontSize: '0.82rem', color: '#5A7B87', marginTop: '10px' }}>
-                with automated financial projections, funding analysis and structured documentation.
+              <div style={{ fontSize: '0.82rem', color: '#86868B', marginTop: '10px' }}>
+                With automated financial projections, funding analysis and structured documentation.
               </div>
             </div>
 
             {/* Action Buttons */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', marginTop: '8px' }}>
-              <button onClick={() => { setAuthView('login'); scrollToAuth(); }} className="vkf-btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.02rem' }}>
+              <button onClick={() => { setAuthView('login'); scrollToAuth(); }} className="apple-btn-primary" style={{ padding: '0.9rem 2.2rem', fontSize: '1.02rem' }}>
                 Create My DPR &rarr;
               </button>
-              <button onClick={scrollToAuth} className="vkf-btn-secondary" style={{ padding: '1rem 2rem', fontSize: '1.02rem' }}>
+              <button onClick={scrollToAuth} className="apple-btn-secondary" style={{ padding: '0.9rem 2.2rem', fontSize: '1.02rem' }}>
                 Get in Touch
               </button>
             </div>
 
           </div>
 
-          {/* Right Column Document Mockup */}
+          {/* Right Column: macOS DPR Studio Window Mockup */}
           <div style={{ position: 'relative' }}>
-            <div style={{
-              position: 'absolute',
-              top: '24px',
-              left: '32px',
-              right: '-12px',
-              bottom: '-12px',
-              background: '#DDF4F3',
-              borderRadius: '20px',
-              zIndex: 0
-            }}></div>
-            
             <div style={{
               position: 'relative',
               zIndex: 1,
               background: '#FFFFFF',
-              border: '1.5px solid #C5EBE9',
-              borderRadius: '20px',
-              boxShadow: '0 24px 48px -16px rgba(0, 70, 78, 0.18)',
-              padding: '36px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '20px'
+              border: '1px solid rgba(0, 0, 0, 0.08)',
+              borderRadius: '24px',
+              boxShadow: '0 30px 60px -15px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.04)',
+              overflow: 'hidden'
             }}>
               
-              {/* Card Header */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.78rem', color: '#008C95', fontWeight: 600 }}>Detailed Project Report</span>
-                  <div style={{ fontSize: '1.45rem', fontWeight: 800, color: '#00464E', marginTop: '2px' }}>[Your Project Name]</div>
+              {/* macOS Window Header Bar */}
+              <div style={{
+                background: 'rgba(245, 245, 247, 0.9)',
+                backdropFilter: 'blur(10px)',
+                padding: '12px 18px',
+                borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FF5F56', display: 'inline-block' }}></span>
+                  <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FFBD2E', display: 'inline-block' }}></span>
+                  <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#27C93F', display: 'inline-block' }}></span>
                 </div>
-                <span style={{ padding: '6px 12px', background: '#E6F7F7', color: '#006F78', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 700 }}>
-                  Ready to review
+                <div style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.78rem', color: '#86868B', fontWeight: 500 }}>
+                  DPR_Studio_Appraisal_Report.docx
+                </div>
+                <span style={{ padding: '4px 10px', background: 'rgba(52, 199, 89, 0.12)', color: '#248A3D', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 600 }}>
+                  Institutional Ready
                 </span>
               </div>
 
-              {/* TOC Items List */}
-              <div style={{ borderTop: '1px solid #DDF4F3', borderBottom: '1px solid #DDF4F3', padding: '10px 0' }}>
-                {[
-                  { id: '01', title: 'Business & Promoter Profile', active: false },
-                  { id: '02', title: 'Project Overview', active: false },
-                  { id: '03', title: 'Financial Projections', active: true },
-                  { id: '04', title: 'Funding Requirement', active: false },
-                  { id: '05', title: 'Feasibility & Supporting Analysis', active: false },
-                ].map((item) => (
-                  <div key={item.id} style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '14px',
-                    padding: '8px 10px',
-                    borderRadius: '8px',
-                    fontSize: '0.9rem',
-                    background: item.active ? '#E6F7F7' : 'transparent',
-                    color: item.active ? '#00464E' : '#5A7B87',
-                    fontWeight: item.active ? 700 : 500
-                  }}>
-                    <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.8rem', color: item.active ? '#008C95' : '#9AAFB5' }}>{item.id}</span>
-                    <span>{item.title}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Bar Chart Preview */}
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', color: '#5A7B87', marginBottom: '12px' }}>
-                  <span>Projected P&L — Year 1 to Year 5</span>
-                  <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontWeight: 600, color: '#008C95' }}>Auto-calculated</span>
-                </div>
+              {/* macOS Window Main Body */}
+              <div style={{ padding: '28px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 
-                {/* 5 Vertical Bars */}
-                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '14px', height: '110px', padding: '10px 0', borderBottom: '1.5px solid #DDF4F3' }}>
+                {/* Project Title Row */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <span style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.78rem', color: '#0071E3', fontWeight: 600 }}>DETAILED PROJECT REPORT</span>
+                    <div style={{ fontSize: '1.4rem', fontWeight: 700, color: '#1D1D1F', marginTop: '2px' }}>[Your Enterprise Unit]</div>
+                  </div>
+                </div>
+
+                {/* TOC Items List */}
+                <div style={{ borderTop: '1px solid rgba(0,0,0,0.06)', borderBottom: '1px solid rgba(0,0,0,0.06)', padding: '10px 0' }}>
                   {[
-                    { h: '45%', label: 'Y1' },
-                    { h: '60%', label: 'Y2' },
-                    { h: '75%', label: 'Y3' },
-                    { h: '88%', label: 'Y4' },
-                    { h: '100%', label: 'Y5', highlight: true }
-                  ].map((bar, i) => (
-                    <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', height: '100%', justifyContent: 'flex-end' }}>
-                      <div style={{
-                        width: '100%',
-                        height: bar.h,
-                        background: bar.highlight ? 'linear-gradient(180deg, #008C95 0%, #006F78 100%)' : '#00464E',
-                        borderRadius: '6px 6px 0 0',
-                        transition: 'height 0.3s ease'
-                      }}></div>
-                      <span style={{ fontSize: '0.72rem', color: '#7A8C94', fontFamily: 'IBM Plex Mono, monospace' }}>{bar.label}</span>
+                    { id: '01', title: 'Business & Promoter Profile', active: false },
+                    { id: '02', title: 'Project Overview & Capital Head', active: false },
+                    { id: '03', title: 'Financial Projections (10-Year P&L)', active: true },
+                    { id: '04', title: 'Funding & Subsidy Allocation Matrix', active: false },
+                    { id: '05', title: 'Feasibility & DSCR Amortization', active: false },
+                  ].map((item) => (
+                    <div key={item.id} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '14px',
+                      padding: '8px 12px',
+                      borderRadius: '10px',
+                      fontSize: '0.88rem',
+                      background: item.active ? 'rgba(0, 113, 227, 0.08)' : 'transparent',
+                      color: item.active ? '#0071E3' : '#6E6E73',
+                      fontWeight: item.active ? 600 : 400
+                    }}>
+                      <span style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.78rem', color: item.active ? '#0071E3' : '#A1A1A6' }}>{item.id}</span>
+                      <span>{item.title}</span>
                     </div>
                   ))}
                 </div>
 
-                {/* Sub-summary Cards */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginTop: '16px' }}>
-                  <div style={{ padding: '10px', background: '#F2FAFA', borderRadius: '8px', border: '1px solid #DDF4F3' }}>
-                    <div style={{ fontSize: '0.7rem', color: '#7A8C94' }}>Project Cost</div>
-                    <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.85rem', fontWeight: 700, color: '#00464E' }}>₹ 80.0 Lakhs</div>
+                {/* Bar Chart Preview */}
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#86868B', marginBottom: '12px' }}>
+                    <span>Projected Revenue & Net Profit (Y1 - Y5)</span>
+                    <span style={{ fontFamily: 'SF Mono, monospace', fontWeight: 600, color: '#0071E3' }}>Auto-calculated</span>
                   </div>
-                  <div style={{ padding: '10px', background: '#F2FAFA', borderRadius: '8px', border: '1px solid #DDF4F3' }}>
-                    <div style={{ fontSize: '0.7rem', color: '#7A8C94' }}>Bank Loan</div>
-                    <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.85rem', fontWeight: 700, color: '#00464E' }}>₹ 56.0 Lakhs</div>
+                  
+                  {/* 5 Vertical Apple Blue Gradient Bars */}
+                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '14px', height: '100px', padding: '10px 0', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+                    {[
+                      { h: '45%', label: 'Y1' },
+                      { h: '60%', label: 'Y2' },
+                      { h: '75%', label: 'Y3' },
+                      { h: '88%', label: 'Y4' },
+                      { h: '100%', label: 'Y5', highlight: true }
+                    ].map((bar, i) => (
+                      <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', height: '100%', justifyContent: 'flex-end' }}>
+                        <div style={{
+                          width: '100%',
+                          height: bar.h,
+                          background: bar.highlight ? 'linear-gradient(180deg, #0071E3 0%, #005BB5 100%)' : 'rgba(0, 0, 0, 0.08)',
+                          borderRadius: '6px 6px 0 0',
+                          transition: 'height 0.3s ease'
+                        }}></div>
+                        <span style={{ fontSize: '0.72rem', color: '#86868B', fontFamily: 'SF Mono, monospace' }}>{bar.label}</span>
+                      </div>
+                    ))}
                   </div>
-                  <div style={{ padding: '10px', background: '#E6F7F7', borderRadius: '8px', border: '1px solid #C5EBE9' }}>
-                    <div style={{ fontSize: '0.7rem', color: '#006F78' }}>Govt Subsidy</div>
-                    <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.85rem', fontWeight: 700, color: '#008C95' }}>₹ 17.5 Lakhs</div>
+
+                  {/* Sub-summary Cards */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginTop: '14px' }}>
+                    <div style={{ padding: '10px', background: '#F5F5F7', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.04)' }}>
+                      <div style={{ fontSize: '0.68rem', color: '#86868B' }}>Project Cost</div>
+                      <div style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.85rem', fontWeight: 700, color: '#1D1D1F' }}>₹ 80.0 Lakhs</div>
+                    </div>
+                    <div style={{ padding: '10px', background: '#F5F5F7', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.04)' }}>
+                      <div style={{ fontSize: '0.68rem', color: '#86868B' }}>Bank Loan</div>
+                      <div style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.85rem', fontWeight: 700, color: '#1D1D1F' }}>₹ 56.0 Lakhs</div>
+                    </div>
+                    <div style={{ padding: '10px', background: 'rgba(0, 113, 227, 0.06)', borderRadius: '10px', border: '1px solid rgba(0, 113, 227, 0.12)' }}>
+                      <div style={{ fontSize: '0.68rem', color: '#0071E3' }}>Govt Subsidy</div>
+                      <div style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.85rem', fontWeight: 700, color: '#0071E3' }}>₹ 17.5 Lakhs</div>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Floating Notification Badge */}
-              <div style={{
-                position: 'absolute',
-                left: '-16px',
-                bottom: '36px',
-                padding: '12px 18px',
-                background: '#003E46',
-                color: '#FFFFFF',
-                borderRadius: '12px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                fontSize: '0.86rem',
-                fontWeight: 600,
-                boxShadow: '0 12px 28px rgba(0, 62, 70, 0.4)'
-              }}>
-                <span style={{ fontSize: '1rem' }}>🔄</span>
-                <span>Machinery cost changed — projections updated</span>
               </div>
 
             </div>
@@ -491,30 +496,26 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
       </section>
 
       {/* 3. THE PROBLEM SECTION */}
-      <section style={{ padding: '100px 24px', background: '#FFFFFF', borderTop: '1px solid #DDF4F3', borderBottom: '1px solid #DDF4F3', position: 'relative', zIndex: 1 }}>
+      <section style={{ padding: '100px 24px', background: '#FFFFFF', borderTop: '1px solid rgba(0, 0, 0, 0.06)', borderBottom: '1px solid rgba(0, 0, 0, 0.06)', position: 'relative', zIndex: 1 }}>
         <div className="two-col-grid" style={{ maxWidth: '1240px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '72px', alignItems: 'center' }}>
           
           {/* Left Side */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            <span className="vkf-kicker">The Problem</span>
-            <h2 style={{ fontSize: '2.6rem', fontWeight: 800, color: '#00464E', lineHeight: 1.1, letterSpacing: '-0.02em' }}>
+            <span className="apple-kicker">The Challenge</span>
+            <h2 style={{ fontSize: '2.8rem', fontWeight: 700, color: '#1D1D1F', lineHeight: 1.08, letterSpacing: '-0.03em' }}>
               Your Funding Shouldn't Wait for Your Documentation.
             </h2>
-            <p style={{ fontSize: '1.08rem', color: '#3F5D68', lineHeight: 1.65 }}>
+            <p style={{ fontSize: '1.1rem', color: '#515154', lineHeight: 1.6 }}>
               Preparing a DPR manually can mean collecting information across multiple files, building financial projections, checking calculations, formatting reports and going through multiple rounds of revisions.
-            </p>
-            <p style={{ fontSize: '1.05rem', color: '#3F5D68', lineHeight: 1.65 }}>
-              That takes time — especially when your project numbers keep changing.
             </p>
 
             <blockquote style={{
               margin: '16px 0 0',
               paddingLeft: '20px',
-              borderLeft: '4px solid #008C95',
-              fontSize: '1.4rem',
-              fontWeight: 700,
-              color: '#00464E',
-              fontStyle: 'italic',
+              borderLeft: '3px solid #0071E3',
+              fontSize: '1.35rem',
+              fontWeight: 600,
+              color: '#1D1D1F',
               lineHeight: 1.35
             }}>
               “Your business is ready to move. Your DPR should be too.”
@@ -522,29 +523,28 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
           </div>
 
           {/* Right Side Cards List */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#00464E', marginBottom: '4px' }}>The result?</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div style={{ fontSize: '1.05rem', fontWeight: 600, color: '#1D1D1F', marginBottom: '4px' }}>Traditional challenges:</div>
             {[
-              { icon: '🕒', text: 'Weeks spent preparing and revising documents' },
-              { icon: '📊', text: 'Complex financial projections to build and maintain' },
-              { icon: '📄', text: 'Repetitive work across Excel, Word and other files' },
-              { icon: '👥', text: 'Higher dependence on external consultants' },
-              { icon: '⚠️', text: 'Delays when your project or funding requirements change' }
+              { icon: '🕒', text: 'Weeks spent preparing and revising documents manually' },
+              { icon: '📊', text: 'Complex financial projections to build and check' },
+              { icon: '📄', text: 'Repetitive work across Excel spreadsheets and Word files' },
+              { icon: '👥', text: 'High dependence on external consultant turnaround times' },
+              { icon: '⚠️', text: 'Delays whenever project inputs or loan amounts change' }
             ].map((item, idx) => (
               <div key={idx} style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '16px',
                 padding: '18px 24px',
-                background: '#F2FAFA',
-                border: '1px solid #DDF4F3',
-                borderRadius: '14px',
+                background: '#F5F5F7',
+                border: '1px solid rgba(0, 0, 0, 0.04)',
+                borderRadius: '16px',
                 fontSize: '1.02rem',
-                fontWeight: 600,
-                color: '#00464E',
-                boxShadow: '0 2px 8px rgba(0, 70, 78, 0.03)'
+                fontWeight: 500,
+                color: '#1D1D1F'
               }}>
-                <span style={{ fontSize: '1.3rem' }}>{item.icon}</span>
+                <span style={{ fontSize: '1.2rem' }}>{item.icon}</span>
                 <span>{item.text}</span>
               </div>
             ))}
@@ -553,76 +553,76 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         </div>
       </section>
 
-      {/* 4. WORKFLOW MODULES SECTION */}
+      {/* 4. WORKFLOW MODULES SECTION (BENTO GRID) */}
       <section id="how-it-works" style={{ padding: '100px 24px', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
           
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'end', marginBottom: '56px' }}>
             <div>
-              <span className="vkf-kicker">Workflow Modules</span>
-              <h2 style={{ fontSize: '2.6rem', fontWeight: 800, color: '#00464E', lineHeight: 1.1, letterSpacing: '-0.02em' }}>
+              <span className="apple-kicker">Workflow Modules</span>
+              <h2 style={{ fontSize: '2.8rem', fontWeight: 700, color: '#1D1D1F', lineHeight: 1.08, letterSpacing: '-0.03em' }}>
                 From Business Data to a Structured DPR
               </h2>
             </div>
-            <p style={{ fontSize: '1.08rem', color: '#3F5D68', lineHeight: 1.65 }}>
-              VKF DPR helps transform your business, project and financial information into a structured DPR with the key information needed to present your funding requirement.
+            <p style={{ fontSize: '1.1rem', color: '#515154', lineHeight: 1.6 }}>
+              VKF DPR Studio transforms your raw project parameters and financial inputs into an institutional-grade report built for credit approval.
             </p>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }} className="grid-3">
             
             {/* Card 01 */}
-            <div className="vkf-card">
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.88rem', color: '#008C95', fontWeight: 700 }}>01</span>
-              <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#00464E', margin: '8px 0 10px' }}>Business & Project Profile</h3>
-              <p style={{ fontSize: '0.98rem', color: '#5A7B87', lineHeight: 1.6, margin: 0 }}>
-                Bring your business, promoter and project information together in one structured workflow.
+            <div className="apple-bento-card">
+              <span style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.88rem', color: '#0071E3', fontWeight: 600 }}>01</span>
+              <h3 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1D1D1F', margin: '10px 0 10px' }}>Business & Project Profile</h3>
+              <p style={{ fontSize: '0.98rem', color: '#86868B', lineHeight: 1.6, margin: 0 }}>
+                Bring your business profile, promoter track record, and infrastructure assets into one unified workflow.
               </p>
             </div>
 
             {/* Card 02 */}
-            <div className="vkf-card">
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.88rem', color: '#008C95', fontWeight: 700 }}>02</span>
-              <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#00464E', margin: '8px 0 10px' }}>Financial Projections</h3>
-              <p style={{ fontSize: '0.98rem', color: '#5A7B87', lineHeight: 1.6, margin: 0 }}>
-                Generate multi-year projected Profit & Loss, Balance Sheet and Cash Flow models.
+            <div className="apple-bento-card">
+              <span style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.88rem', color: '#0071E3', fontWeight: 600 }}>02</span>
+              <h3 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1D1D1F', margin: '10px 0 10px' }}>Financial Projections</h3>
+              <p style={{ fontSize: '0.98rem', color: '#86868B', lineHeight: 1.6, margin: 0 }}>
+                Generate multi-year projected Profit & Loss statements, Balance Sheets, and Cash Flow models instantly.
               </p>
             </div>
 
             {/* Card 03 */}
-            <div className="vkf-card">
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.88rem', color: '#008C95', fontWeight: 700 }}>03</span>
-              <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#00464E', margin: '8px 0 10px' }}>Funding Requirement Analysis</h3>
-              <p style={{ fontSize: '0.98rem', color: '#5A7B87', lineHeight: 1.6, margin: 0 }}>
-                Structure your funding requirements, including term loans, working capital margins and applicable subsidy allocations.
+            <div className="apple-bento-card">
+              <span style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.88rem', color: '#0071E3', fontWeight: 600 }}>03</span>
+              <h3 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1D1D1F', margin: '10px 0 10px' }}>Funding Allocation Analysis</h3>
+              <p style={{ fontSize: '0.98rem', color: '#86868B', lineHeight: 1.6, margin: 0 }}>
+                Structure term loans, working capital margins, promoter contribution, and central/state subsidy allocations.
               </p>
             </div>
 
             {/* Card 04 */}
-            <div className="vkf-card">
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.88rem', color: '#008C95', fontWeight: 700 }}>04</span>
-              <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#00464E', margin: '8px 0 10px' }}>Feasibility & Supporting Analysis</h3>
-              <p style={{ fontSize: '0.98rem', color: '#5A7B87', lineHeight: 1.6, margin: 0 }}>
-                Organize the information required to present your project and financial requirements clearly.
+            <div className="apple-bento-card">
+              <span style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.88rem', color: '#0071E3', fontWeight: 600 }}>04</span>
+              <h3 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1D1D1F', margin: '10px 0 10px' }}>Feasibility & Risk Audits</h3>
+              <p style={{ fontSize: '0.98rem', color: '#86868B', lineHeight: 1.6, margin: 0 }}>
+                Organize DSCR ratio calculations, sensitivity stress tests, and Tandon committee working capital norms.
               </p>
             </div>
 
-            {/* Card 05 - Highlighted Dark Card */}
+            {/* Card 05 - Apple Sleek Dark Bento Card */}
             <div style={{
               gridColumn: 'span 2',
-              background: '#003E46',
+              background: '#1D1D1F',
               color: '#FFFFFF',
-              borderRadius: '16px',
+              borderRadius: '28px',
               padding: '36px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              boxShadow: '0 12px 32px rgba(0, 62, 70, 0.25)'
+              boxShadow: '0 16px 40px rgba(0, 0, 0, 0.18)'
             }}>
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.88rem', color: '#5BE2EC', fontWeight: 700 }}>05</span>
-              <h3 style={{ fontSize: '1.65rem', fontWeight: 800, color: '#FFFFFF', margin: '8px 0 10px' }}>Professional DPR Output</h3>
-              <p style={{ fontSize: '1.02rem', color: '#C5EBE9', lineHeight: 1.6, margin: 0, maxWidth: '580px' }}>
-                Generate a structured report containing your project profile, financial projections, funding requirements and supporting analysis.
+              <span style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.88rem', color: '#64D2FF', fontWeight: 600 }}>05</span>
+              <h3 style={{ fontSize: '1.65rem', fontWeight: 700, color: '#FFFFFF', margin: '10px 0 10px' }}>Professional DPR Output</h3>
+              <p style={{ fontSize: '1.02rem', color: '#A1A1A6', lineHeight: 1.6, margin: 0, maxWidth: '580px' }}>
+                Export fully formatted Word (.docx) reports with optional VKF co-branding, ready for immediate bank submission.
               </p>
             </div>
 
@@ -631,31 +631,31 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         </div>
       </section>
 
-      {/* 5. SPEED BAND SECTION */}
-      <section style={{ padding: '100px 24px', background: '#003E46', color: '#FFFFFF', position: 'relative', zIndex: 1 }}>
+      {/* 5. SPEED BAND SECTION (APPLE DARK STAGE) */}
+      <section style={{ padding: '100px 24px', background: '#000000', color: '#FFFFFF', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
           
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px', marginBottom: '56px' }} className="two-col-grid">
             <div>
-              <h2 style={{ fontSize: '3.2rem', fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.02em', color: '#FFFFFF' }}>
+              <h2 style={{ fontSize: '3.4rem', fontWeight: 700, lineHeight: 1.05, letterSpacing: '-0.038em', color: '#FFFFFF' }}>
                 3 Weeks of Work.<br />Now Under 10 Minutes.
               </h2>
-              <div style={{ fontSize: '1.15rem', color: '#5BE2EC', fontWeight: 700, marginTop: '20px' }}>
-                Stop rebuilding your financial model every time something changes.
+              <div style={{ fontSize: '1.2rem', color: '#64D2FF', fontWeight: 500, marginTop: '20px' }}>
+                Stop rebuilding your financial models manually.
               </div>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '20px' }}>
-              <p style={{ fontSize: '1.08rem', color: '#DDF4F3', lineHeight: 1.65 }}>
-                Change a project variable — such as a machinery cost, project investment or other key input — and your financial projections can be updated through the automated calculation workflow.
+              <p style={{ fontSize: '1.1rem', color: '#A1A1A6', lineHeight: 1.6 }}>
+                Modify any project parameter — like machinery expenditure or working capital — and your entire 10-year P&L, balance sheet, and DSCR ratios recalculate automatically.
               </p>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.02rem', fontWeight: 600, color: '#FFFFFF' }}>
-                  <span style={{ color: '#5BE2EC' }}>✓</span> No starting from a blank template.
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.02rem', fontWeight: 500, color: '#FFFFFF' }}>
+                  <span style={{ color: '#30D158' }}>✓</span> No starting from scratch.
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.02rem', fontWeight: 600, color: '#FFFFFF' }}>
-                  <span style={{ color: '#5BE2EC' }}>✓</span> No rebuilding the entire report for every change.
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.02rem', fontWeight: 500, color: '#FFFFFF' }}>
+                  <span style={{ color: '#30D158' }}>✓</span> Zero spreadsheet formula breakages.
                 </div>
               </div>
             </div>
@@ -665,27 +665,28 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
           <div className="flow-grid" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
-            border: '1.5px solid rgba(221, 244, 243, 0.25)',
-            borderRadius: '16px',
+            border: '1px solid rgba(255, 255, 255, 0.12)',
+            borderRadius: '20px',
             overflow: 'hidden',
-            background: 'rgba(11, 40, 48, 0.6)'
+            background: 'rgba(29, 29, 31, 0.8)',
+            backdropFilter: 'blur(20px)'
           }}>
             {[
-              { step: 'Step 1', title: 'Input your information' },
-              { step: 'Step 2', title: 'Build your financial model' },
-              { step: 'Step 3', title: 'Review your funding requirements' },
-              { step: 'Step 4', title: 'Generate your DPR', active: true }
+              { step: 'Step 1', title: 'Input your business details' },
+              { step: 'Step 2', title: 'Automate financial model' },
+              { step: 'Step 3', title: 'Review debt & subsidy margins' },
+              { step: 'Step 4', title: 'Export bank-ready DPR', active: true }
             ].map((st, i) => (
               <div key={i} style={{
                 padding: '28px 24px',
-                borderRight: i === 3 ? 'none' : '1px solid rgba(221, 244, 243, 0.2)',
-                background: st.active ? '#008C95' : 'transparent',
+                borderRight: i === 3 ? 'none' : '1px solid rgba(255, 255, 255, 0.1)',
+                background: st.active ? '#0071E3' : 'transparent',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '8px'
               }}>
-                <small style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.8rem', color: st.active ? '#FFFFFF' : '#8AAFB7' }}>{st.step}</small>
-                <b style={{ fontSize: '1.1rem', fontWeight: 700, color: '#FFFFFF' }}>{st.title}</b>
+                <small style={{ fontFamily: 'SF Mono, monospace', fontSize: '0.8rem', color: st.active ? '#FFFFFF' : '#86868B' }}>{st.step}</small>
+                <b style={{ fontSize: '1.1rem', fontWeight: 600, color: '#FFFFFF' }}>{st.title}</b>
               </div>
             ))}
           </div>
@@ -694,60 +695,60 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
       </section>
 
       {/* 6. MULTIPLE FUNDING NEEDS SECTION */}
-      <section id="funding-needs" style={{ padding: '100px 24px', background: '#FFFFFF', borderBottom: '1px solid #DDF4F3', position: 'relative', zIndex: 1 }}>
+      <section id="funding-needs" style={{ padding: '100px 24px', background: '#FFFFFF', borderBottom: '1px solid rgba(0, 0, 0, 0.06)', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
           
           <div style={{ marginBottom: '56px' }}>
-            <span className="vkf-kicker">Use Cases</span>
-            <h2 style={{ fontSize: '2.6rem', fontWeight: 800, color: '#00464E', lineHeight: 1.1, letterSpacing: '-0.02em' }}>
-              One DPR. Multiple Funding Needs.
+            <span className="apple-kicker">Use Cases</span>
+            <h2 style={{ fontSize: '2.8rem', fontWeight: 700, color: '#1D1D1F', lineHeight: 1.08, letterSpacing: '-0.03em' }}>
+              One DPR. Multiple Funding Goals.
             </h2>
-            <p style={{ fontSize: '1.08rem', color: '#3F5D68', lineHeight: 1.65, marginTop: '12px', maxWidth: '640px' }}>
-              Whether you're preparing for your next business expansion or actively seeking funding, build the documentation around your funding objective.
+            <p style={{ fontSize: '1.1rem', color: '#515154', lineHeight: 1.6, marginTop: '12px', maxWidth: '640px' }}>
+              Whether you're preparing for business expansion or seeking institutional finance, structure documentation around your specific objective.
             </p>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '28px' }} className="grid-3">
             
             {/* Card 1 */}
-            <div className="vkf-card" style={{ display: 'flex', flexDirection: 'column' }}>
-              <div style={{ width: '56px', height: '56px', borderRadius: '12px', background: '#F2FAFA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', marginBottom: '20px' }}>
+            <div className="apple-bento-card" style={{ display: 'flex', flexDirection: 'column' }}>
+              <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#F5F5F7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', marginBottom: '20px' }}>
                 🏛️
               </div>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#00464E', marginBottom: '12px' }}>Bank & NBFC Loans</h3>
-              <p style={{ fontSize: '0.98rem', color: '#5A7B87', lineHeight: 1.6, flexGrow: 1, marginBottom: '24px' }}>
-                Present your business, project, financial projections and funding requirements in a structured DPR.
+              <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#1D1D1F', marginBottom: '12px' }}>Bank & NBFC Loans</h3>
+              <p style={{ fontSize: '0.98rem', color: '#86868B', lineHeight: 1.6, flexGrow: 1, marginBottom: '24px' }}>
+                Present your business, project heads, financial projections, and debt repayment schedules in a structured report.
               </p>
-              <button onClick={scrollToAuth} style={{ all: 'unset', cursor: 'pointer', fontWeight: 700, color: '#008C95', fontSize: '0.95rem' }}>
-                Create a Loan DPR &rarr;
+              <button onClick={scrollToAuth} style={{ all: 'unset', cursor: 'pointer', fontWeight: 600, color: '#0071E3', fontSize: '0.95rem' }}>
+                Create Loan DPR &rarr;
               </button>
             </div>
 
             {/* Card 2 */}
-            <div className="vkf-card" style={{ display: 'flex', flexDirection: 'column' }}>
-              <div style={{ width: '56px', height: '56px', borderRadius: '12px', background: '#F2FAFA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', marginBottom: '20px' }}>
+            <div className="apple-bento-card" style={{ display: 'flex', flexDirection: 'column' }}>
+              <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#F5F5F7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', marginBottom: '20px' }}>
                 🏛️
               </div>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#00464E', marginBottom: '12px' }}>Government Schemes & Subsidies</h3>
-              <p style={{ fontSize: '0.98rem', color: '#5A7B87', lineHeight: 1.6, flexGrow: 1, marginBottom: '24px' }}>
-                Prepare structured project documentation for government funding and subsidy-related requirements.
+              <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#1D1D1F', marginBottom: '12px' }}>Government Subsidies</h3>
+              <p style={{ fontSize: '0.98rem', color: '#86868B', lineHeight: 1.6, flexGrow: 1, marginBottom: '24px' }}>
+                Prepare structured project reports for PMEGP, PMFME, State Industrial Policies, and MSME capital subsidy claims.
               </p>
-              <button onClick={scrollToAuth} style={{ all: 'unset', cursor: 'pointer', fontWeight: 700, color: '#008C95', fontSize: '0.95rem' }}>
-                Prepare My DPR &rarr;
+              <button onClick={scrollToAuth} style={{ all: 'unset', cursor: 'pointer', fontWeight: 600, color: '#0071E3', fontSize: '0.95rem' }}>
+                Prepare Subsidy DPR &rarr;
               </button>
             </div>
 
             {/* Card 3 */}
-            <div className="vkf-card" style={{ display: 'flex', flexDirection: 'column' }}>
-              <div style={{ width: '56px', height: '56px', borderRadius: '12px', background: '#F2FAFA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', marginBottom: '20px' }}>
+            <div className="apple-bento-card" style={{ display: 'flex', flexDirection: 'column' }}>
+              <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#F5F5F7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', marginBottom: '20px' }}>
                 💼
               </div>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#00464E', marginBottom: '12px' }}>Investor Funding</h3>
-              <p style={{ fontSize: '0.98rem', color: '#5A7B87', lineHeight: 1.6, flexGrow: 1, marginBottom: '24px' }}>
-                Bring your business and financial information together into a professional project document for funding discussions.
+              <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#1D1D1F', marginBottom: '12px' }}>Investor Funding</h3>
+              <p style={{ fontSize: '0.98rem', color: '#86868B', lineHeight: 1.6, flexGrow: 1, marginBottom: '24px' }}>
+                Consolidate your unit profile, unit economics, and multi-scenario sensitivities into a compelling pitch document.
               </p>
-              <button onClick={scrollToAuth} style={{ all: 'unset', cursor: 'pointer', fontWeight: 700, color: '#008C95', fontSize: '0.95rem' }}>
-                Build My DPR &rarr;
+              <button onClick={scrollToAuth} style={{ all: 'unset', cursor: 'pointer', fontWeight: 600, color: '#0071E3', fontSize: '0.95rem' }}>
+                Build Investor DPR &rarr;
               </button>
             </div>
 
@@ -761,29 +762,29 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
           
           <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 64px' }}>
-            <span className="vkf-kicker">Platform Features</span>
-            <h2 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#00464E', lineHeight: 1.1 }}>
-              Built for Speed. Designed for Accuracy.
+            <span className="apple-kicker">Platform Features</span>
+            <h2 style={{ fontSize: '2.6rem', fontWeight: 700, color: '#1D1D1F', lineHeight: 1.1 }}>
+              Built for Speed. Designed for Precision.
             </h2>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '24px' }} className="grid-5">
             {[
-              { title: 'Instant Recalculations', desc: 'Update machinery or investment variables and see instant updates across P&L, Balance Sheet, and ratios.' },
-              { title: 'Audit-Ready Projections', desc: 'Financial models built according to Indian banking norms and CA compliance guidelines.' },
+              { title: 'Live Recalculations', desc: 'Update machinery or investment variables and see instant updates across P&L, Balance Sheet, and ratios.' },
+              { title: 'Audit-Ready Models', desc: 'Financial calculations structured according to RBI lending guidelines and CA norms.' },
               { title: 'Standardized Formats', desc: 'Generates clean, well-aligned DOCX reports ready for submission without manual formatting hassle.' },
               { title: 'Multi-Sector Intelligence', desc: 'Pre-configured schemas for Dairy, Food Processing, Solar, Manufacturing, Textiles, and more.' },
               { title: 'One-Click Exports', desc: 'Export fully formatted Word documents with customizable VKF co-branding or sole business logo.' }
             ].map((ft, idx) => (
               <div key={idx} style={{
                 paddingTop: '20px',
-                borderTop: '3px solid #008C95',
+                borderTop: '2.5px solid #0071E3',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '12px'
               }}>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#00464E', margin: 0 }}>{ft.title}</h3>
-                <p style={{ fontSize: '0.92rem', color: '#5A7B87', lineHeight: 1.6, margin: 0 }}>{ft.desc}</p>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1D1D1F', margin: 0 }}>{ft.title}</h3>
+                <p style={{ fontSize: '0.92rem', color: '#86868B', lineHeight: 1.6, margin: 0 }}>{ft.desc}</p>
               </div>
             ))}
           </div>
@@ -792,34 +793,34 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
       </section>
 
       {/* 8. INTERACTIVE DASHBOARD SECTION ("Why Digital") */}
-      <section id="why-digital" style={{ padding: '100px 24px', background: '#FFFFFF', borderTop: '1px solid #DDF4F3', borderBottom: '1px solid #DDF4F3', position: 'relative', zIndex: 1 }}>
+      <section id="why-digital" style={{ padding: '100px 24px', background: '#FFFFFF', borderTop: '1px solid rgba(0,0,0,0.06)', borderBottom: '1px solid rgba(0,0,0,0.06)', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
           
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'end', marginBottom: '48px' }}>
             <div>
-              <span className="vkf-kicker">Interactive Financial Calculator</span>
-              <h2 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#00464E', lineHeight: 1.1 }}>
-                See How Live Financial Calculation Works
+              <span className="apple-kicker">Interactive Financial Simulator</span>
+              <h2 style={{ fontSize: '2.6rem', fontWeight: 700, color: '#1D1D1F', lineHeight: 1.1 }}>
+                Experience Real-Time Calculation Engine
               </h2>
             </div>
-            <p style={{ fontSize: '1.05rem', color: '#3F5D68', lineHeight: 1.65 }}>
-              Try adjusting the machinery cost slider below to observe how the entire financial model recalculates P&L, debt service ratios, and subsidy allocations live.
+            <p style={{ fontSize: '1.08rem', color: '#515154', lineHeight: 1.6 }}>
+              Adjust the machinery cost slider below to see how our engine automatically updates P&L projections, DSCR coverage, and term loan limits live.
             </p>
           </div>
 
           {/* Dashboard Outer Container */}
           <div className="dash-grid" style={{
-            background: '#F2FAFA',
-            border: '1.5px solid #C5EBE9',
-            borderRadius: '20px',
+            background: '#F5F5F7',
+            border: '1px solid rgba(0, 0, 0, 0.08)',
+            borderRadius: '24px',
             display: 'grid',
             gridTemplateColumns: '320px 1fr',
             overflow: 'hidden',
-            boxShadow: '0 24px 48px -20px rgba(0, 70, 78, 0.15)'
+            boxShadow: '0 24px 48px -20px rgba(0, 0, 0, 0.12)'
           }}>
             
             {/* Left Tabs */}
-            <div style={{ borderRight: '1px solid #DDF4F3', background: '#FFFFFF', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ borderRight: '1px solid rgba(0, 0, 0, 0.06)', background: '#FFFFFF', display: 'flex', flexDirection: 'column' }}>
               {[
                 { id: 'projections', label: 'Projections', desc: '5-year Profit & Loss forecast' },
                 { id: 'ratios', label: 'Key Ratios', desc: 'DSCR, Debt-Equity & Margins' },
@@ -830,16 +831,16 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                 return (
                   <button
                     key={tab.id}
-                    className="dash-tab-btn"
+                    className="dash-tab-btn-apple"
                     aria-selected={isSelected}
                     onClick={() => setActiveDashTab(tab.id as any)}
                   >
                     <div style={{
                       width: '38px',
                       height: '38px',
-                      borderRadius: '8px',
-                      background: isSelected ? '#008C95' : '#F2FAFA',
-                      color: isSelected ? '#FFFFFF' : '#00464E',
+                      borderRadius: '10px',
+                      background: isSelected ? '#0071E3' : '#F5F5F7',
+                      color: isSelected ? '#FFFFFF' : '#1D1D1F',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -849,8 +850,8 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                       📊
                     </div>
                     <div>
-                      <b style={{ fontSize: '0.98rem', color: '#00464E' }}>{tab.label}</b>
-                      <span style={{ fontSize: '0.8rem', color: '#5A7B87', display: 'block', marginTop: '2px' }}>{tab.desc}</span>
+                      <b style={{ fontSize: '0.98rem', color: '#1D1D1F' }}>{tab.label}</b>
+                      <span style={{ fontSize: '0.8rem', color: '#86868B', display: 'block', marginTop: '2px' }}>{tab.desc}</span>
                     </div>
                   </button>
                 );
@@ -864,15 +865,15 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               <div style={{
                 background: '#FFFFFF',
                 padding: '24px',
-                borderRadius: '14px',
-                border: '1px solid #DDF4F3',
-                boxShadow: '0 4px 14px rgba(0, 70, 78, 0.04)'
+                borderRadius: '18px',
+                border: '1px solid rgba(0,0,0,0.06)',
+                boxShadow: '0 4px 14px rgba(0, 0, 0, 0.03)'
               }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                  <label style={{ fontWeight: 700, color: '#00464E', fontSize: '1rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                  <label style={{ fontWeight: 600, color: '#1D1D1F', fontSize: '1rem' }}>
                     Adjust Machinery Investment Cost:
                   </label>
-                  <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '1.2rem', fontWeight: 800, color: '#008C95' }}>
+                  <span style={{ fontFamily: 'SF Mono, monospace', fontSize: '1.25rem', fontWeight: 700, color: '#0071E3' }}>
                     ₹ {machineryCost} Lakhs
                   </span>
                 </div>
@@ -884,10 +885,10 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                   step="5"
                   value={machineryCost}
                   onChange={(e) => setMachineryCost(Number(e.target.value))}
-                  style={{ width: '100%', accentColor: '#008C95', cursor: 'pointer' }}
+                  style={{ width: '100%', accentColor: '#0071E3', cursor: 'pointer' }}
                 />
                 
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: '#7A8C94', marginTop: '6px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: '#86868B', marginTop: '8px', fontFamily: 'SF Mono, monospace' }}>
                   <span>₹20 Lakhs</span>
                   <span>₹80 Lakhs</span>
                   <span>₹150 Lakhs</span>
@@ -896,71 +897,71 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
 
               {/* Dynamic Live Calculated Metric Cards */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
-                <div style={{ background: '#FFFFFF', padding: '18px', borderRadius: '12px', border: '1px solid #DDF4F3' }}>
-                  <div style={{ fontSize: '0.76rem', color: '#5A7B87', fontWeight: 600 }}>Total Project Cost</div>
-                  <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '1.2rem', fontWeight: 800, color: '#00464E', marginTop: '4px' }}>
+                <div style={{ background: '#FFFFFF', padding: '18px', borderRadius: '14px', border: '1px solid rgba(0,0,0,0.06)' }}>
+                  <div style={{ fontSize: '0.76rem', color: '#86868B', fontWeight: 500 }}>Total Project Cost</div>
+                  <div style={{ fontFamily: 'SF Mono, monospace', fontSize: '1.2rem', fontWeight: 700, color: '#1D1D1F', marginTop: '4px' }}>
                     ₹{totalProjectCost}L
                   </div>
                 </div>
 
-                <div style={{ background: '#FFFFFF', padding: '18px', borderRadius: '12px', border: '1px solid #DDF4F3' }}>
-                  <div style={{ fontSize: '0.76rem', color: '#5A7B87', fontWeight: 600 }}>Bank Term Loan (70%)</div>
-                  <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '1.2rem', fontWeight: 800, color: '#00464E', marginTop: '4px' }}>
+                <div style={{ background: '#FFFFFF', padding: '18px', borderRadius: '14px', border: '1px solid rgba(0,0,0,0.06)' }}>
+                  <div style={{ fontSize: '0.76rem', color: '#86868B', fontWeight: 500 }}>Bank Loan (70%)</div>
+                  <div style={{ fontFamily: 'SF Mono, monospace', fontSize: '1.2rem', fontWeight: 700, color: '#1D1D1F', marginTop: '4px' }}>
                     ₹{termLoan}L
                   </div>
                 </div>
 
-                <div style={{ background: '#E6F7F7', padding: '18px', borderRadius: '12px', border: '1px solid #C5EBE9' }}>
-                  <div style={{ fontSize: '0.76rem', color: '#006F78', fontWeight: 600 }}>Eligible Subsidy</div>
-                  <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '1.2rem', fontWeight: 800, color: '#008C95', marginTop: '4px' }}>
+                <div style={{ background: 'rgba(0, 113, 227, 0.06)', padding: '18px', borderRadius: '14px', border: '1px solid rgba(0, 113, 227, 0.12)' }}>
+                  <div style={{ fontSize: '0.76rem', color: '#0071E3', fontWeight: 500 }}>Eligible Subsidy</div>
+                  <div style={{ fontFamily: 'SF Mono, monospace', fontSize: '1.2rem', fontWeight: 700, color: '#0071E3', marginTop: '4px' }}>
                     ₹{govtSubsidy}L
                   </div>
                 </div>
 
-                <div style={{ background: '#FFFFFF', padding: '18px', borderRadius: '12px', border: '1px solid #DDF4F3' }}>
-                  <div style={{ fontSize: '0.76rem', color: '#5A7B87', fontWeight: 600 }}>Average DSCR</div>
-                  <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '1.2rem', fontWeight: 800, color: '#00464E', marginTop: '4px' }}>
+                <div style={{ background: '#FFFFFF', padding: '18px', borderRadius: '14px', border: '1px solid rgba(0,0,0,0.06)' }}>
+                  <div style={{ fontSize: '0.76rem', color: '#86868B', fontWeight: 500 }}>Average DSCR</div>
+                  <div style={{ fontFamily: 'SF Mono, monospace', fontSize: '1.2rem', fontWeight: 700, color: '#1D1D1F', marginTop: '4px' }}>
                     {avgDscr}x
                   </div>
                 </div>
               </div>
 
               {/* Data Table / Tab Details */}
-              <div style={{ background: '#FFFFFF', padding: '24px', borderRadius: '14px', border: '1px solid #DDF4F3' }}>
-                <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#00464E', margin: '0 0 16px' }}>
+              <div style={{ background: '#FFFFFF', padding: '24px', borderRadius: '18px', border: '1px solid rgba(0,0,0,0.06)' }}>
+                <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1D1D1F', margin: '0 0 16px' }}>
                   {activeDashTab === 'projections' && '5-Year Projected Profitability Overview'}
-                  {activeDashTab === 'ratios' && 'Financial Risk & Debt Ratios'}
+                  {activeDashTab === 'ratios' && 'Financial Risk & Debt Service Coverage'}
                   {activeDashTab === 'repayments' && 'Loan Debt Amortization Schedule'}
                   {activeDashTab === 'sensitivities' && 'Capacity Utilization & Sensitivity Thresholds'}
                 </h4>
 
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
                   <thead>
-                    <tr style={{ borderBottom: '2px solid #DDF4F3', textAlign: 'left' }}>
-                      <th style={{ padding: '10px 0', color: '#00464E' }}>Particulars (₹ Lakhs)</th>
-                      <th style={{ padding: '10px 0', color: '#00464E' }}>Year 1</th>
-                      <th style={{ padding: '10px 0', color: '#00464E' }}>Year 3</th>
-                      <th style={{ padding: '10px 0', color: '#00464E' }}>Year 5</th>
+                    <tr style={{ borderBottom: '1px solid rgba(0,0,0,0.08)', textAlign: 'left' }}>
+                      <th style={{ padding: '10px 0', color: '#1D1D1F', fontWeight: 600 }}>Particulars (₹ Lakhs)</th>
+                      <th style={{ padding: '10px 0', color: '#1D1D1F', fontWeight: 600 }}>Year 1</th>
+                      <th style={{ padding: '10px 0', color: '#1D1D1F', fontWeight: 600 }}>Year 3</th>
+                      <th style={{ padding: '10px 0', color: '#1D1D1F', fontWeight: 600 }}>Year 5</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr style={{ borderBottom: '1px solid #F2FAFA' }}>
-                      <td style={{ padding: '12px 0', fontWeight: 600 }}>Gross Turnover</td>
-                      <td style={{ padding: '12px 0', fontFamily: 'IBM Plex Mono, monospace' }}>₹{(machineryCost * 1.8).toFixed(1)}L</td>
-                      <td style={{ padding: '12px 0', fontFamily: 'IBM Plex Mono, monospace' }}>₹{(machineryCost * 2.9).toFixed(1)}L</td>
-                      <td style={{ padding: '12px 0', fontFamily: 'IBM Plex Mono, monospace' }}>₹{(machineryCost * 3.8).toFixed(1)}L</td>
+                    <tr style={{ borderBottom: '1px solid rgba(0,0,0,0.04)' }}>
+                      <td style={{ padding: '12px 0', fontWeight: 500 }}>Gross Turnover</td>
+                      <td style={{ padding: '12px 0', fontFamily: 'SF Mono, monospace' }}>₹{(machineryCost * 1.8).toFixed(1)}L</td>
+                      <td style={{ padding: '12px 0', fontFamily: 'SF Mono, monospace' }}>₹{(machineryCost * 2.9).toFixed(1)}L</td>
+                      <td style={{ padding: '12px 0', fontFamily: 'SF Mono, monospace' }}>₹{(machineryCost * 3.8).toFixed(1)}L</td>
                     </tr>
-                    <tr style={{ borderBottom: '1px solid #F2FAFA' }}>
-                      <td style={{ padding: '12px 0', fontWeight: 600 }}>Operating Expenses</td>
-                      <td style={{ padding: '12px 0', fontFamily: 'IBM Plex Mono, monospace' }}>₹{(machineryCost * 1.2).toFixed(1)}L</td>
-                      <td style={{ padding: '12px 0', fontFamily: 'IBM Plex Mono, monospace' }}>₹{(machineryCost * 1.8).toFixed(1)}L</td>
-                      <td style={{ padding: '12px 0', fontFamily: 'IBM Plex Mono, monospace' }}>₹{(machineryCost * 2.3).toFixed(1)}L</td>
+                    <tr style={{ borderBottom: '1px solid rgba(0,0,0,0.04)' }}>
+                      <td style={{ padding: '12px 0', fontWeight: 500 }}>Operating Expenses</td>
+                      <td style={{ padding: '12px 0', fontFamily: 'SF Mono, monospace' }}>₹{(machineryCost * 1.2).toFixed(1)}L</td>
+                      <td style={{ padding: '12px 0', fontFamily: 'SF Mono, monospace' }}>₹{(machineryCost * 1.8).toFixed(1)}L</td>
+                      <td style={{ padding: '12px 0', fontFamily: 'SF Mono, monospace' }}>₹{(machineryCost * 2.3).toFixed(1)}L</td>
                     </tr>
                     <tr>
-                      <td style={{ padding: '12px 0', fontWeight: 700, color: '#008C95' }}>Projected Net Profit</td>
-                      <td style={{ padding: '12px 0', fontFamily: 'IBM Plex Mono, monospace', fontWeight: 700, color: '#008C95' }}>₹{(machineryCost * 0.38).toFixed(1)}L</td>
-                      <td style={{ padding: '12px 0', fontFamily: 'IBM Plex Mono, monospace', fontWeight: 700, color: '#008C95' }}>₹{netProfitYr3}L</td>
-                      <td style={{ padding: '12px 0', fontFamily: 'IBM Plex Mono, monospace', fontWeight: 700, color: '#008C95' }}>₹{(machineryCost * 1.15).toFixed(1)}L</td>
+                      <td style={{ padding: '12px 0', fontWeight: 700, color: '#0071E3' }}>Projected Net Profit</td>
+                      <td style={{ padding: '12px 0', fontFamily: 'SF Mono, monospace', fontWeight: 700, color: '#0071E3' }}>₹{(machineryCost * 0.38).toFixed(1)}L</td>
+                      <td style={{ padding: '12px 0', fontFamily: 'SF Mono, monospace', fontWeight: 700, color: '#0071E3' }}>₹{netProfitYr3}L</td>
+                      <td style={{ padding: '12px 0', fontFamily: 'SF Mono, monospace', fontWeight: 700, color: '#0071E3' }}>₹{(machineryCost * 1.15).toFixed(1)}L</td>
                     </tr>
                   </tbody>
                 </table>
@@ -973,25 +974,25 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         </div>
       </section>
 
-      {/* 9. FAQ SECTION (Exact Side-by-Side Design from Screenshot 1) */}
-      <section id="faq" style={{ padding: '100px 24px', background: '#FFFFFF', borderTop: '1px solid #DDF4F3', position: 'relative', zIndex: 1 }}>
+      {/* 9. FAQ SECTION */}
+      <section id="faq" style={{ padding: '100px 24px', background: '#FFFFFF', borderTop: '1px solid rgba(0, 0, 0, 0.06)', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
           
           <div className="faq-grid" style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '64px', alignItems: 'start' }}>
             
             {/* Left Column Heading */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <h2 style={{ fontSize: '3rem', fontWeight: 800, color: '#00464E', lineHeight: 1.05, letterSpacing: '-0.02em' }}>
+              <h2 style={{ fontSize: '3rem', fontWeight: 700, color: '#1D1D1F', lineHeight: 1.05, letterSpacing: '-0.03em' }}>
                 Frequently Asked Questions
               </h2>
-              <div style={{ fontSize: '1.05rem', color: '#3F5D68' }}>
-                Still unsure?{' '}
+              <div style={{ fontSize: '1.05rem', color: '#86868B' }}>
+                Have questions?{' '}
                 <button
                   onClick={scrollToAuth}
-                  style={{ all: 'unset', color: '#00464E', fontWeight: 700, textDecoration: 'underline', cursor: 'pointer' }}
+                  style={{ all: 'unset', color: '#0071E3', fontWeight: 600, cursor: 'pointer' }}
                 >
-                  Talk to our team
-                </button>.
+                  Talk to our team &rarr;
+                </button>
               </div>
             </div>
 
@@ -999,27 +1000,27 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {[
                 {
-                  q: 'What is a DPR?',
-                  a: 'A Detailed Project Report is a structured document that presents a business or project, its financial requirements, projections and supporting analysis.'
+                  q: 'What is a Detailed Project Report (DPR)?',
+                  a: 'A Detailed Project Report is an official comprehensive document that details a enterprise setup, its capital expenditure heads, operational parameters, 10-year projected financials, and debt service viability for institutional sanction.'
                 },
                 {
                   q: 'Who can use this DPR tool?',
-                  a: 'The solution is designed for startups, MSMEs, entrepreneurs and established businesses seeking loans, government funding, subsidies or investor funding.'
+                  a: 'The DPR Studio is built for MSMEs, entrepreneurs, chartered accountants, and consultants preparing bank loans, subsidy applications, and investor presentations.'
                 },
                 {
-                  q: 'What can I prepare the DPR for?',
-                  a: 'You can use it for Bank/NBFC loans, government schemes and subsidies, and investor funding discussions.'
+                  q: 'Which government subsidy schemes are supported?',
+                  a: 'The engine supports central and state government schemes including PMEGP, PMFME, State Industrial Policy capital subsidies, AIF, and PM-KUSUM.'
                 },
                 {
-                  q: 'What financial information does the tool generate?',
-                  a: 'The platform\'s financial workflow includes projected Profit & Loss, Balance Sheet and Cash Flow models along with funding requirement analysis.'
+                  q: 'What formats can I export my DPR to?',
+                  a: 'You can generate fully formatted Microsoft Word (.docx) documents with option for custom enterprise co-branding.'
                 }
               ].map((faq, i) => {
                 const isOpen = openFaqIndex === i;
                 return (
                   <div key={i} style={{
-                    borderTop: '1px solid #DDF4F3',
-                    borderBottom: i === 3 ? '1px solid #DDF4F3' : 'none',
+                    borderTop: '1px solid rgba(0, 0, 0, 0.08)',
+                    borderBottom: i === 3 ? '1px solid rgba(0, 0, 0, 0.08)' : 'none',
                     padding: '24px 0'
                   }}>
                     <div
@@ -1032,21 +1033,21 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                         gap: '20px'
                       }}
                     >
-                      <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#00464E', margin: 0 }}>
+                      <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#1D1D1F', margin: 0 }}>
                         {faq.q}
                       </h3>
                       <button style={{
                         width: '32px',
                         height: '32px',
                         borderRadius: '50%',
-                        background: '#003E46',
+                        background: '#1D1D1F',
                         color: '#FFFFFF',
                         border: 'none',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         fontSize: '1rem',
-                        fontWeight: 700,
+                        fontWeight: 600,
                         cursor: 'pointer',
                         flexShrink: 0
                       }}>
@@ -1055,7 +1056,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                     </div>
 
                     {isOpen && (
-                      <p style={{ marginTop: '16px', fontSize: '1.02rem', color: '#3F5D68', lineHeight: 1.65, maxWidth: '720px' }}>
+                      <p style={{ marginTop: '16px', fontSize: '1.02rem', color: '#515154', lineHeight: 1.6, maxWidth: '720px' }}>
                         {faq.a}
                       </p>
                     )}
@@ -1069,41 +1070,41 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         </div>
       </section>
 
-      {/* 10. GET IN TOUCH & AUTHENTICATION SECTION (Exact Design from Screenshot 2) */}
-      <section id="contact" style={{ padding: '100px 24px', background: '#F2FAFA', borderTop: '1.5px solid #DDF4F3', position: 'relative', zIndex: 1 }}>
+      {/* 10. GET IN TOUCH & AUTHENTICATION SECTION */}
+      <section id="contact" style={{ padding: '100px 24px', background: '#F5F5F7', borderTop: '1px solid rgba(0, 0, 0, 0.08)', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
           
           <div className="two-col-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.25fr', gap: '64px', alignItems: 'start' }}>
             
             {/* Left Column: Connect with our team */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              <span className="vkf-kicker">Connect with our team</span>
+              <span className="apple-kicker">Connect with our team</span>
               
-              <h2 style={{ fontSize: '3rem', fontWeight: 800, color: '#00464E', lineHeight: 1.05, letterSpacing: '-0.02em' }}>
+              <h2 style={{ fontSize: '3rem', fontWeight: 700, color: '#1D1D1F', lineHeight: 1.05, letterSpacing: '-0.03em' }}>
                 Tell us about your project.
               </h2>
               
-              <p style={{ fontSize: '1.1rem', color: '#3F5D68', lineHeight: 1.65 }}>
-                Share a few details and what you need help with. Our team will get back to you to discuss your DPR and funding documentation.
+              <p style={{ fontSize: '1.1rem', color: '#515154', lineHeight: 1.6 }}>
+                Share your project details and requirements. Our advisory team will assist you in preparing a bankable DPR.
               </p>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '16px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '1.05rem', fontWeight: 600, color: '#00464E' }}>
-                  <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#FFFFFF', border: '1px solid #C5EBE9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#008C95' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '1.05rem', fontWeight: 500, color: '#1D1D1F' }}>
+                  <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#FFFFFF', border: '1px solid rgba(0, 0, 0, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#0071E3' }}>
                     ✉️
                   </div>
                   <span>support@vkf.org</span>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '1.05rem', fontWeight: 600, color: '#00464E' }}>
-                  <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#FFFFFF', border: '1px solid #C5EBE9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#008C95' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '1.05rem', fontWeight: 500, color: '#1D1D1F' }}>
+                  <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#FFFFFF', border: '1px solid rgba(0, 0, 0, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#0071E3' }}>
                     📞
                   </div>
                   <span>+91 98860 12345</span>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '1.05rem', fontWeight: 600, color: '#00464E' }}>
-                  <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#FFFFFF', border: '1px solid #C5EBE9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#008C95' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '1.05rem', fontWeight: 500, color: '#1D1D1F' }}>
+                  <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#FFFFFF', border: '1px solid rgba(0, 0, 0, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#0071E3' }}>
                     📍
                   </div>
                   <span>Vision Karnataka Foundation, Bengaluru, KA</span>
@@ -1115,25 +1116,25 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             {/* Right Column: Contact & Auth Card */}
             <div style={{
               background: '#FFFFFF',
-              border: '1.5px solid #C5EBE9',
-              borderRadius: '24px',
+              border: '1px solid rgba(0, 0, 0, 0.08)',
+              borderRadius: '28px',
               padding: '40px',
-              boxShadow: '0 24px 48px -16px rgba(0, 70, 78, 0.12)'
+              boxShadow: '0 24px 48px -16px rgba(0, 0, 0, 0.12)'
             }}>
               
               {/* Card Mode Switcher Tabs */}
-              <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid #DDF4F3', paddingBottom: '16px', marginBottom: '28px' }}>
+              <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid rgba(0, 0, 0, 0.06)', paddingBottom: '16px', marginBottom: '28px' }}>
                 <button
                   onClick={() => setAuthView('inquiry')}
                   style={{
                     all: 'unset',
                     cursor: 'pointer',
-                    padding: '8px 16px',
-                    borderRadius: '8px',
-                    fontWeight: 700,
-                    fontSize: '0.92rem',
-                    background: authView === 'inquiry' ? '#008C95' : 'transparent',
-                    color: authView === 'inquiry' ? '#FFFFFF' : '#00464E'
+                    padding: '8px 18px',
+                    borderRadius: '9999px',
+                    fontWeight: 600,
+                    fontSize: '0.9rem',
+                    background: authView === 'inquiry' ? '#0071E3' : 'transparent',
+                    color: authView === 'inquiry' ? '#FFFFFF' : '#1D1D1F'
                   }}
                 >
                   Send Inquiry
@@ -1143,12 +1144,12 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                   style={{
                     all: 'unset',
                     cursor: 'pointer',
-                    padding: '8px 16px',
-                    borderRadius: '8px',
-                    fontWeight: 700,
-                    fontSize: '0.92rem',
-                    background: authView === 'login' ? '#008C95' : 'transparent',
-                    color: authView === 'login' ? '#FFFFFF' : '#00464E'
+                    padding: '8px 18px',
+                    borderRadius: '9999px',
+                    fontWeight: 600,
+                    fontSize: '0.9rem',
+                    background: authView === 'login' ? '#0071E3' : 'transparent',
+                    color: authView === 'login' ? '#FFFFFF' : '#1D1D1F'
                   }}
                 >
                   Account Login
@@ -1158,12 +1159,12 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                   style={{
                     all: 'unset',
                     cursor: 'pointer',
-                    padding: '8px 16px',
-                    borderRadius: '8px',
-                    fontWeight: 700,
-                    fontSize: '0.92rem',
-                    background: authView === 'register' ? '#008C95' : 'transparent',
-                    color: authView === 'register' ? '#FFFFFF' : '#00464E'
+                    padding: '8px 18px',
+                    borderRadius: '9999px',
+                    fontWeight: 600,
+                    fontSize: '0.9rem',
+                    background: authView === 'register' ? '#0071E3' : 'transparent',
+                    color: authView === 'register' ? '#FFFFFF' : '#1D1D1F'
                   }}
                 >
                   Register
@@ -1172,14 +1173,14 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
 
               {authView === 'inquiry' ? (
                 <div>
-                  <h3 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#00464E', margin: 0 }}>Get in touch</h3>
-                  <p style={{ fontSize: '0.92rem', color: '#7A8C94', marginTop: '4px', marginBottom: '24px' }}>
+                  <h3 style={{ fontSize: '1.8rem', fontWeight: 700, color: '#1D1D1F', margin: 0 }}>Get in touch</h3>
+                  <p style={{ fontSize: '0.92rem', color: '#86868B', marginTop: '4px', marginBottom: '24px' }}>
                     Fields marked optional can be left blank.
                   </p>
 
                   {inquirySubmitted ? (
-                    <div style={{ padding: '24px', background: '#E6F7F7', borderRadius: '12px', border: '1px solid #C5EBE9', textAlign: 'center', color: '#006F78', fontWeight: 700 }}>
-                      ✅ Thank you! Your project details have been submitted. Our team will get back to you shortly.
+                    <div style={{ padding: '24px', background: 'rgba(52, 199, 89, 0.1)', borderRadius: '16px', border: '1px solid rgba(52, 199, 89, 0.2)', textAlign: 'center', color: '#248A3D', fontWeight: 600 }}>
+                      ✅ Thank you! Your project details have been submitted. Our team will contact you shortly.
                     </div>
                   ) : (
                     <form onSubmit={handleInquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -1187,44 +1188,44 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                       {/* Row 1 */}
                       <div className="form-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                         <div>
-                          <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#00464E', marginBottom: '6px' }}>Full name</label>
+                          <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 600, color: '#1D1D1F', marginBottom: '6px' }}>Full name</label>
                           <input
                             type="text"
                             required
                             value={contactName}
                             onChange={(e) => setContactName(e.target.value)}
                             placeholder="Enter your name"
-                            className="vkf-input"
+                            className="apple-input"
                           />
                         </div>
                         <div>
-                          <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#00464E', marginBottom: '6px' }}>Business name <small style={{ fontWeight: 400, color: '#7A8C94' }}>(optional)</small></label>
-                          <input type="text" placeholder="Enter business name" className="vkf-input" />
+                          <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 600, color: '#1D1D1F', marginBottom: '6px' }}>Business name <small style={{ fontWeight: 400, color: '#86868B' }}>(optional)</small></label>
+                          <input type="text" placeholder="Enter business name" className="apple-input" />
                         </div>
                       </div>
 
                       {/* Row 2 */}
                       <div className="form-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                         <div>
-                          <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#00464E', marginBottom: '6px' }}>Email</label>
+                          <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 600, color: '#1D1D1F', marginBottom: '6px' }}>Email</label>
                           <input
                             type="email"
                             required
                             value={contactEmail}
                             onChange={(e) => setContactEmail(e.target.value)}
                             placeholder="name@company.com"
-                            className="vkf-input"
+                            className="apple-input"
                           />
                         </div>
                         <div>
-                          <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#00464E', marginBottom: '6px' }}>Phone</label>
+                          <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 600, color: '#1D1D1F', marginBottom: '6px' }}>Phone</label>
                           <input
                             type="tel"
                             required
                             value={contactPhone}
                             onChange={(e) => setContactPhone(e.target.value)}
                             placeholder="+91 XXXXX XXXXX"
-                            className="vkf-input"
+                            className="apple-input"
                           />
                         </div>
                       </div>
@@ -1232,12 +1233,12 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                       {/* Row 3 */}
                       <div className="form-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                         <div>
-                          <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#00464E', marginBottom: '6px' }}>City <small style={{ fontWeight: 400, color: '#7A8C94' }}>(optional)</small></label>
-                          <input type="text" placeholder="City" className="vkf-input" />
+                          <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 600, color: '#1D1D1F', marginBottom: '6px' }}>City <small style={{ fontWeight: 400, color: '#86868B' }}>(optional)</small></label>
+                          <input type="text" placeholder="City" className="apple-input" />
                         </div>
                         <div>
-                          <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#00464E', marginBottom: '6px' }}>Business type <small style={{ fontWeight: 400, color: '#7A8C94' }}>(optional)</small></label>
-                          <select className="vkf-input" style={{ cursor: 'pointer' }}>
+                          <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 600, color: '#1D1D1F', marginBottom: '6px' }}>Business type <small style={{ fontWeight: 400, color: '#86868B' }}>(optional)</small></label>
+                          <select className="apple-input" style={{ cursor: 'pointer' }}>
                             <option value="">Select business type</option>
                             <option value="manufacturing">Manufacturing</option>
                             <option value="services">Services</option>
@@ -1250,7 +1251,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
 
                       {/* DPR Purpose Radios */}
                       <div>
-                        <label style={{ display: 'block', fontSize: '0.92rem', fontWeight: 700, color: '#00464E', marginBottom: '12px' }}>
+                        <label style={{ display: 'block', fontSize: '0.92rem', fontWeight: 600, color: '#1D1D1F', marginBottom: '12px' }}>
                           What do you need the DPR for?
                         </label>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
@@ -1264,13 +1265,13 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                               key={item.id}
                               type="button"
                               onClick={() => setDprPurpose(item.id)}
-                              className={`radio-pill ${dprPurpose === item.id ? 'selected' : ''}`}
+                              className={`radio-pill-apple ${dprPurpose === item.id ? 'selected' : ''}`}
                             >
                               <span style={{
                                 width: '12px',
                                 height: '12px',
                                 borderRadius: '50%',
-                                border: dprPurpose === item.id ? '4px solid #008C95' : '1.5px solid #7A8C94',
+                                border: dprPurpose === item.id ? '4px solid #0071E3' : '1.5px solid #86868B',
                                 background: '#FFFFFF'
                               }}></span>
                               <span>{item.label}</span>
@@ -1279,7 +1280,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                         </div>
                       </div>
 
-                      <button type="submit" className="vkf-btn-primary" style={{ marginTop: '8px', padding: '0.95rem' }}>
+                      <button type="submit" className="apple-btn-primary" style={{ marginTop: '8px', padding: '0.95rem', justifyContent: 'center', width: '100%', borderRadius: '14px' }}>
                         Send Message &rarr;
                       </button>
 
@@ -1307,10 +1308,10 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
 
       {/* 11. FOOTER */}
       <footer style={{
-        background: '#003E46',
+        background: '#1D1D1F',
         color: '#FFFFFF',
         padding: '60px 24px 40px',
-        borderTop: '1px solid rgba(221, 244, 243, 0.2)',
+        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
         position: 'relative',
         zIndex: 1
       }}>
@@ -1321,26 +1322,26 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               <img
                 src="/VKF_logo.png"
                 alt="VKF DPR Logo"
-                style={{ height: '52px', width: 'auto', filter: 'brightness(0) invert(1)' }}
+                style={{ height: '48px', width: 'auto', filter: 'brightness(0) invert(1)' }}
               />
               <div>
-                <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#FFFFFF' }}>VKF DPR</div>
-                <div style={{ fontSize: '0.78rem', color: '#5BE2EC' }}>Vision Karnataka Foundation</div>
+                <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#FFFFFF' }}>VKF DPR Studio</div>
+                <div style={{ fontSize: '0.78rem', color: '#86868B' }}>Vision Karnataka Foundation</div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '24px', fontSize: '0.9rem', color: '#DDF4F3' }}>
-              <button onClick={() => scrollToSection('hero')} style={{ background: 'none', border: 'none', color: '#DDF4F3', cursor: 'pointer' }}>Home</button>
-              <button onClick={() => scrollToSection('how-it-works')} style={{ background: 'none', border: 'none', color: '#DDF4F3', cursor: 'pointer' }}>How it works</button>
-              <button onClick={() => scrollToSection('funding-needs')} style={{ background: 'none', border: 'none', color: '#DDF4F3', cursor: 'pointer' }}>Funding needs</button>
-              <button onClick={() => scrollToSection('why-digital')} style={{ background: 'none', border: 'none', color: '#DDF4F3', cursor: 'pointer' }}>Why digital</button>
-              <button onClick={() => scrollToSection('faq')} style={{ background: 'none', border: 'none', color: '#DDF4F3', cursor: 'pointer' }}>FAQ</button>
+            <div style={{ display: 'flex', gap: '24px', fontSize: '0.9rem', color: '#A1A1A6' }}>
+              <button onClick={() => scrollToSection('hero')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Home</button>
+              <button onClick={() => scrollToSection('how-it-works')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Overview</button>
+              <button onClick={() => scrollToSection('funding-needs')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Funding Needs</button>
+              <button onClick={() => scrollToSection('why-digital')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Financial Studio</button>
+              <button onClick={() => scrollToSection('faq')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>FAQ</button>
             </div>
           </div>
 
-          <div style={{ borderTop: '1px solid rgba(221, 244, 243, 0.15)', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', color: '#8AAFB7' }}>
+          <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', color: '#86868B' }}>
             <div>&copy; {new Date().getFullYear()} Vision Karnataka Foundation. All rights reserved.</div>
-            <div>Confidential & Bank-Compliant DPR Preparation Service.</div>
+            <div>Institutional Grade DPR & Project Appraisal Engine.</div>
           </div>
 
         </div>
@@ -1348,3 +1349,4 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
     </div>
   );
 }
+
