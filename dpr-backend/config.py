@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     # Razorpay
     RAZORPAY_KEY_ID: str = os.getenv("RAZORPAY_KEY_ID", "")
     RAZORPAY_KEY_SECRET: str = os.getenv("RAZORPAY_KEY_SECRET", "")
+    DPR_REPORT_PRICE: float = float(os.getenv("DPR_REPORT_PRICE", 500.0))
     
     # Gemini AI (Optional)
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")

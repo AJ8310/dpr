@@ -14,6 +14,8 @@ import {
   getMasterActivities,
   getMasterProjectTypes,
   resolveMasterBlueprint,
+  createRazorpayOrder,
+  verifyRazorpayPayment,
 } from '@/lib/api';
 import { compressImageClientSide } from '@/lib/imageCompressor';
 import DPRGenerationModal from './DPRGenerationModal';
@@ -729,6 +731,171 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       alert(`PDF Report Generation Notice: ${errorDetail}`);
     } finally {
       setGenerating(false);
+    }
+  };
+
+  const loadRazorpayScript = (): Promise<boolean> => {
+    return new Promise((resolve) => {
+      if (typeof window !== 'undefined' && (window as any).Razorpay) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handlePayAndGeneratePDF = async () => {
+    const isLoaded = await loadRazorpayScript();
+    if (!isLoaded) {
+      alert('Failed to load Razorpay SDK. Please check your internet connection.');
+      return;
+    }
+
+    try {
+      setGenerating(true);
+      setStepName('Initializing Razorpay Order...');
+
+      const orderData = await createRazorpayOrder(500);
+      setGenerating(false);
+
+      if (!orderData.success || !orderData.order_id) {
+        alert('Payment order creation failed: ' + (orderData.detail || 'Unknown error'));
+        return;
+      }
+
+      const options = {
+        key: orderData.key_id,
+        amount: orderData.amount,
+        currency: orderData.currency || 'INR',
+        name: 'InfoPace DPR Studio',
+        description: `Unlock & Generate ${formData.dpr_type || 'Detailed Project Report'}`,
+        order_id: orderData.order_id,
+        handler: async function (response: any) {
+          setGenerating(true);
+          setStepName('Verifying payment signature...');
+          try {
+            const verification = await verifyRazorpayPayment({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+
+            if (verification.success) {
+              setStepName('Payment verified! Compiling PDF report...');
+              await handleGeneratePDF();
+            } else {
+              alert('Payment signature verification failed.');
+              setGenerating(false);
+            }
+          } catch (err: any) {
+            alert('Payment Verification Exception: ' + (err.detail || err.message || 'Error occurred'));
+            setGenerating(false);
+          }
+        },
+        prefill: {
+          name: formData.contact_name || formData.business_name || '',
+          email: formData.email || '',
+          contact: formData.contact_number || '',
+        },
+        notes: {
+          business_name: formData.business_name || '',
+          dpr_type: formData.dpr_type || '',
+        },
+        theme: {
+          color: '#008C95',
+        },
+        modal: {
+          ondismiss: function () {
+            setGenerating(false);
+            setStepName('');
+          },
+        },
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+    } catch (err: any) {
+      setGenerating(false);
+      alert('Error initiating Razorpay checkout: ' + (err.message || err));
+    }
+  };
+
+  const handlePayAndGenerateDocx = async () => {
+    const isLoaded = await loadRazorpayScript();
+    if (!isLoaded) {
+      alert('Failed to load Razorpay SDK. Please check your internet connection.');
+      return;
+    }
+
+    try {
+      setGenerating(true);
+      setStepName('Initializing Razorpay Order...');
+
+      const orderData = await createRazorpayOrder(500);
+      setGenerating(false);
+
+      if (!orderData.success || !orderData.order_id) {
+        alert('Payment order creation failed: ' + (orderData.detail || 'Unknown error'));
+        return;
+      }
+
+      const options = {
+        key: orderData.key_id,
+        amount: orderData.amount,
+        currency: orderData.currency || 'INR',
+        name: 'InfoPace DPR Studio',
+        description: `Unlock & Generate Word DOCX (${formData.dpr_type || 'DPR'})`,
+        order_id: orderData.order_id,
+        handler: async function (response: any) {
+          setGenerating(true);
+          setStepName('Payment verified! Compiling Word DOCX report...');
+          try {
+            const verification = await verifyRazorpayPayment({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+
+            if (verification.success) {
+              await downloadClientReport(formData, 'docx');
+            } else {
+              alert('Payment signature verification failed.');
+              setGenerating(false);
+            }
+          } catch (err: any) {
+            alert('Payment Verification Exception: ' + (err.detail || err.message || 'Error occurred'));
+            setGenerating(false);
+          }
+        },
+        prefill: {
+          name: formData.contact_name || formData.business_name || '',
+          email: formData.email || '',
+          contact: formData.contact_number || '',
+        },
+        notes: {
+          business_name: formData.business_name || '',
+          dpr_type: formData.dpr_type || '',
+        },
+        theme: {
+          color: '#008C95',
+        },
+        modal: {
+          ondismiss: function () {
+            setGenerating(false);
+            setStepName('');
+          },
+        },
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+    } catch (err: any) {
+      setGenerating(false);
+      alert('Error initiating Razorpay checkout: ' + (err.message || err));
     }
   };
 
@@ -2247,22 +2414,22 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                     <div style={{ display: 'flex', justifyContent: 'center', gap: '1.2rem', flexWrap: 'wrap', width: '100%' }}>
                       <button
                         type="button"
-                        onClick={handleGeneratePDF}
+                        onClick={handlePayAndGeneratePDF}
                         disabled={generating}
                         className="btn-next-spacious"
                         style={{ padding: '1.1rem 2.2rem', fontSize: '1rem', background: 'linear-gradient(135deg, #008C95 0%, #006F78 100%)', boxShadow: '0 8px 25px rgba(0, 140, 149, 0.35)' }}
                       >
-                        <i className="fas fa-file-pdf"></i> {generating ? 'Compiling PDF Engine Report...' : 'APPROVE & COMPILE FINAL PDF REPORT'}
+                        <i className="fas fa-lock-open"></i> {generating ? 'Processing Payment & PDF...' : 'PAY ₹500 & UNLOCK FINAL PDF REPORT'}
                       </button>
 
                       <button
                         type="button"
-                        onClick={() => downloadClientReport(formData, 'docx')}
+                        onClick={handlePayAndGenerateDocx}
                         disabled={generating}
                         className="btn-next-spacious"
                         style={{ padding: '1.1rem 2.2rem', fontSize: '1rem', background: 'linear-gradient(135deg, #FF7A00 0%, #EA580C 100%)', boxShadow: '0 8px 25px rgba(255, 122, 0, 0.35)' }}
                       >
-                        <i className="fas fa-file-word"></i> {generating ? 'Compiling Word DOCX...' : 'APPROVE & COMPILE EDITABLE DOCX'}
+                        <i className="fas fa-file-word"></i> {generating ? 'Processing Payment & DOCX...' : 'PAY ₹500 & UNLOCK EDITABLE DOCX'}
                       </button>
                     </div>
                   </div>

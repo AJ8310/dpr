@@ -222,4 +222,29 @@ export async function generateSubmissionPack(submissionData: any) {
   return response.data;
 }
 
+// Razorpay Payment Gateway APIs
+export async function getPaymentConfig() {
+  const response = await api.get('/api/payment/config');
+  return response.data;
+}
+
+export async function createRazorpayOrder(amount: number = 500, projectId?: string) {
+  const response = await api.post('/api/payment/create-order', {
+    amount,
+    currency: 'INR',
+    project_id: projectId
+  });
+  return response.data;
+}
+
+export async function verifyRazorpayPayment(paymentData: {
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+  project_id?: string;
+}) {
+  const response = await api.post('/api/payment/verify-payment', paymentData);
+  return response.data;
+}
+
 export default api;
