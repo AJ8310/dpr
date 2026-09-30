@@ -337,17 +337,15 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               alignSelf: 'flex-start',
               alignItems: 'center',
               gap: '12px',
-              padding: '8px 20px',
-              background: 'rgba(0, 113, 227, 0.08)',
-              border: '1px solid rgba(0, 113, 227, 0.18)',
+              padding: '9px 22px',
+              background: '#123B4A',
+              border: '1.5px solid #006F78',
               borderRadius: '9999px',
-              fontSize: '0.98rem',
-              fontWeight: 600,
-              backdropFilter: 'blur(10px)',
-              margin: '2px 0'
+              boxShadow: '0 6px 20px rgba(18, 59, 74, 0.18)',
+              margin: '4px 0'
             }}>
-              <span style={{ color: '#86868B', textDecoration: 'line-through', fontSize: '0.96rem' }}>3 weeks manual prep</span>
-              <span style={{ color: '#0071E3', fontWeight: 700, fontSize: '1.02rem' }}>⚡ &lt; 10 mins flow</span>
+              <span style={{ color: '#94A3B8', textDecoration: 'line-through', fontSize: '0.96rem', fontWeight: 600 }}>3 weeks manual prep</span>
+              <span style={{ color: '#FFD166', fontWeight: 800, fontSize: '1.04rem', letterSpacing: '0.02em' }}>⚡ &lt; 10 mins flow</span>
             </div>
 
             {/* Subtitle */}
