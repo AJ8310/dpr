@@ -1914,7 +1914,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               <img
                 src="/VKF_logo.png"
                 alt="VKF DPR Logo"
-                style={{ height: '48px', width: 'auto', filter: 'brightness(0) invert(1)' }}
+                style={{ height: '48px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2))' }}
               />
               <div>
                 <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#FFFFFF' }}>DPRPro AI</div>
