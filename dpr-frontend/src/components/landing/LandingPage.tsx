@@ -473,19 +473,33 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                       backfaceVisibility: 'hidden'
                     }}
                   />
-                  {/* VKF Logo Watermark Overlay (Bottom Right - Pure Logo without white box) */}
+                  {/* Black corner overlay mask to 100% hide video star watermark */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: 0,
+                      right: 0,
+                      width: '110px',
+                      height: '110px',
+                      background: 'radial-gradient(circle at 80% 80%, rgba(0,0,0,0.98) 0%, rgba(0,0,0,0.85) 60%, transparent 100%)',
+                      zIndex: 14,
+                      pointerEvents: 'none'
+                    }}
+                  />
+
+                  {/* VKF Logo Watermark Overlay (Shifted to Left, High Clarity) */}
                   <img
                     src="/VKF.png"
                     alt="Vision Karnataka Foundation Logo"
                     style={{
                       position: 'absolute',
-                      bottom: '18px',
-                      right: '12px',
+                      bottom: '22px',
+                      right: '60px',
                       zIndex: 15,
-                      height: '92px',
+                      height: '96px',
                       width: 'auto',
                       objectFit: 'contain',
-                      filter: 'drop-shadow(0 4px 18px rgba(0, 0, 0, 0.75))',
+                      filter: 'drop-shadow(0 4px 20px rgba(0, 0, 0, 0.85))',
                       pointerEvents: 'none'
                     }}
                   />
