@@ -34,6 +34,8 @@ export default function Home() {
           setSession(null);
         } else {
           setSession(parsed);
+          const storedService = sessionStorage.getItem('dpr_selected_service') || 'Bank Loan DPR';
+          setSelectedService(storedService);
         }
       } catch (e) {
         sessionStorage.removeItem('dpr_session');
@@ -51,27 +53,28 @@ export default function Home() {
   };
 
   const handleSelectService = (serviceName: string) => {
+    sessionStorage.setItem('dpr_selected_service', serviceName);
     setSelectedService(serviceName);
     setActiveStepIndex(0);
   };
 
+  const handleLoginSuccess = (sess: UserSession) => {
+    const storedService = sessionStorage.getItem('dpr_selected_service') || 'Bank Loan DPR';
+    setSelectedService(storedService);
+    setSession(sess);
+  };
+
   // 1. Unauthenticated View (Interactive Landing Page with Login / Register)
   if (!session) {
-    return <LandingPage onLoginSuccess={(sess) => setSession(sess)} />;
+    return <LandingPage onLoginSuccess={handleLoginSuccess} />;
   }
 
-  // 2. Service Selection View (User selects DPR Type)
+  // 2. Fallback Service Selection View (Only if user explicitly cleared service inside dashboard)
   if (!selectedService) {
-    return (
-      <main style={{ minHeight: '100vh', background: 'var(--vkf-bg-light)', padding: '2rem 1rem' }}>
-        <ServiceSelectionView
-          userName={session.name}
-          onSelectService={handleSelectService}
-          onLogout={handleLogout}
-        />
-        <FloatingChatbotWidget onSelectDprType={handleSelectService} />
-      </main>
-    );
+    const fallbackService = sessionStorage.getItem('dpr_selected_service') || 'Bank Loan DPR';
+    if (fallbackService) {
+      setSelectedService(fallbackService);
+    }
   }
 
   // 3. Full Main Dashboard View (Fixed Sidebar + Form Wizard)
@@ -162,12 +165,12 @@ export default function Home() {
         <ProgressHeader
           currentStep={activeStepIndex}
           totalSteps={14}
-          selectedService={selectedService}
+          selectedService={selectedService || 'Bank Loan DPR'}
           onChangeService={(service) => setSelectedService(service)}
         />
 
         <FormWizard
-          initialService={selectedService}
+          initialService={selectedService || 'Bank Loan DPR'}
           activeStep={activeStepIndex}
           setActiveStep={(step) => setActiveStepIndex(step)}
           onNextStep={() => setActiveStepIndex((prev) => Math.min(prev + 1, 13))}

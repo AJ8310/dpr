@@ -28,6 +28,19 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
   const [isPlansModalOpen, setIsPlansModalOpen] = useState(false);
   const [selectedRouteKey, setSelectedRouteKey] = useState<'govt' | 'bank' | 'inv'>('bank');
 
+  const saveSelection = (routeKey: string, planId?: string) => {
+    const serviceMap: Record<string, string> = {
+      govt: 'Govt Subsidy DPR',
+      bank: 'Bank Loan DPR',
+      inv: 'Investor / Business Pitch DPR'
+    };
+    const canonicalService = serviceMap[routeKey] || 'Bank Loan DPR';
+    sessionStorage.setItem('dpr_selected_service', canonicalService);
+    if (planId) {
+      sessionStorage.setItem('dpr_selected_plan', planId);
+    }
+  };
+
   React.useEffect(() => {
     // Pre-warm backend server silently on page load
     const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://dpr-0eje.onrender.com';
@@ -306,7 +319,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             <button onClick={scrollToAuth} className="apple-btn-secondary" style={{ padding: '0.55rem 1.2rem', fontSize: '0.86rem' }}>
               Contact Team
             </button>
-            <button onClick={() => { setAuthView('login'); scrollToAuth(); }} className="apple-btn-primary" style={{ padding: '0.55rem 1.3rem', fontSize: '0.86rem' }}>
+            <button onClick={() => { saveSelection(selectedRouteKey); setAuthView('login'); scrollToAuth(); }} className="apple-btn-primary" style={{ padding: '0.55rem 1.3rem', fontSize: '0.86rem' }}>
               Create My DPR &rarr;
             </button>
           </div>
@@ -385,7 +398,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
 
             {/* Action Buttons */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', marginTop: '8px' }}>
-              <button onClick={() => { setAuthView('login'); scrollToAuth(); }} className="apple-btn-primary" style={{ padding: '0.9rem 2.2rem', fontSize: '1.02rem' }}>
+              <button onClick={() => { saveSelection(selectedRouteKey); setAuthView('login'); scrollToAuth(); }} className="apple-btn-primary" style={{ padding: '0.9rem 2.2rem', fontSize: '1.02rem' }}>
                 Create My DPR &rarr;
               </button>
               <button onClick={scrollToAuth} className="apple-btn-secondary" style={{ padding: '0.9rem 2.2rem', fontSize: '1.02rem' }}>
@@ -1246,6 +1259,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                   <button
                     onClick={() => {
                       setSelectedRouteKey(route.id);
+                      saveSelection(route.id);
                       setIsPlansModalOpen(true);
                     }}
                     style={{
@@ -1346,7 +1360,10 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                   return (
                     <button
                       key={rt.id}
-                      onClick={() => setSelectedRouteKey(rt.id)}
+                      onClick={() => {
+                        setSelectedRouteKey(rt.id);
+                        saveSelection(rt.id);
+                      }}
                       style={{
                         background: isActive ? rt.bgSoft : '#FFFFFF',
                         border: isActive ? `2px solid ${rt.accentColor}` : '1.5px solid #CBD5E1',
@@ -1556,6 +1573,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                       <button
                         type="button"
                         onClick={() => {
+                          saveSelection(selectedRouteKey, plan.id);
                           setIsPlansModalOpen(false);
                           if (plan.contact) {
                             scrollToAuth();
