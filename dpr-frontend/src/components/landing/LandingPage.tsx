@@ -24,8 +24,8 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
   const [contactEmail, setContactEmail] = useState('');
   const [contactPhone, setContactPhone] = useState('');
 
-  // Auth Pop-Up Modal State (Auto-opens on page load, and pops up on clicking Pricing / Plans if unauthenticated)
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(true);
+  // Auth Pop-Up Modal State (Triggered when user clicks 'View Plans by Project Size' / plan CTAs)
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [popupAuthMode, setPopupAuthMode] = useState<'login' | 'register'>('login');
 
   // Funding Routes & Project-Size Plans Dialog State
@@ -314,7 +314,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             <button onClick={() => scrollToSection('how-it-works')} className="apple-nav-link">Overview</button>
             <button onClick={() => scrollToSection('funding-needs')} className="apple-nav-link">Funding Needs</button>
             <button onClick={() => scrollToSection('why-digital')} className="apple-nav-link">Financial Studio</button>
-            <button onClick={() => { saveSelection(selectedRouteKey); setIsAuthModalOpen(true); }} className="apple-nav-link">Pricing</button>
+            <button onClick={() => scrollToSection('pricing')} className="apple-nav-link">Pricing</button>
             <button onClick={() => scrollToSection('faq')} className="apple-nav-link">FAQ</button>
           </nav>
 
@@ -2095,7 +2095,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               <button onClick={() => scrollToSection('how-it-works')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Overview</button>
               <button onClick={() => scrollToSection('funding-needs')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Funding Needs</button>
               <button onClick={() => scrollToSection('why-digital')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Financial Studio</button>
-              <button onClick={() => { saveSelection(selectedRouteKey); setIsAuthModalOpen(true); }} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Pricing</button>
+              <button onClick={() => scrollToSection('pricing')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Pricing</button>
               <button onClick={() => scrollToSection('faq')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>FAQ</button>
             </div>
           </div>
