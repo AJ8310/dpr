@@ -1374,8 +1374,6 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                   cta: 'Create DPR',
                   desc: 'A standard DPR for early-stage projects and smaller funding requirements.',
                   inc: [
-                    'Standard DPR structure',
-                    '1 DPR',
                     'Basic support',
                     'Business / project profile',
                     'Executive summary',
@@ -1394,8 +1392,6 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                   cta: 'Create DPR',
                   desc: 'A complete DPR with projections and funding analysis for growing businesses.',
                   inc: [
-                    'Complete DPR',
-                    '1 DPR',
                     'Standard support',
                     'Executive summary & profile',
                     'Market & competitor analysis',
@@ -1416,8 +1412,6 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                   badge: 'MOST USED',
                   desc: 'Advanced DPR with detailed financial analysis and funding requirement analysis.',
                   inc: [
-                    'Advanced DPR',
-                    '1 DPR + revisions',
                     'Priority support',
                     'Detailed project & market analysis',
                     'Detailed financial projections',
@@ -1439,8 +1433,6 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                   contact: true,
                   desc: 'Custom DPR depth, detailed projections and analysis based on project scope.',
                   inc: [
-                    'Advanced / custom DPR',
-                    'Custom DPR scope',
                     'Dedicated support',
                     '40–60+ page report structure',
                     'Detailed business & market analysis',
