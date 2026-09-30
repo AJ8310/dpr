@@ -24,6 +24,10 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
   const [contactEmail, setContactEmail] = useState('');
   const [contactPhone, setContactPhone] = useState('');
 
+  // Auth Pop-Up Modal State (Auto-opens on page load, and pops up on clicking Pricing / Plans if unauthenticated)
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(true);
+  const [popupAuthMode, setPopupAuthMode] = useState<'login' | 'register'>('login');
+
   // Funding Routes & Project-Size Plans Dialog State
   const [isPlansModalOpen, setIsPlansModalOpen] = useState(false);
   const [selectedRouteKey, setSelectedRouteKey] = useState<'govt' | 'bank' | 'inv'>('bank');
@@ -310,7 +314,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             <button onClick={() => scrollToSection('how-it-works')} className="apple-nav-link">Overview</button>
             <button onClick={() => scrollToSection('funding-needs')} className="apple-nav-link">Funding Needs</button>
             <button onClick={() => scrollToSection('why-digital')} className="apple-nav-link">Financial Studio</button>
-            <button onClick={() => scrollToSection('pricing')} className="apple-nav-link">Pricing</button>
+            <button onClick={() => { saveSelection(selectedRouteKey); setIsAuthModalOpen(true); }} className="apple-nav-link">Pricing</button>
             <button onClick={() => scrollToSection('faq')} className="apple-nav-link">FAQ</button>
           </nav>
 
@@ -319,7 +323,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             <button onClick={scrollToAuth} className="apple-btn-secondary" style={{ padding: '0.55rem 1.2rem', fontSize: '0.86rem' }}>
               Contact Team
             </button>
-            <button onClick={() => { saveSelection(selectedRouteKey); setAuthView('login'); scrollToAuth(); }} className="apple-btn-primary" style={{ padding: '0.55rem 1.3rem', fontSize: '0.86rem' }}>
+            <button onClick={() => { saveSelection(selectedRouteKey); setIsAuthModalOpen(true); }} className="apple-btn-primary" style={{ padding: '0.55rem 1.3rem', fontSize: '0.86rem' }}>
               Create My DPR &rarr;
             </button>
           </div>
@@ -398,7 +402,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
 
             {/* Action Buttons */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', marginTop: '8px' }}>
-              <button onClick={() => { saveSelection(selectedRouteKey); setAuthView('login'); scrollToAuth(); }} className="apple-btn-primary" style={{ padding: '0.9rem 2.2rem', fontSize: '1.02rem' }}>
+              <button onClick={() => { saveSelection(selectedRouteKey); setIsAuthModalOpen(true); }} className="apple-btn-primary" style={{ padding: '0.9rem 2.2rem', fontSize: '1.02rem' }}>
                 Create My DPR &rarr;
               </button>
               <button onClick={scrollToAuth} className="apple-btn-secondary" style={{ padding: '0.9rem 2.2rem', fontSize: '1.02rem' }}>
@@ -1623,6 +1627,138 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         </div>
       )}
 
+      {/* 9.5. AUTO & GATED AUTH POPUP MODAL */}
+      {isAuthModalOpen && (
+        <div
+          onClick={() => setIsAuthModalOpen(false)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(15, 23, 42, 0.72)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+            zIndex: 20000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1rem',
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: '#FFFFFF',
+              borderRadius: '28px',
+              width: 'min(500px, 94vw)',
+              maxHeight: '92vh',
+              overflowY: 'auto',
+              padding: '2.2rem 2.2rem 2.4rem',
+              boxShadow: '0 30px 70px -15px rgba(0, 0, 0, 0.35)',
+              position: 'relative',
+              border: '1.5px solid rgba(0, 0, 0, 0.08)',
+            }}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setIsAuthModalOpen(false)}
+              aria-label="Close modal"
+              style={{
+                position: 'absolute',
+                top: '1.2rem',
+                right: '1.2rem',
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                background: '#F1F5F9',
+                border: '1px solid #CBD5E1',
+                color: '#475569',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1rem',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <i className="fas fa-times" />
+            </button>
+
+            {/* Modal Header */}
+            <div style={{ textAlign: 'center', marginBottom: '1.5rem', paddingRight: '1rem' }}>
+              <img src="/VKF_logo.png" alt="VKF Logo" style={{ height: '44px', margin: '0 auto 10px', display: 'block' }} />
+              <h3 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#123B4A', margin: '0 0 6px 0', lineHeight: 1.2 }}>
+                {popupAuthMode === 'login' ? 'Sign In to Continue' : 'Create Your DPR Account'}
+              </h3>
+              <p style={{ fontSize: '0.88rem', color: '#64748B', margin: 0 }}>
+                Sign in or register to select pricing plans and build your bankable DPR report.
+              </p>
+            </div>
+
+            {/* Mode Switcher Tabs */}
+            <div style={{ display: 'flex', gap: '8px', background: '#F1F5F9', padding: '4px', borderRadius: '9999px', marginBottom: '1.6rem' }}>
+              <button
+                type="button"
+                onClick={() => setPopupAuthMode('login')}
+                style={{
+                  flex: 1,
+                  padding: '8px',
+                  borderRadius: '9999px',
+                  border: 'none',
+                  background: popupAuthMode === 'login' ? '#0071E3' : 'transparent',
+                  color: popupAuthMode === 'login' ? '#FFFFFF' : '#64748B',
+                  fontWeight: 700,
+                  fontSize: '0.88rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                Sign In
+              </button>
+              <button
+                type="button"
+                onClick={() => setPopupAuthMode('register')}
+                style={{
+                  flex: 1,
+                  padding: '8px',
+                  borderRadius: '9999px',
+                  border: 'none',
+                  background: popupAuthMode === 'register' ? '#0071E3' : 'transparent',
+                  color: popupAuthMode === 'register' ? '#FFFFFF' : '#64748B',
+                  fontWeight: 700,
+                  fontSize: '0.88rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                Sign Up
+              </button>
+            </div>
+
+            {/* Auth Form Card */}
+            {popupAuthMode === 'login' ? (
+              <LoginCard
+                onLoginSuccess={(sess) => {
+                  setIsAuthModalOpen(false);
+                  onLoginSuccess(sess);
+                }}
+                onSwitchToRegister={() => setPopupAuthMode('register')}
+              />
+            ) : (
+              <RegisterCard
+                onRegisterSuccess={(sess) => {
+                  setIsAuthModalOpen(false);
+                  onLoginSuccess(sess);
+                }}
+                onSwitchToLogin={() => setPopupAuthMode('login')}
+              />
+            )}
+          </div>
+        </div>
+      )}
+
       {/* 10. GET IN TOUCH & AUTHENTICATION SECTION */}
       <section id="contact" style={{ padding: '100px 24px', background: '#F5F5F7', borderTop: '1px solid rgba(0, 0, 0, 0.08)', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
@@ -1959,7 +2095,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               <button onClick={() => scrollToSection('how-it-works')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Overview</button>
               <button onClick={() => scrollToSection('funding-needs')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Funding Needs</button>
               <button onClick={() => scrollToSection('why-digital')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Financial Studio</button>
-              <button onClick={() => scrollToSection('pricing')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Pricing</button>
+              <button onClick={() => { saveSelection(selectedRouteKey); setIsAuthModalOpen(true); }} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Pricing</button>
               <button onClick={() => scrollToSection('faq')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>FAQ</button>
             </div>
           </div>
