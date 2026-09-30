@@ -759,6 +759,26 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
     });
   };
 
+  const getDisplayPrice = (): string => {
+    const selectedPlan = (typeof window !== 'undefined' && sessionStorage.getItem('dpr_selected_plan')) || formData.dpr_depth || 'entry';
+    const dt = (formData.dpr_type || '').toLowerCase();
+    const isInv = dt.includes('inv') || dt.includes('pitch') || dt.includes('equity');
+    const depth = (selectedPlan || '').toLowerCase().trim();
+
+    let amount = isInv ? 4999 : 3999;
+    if (depth === 'core' || depth === 'standard') {
+      amount = isInv ? 9999 : 7999;
+    } else if (depth === 'team' || depth === 'advanced' || depth === 'detailed' || depth === 'comprehensive') {
+      amount = isInv ? 19999 : 14999;
+    } else if (depth === 'ent' || depth === 'enterprise' || depth === 'premium') {
+      amount = isInv ? 29999 : 24999;
+    } else if (depth === 'entry' || depth === 'basic' || depth === 'summary') {
+      amount = isInv ? 4999 : 3999;
+    }
+
+    return amount.toLocaleString('en-IN');
+  };
+
   const handlePayAndGeneratePDF = async () => {
     if (paymentUnlocked) {
       await handleGeneratePDF();
@@ -2535,7 +2555,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                         className="btn-next-spacious"
                         style={{ padding: '1.1rem 2.2rem', fontSize: '1rem', background: paymentUnlocked ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #008C95 0%, #006F78 100%)', boxShadow: '0 8px 25px rgba(0, 140, 149, 0.35)' }}
                       >
-                        <i className={paymentUnlocked ? "fas fa-download" : "fas fa-lock-open"}></i> {generating ? 'Compiling PDF Engine Report...' : paymentUnlocked ? 'DOWNLOAD FINAL PDF REPORT (UNLOCKED)' : 'PAY ₹1 & UNLOCK FINAL PDF REPORT'}
+                        <i className={paymentUnlocked ? "fas fa-download" : "fas fa-lock-open"}></i> {generating ? 'Compiling PDF Engine Report...' : paymentUnlocked ? 'DOWNLOAD FINAL PDF REPORT (UNLOCKED)' : `PAY ₹${getDisplayPrice()} & UNLOCK FINAL PDF REPORT`}
                       </button>
 
                       <button
@@ -2545,7 +2565,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                         className="btn-next-spacious"
                         style={{ padding: '1.1rem 2.2rem', fontSize: '1rem', background: 'linear-gradient(135deg, #FF7A00 0%, #EA580C 100%)', boxShadow: '0 8px 25px rgba(255, 122, 0, 0.35)' }}
                       >
-                        <i className="fas fa-file-word"></i> {generating ? 'Compiling Word DOCX...' : paymentUnlocked ? 'DOWNLOAD EDITABLE DOCX (UNLOCKED)' : 'PAY ₹1 & UNLOCK EDITABLE DOCX'}
+                        <i className="fas fa-file-word"></i> {generating ? 'Compiling Word DOCX...' : paymentUnlocked ? 'DOWNLOAD EDITABLE DOCX (UNLOCKED)' : `PAY ₹${getDisplayPrice()} & UNLOCK EDITABLE DOCX`}
                       </button>
                     </div>
 
