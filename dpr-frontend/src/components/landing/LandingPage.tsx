@@ -337,15 +337,30 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               alignSelf: 'flex-start',
               alignItems: 'center',
               gap: '12px',
-              padding: '9px 22px',
-              background: '#123B4A',
-              border: '1.5px solid #006F78',
+              padding: '4px 6px 4px 18px',
+              background: '#F1F5F9',
+              border: '1.5px solid #E2E8F0',
               borderRadius: '9999px',
-              boxShadow: '0 6px 20px rgba(18, 59, 74, 0.18)',
+              boxShadow: '0 2px 10px rgba(0, 0, 0, 0.04)',
               margin: '4px 0'
             }}>
-              <span style={{ color: '#94A3B8', textDecoration: 'line-through', fontSize: '0.96rem', fontWeight: 600 }}>3 weeks manual prep</span>
-              <span style={{ color: '#FFD166', fontWeight: 800, fontSize: '1.04rem', letterSpacing: '0.02em' }}>⚡ &lt; 10 mins flow</span>
+              <span style={{ color: '#64748B', textDecoration: 'line-through', fontSize: '0.94rem', fontWeight: 600 }}>
+                3 weeks manual prep
+              </span>
+              <span style={{
+                background: 'linear-gradient(135deg, #0071E3 0%, #005BB5 100%)',
+                color: '#FFFFFF',
+                borderRadius: '9999px',
+                padding: '6px 16px',
+                fontSize: '0.94rem',
+                fontWeight: 700,
+                boxShadow: '0 3px 10px rgba(0, 113, 227, 0.28)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px'
+              }}>
+                ⚡ &lt; 10 mins flow
+              </span>
             </div>
 
             {/* Subtitle */}
