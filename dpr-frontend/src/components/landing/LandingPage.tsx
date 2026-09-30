@@ -24,6 +24,10 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
   const [contactEmail, setContactEmail] = useState('');
   const [contactPhone, setContactPhone] = useState('');
 
+  // Funding Routes & Project-Size Plans Dialog State
+  const [isPlansModalOpen, setIsPlansModalOpen] = useState(false);
+  const [selectedRouteKey, setSelectedRouteKey] = useState<'govt' | 'bank' | 'inv'>('bank');
+
   React.useEffect(() => {
     // Pre-warm backend server silently on page load
     const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://dpr-0eje.onrender.com';
@@ -1089,170 +1093,512 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
 
 
 
-      {/* 9.5 COMPLETE DPR PRICING SECTION (FROM dpr-pricing-page 5.html) */}
-      <section id="pricing" style={{ padding: '100px 24px', background: 'linear-gradient(180deg, #F4FBFC 0%, #FFFFFF 46%)', borderTop: '1px solid rgba(0, 0, 0, 0.08)', position: 'relative', zIndex: 1 }}>
+      {/* 9.5 FUNDING ROUTES & PROJECT-SIZE DPR PLANS SECTION (FROM vkf-funding-plans.html) */}
+      <section id="pricing" style={{ padding: '90px 24px 100px', background: 'linear-gradient(180deg, #F4FBFC 0%, #FFFFFF 46%)', borderTop: '1px solid rgba(0, 0, 0, 0.08)', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
           
-          {/* HERO HEADER */}
-          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+          {/* SECTION HEAD */}
+          <div style={{ textAlign: 'center', marginBottom: '44px' }}>
             <h2 style={{ fontSize: '3rem', fontWeight: 700, color: '#1D1D1F', letterSpacing: '-0.03em', margin: 0, lineHeight: 1.15 }}>
-              Choose the DPR that fits your funding need
+              Choose your <em style={{ fontStyle: 'normal', color: '#FF7A00' }}>funding route</em>
             </h2>
-            <p style={{ fontSize: '1.15rem', color: '#66798A', marginTop: '14px', maxWidth: '720px', margin: '14px auto 0', lineHeight: 1.6 }}>
-              Build professional Detailed Project Reports with financial projections, funding analysis and lender/investor-ready documentation.
+            <p style={{ fontSize: '1.12rem', color: '#515154', marginTop: '14px', maxWidth: '640px', margin: '14px auto 0', lineHeight: 1.55 }}>
+              Select how you plan to raise capital for your project. On the next screen, pick a DPR plan sized for your project.
             </p>
+            <div style={{ display: 'inline-flex', flexWrap: 'wrap', justifyContent: 'center', gap: '6px 12px', alignItems: 'center', background: '#123B4A', color: '#FFFFFF', borderRadius: '9999px', padding: '10px 24px', marginTop: '24px', fontSize: '0.82rem', fontWeight: 700 }}>
+              <span>3 Funding Routes</span> <i style={{ fontStyle: 'normal', opacity: 0.6 }}>•</i> <span>Prices start at ₹3,999</span>
+            </div>
           </div>
 
-          {/* 4 PLAN TIER CARDS GRID */}
-          <div className="pricing-grid-responsive" style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: '20px',
-            alignItems: 'stretch',
-            marginBottom: '72px'
-          }}>
+          {/* 3 ROUTE CARDS GRID */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '28px', alignItems: 'stretch' }}>
+            {[
+              {
+                id: 'govt' as const,
+                label: 'Govt Schemes',
+                tag: 'GOVT SCHEMES & SUBSIDIES',
+                title: 'PMEGP, PMFME & State Policies',
+                accentColor: '#008C95',
+                bgSoft: '#F0FDFA',
+                borderSoft: '#CCFBF1',
+                btnGradient: 'linear-gradient(135deg, #008C95 0%, #006F78 100%)',
+                icon: 'fa-landmark',
+                desc: 'For entrepreneurs applying for government grants, margin money, or capital subsidies.',
+                checks: [
+                  'Scheme-compliant DPR format & layout',
+                  'Subsidy eligibility & margin money breakup',
+                  'Lender & nodal agency submission ready',
+                  'Detailed 5–10 year financial projections'
+                ],
+                projectSizeText: 'Project sizes from ₹5L to ₹25Cr+',
+                modalTitle: 'Govt Scheme & Subsidy DPR Plans',
+                prices: { entry: 3999, core: 7999, team: 14999 }
+              },
+              {
+                id: 'bank' as const,
+                label: 'Bank Loans',
+                tag: 'BANK & NBFC LOANS',
+                title: 'Term Loan & Working Capital',
+                accentColor: '#FF7A00',
+                bgSoft: '#FFF7ED',
+                borderSoft: '#FFEDD5',
+                btnGradient: 'linear-gradient(135deg, #FF7A00 0%, #EA580C 100%)',
+                icon: 'fa-building-columns',
+                desc: 'For businesses seeking debt financing from public, private, or co-operative banks.',
+                checks: [
+                  'Bankable DPR with Credit Appraisal norms',
+                  'DSCR, DE ratio & Tandon Committee checks',
+                  '36-month cash flow & CMA-style schedules',
+                  'IRR, NPV, BEP & sensitivity analysis'
+                ],
+                projectSizeText: 'Project sizes from ₹5L to ₹25Cr+',
+                modalTitle: 'Bank & NBFC Loan DPR Plans',
+                prices: { entry: 3999, core: 7999, team: 14999 }
+              },
+              {
+                id: 'inv' as const,
+                label: 'Investor Pitch',
+                tag: 'INVESTOR FUNDING',
+                title: 'Pitch DPR & Equity Expansion',
+                accentColor: '#0071E3',
+                bgSoft: '#F0F7FF',
+                borderSoft: '#D0E3FF',
+                btnGradient: 'linear-gradient(135deg, #0071E3 0%, #005BB5 100%)',
+                icon: 'fa-chart-line',
+                desc: 'For startups & MSMEs pitching to angel investors, VC funds, or strategic partners.',
+                checks: [
+                  'Investor-grade executive summary & deck',
+                  'Unit economics, CAC & LTV projections',
+                  'Valuation benchmarks & cap table summary',
+                  'Use of funds & exit strategy outline'
+                ],
+                projectSizeText: 'Project sizes from ₹5L to ₹25Cr+',
+                modalTitle: 'Investor Pitch DPR Plans',
+                prices: { entry: 4999, core: 9999, team: 19999 }
+              }
+            ].map((route) => (
+              <div
+                key={route.id}
+                style={{
+                  background: '#FFFFFF',
+                  border: `1.5px solid ${route.borderSoft}`,
+                  borderRadius: '24px',
+                  padding: '32px 28px 28px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.04)',
+                  transition: 'all 0.3s ease',
+                  position: 'relative',
+                }}
+              >
+                <div>
+                  {/* Icon Badge & Tag */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: route.bgSoft, border: `1px solid ${route.borderSoft}`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: route.accentColor, fontSize: '1.25rem' }}>
+                      <i className={`fas ${route.icon}`} />
+                    </div>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: route.accentColor, background: route.bgSoft, padding: '4px 12px', borderRadius: '9999px', border: `1px solid ${route.borderSoft}` }}>
+                      {route.tag}
+                    </span>
+                  </div>
 
-            {/* CARD 2: ENTRY */}
-            <div style={{
-              background: 'linear-gradient(180deg, #FFFFFF 0%, #FBFEFE 100%)',
-              border: '1px solid #D8E3E8',
-              borderTop: '4px solid #22A6B3',
-              borderRadius: '18px',
-              padding: '24px 20px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              boxShadow: '0 5px 16px rgba(0, 65, 80, 0.04)'
-            }}>
-              <div>
-                <h3 style={{ margin: '0 0 6px 0', fontSize: '1.25rem', color: '#102536', fontWeight: 800 }}>Entry</h3>
-                <div style={{ color: '#66798A', fontSize: '0.78rem', minHeight: '34px', lineHeight: 1.4, fontWeight: 500 }}>Early-stage projects</div>
-                <div style={{ display: 'inline-block', padding: '6px 12px', borderRadius: '10px', background: '#E5F8F7', color: '#007B86', fontWeight: 900, fontSize: '1.6rem', marginTop: '16px', marginBottom: '8px' }}>
-                  ₹3,999 <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#66798A' }}>/ DPR</span>
+                  <h3 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#123B4A', margin: '0 0 10px 0', lineHeight: 1.25 }}>
+                    {route.title}
+                  </h3>
+
+                  <p style={{ fontSize: '0.88rem', color: '#64748B', lineHeight: 1.5, marginBottom: '22px' }}>
+                    {route.desc}
+                  </p>
+
+                  {/* Checklist */}
+                  <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px 0', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    {route.checks.map((chk, idx) => (
+                      <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.84rem', color: '#334155', lineHeight: 1.4 }}>
+                        <i className="fas fa-check-circle" style={{ color: route.accentColor, marginTop: '3px', flexShrink: 0, fontSize: '0.9rem' }} />
+                        <span>{chk}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <p style={{ fontSize: '0.78rem', color: '#66798A', lineHeight: 1.5, margin: '8px 0 16px' }}>A standard DPR for early-stage projects and smaller funding requirements.</p>
-                <button onClick={() => { setAuthView('register'); scrollToAuth(); }} className="apple-btn-secondary" style={{ width: '100%', padding: '0.7rem', fontSize: '0.86rem', justifyContent: 'center', borderRadius: '10px' }}>Create DPR</button>
-              </div>
-              <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '14px', marginTop: '16px' }}>
-                <strong style={{ fontSize: '0.7rem', color: '#164E5B', letterSpacing: '0.4px', textTransform: 'uppercase' }}>INCLUDES</strong>
-                <ul style={{ padding: 0, margin: '8px 0 0 0', listStyle: 'none', fontSize: '0.78rem', color: '#435B67' }}>
-                  {['Standard DPR structure', '1 DPR', 'Basic support', 'Business / project profile', 'Executive summary', 'Market & project overview', 'Basic financial projections', 'Cost & funding requirement', 'Implementation plan', 'Basic risk assessment'].map((item, idx) => (
-                    <li key={idx} style={{ margin: '6px 0', paddingLeft: '16px', position: 'relative' }}>
-                      <span style={{ position: 'absolute', left: 0, color: '#008C95', fontWeight: 900 }}>✓</span> {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
 
-            {/* CARD 3: CORE (MOST USED FEATURED) */}
-            <div style={{
-              background: 'linear-gradient(180deg, #FFFFFF 0%, #FBFEFE 100%)',
-              border: '2px solid #008C95',
-              borderTop: '4px solid #3488D0',
-              borderRadius: '18px',
-              padding: '24px 20px',
-              position: 'relative',
-              boxShadow: '0 12px 30px rgba(0, 77, 91, 0.12)',
-              transform: 'scale(1.03)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between'
-            }}>
-              <div style={{ position: 'absolute', top: '-13px', left: '18px', background: '#008C95', color: '#FFFFFF', padding: '4px 12px', borderRadius: '9999px', fontSize: '0.68rem', fontWeight: 900, letterSpacing: '0.5px' }}>
-                MOST USED
-              </div>
-              <div>
-                <h3 style={{ margin: '0 0 6px 0', fontSize: '1.25rem', color: '#102536', fontWeight: 800 }}>Core</h3>
-                <div style={{ color: '#66798A', fontSize: '0.78rem', minHeight: '34px', lineHeight: 1.4, fontWeight: 500 }}>Growing businesses</div>
-                <div style={{ display: 'inline-block', padding: '6px 12px', borderRadius: '10px', background: '#EAF3FF', color: '#216DA9', fontWeight: 900, fontSize: '1.6rem', marginTop: '16px', marginBottom: '8px' }}>
-                  ₹7,999 <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#66798A' }}>/ DPR</span>
+                {/* Card Footer Action */}
+                <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '20px', marginTop: '12px' }}>
+                  <div style={{ fontSize: '0.78rem', color: '#64748B', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                    <span>Project size range</span>
+                    <strong style={{ color: '#123B4A', fontWeight: 800 }}>₹5L to ₹25Cr+</strong>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setSelectedRouteKey(route.id);
+                      setIsPlansModalOpen(true);
+                    }}
+                    style={{
+                      width: '100%',
+                      background: route.btnGradient,
+                      color: '#FFFFFF',
+                      border: 'none',
+                      borderRadius: '12px',
+                      padding: '0.85rem 1.4rem',
+                      fontWeight: 800,
+                      fontSize: '0.92rem',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.6rem',
+                      boxShadow: `0 8px 20px ${route.accentColor}33`,
+                      transition: 'all 0.25s ease',
+                    }}
+                  >
+                    View Plans by Project Size <i className="fas fa-arrow-right" />
+                  </button>
                 </div>
-                <p style={{ fontSize: '0.78rem', color: '#66798A', lineHeight: 1.5, margin: '8px 0 16px' }}>A complete DPR with projections and funding analysis for growing businesses.</p>
-                <button onClick={() => { setAuthView('register'); scrollToAuth(); }} className="apple-btn-primary" style={{ width: '100%', padding: '0.7rem', fontSize: '0.86rem', justifyContent: 'center', borderRadius: '10px' }}>Create DPR</button>
               </div>
-              <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '14px', marginTop: '16px' }}>
-                <strong style={{ fontSize: '0.7rem', color: '#164E5B', letterSpacing: '0.4px', textTransform: 'uppercase' }}>INCLUDES</strong>
-                <ul style={{ padding: 0, margin: '8px 0 0 0', listStyle: 'none', fontSize: '0.78rem', color: '#435B67' }}>
-                  {['Complete DPR', '1 DPR', 'Standard support', 'Executive summary & profile', 'Market & competitor analysis', 'Detailed financial projections', 'Revenue & expense assumptions', 'Funding requirement analysis', 'Break-even analysis', 'Repayment / viability analysis', 'Risk & mitigation section'].map((item, idx) => (
-                    <li key={idx} style={{ margin: '6px 0', paddingLeft: '16px', position: 'relative' }}>
-                      <span style={{ position: 'absolute', left: 0, color: '#008C95', fontWeight: 900 }}>✓</span> {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* CARD 4: TEAM */}
-            <div style={{
-              background: 'linear-gradient(180deg, #FFFFFF 0%, #FBFEFE 100%)',
-              border: '1px solid #D8E3E8',
-              borderTop: '4px solid #0B9B86',
-              borderRadius: '18px',
-              padding: '24px 20px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              boxShadow: '0 5px 16px rgba(0, 65, 80, 0.04)'
-            }}>
-              <div>
-                <h3 style={{ margin: '0 0 6px 0', fontSize: '1.25rem', color: '#102536', fontWeight: 800 }}>Team</h3>
-                <div style={{ color: '#66798A', fontSize: '0.78rem', minHeight: '34px', lineHeight: 1.4, fontWeight: 500 }}>Growth-stage businesses & MSMEs</div>
-                <div style={{ display: 'inline-block', padding: '6px 12px', borderRadius: '10px', background: '#E4F8F1', color: '#08785F', fontWeight: 900, fontSize: '1.4rem', marginTop: '16px', marginBottom: '8px' }}>
-                  Custom Scope
-                </div>
-                <p style={{ fontSize: '0.78rem', color: '#66798A', lineHeight: 1.5, margin: '8px 0 16px' }}>Advanced DPR depth with detailed financial analysis and funding requirement analysis.</p>
-                <button onClick={scrollToAuth} className="apple-btn-secondary" style={{ width: '100%', padding: '0.7rem', fontSize: '0.86rem', justifyContent: 'center', borderRadius: '10px' }}>Contact Team</button>
-              </div>
-              <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '14px', marginTop: '16px' }}>
-                <strong style={{ fontSize: '0.7rem', color: '#164E5B', letterSpacing: '0.4px', textTransform: 'uppercase' }}>INCLUDES</strong>
-                <ul style={{ padding: 0, margin: '8px 0 0 0', listStyle: 'none', fontSize: '0.78rem', color: '#435B67' }}>
-                  {['Advanced DPR', '1 DPR + revisions', 'Priority support', 'Detailed project & market analysis', 'Detailed financial projections', 'Cash-flow analysis', 'Profitability & break-even analysis', 'DSCR / repayment analysis', 'Funding requirement analysis', 'Risk matrix & mitigation plan', 'Implementation milestone plan', 'Revision support'].map((item, idx) => (
-                    <li key={idx} style={{ margin: '6px 0', paddingLeft: '16px', position: 'relative' }}>
-                      <span style={{ position: 'absolute', left: 0, color: '#008C95', fontWeight: 900 }}>✓</span> {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* CARD 5: ENTERPRISE */}
-            <div style={{
-              background: 'linear-gradient(180deg, #FFFFFF 0%, #FBFEFE 100%)',
-              border: '1px solid #D8E3E8',
-              borderTop: '4px solid #7256C9',
-              borderRadius: '18px',
-              padding: '24px 20px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              boxShadow: '0 5px 16px rgba(0, 65, 80, 0.04)'
-            }}>
-              <div>
-                <h3 style={{ margin: '0 0 6px 0', fontSize: '1.25rem', color: '#102536', fontWeight: 800 }}>Enterprise</h3>
-                <div style={{ color: '#66798A', fontSize: '0.78rem', minHeight: '34px', lineHeight: 1.4, fontWeight: 500 }}>Established & large businesses</div>
-                <div style={{ display: 'inline-block', padding: '6px 12px', borderRadius: '10px', background: '#EEE9FF', color: '#6045AE', fontWeight: 900, fontSize: '1.4rem', marginTop: '16px', marginBottom: '8px' }}>
-                  Custom Scope
-                </div>
-                <p style={{ fontSize: '0.78rem', color: '#66798A', lineHeight: 1.5, margin: '8px 0 16px' }}>Custom DPR depth, detailed projections and analysis based on project scope.</p>
-                <button onClick={scrollToAuth} className="apple-btn-secondary" style={{ width: '100%', padding: '0.7rem', fontSize: '0.86rem', justifyContent: 'center', borderRadius: '10px' }}>Contact Team</button>
-              </div>
-              <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '14px', marginTop: '16px' }}>
-                <strong style={{ fontSize: '0.7rem', color: '#164E5B', letterSpacing: '0.4px', textTransform: 'uppercase' }}>INCLUDES</strong>
-                <ul style={{ padding: 0, margin: '8px 0 0 0', listStyle: 'none', fontSize: '0.78rem', color: '#435B67' }}>
-                  {['Advanced / custom DPR', 'Custom DPR scope', 'Dedicated support', '40–60+ page report structure', 'Detailed business & market analysis', '10-year financial projections', 'Detailed cash-flow analysis', 'DSCR & repayment analysis', 'BOQ / capex schedules', 'Funding & capital structure', 'Risk matrix & mitigation plan', 'Customized lender analysis'].map((item, idx) => (
-                    <li key={idx} style={{ margin: '6px 0', paddingLeft: '16px', position: 'relative' }}>
-                      <span style={{ position: 'absolute', left: 0, color: '#008C95', fontWeight: 900 }}>✓</span> {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
+            ))}
           </div>
-
         </div>
       </section>
+
+      {/* PROJECT SIZE PLANS MODAL DIALOG SHEET */}
+      {isPlansModalOpen && (
+        <div
+          onClick={() => setIsPlansModalOpen(false)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(15, 23, 42, 0.65)',
+            backdropFilter: 'blur(5px)',
+            WebkitBackdropFilter: 'blur(5px)',
+            zIndex: 10000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1rem',
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: '#F8FAFC',
+              borderRadius: '24px',
+              width: 'min(1200px, 100%)',
+              maxHeight: '92vh',
+              overflowY: 'auto',
+              padding: '2rem 2.2rem 2.2rem',
+              boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.3)',
+              position: 'relative',
+              border: '1px solid #E2E8F0',
+            }}
+          >
+            {/* Modal Close Button */}
+            <button
+              onClick={() => setIsPlansModalOpen(false)}
+              aria-label="Close dialog"
+              style={{
+                position: 'absolute',
+                top: '1.2rem',
+                right: '1.2rem',
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                background: '#FFFFFF',
+                border: '1.5px solid #CBD5E1',
+                color: '#475569',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1rem',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <i className="fas fa-times" />
+            </button>
+
+            {/* Modal Header & Route Switcher Tabs */}
+            <div style={{ marginBottom: '1.8rem', paddingRight: '2.5rem' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem', marginBottom: '1rem' }}>
+                {[
+                  { id: 'govt' as const, label: 'Govt Schemes', icon: 'fa-landmark', accentColor: '#008C95', bgSoft: '#F0FDFA', modalTitle: 'Govt Scheme & Subsidy DPR Plans' },
+                  { id: 'bank' as const, label: 'Bank Loans', icon: 'fa-building-columns', accentColor: '#FF7A00', bgSoft: '#FFF7ED', modalTitle: 'Bank & NBFC Loan DPR Plans' },
+                  { id: 'inv' as const, label: 'Investor Pitch', icon: 'fa-chart-line', accentColor: '#0071E3', bgSoft: '#F0F7FF', modalTitle: 'Investor Pitch DPR Plans' }
+                ].map((rt) => {
+                  const isActive = selectedRouteKey === rt.id;
+                  return (
+                    <button
+                      key={rt.id}
+                      onClick={() => setSelectedRouteKey(rt.id)}
+                      style={{
+                        background: isActive ? rt.bgSoft : '#FFFFFF',
+                        border: isActive ? `2px solid ${rt.accentColor}` : '1.5px solid #CBD5E1',
+                        color: isActive ? rt.accentColor : '#64748B',
+                        padding: '0.45rem 1.1rem',
+                        borderRadius: '9999px',
+                        fontSize: '0.82rem',
+                        fontWeight: 800,
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        transition: 'all 0.2s ease',
+                      }}
+                    >
+                      <i className={`fas ${rt.icon}`} style={{ fontSize: '0.8rem' }} />
+                      {rt.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <h3 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#123B4A', margin: '0 0 6px 0', lineHeight: 1.2 }}>
+                {selectedRouteKey === 'govt' ? 'Govt Scheme & Subsidy DPR Plans' : selectedRouteKey === 'bank' ? 'Bank & NBFC Loan DPR Plans' : 'Investor Pitch DPR Plans'}
+              </h3>
+              <p style={{ fontSize: '0.9rem', color: '#64748B', margin: 0 }}>
+                Prices are per DPR report. Choose the plan that matches your project investment size:
+              </p>
+            </div>
+
+            {/* 4 PROJECT-SIZE PLANS GRID */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.2rem', alignItems: 'stretch' }}>
+              {[
+                {
+                  id: 'entry',
+                  name: 'Entry',
+                  sub: 'Early-stage projects',
+                  size: '₹5L – ₹25L',
+                  cta: 'Create DPR',
+                  desc: 'A standard DPR for early-stage projects and smaller funding requirements.',
+                  inc: [
+                    'Standard DPR structure',
+                    '1 DPR',
+                    'Basic support',
+                    'Business / project profile',
+                    'Executive summary',
+                    'Market & project overview',
+                    'Basic financial projections',
+                    'Cost & funding requirement',
+                    'Implementation plan',
+                    'Basic risk assessment'
+                  ]
+                },
+                {
+                  id: 'core',
+                  name: 'Core',
+                  sub: 'Growing businesses',
+                  size: '₹25L – ₹1Cr',
+                  cta: 'Create DPR',
+                  desc: 'A complete DPR with projections and funding analysis for growing businesses.',
+                  inc: [
+                    'Complete DPR',
+                    '1 DPR',
+                    'Standard support',
+                    'Executive summary & profile',
+                    'Market & competitor analysis',
+                    'Detailed financial projections',
+                    'Revenue & expense assumptions',
+                    'Funding requirement analysis',
+                    'Break-even analysis',
+                    'Repayment / viability analysis',
+                    'Risk & mitigation section'
+                  ]
+                },
+                {
+                  id: 'team',
+                  name: 'Team',
+                  sub: 'Growth-stage businesses & MSMEs',
+                  size: '₹1Cr – ₹5Cr',
+                  cta: 'Create Advanced DPR',
+                  badge: 'MOST USED',
+                  desc: 'Advanced DPR with detailed financial analysis and funding requirement analysis.',
+                  inc: [
+                    'Advanced DPR',
+                    '1 DPR + revisions',
+                    'Priority support',
+                    'Detailed project & market analysis',
+                    'Detailed financial projections',
+                    'Cash-flow analysis',
+                    'Profitability & break-even analysis',
+                    'DSCR / repayment analysis',
+                    'Funding requirement analysis',
+                    'Risk matrix & mitigation plan',
+                    'Implementation milestone plan',
+                    'Revision support'
+                  ]
+                },
+                {
+                  id: 'ent',
+                  name: 'Enterprise',
+                  sub: 'Established & large businesses',
+                  size: '₹5Cr – ₹25Cr+',
+                  cta: 'Contact Team',
+                  contact: true,
+                  desc: 'Custom DPR depth, detailed projections and analysis based on project scope.',
+                  inc: [
+                    'Advanced / custom DPR',
+                    'Custom DPR scope',
+                    'Dedicated support',
+                    '40–60+ page report structure',
+                    'Detailed business & market analysis',
+                    '10-year financial projections',
+                    'Detailed cash-flow analysis',
+                    'DSCR & repayment analysis',
+                    'BOQ / capex schedules',
+                    'Funding & capital structure',
+                    'Risk matrix & mitigation plan',
+                    'Customized lender analysis'
+                  ]
+                }
+              ].map((plan) => {
+                const routePrices: Record<string, Record<string, number>> = {
+                  govt: { entry: 3999, core: 7999, team: 14999 },
+                  bank: { entry: 3999, core: 7999, team: 14999 },
+                  inv: { entry: 4999, core: 9999, team: 19999 },
+                };
+                const accentColors: Record<string, string> = {
+                  govt: '#008C95',
+                  bank: '#FF7A00',
+                  inv: '#0071E3',
+                };
+                const bgSofts: Record<string, string> = {
+                  govt: '#F0FDFA',
+                  bank: '#FFF7ED',
+                  inv: '#F0F7FF',
+                };
+                const borderSofts: Record<string, string> = {
+                  govt: '#CCFBF1',
+                  bank: '#FFEDD5',
+                  inv: '#D0E3FF',
+                };
+
+                const accentColor = accentColors[selectedRouteKey];
+                const bgSoft = bgSofts[selectedRouteKey];
+                const borderSoft = borderSofts[selectedRouteKey];
+                const planPrice = routePrices[selectedRouteKey]?.[plan.id];
+                const isFeatured = plan.id === 'team';
+
+                return (
+                  <div
+                    key={plan.id}
+                    style={{
+                      background: '#FFFFFF',
+                      border: isFeatured ? `2.5px solid ${accentColor}` : '1.5px solid #E2E8F0',
+                      borderTop: `4px solid ${isFeatured ? accentColor : plan.id === 'entry' ? '#36B5B8' : plan.id === 'core' ? '#0071E3' : '#7256C9'}`,
+                      borderRadius: '20px',
+                      padding: '1.6rem 1.4rem 1.4rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      position: 'relative',
+                      boxShadow: isFeatured ? `0 12px 30px ${accentColor}25` : '0 4px 15px rgba(0, 0, 0, 0.03)',
+                    }}
+                  >
+                    {plan.badge && (
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '-13px',
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          background: accentColor,
+                          color: '#FFFFFF',
+                          padding: '3px 14px',
+                          borderRadius: '9999px',
+                          fontSize: '0.68rem',
+                          fontWeight: 900,
+                          letterSpacing: '0.06em',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {plan.badge}
+                      </div>
+                    )}
+
+                    <div>
+                      <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#123B4A', marginBottom: '2px' }}>
+                        {plan.name}
+                      </div>
+                      <div style={{ fontSize: '0.78rem', color: '#64748B', fontWeight: 600, minHeight: '32px', marginBottom: '12px' }}>
+                        {plan.sub}
+                      </div>
+
+                      {/* Price Badge */}
+                      <div style={{ marginBottom: '12px' }}>
+                        {plan.contact ? (
+                          <div style={{ display: 'inline-block', padding: '6px 14px', borderRadius: '12px', background: '#F1F5F9', color: '#334155', fontWeight: 800, fontSize: '1.25rem' }}>
+                            Custom Scope
+                          </div>
+                        ) : (
+                          <div style={{ display: 'inline-flex', alignItems: 'baseline', gap: '4px', padding: '6px 14px', borderRadius: '12px', background: bgSoft, border: `1px solid ${borderSoft}`, color: accentColor, fontWeight: 900, fontSize: '1.45rem' }}>
+                            ₹{planPrice?.toLocaleString('en-IN')}
+                            <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748B' }}>/ DPR</span>
+                          </div>
+                        )}
+                        <div style={{ fontSize: '0.75rem', color: '#94A3B8', fontWeight: 600, marginTop: '6px' }}>
+                          For projects of <strong style={{ color: '#123B4A' }}>{plan.size}</strong>
+                        </div>
+                      </div>
+
+                      <p style={{ fontSize: '0.78rem', color: '#64748B', lineHeight: 1.45, marginBottom: '16px', minHeight: '40px' }}>
+                        {plan.desc}
+                      </p>
+
+                      {/* CTA Button */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsPlansModalOpen(false);
+                          if (plan.contact) {
+                            scrollToAuth();
+                          } else {
+                            setAuthView('register');
+                            scrollToAuth();
+                          }
+                        }}
+                        style={{
+                          width: '100%',
+                          background: plan.contact ? '#F1F5F9' : isFeatured ? `linear-gradient(135deg, ${accentColor} 0%, #006F78 100%)` : 'linear-gradient(135deg, #123B4A 0%, #006F78 100%)',
+                          color: plan.contact ? '#1E293B' : '#FFFFFF',
+                          border: plan.contact ? '1.5px solid #CBD5E1' : 'none',
+                          borderRadius: '12px',
+                          padding: '0.75rem 1rem',
+                          fontWeight: 800,
+                          fontSize: '0.86rem',
+                          cursor: 'pointer',
+                          marginBottom: '16px',
+                          boxShadow: !plan.contact && isFeatured ? `0 6px 18px ${accentColor}35` : 'none',
+                          transition: 'all 0.2s ease',
+                        }}
+                      >
+                        {plan.cta}
+                      </button>
+                    </div>
+
+                    {/* Includes List */}
+                    <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '14px', marginTop: '10px' }}>
+                      <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#008C95', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>
+                        INCLUDES
+                      </div>
+                      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        {plan.inc.map((item, idx) => (
+                          <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '0.76rem', color: '#334155', lineHeight: 1.35 }}>
+                            <i className="fas fa-check" style={{ color: '#008C95', fontSize: '0.7rem', marginTop: '3px', flexShrink: 0 }} />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 10. GET IN TOUCH & AUTHENTICATION SECTION */}
       <section id="contact" style={{ padding: '100px 24px', background: '#F5F5F7', borderTop: '1px solid rgba(0, 0, 0, 0.08)', position: 'relative', zIndex: 1 }}>
