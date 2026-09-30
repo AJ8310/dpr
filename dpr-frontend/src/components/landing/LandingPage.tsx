@@ -1095,21 +1095,6 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
           
           {/* HERO HEADER */}
           <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-            <span style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              color: '#008C95',
-              fontWeight: 800,
-              fontSize: '0.82rem',
-              background: '#DFF8F6',
-              border: '1px solid #B7ECE8',
-              padding: '6px 16px',
-              borderRadius: '9999px',
-              marginBottom: '16px'
-            }}>
-              ✦ Simple, transparent DPR pricing
-            </span>
             <h2 style={{ fontSize: '3rem', fontWeight: 700, color: '#1D1D1F', letterSpacing: '-0.03em', margin: 0, lineHeight: 1.15 }}>
               Choose the DPR that fits your funding need
             </h2>
