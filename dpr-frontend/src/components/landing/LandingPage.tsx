@@ -1434,7 +1434,6 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                   desc: 'Custom DPR depth, detailed projections and analysis based on project scope.',
                   inc: [
                     'Dedicated support',
-                    '40–60+ page report structure',
                     'Detailed business & market analysis',
                     '10-year financial projections',
                     'Detailed cash-flow analysis',
