@@ -479,13 +479,13 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                     alt="Vision Karnataka Foundation Logo"
                     style={{
                       position: 'absolute',
-                      bottom: '24px',
-                      right: '24px',
+                      bottom: '18px',
+                      right: '12px',
                       zIndex: 15,
-                      height: '76px',
+                      height: '92px',
                       width: 'auto',
                       objectFit: 'contain',
-                      filter: 'drop-shadow(0 4px 16px rgba(0, 0, 0, 0.65))',
+                      filter: 'drop-shadow(0 4px 18px rgba(0, 0, 0, 0.75))',
                       pointerEvents: 'none'
                     }}
                   />
