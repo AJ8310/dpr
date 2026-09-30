@@ -24,9 +24,14 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
   const [contactEmail, setContactEmail] = useState('');
   const [contactPhone, setContactPhone] = useState('');
 
-  // Auth Pop-Up Modal State (Triggered when user clicks 'View Plans by Project Size' / plan CTAs)
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  // Auth Pop-Up Modal State (Auto-opens on first visit; re-triggers on 'View Plans' if lead not captured)
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(true);
   const [popupAuthMode, setPopupAuthMode] = useState<'login' | 'register'>('login');
+
+  const isLeadCaptured = () => {
+    if (typeof window === 'undefined') return false;
+    return sessionStorage.getItem('dpr_lead_captured') === 'true' || !!sessionStorage.getItem('dpr_session');
+  };
 
   // Funding Routes & Project-Size Plans Dialog State
   const [isPlansModalOpen, setIsPlansModalOpen] = useState(false);
@@ -1264,7 +1269,11 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                     onClick={() => {
                       setSelectedRouteKey(route.id);
                       saveSelection(route.id);
-                      setIsAuthModalOpen(true);
+                      if (!isLeadCaptured()) {
+                        setIsAuthModalOpen(true);
+                      } else {
+                        setIsPlansModalOpen(true);
+                      }
                     }}
                     style={{
                       width: '100%',
@@ -1741,7 +1750,9 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             {popupAuthMode === 'login' ? (
               <LoginCard
                 onLoginSuccess={(sess) => {
+                  sessionStorage.setItem('dpr_lead_captured', 'true');
                   setIsAuthModalOpen(false);
+                  setIsPlansModalOpen(true);
                   onLoginSuccess(sess);
                 }}
                 onSwitchToRegister={() => setPopupAuthMode('register')}
@@ -1749,7 +1760,9 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             ) : (
               <RegisterCard
                 onRegisterSuccess={(sess) => {
+                  sessionStorage.setItem('dpr_lead_captured', 'true');
                   setIsAuthModalOpen(false);
+                  setIsPlansModalOpen(true);
                   onLoginSuccess(sess);
                 }}
                 onSwitchToLogin={() => setPopupAuthMode('login')}
