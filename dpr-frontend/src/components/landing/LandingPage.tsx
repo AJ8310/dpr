@@ -24,8 +24,8 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
   const [contactEmail, setContactEmail] = useState('');
   const [contactPhone, setContactPhone] = useState('');
 
-  // Auth Pop-Up Modal State (Auto-opens on first visit; re-triggers on 'View Plans' if lead not captured)
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(true);
+  // Auth Pop-Up Modal State (Opens when clicking 'View Plans by Project Size' / 'Create My DPR')
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [popupAuthMode, setPopupAuthMode] = useState<'login' | 'register'>('login');
 
   const isLeadCaptured = () => {
@@ -1269,11 +1269,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                     onClick={() => {
                       setSelectedRouteKey(route.id);
                       saveSelection(route.id);
-                      if (!isLeadCaptured()) {
-                        setIsAuthModalOpen(true);
-                      } else {
-                        setIsPlansModalOpen(true);
-                      }
+                      setIsAuthModalOpen(true);
                     }}
                     style={{
                       width: '100%',
