@@ -318,26 +318,8 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         <div className="hero-grid" style={{ maxWidth: '1400px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1.35fr', gap: '48px', alignItems: 'center' }}>
           
           {/* Left Column Copy */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             
-            {/* Speed Badge */}
-            <div style={{
-              display: 'inline-flex',
-              alignSelf: 'flex-start',
-              alignItems: 'center',
-              gap: '10px',
-              padding: '6px 16px',
-              background: 'rgba(0, 113, 227, 0.08)',
-              border: '1px solid rgba(0, 113, 227, 0.18)',
-              borderRadius: '9999px',
-              fontSize: '0.85rem',
-              fontWeight: 500,
-              backdropFilter: 'blur(10px)'
-            }}>
-              <span style={{ color: '#86868B', textDecoration: 'line-through' }}>3 weeks manual prep</span>
-              <span style={{ color: '#0071E3', fontWeight: 600 }}>⚡ &lt; 10 mins flow</span>
-            </div>
-
             {/* Main Headline */}
             <h1 style={{
               fontSize: '3.6rem',
@@ -348,6 +330,25 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             }}>
               Build Your Funding-Ready DPR, Smarter.
             </h1>
+
+            {/* Speed Badge */}
+            <div style={{
+              display: 'inline-flex',
+              alignSelf: 'flex-start',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '8px 20px',
+              background: 'rgba(0, 113, 227, 0.08)',
+              border: '1px solid rgba(0, 113, 227, 0.18)',
+              borderRadius: '9999px',
+              fontSize: '0.98rem',
+              fontWeight: 600,
+              backdropFilter: 'blur(10px)',
+              margin: '2px 0'
+            }}>
+              <span style={{ color: '#86868B', textDecoration: 'line-through', fontSize: '0.96rem' }}>3 weeks manual prep</span>
+              <span style={{ color: '#0071E3', fontWeight: 700, fontSize: '1.02rem' }}>⚡ &lt; 10 mins flow</span>
+            </div>
 
             {/* Subtitle */}
             <p style={{ fontSize: '1.18rem', color: '#515154', lineHeight: 1.5, maxWidth: '560px', fontWeight: 400 }}>
