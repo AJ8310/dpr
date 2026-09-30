@@ -147,7 +147,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
     designation: '',
     place: '',
     declaration_date: new Date().toISOString().split('T')[0],
-    dpr_depth: 'enterprise',
+    dpr_depth: 'entry',
     associated_with_vkf: false
   });
 
@@ -240,8 +240,17 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       });
   }, []);
 
-  // Synchronize formData.dpr_type whenever initialService changes from ServiceSelectionView
+  // Synchronize formData.dpr_type and dpr_depth whenever initialService changes or on mount
   React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedPlan = sessionStorage.getItem('dpr_selected_plan');
+      if (storedPlan) {
+        setFormData((prev) => ({
+          ...prev,
+          dpr_depth: storedPlan,
+        }));
+      }
+    }
     if (initialService) {
       let canonicalType = 'Bank Loan DPR';
       if (initialService.includes('Govt') || initialService.includes('Subsidy') || initialService.includes('Subsidies')) {
@@ -765,7 +774,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       setGenerating(true);
       setStepName('Initializing Razorpay Order...');
 
-      const orderData = await createRazorpayOrder(undefined, undefined, formData.dpr_type, formData.dpr_depth);
+      const effectiveDepth = (typeof window !== 'undefined' && sessionStorage.getItem('dpr_selected_plan')) || formData.dpr_depth || 'entry';
+      const orderData = await createRazorpayOrder(undefined, undefined, formData.dpr_type, effectiveDepth);
       setGenerating(false);
 
       if (!orderData.success || !orderData.order_id) {
@@ -847,7 +857,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       setGenerating(true);
       setStepName('Initializing Razorpay Order...');
 
-      const orderData = await createRazorpayOrder(undefined, undefined, formData.dpr_type, formData.dpr_depth);
+      const effectiveDepth = (typeof window !== 'undefined' && sessionStorage.getItem('dpr_selected_plan')) || formData.dpr_depth || 'entry';
+      const orderData = await createRazorpayOrder(undefined, undefined, formData.dpr_type, effectiveDepth);
       setGenerating(false);
 
       if (!orderData.success || !orderData.order_id) {

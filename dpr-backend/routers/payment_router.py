@@ -57,15 +57,23 @@ def determine_dpr_price(dpr_type: Optional[str], category: Optional[str], fallba
 
     norm_cat = "entry"
     if category:
-        cat = category.lower()
-        if "core" in cat or "standard" in cat:
+        cat = category.lower().strip()
+        if cat in ["entry", "basic", "summary"]:
+            norm_cat = "entry"
+        elif cat in ["core", "standard"]:
             norm_cat = "core"
-        elif "team" in cat or "advanced" in cat:
+        elif cat in ["team", "advanced", "detailed", "comprehensive"]:
             norm_cat = "team"
-        elif "ent" in cat or "premium" in cat or "enterprise" in cat:
+        elif cat in ["ent", "enterprise", "premium"]:
             norm_cat = "ent"
         elif "entry" in cat or "basic" in cat:
             norm_cat = "entry"
+        elif "core" in cat or "standard" in cat:
+            norm_cat = "core"
+        elif "team" in cat or "advanced" in cat:
+            norm_cat = "team"
+        elif "enterprise" in cat or "premium" in cat:
+            norm_cat = "ent"
 
     price = PRICING_MATRIX.get(norm_type, {}).get(norm_cat)
     if price is not None:
