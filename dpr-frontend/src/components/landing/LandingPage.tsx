@@ -27,6 +27,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
   // Auth Pop-Up Modal State (Opens when clicking 'View Plans by Project Size' / 'Create My DPR')
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [popupAuthMode, setPopupAuthMode] = useState<'login' | 'register'>('login');
+  const [pendingSession, setPendingSession] = useState<UserSession | null>(null);
 
   const isLeadCaptured = () => {
     if (typeof window === 'undefined') return false;
@@ -1269,7 +1270,11 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                     onClick={() => {
                       setSelectedRouteKey(route.id);
                       saveSelection(route.id);
-                      setIsAuthModalOpen(true);
+                      if (isLeadCaptured()) {
+                        setIsPlansModalOpen(true);
+                      } else {
+                        setIsAuthModalOpen(true);
+                      }
                     }}
                     style={{
                       width: '100%',
@@ -1584,11 +1589,11 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                         onClick={() => {
                           saveSelection(selectedRouteKey, plan.id);
                           setIsPlansModalOpen(false);
-                          if (plan.contact) {
-                            scrollToAuth();
+                          const activeSess = pendingSession || (typeof window !== 'undefined' && sessionStorage.getItem('dpr_session') ? JSON.parse(sessionStorage.getItem('dpr_session')!) : null);
+                          if (activeSess) {
+                            onLoginSuccess(activeSess);
                           } else {
-                            setAuthView('register');
-                            scrollToAuth();
+                            setIsAuthModalOpen(true);
                           }
                         }}
                         style={{
@@ -1747,9 +1752,10 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               <LoginCard
                 onLoginSuccess={(sess) => {
                   sessionStorage.setItem('dpr_lead_captured', 'true');
+                  sessionStorage.setItem('dpr_session', JSON.stringify(sess));
+                  setPendingSession(sess);
                   setIsAuthModalOpen(false);
                   setIsPlansModalOpen(true);
-                  onLoginSuccess(sess);
                 }}
                 onSwitchToRegister={() => setPopupAuthMode('register')}
               />
@@ -1757,9 +1763,10 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               <RegisterCard
                 onRegisterSuccess={(sess) => {
                   sessionStorage.setItem('dpr_lead_captured', 'true');
+                  sessionStorage.setItem('dpr_session', JSON.stringify(sess));
+                  setPendingSession(sess);
                   setIsAuthModalOpen(false);
                   setIsPlansModalOpen(true);
-                  onLoginSuccess(sess);
                 }}
                 onSwitchToLogin={() => setPopupAuthMode('login')}
               />
