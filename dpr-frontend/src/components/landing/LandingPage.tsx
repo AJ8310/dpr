@@ -1264,7 +1264,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                     onClick={() => {
                       setSelectedRouteKey(route.id);
                       saveSelection(route.id);
-                      setIsPlansModalOpen(true);
+                      setIsAuthModalOpen(true);
                     }}
                     style={{
                       width: '100%',
