@@ -233,11 +233,13 @@ export async function getPaymentConfig() {
   return response.data;
 }
 
-export async function createRazorpayOrder(amount: number = 1, projectId?: string) {
+export async function createRazorpayOrder(amount?: number, projectId?: string, dprType?: string, category?: string) {
   const response = await api.post('/api/payment/create-order', {
     amount,
     currency: 'INR',
-    project_id: projectId
+    project_id: projectId,
+    dpr_type: dprType,
+    category: category
   });
   return response.data;
 }

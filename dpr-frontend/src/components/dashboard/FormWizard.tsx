@@ -765,7 +765,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       setGenerating(true);
       setStepName('Initializing Razorpay Order...');
 
-      const orderData = await createRazorpayOrder(1);
+      const orderData = await createRazorpayOrder(undefined, undefined, formData.dpr_type, formData.dpr_depth);
       setGenerating(false);
 
       if (!orderData.success || !orderData.order_id) {
@@ -847,7 +847,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       setGenerating(true);
       setStepName('Initializing Razorpay Order...');
 
-      const orderData = await createRazorpayOrder(1);
+      const orderData = await createRazorpayOrder(undefined, undefined, formData.dpr_type, formData.dpr_depth);
       setGenerating(false);
 
       if (!orderData.success || !orderData.order_id) {
