@@ -139,9 +139,34 @@ class DPRTemplateCompositionEngine:
         env.filters['indian_num'] = format_inr
         template = env.get_template("dpr_template.html")
 
-        # Context payload for Jinja rendering
+        depth_str = getattr(doc.dpr_depth, 'value', str(doc.dpr_depth)).lower()
+        if 'entry' in depth_str or 'basic' in depth_str or 'sum' in depth_str:
+            plan_quality_tier = "Essential / Executive Summary DPR"
+            target_page_range = "12 - 18 Pages"
+            financial_horizon = "5-Year Essential Model"
+            tier_code = "ENTRY"
+        elif 'core' in depth_str or 'standard' in depth_str:
+            plan_quality_tier = "Standard Bankable DPR"
+            target_page_range = "22 - 32 Pages"
+            financial_horizon = "5-Year Detailed Model"
+            tier_code = "CORE"
+        elif 'team' in depth_str or 'adv' in depth_str:
+            plan_quality_tier = "Advanced Institutional & Syndication DPR"
+            target_page_range = "38 - 52 Pages"
+            financial_horizon = "7-Year Extended Model"
+            tier_code = "TEAM"
+        else:
+            plan_quality_tier = "Ultra-Premium Institutional Bankable & Investor Pitch DPR"
+            target_page_range = "55 - 75+ Pages"
+            financial_horizon = "10-Year Institutional Model + BOQ + ESG"
+            tier_code = "ENTERPRISE"
+
         context = doc.model_dump()
         context["dpr_type"] = doc.dpr_type.value if hasattr(doc.dpr_type, "value") else str(doc.dpr_type)
+        context["plan_quality_tier"] = plan_quality_tier
+        context["target_page_range"] = target_page_range
+        context["financial_horizon"] = financial_horizon
+        context["plan_tier_code"] = tier_code
         context["structure"] = structure_info
         context["narratives"] = narratives
         context["diagrams"] = diagrams

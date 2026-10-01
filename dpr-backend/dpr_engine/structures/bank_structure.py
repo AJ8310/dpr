@@ -38,13 +38,12 @@ class BankDPRStructure:
             {"id": "annexures", "title": "Annexures A–F (Supporting Documents & Certificates)", "number": "28.0", "summary_include": True},
         ]
 
-        if depth == DPRDepthEnum.SUMMARY:
-            return [s for s in base_sections if s["summary_include"]]
-        elif depth == DPRDepthEnum.STANDARD:
-            return base_sections
-        elif depth == DPRDepthEnum.DETAILED:
-            # Add detailed sub-analysis subsections
-            return base_sections
+        if depth in [DPRDepthEnum.ENTRY, DPRDepthEnum.SUMMARY]:
+            return [s for s in base_sections if s.get("summary_include")]
+        elif depth in [DPRDepthEnum.CORE, DPRDepthEnum.STANDARD]:
+            return base_sections[:22]
+        elif depth == DPRDepthEnum.TEAM:
+            return base_sections[:26]
         else:
-            # Comprehensive 70-100+ pages: All sections + expanded annexures
+            # ENTERPRISE / DETAILED: Full sections + complete annexures
             return base_sections

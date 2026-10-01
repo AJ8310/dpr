@@ -10,9 +10,13 @@ class DPRTypeEnum(str, Enum):
     CORPORATE_DPR = "Corporate Enterprise DPR"
 
 class DPRDepthEnum(str, Enum):
-    SUMMARY = "summary"             # 10-15 pages
-    STANDARD = "standard"           # 20-30 pages
-    DETAILED = "detailed"           # 40-60 pages
+    ENTRY = "entry"                 # Essential / Executive Summary (12-18 pages)
+    CORE = "core"                   # Standard Bankable (22-32 pages)
+    TEAM = "team"                   # Advanced Institutional (38-52 pages)
+    ENTERPRISE = "enterprise"       # Ultra-Premium Institutional & Investor (55-75+ pages)
+    SUMMARY = "summary"
+    STANDARD = "standard"
+    DETAILED = "detailed"
 
 class IndustryCategoryEnum(str, Enum):
     MANUFACTURING = "manufacturing"
@@ -118,7 +122,7 @@ class DPRDocumentModel(BaseModel):
     created_at: str = Field(default_factory=lambda: datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     version: int = 1
     dpr_type: DPRTypeEnum = DPRTypeEnum.BANK_LOAN
-    dpr_depth: DPRDepthEnum = DPRDepthEnum.STANDARD
+    dpr_depth: DPRDepthEnum = DPRDepthEnum.CORE
     industry: IndustryCategoryEnum = IndustryCategoryEnum.MANUFACTURING
     associated_with_vkf: bool = False
 
@@ -141,14 +145,18 @@ class DPRDocumentModel(BaseModel):
     @classmethod
     def normalize_dpr_depth(cls, v):
         if not v:
-            return DPRDepthEnum.STANDARD
+            return DPRDepthEnum.CORE
         s = str(v).strip().lower()
-        if 'sum' in s:
-            return DPRDepthEnum.SUMMARY
-        elif 'det' in s or 'comp' in s:
-            return DPRDepthEnum.DETAILED
+        if 'sum' in s or 'entry' in s or 'basic' in s:
+            return DPRDepthEnum.ENTRY
+        elif 'core' in s or 'standard' in s:
+            return DPRDepthEnum.CORE
+        elif 'team' in s or 'adv' in s:
+            return DPRDepthEnum.TEAM
+        elif 'ent' in s or 'prem' in s or 'det' in s or 'comp' in s:
+            return DPRDepthEnum.ENTERPRISE
         else:
-            return DPRDepthEnum.STANDARD
+            return DPRDepthEnum.CORE
 
     @field_validator('industry', mode='before')
     @classmethod

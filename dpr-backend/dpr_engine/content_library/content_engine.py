@@ -89,11 +89,25 @@ class DPRContentEngine:
         raw_list = getattr(doc, 'raw_materials_list', None) or getattr(doc, 'boq_raw_materials', None) or []
         boq_items = [getattr(b, 'item', getattr(b, 'name', str(b))) for b in raw_list] if raw_list else ["High Grade Raw Materials"]
 
+        depth_str = getattr(doc.dpr_depth, 'value', str(doc.dpr_depth)).lower()
+        if 'entry' in depth_str or 'basic' in depth_str or 'sum' in depth_str:
+            target_paragraphs = "3 to 4 concise, focused paragraphs"
+            plan_badge = "ENTRY PLAN QUALITY TIER (ESSENTIAL EXECUTIVE SUMMARY)"
+        elif 'core' in depth_str or 'standard' in depth_str:
+            target_paragraphs = "5 to 6 detailed, bankable paragraphs"
+            plan_badge = "CORE PLAN QUALITY TIER (STANDARD BANKABLE DPR)"
+        elif 'team' in depth_str or 'adv' in depth_str:
+            target_paragraphs = "7 to 8 deep, multi-paragraph institutional narratives"
+            plan_badge = "TEAM PLAN QUALITY TIER (ADVANCED INSTITUTIONAL DPR)"
+        else:
+            target_paragraphs = "9 to 12 exhaustive, institutional-grade, multi-paragraph narratives with ISO standards, HSN codes, ESG compliance, and 10-Yr strategic roadmap"
+            plan_badge = "ENTERPRISE PLAN QUALITY TIER (ULTRA-PREMIUM INSTITUTIONAL & INVESTOR PITCH DPR)"
+
         system_instruction = (
-            "You are an expert Senior Financial Analyst and Technical DPR Author for Indian Lead Banks (SBI, Canara, HDFC) and MSME Schemes (PMEGP, SVSY, CGTMSE).\n"
-            "Generate authoritative, highly detailed, multi-paragraph bankable HTML narratives.\n"
-            "Each narrative section MUST contain 7 to 8 comprehensive, highly detailed, long paragraphs using <p><strong>Subheading Title:</strong><br>Detailed text...</p> format.\n"
-            "Include specific technical standards (ISO 9001:2015, HSN codes), financial coverage metrics, market CAGRs, and operational workflows tailored to the client business."
+            f"You are an expert Senior Financial Analyst and Technical DPR Author for Indian Lead Banks (SBI, Canara, HDFC) and MSME Schemes (PMEGP, SVSY, CGTMSE).\n"
+            f"Generate authoritative, highly detailed HTML narratives tailored for: {plan_badge}.\n"
+            f"Each narrative section MUST contain {target_paragraphs} using <p><strong>Subheading Title:</strong><br>Detailed text...</p> format.\n"
+            f"Include specific technical standards (ISO 9001:2015, HSN codes), financial coverage metrics, market CAGRs, and operational workflows tailored to the client business."
         )
 
         base_info = f"""

@@ -384,7 +384,9 @@
 
     <table class="cover-details-table">
         <tr><td class="label">Name of Enterprise:</td><td><strong>{{business_name}}</strong></td></tr>
-        <tr><td class="label">Group / Scheme Track:</td><td>{{dpr_type | default("Bank Loan & Subsidy DPR")}}</td></tr>
+        <tr><td class="label">DPR Service Type:</td><td>{{dpr_type | default("Bank Loan & Subsidy DPR")}}</td></tr>
+        <tr><td class="label">Plan Quality Tier:</td><td><strong style="color: #008C95;">{{plan_quality_tier | default("Standard Bankable DPR")}}</strong> ({{target_page_range | default("22 - 32 Pages")}})</td></tr>
+        <tr><td class="label">Financial Horizon:</td><td><strong>{{financial_horizon | default("5-Year Detailed Model")}}</strong></td></tr>
         <tr><td class="label">Legal Constitution:</td><td>{{entity_type | default("Proprietorship")}}</td></tr>
         <tr><td class="label">District & State:</td><td>{{district | default("Bengaluru")}}, {{state | default("Karnataka")}}</td></tr>
         <tr><td class="label">Total Project Cost:</td><td><strong>₹{{total_cost}}</strong></td></tr>

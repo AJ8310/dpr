@@ -24,11 +24,15 @@ class DPRStructureEngine:
 
         # Estimate target page count based on depth configuration
         page_estimates = {
-            DPRDepthEnum.SUMMARY: (10, 15),
-            DPRDepthEnum.STANDARD: (20, 30),
-            DPRDepthEnum.DETAILED: (40, 60)
+            DPRDepthEnum.ENTRY: (12, 18),
+            DPRDepthEnum.SUMMARY: (12, 18),
+            DPRDepthEnum.CORE: (22, 32),
+            DPRDepthEnum.STANDARD: (22, 32),
+            DPRDepthEnum.TEAM: (38, 52),
+            DPRDepthEnum.ENTERPRISE: (55, 75),
+            DPRDepthEnum.DETAILED: (55, 75)
         }
-        min_p, max_p = page_estimates.get(d_depth, (20, 30))
+        min_p, max_p = page_estimates.get(d_depth, (22, 32))
 
         return {
             "dpr_type": str(d_type),
