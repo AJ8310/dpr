@@ -102,7 +102,7 @@ export default function ProgressHeader({
         {/* Track Selector Dropdown */}
         <div className="track-dropdown-pill" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', background: '#FFF7ED', padding: '0.35rem 0.85rem', borderRadius: '2rem', border: '1px solid #FFEDD5' }}>
           <i className="fas fa-file-contract" style={{ color: '#FF7A00', fontSize: '0.85rem' }} />
-          <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#C2410C' }}>Track:</span>
+          <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#C2410C' }}>Service:</span>
           <select
             value={selectedService}
             onChange={(e) => onChangeService && onChangeService(e.target.value)}

@@ -1532,8 +1532,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
               },
               {
                 id: 'track_specific_questions',
-                title: `${formData.dpr_type || 'Bank Loan DPR'} Track Questions`,
-                description: 'Tailored questions for your selected DPR track',
+                title: `${formData.dpr_type || 'Bank Loan DPR'} Service Questions`,
+                description: 'Tailored questions for your selected DPR service',
                 content: (
                   <div>
                     {/* BANK DPR TRACK QUESTIONS */}
@@ -2291,7 +2291,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       {activeStep === 11 && (
         <div className="dpr-section-card">
           <ProgressiveSectorWrapper
-            title="Sector 12: Credit Standing & Track Profile"
+            title="Sector 12: Credit Standing & History Profile"
             subtitle="CIBIL profile, prior loan history, existing liabilities, or scheme standing"
             isSaving={saving}
             onCompleteSector={handleSaveAndContinue}

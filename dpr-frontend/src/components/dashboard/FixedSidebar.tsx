@@ -199,19 +199,19 @@ export default function FixedSidebar({
         <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.6rem' }}>
           <button
             onClick={() => {
-              onChangeService();
+              onLogout();
               if (onCloseMobile) onCloseMobile();
             }}
-            className="sidebar-btn-track"
+            className="sidebar-btn-exit"
             style={{
               flex: 1,
-              background: 'rgba(255, 255, 255, 0.08)',
-              border: '1px solid rgba(255, 255, 255, 0.18)',
-              color: '#DDF4F3',
+              background: 'rgba(239, 68, 68, 0.2)',
+              border: '1px solid rgba(239, 68, 68, 0.4)',
+              color: '#FCA5A5',
               borderRadius: '0.65rem',
-              padding: '0.45rem 0.4rem',
-              fontSize: '0.75rem',
-              fontWeight: 600,
+              padding: '0.5rem 0.8rem',
+              fontSize: '0.8rem',
+              fontWeight: 700,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -219,29 +219,7 @@ export default function FixedSidebar({
               gap: '0.4rem',
             }}
           >
-            <i className="fas fa-arrows-rotate" style={{ transition: 'transform 0.3s ease' }}></i> Change Track
-          </button>
-          <button
-            onClick={() => {
-              onLogout();
-              if (onCloseMobile) onCloseMobile();
-            }}
-            className="sidebar-btn-exit"
-            style={{
-              background: 'rgba(239, 68, 68, 0.2)',
-              border: '1px solid rgba(239, 68, 68, 0.4)',
-              color: '#FCA5A5',
-              borderRadius: '0.65rem',
-              padding: '0.45rem 0.6rem',
-              fontSize: '0.75rem',
-              fontWeight: 700,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.3rem',
-            }}
-          >
-            <i className="fas fa-sign-out-alt"></i> Exit
+            <i className="fas fa-sign-out-alt"></i> Exit Application
           </button>
         </div>
       </div>
