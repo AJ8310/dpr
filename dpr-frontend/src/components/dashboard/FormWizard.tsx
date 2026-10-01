@@ -153,6 +153,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
 
   const [generating, setGenerating] = useState(false);
   const [paymentUnlocked, setPaymentUnlocked] = useState(false);
+  const [isTestOneRupee, setIsTestOneRupee] = useState(false);
   const [allowTrackChange, setAllowTrackChange] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
   const [masterSectors, setMasterSectors] = useState<any[]>([]);
@@ -760,6 +761,9 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
   };
 
   const getDisplayPrice = (): string => {
+    if (isTestOneRupee) {
+      return '1';
+    }
     const selectedPlan = (typeof window !== 'undefined' && sessionStorage.getItem('dpr_selected_plan')) || formData.dpr_depth || 'entry';
     const dt = (formData.dpr_type || '').toLowerCase();
     const isInv = dt.includes('inv') || dt.includes('pitch') || dt.includes('equity');
@@ -795,7 +799,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       setStepName('Initializing Razorpay Order...');
 
       const effectiveDepth = (typeof window !== 'undefined' && sessionStorage.getItem('dpr_selected_plan')) || formData.dpr_depth || 'entry';
-      const orderData = await createRazorpayOrder(undefined, undefined, formData.dpr_type, effectiveDepth);
+      const testAmount = isTestOneRupee ? 1.0 : undefined;
+      const orderData = await createRazorpayOrder(testAmount, undefined, formData.dpr_type, effectiveDepth);
       setGenerating(false);
 
       if (!orderData.success || !orderData.order_id) {
@@ -878,7 +883,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       setStepName('Initializing Razorpay Order...');
 
       const effectiveDepth = (typeof window !== 'undefined' && sessionStorage.getItem('dpr_selected_plan')) || formData.dpr_depth || 'entry';
-      const orderData = await createRazorpayOrder(undefined, undefined, formData.dpr_type, effectiveDepth);
+      const testAmount = isTestOneRupee ? 1.0 : undefined;
+      const orderData = await createRazorpayOrder(testAmount, undefined, formData.dpr_type, effectiveDepth);
       setGenerating(false);
 
       if (!orderData.success || !orderData.order_id) {
@@ -2526,18 +2532,33 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                 description: 'Compile publication-ready PDF or editable Word DOCX report',
                 content: (
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.2rem', paddingTop: '0.8rem' }}>
-                    <div style={{ background: '#F8FAFC', border: '1.5px solid #CBD5E1', padding: '0.8rem 1.4rem', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', userSelect: 'none' }}>
-                      <input
-                        type="checkbox"
-                        id="associated_with_vkf"
-                        name="associated_with_vkf"
-                        checked={!!formData.associated_with_vkf}
-                        onChange={(e) => setFormData((prev) => ({ ...prev, associated_with_vkf: e.target.checked }))}
-                        style={{ width: '18px', height: '18px', accentColor: '#008C95', cursor: 'pointer' }}
-                      />
-                      <label htmlFor="associated_with_vkf" style={{ fontSize: '0.92rem', fontWeight: 700, color: '#0F172A', cursor: 'pointer', margin: 0 }}>
-                        Associated / Partnered with VKF
-                      </label>
+                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                      <div style={{ background: '#F8FAFC', border: '1.5px solid #CBD5E1', padding: '0.8rem 1.4rem', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', userSelect: 'none' }}>
+                        <input
+                          type="checkbox"
+                          id="associated_with_vkf"
+                          name="associated_with_vkf"
+                          checked={!!formData.associated_with_vkf}
+                          onChange={(e) => setFormData((prev) => ({ ...prev, associated_with_vkf: e.target.checked }))}
+                          style={{ width: '18px', height: '18px', accentColor: '#008C95', cursor: 'pointer' }}
+                        />
+                        <label htmlFor="associated_with_vkf" style={{ fontSize: '0.92rem', fontWeight: 700, color: '#0F172A', cursor: 'pointer', margin: 0 }}>
+                          Associated / Partnered with VKF
+                        </label>
+                      </div>
+
+                      <div style={{ background: '#FFF7ED', border: '1.5px solid #FFEDD5', padding: '0.8rem 1.4rem', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', userSelect: 'none' }}>
+                        <input
+                          type="checkbox"
+                          id="test_one_rupee_mode"
+                          checked={isTestOneRupee}
+                          onChange={(e) => setIsTestOneRupee(e.target.checked)}
+                          style={{ width: '18px', height: '18px', accentColor: '#EA580C', cursor: 'pointer' }}
+                        />
+                        <label htmlFor="test_one_rupee_mode" style={{ fontSize: '0.92rem', fontWeight: 700, color: '#C2410C', cursor: 'pointer', margin: 0 }}>
+                          🧪 Test ₹1 Payment Mode (Live Razorpay Receipt Test)
+                        </label>
+                      </div>
                     </div>
 
                     {paymentUnlocked && (

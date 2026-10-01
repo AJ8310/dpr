@@ -45,6 +45,9 @@ PRICING_MATRIX = {
 }
 
 def determine_dpr_price(dpr_type: Optional[str], category: Optional[str], fallback_amount: Optional[float] = None) -> float:
+    if fallback_amount is not None and fallback_amount > 0:
+        return float(fallback_amount)
+
     norm_type = "govt"
     if dpr_type:
         dt = dpr_type.lower()
@@ -78,9 +81,6 @@ def determine_dpr_price(dpr_type: Optional[str], category: Optional[str], fallba
     price = PRICING_MATRIX.get(norm_type, {}).get(norm_cat)
     if price is not None:
         return float(price)
-    
-    if fallback_amount and fallback_amount > 0:
-        return float(fallback_amount)
     
     return float(settings.DPR_REPORT_PRICE)
 
