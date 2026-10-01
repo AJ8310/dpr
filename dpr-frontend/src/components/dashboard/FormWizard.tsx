@@ -153,7 +153,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
 
   const [generating, setGenerating] = useState(false);
   const [paymentUnlocked, setPaymentUnlocked] = useState(false);
-  const [isTestOneRupee, setIsTestOneRupee] = useState(false);
+  const [isTestOneRupee, setIsTestOneRupee] = useState(true);
   const [allowTrackChange, setAllowTrackChange] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
   const [masterSectors, setMasterSectors] = useState<any[]>([]);
