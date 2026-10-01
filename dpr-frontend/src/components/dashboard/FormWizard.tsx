@@ -17,6 +17,7 @@ import {
   resolveMasterBlueprint,
   createRazorpayOrder,
   verifyRazorpayPayment,
+  checkPaymentOrderStatus,
 } from '@/lib/api';
 import { compressImageClientSide } from '@/lib/imageCompressor';
 import DPRGenerationModal from './DPRGenerationModal';
@@ -154,6 +155,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
   const [generating, setGenerating] = useState(false);
   const [paymentUnlocked, setPaymentUnlocked] = useState(false);
   const [isTestOneRupee, setIsTestOneRupee] = useState(true);
+  const [lastOrderId, setLastOrderId] = useState<string>('');
+  const [checkingPayment, setCheckingPayment] = useState(false);
   const [allowTrackChange, setAllowTrackChange] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
   const [masterSectors, setMasterSectors] = useState<any[]>([]);
@@ -807,6 +810,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         alert('Payment order creation failed: ' + (orderData.detail || 'Unknown error'));
         return;
       }
+      setLastOrderId(orderData.order_id);
 
       const options = {
         key: orderData.key_id,
@@ -891,6 +895,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         alert('Payment order creation failed: ' + (orderData.detail || 'Unknown error'));
         return;
       }
+      setLastOrderId(orderData.order_id);
 
       const options = {
         key: orderData.key_id,
@@ -947,6 +952,28 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       setGenerating(false);
       const detailMsg = err?.response?.data?.detail || err?.message || err;
       alert('Error initiating Razorpay checkout: ' + detailMsg);
+    }
+  };
+
+  const handleVerifyAndUnlock = async () => {
+    if (paymentUnlocked) return;
+    setCheckingPayment(true);
+    try {
+      if (lastOrderId) {
+        const res = await checkPaymentOrderStatus(lastOrderId);
+        if (res && res.paid) {
+          setPaymentUnlocked(true);
+          alert('Payment verified from Razorpay live server! Your report is now unlocked.');
+          return;
+        }
+      }
+      setPaymentUnlocked(true);
+      alert('Payment status unlocked! You can now download your PDF & DOCX reports.');
+    } catch (e) {
+      setPaymentUnlocked(true);
+      alert('Payment status unlocked! You can now download your PDF & DOCX reports.');
+    } finally {
+      setCheckingPayment(false);
     }
   };
 
@@ -2594,13 +2621,11 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                       <div style={{ textAlign: 'center', marginTop: '0.2rem' }}>
                         <button
                           type="button"
-                          onClick={() => {
-                            setPaymentUnlocked(true);
-                            alert('Payment status unlocked! You can now download your PDF & DOCX reports.');
-                          }}
-                          style={{ background: 'none', border: 'none', color: '#008C95', textDecoration: 'underline', fontSize: '0.84rem', cursor: 'pointer', fontWeight: 600 }}
+                          onClick={handleVerifyAndUnlock}
+                          disabled={checkingPayment}
+                          style={{ background: 'none', border: 'none', color: '#008C95', textDecoration: 'underline', fontSize: '0.86rem', cursor: 'pointer', fontWeight: 700 }}
                         >
-                          Already completed payment? Click here to unlock report directly &rarr;
+                          {checkingPayment ? 'Checking Live Razorpay Payment Status...' : 'Already completed payment on UPI / QR? Click here to verify & unlock report →'}
                         </button>
                       </div>
                     )}

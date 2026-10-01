@@ -254,4 +254,9 @@ export async function verifyRazorpayPayment(paymentData: {
   return response.data;
 }
 
+export async function checkPaymentOrderStatus(orderId: string) {
+  const response = await api.get(`/api/payment/check-status/${orderId}`);
+  return response.data;
+}
+
 export default api;

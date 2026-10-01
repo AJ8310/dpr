@@ -175,3 +175,32 @@ async def verify_razorpay_payment(payload: VerifyPaymentRequest):
         raise HTTPException(status_code=400, detail="Invalid Razorpay signature. Verification failed.")
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Payment verification failed: {str(e)}")
+
+@router.get("/check-status/{order_id}")
+async def check_order_status(order_id: str):
+    """Directly checks Razorpay live servers for payment status on an order ID."""
+    try:
+        client = get_razorpay_client()
+        order = client.order.fetch(order_id)
+        order_status = order.get("status")
+        
+        payments = client.order.payments(order_id)
+        items = payments.get("items", [])
+        is_paid = (
+            order_status == "paid" or
+            any(p.get("status") in ["captured", "authorized"] for p in items)
+        )
+        
+        return {
+            "success": True,
+            "paid": is_paid,
+            "order_status": order_status,
+            "payment_count": len(items),
+            "order_id": order_id
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "paid": False,
+            "error": str(e)
+        }
