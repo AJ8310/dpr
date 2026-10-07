@@ -326,6 +326,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
           <nav className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
             <button onClick={() => scrollToSection('how-it-works')} className="apple-nav-link">Overview</button>
             <button onClick={() => scrollToSection('funding-needs')} className="apple-nav-link">Funding Needs</button>
+            <button onClick={() => scrollToSection('supported-sectors')} className="apple-nav-link">Sectors</button>
             <button onClick={() => scrollToSection('why-digital')} className="apple-nav-link">Financial Studio</button>
             <button onClick={() => scrollToSection('pricing')} className="apple-nav-link">Pricing</button>
             <button onClick={() => scrollToSection('faq')} className="apple-nav-link">FAQ</button>
@@ -1135,7 +1136,203 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         </div>
       </section>
 
+      {/* 8.5 SUPPORTED BUSINESS SECTORS SECTION */}
+      <section id="supported-sectors" style={{ padding: '100px 24px', background: '#F5F5F7', borderTop: '1px solid rgba(0, 0, 0, 0.06)', position: 'relative', zIndex: 1 }}>
+        <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
+          
+          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 56px' }}>
+            <span className="apple-kicker">Supported Business Sectors</span>
+            <h2 style={{ fontSize: '3rem', fontWeight: 700, color: '#1D1D1F', lineHeight: 1.1, letterSpacing: '-0.03em' }}>
+              Built for Every Business Sector
+            </h2>
+            <p style={{ fontSize: '1.12rem', color: '#515154', lineHeight: 1.6, marginTop: '14px' }}>
+              Our AI engine generates institutional-grade Detailed Project Reports tailored to specific industry norms, machinery heads, and benchmark operational metrics.
+            </p>
+          </div>
 
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '24px' }}>
+            {[
+              {
+                id: 'manufacturing',
+                title: 'Manufacturing & Engineering',
+                icon: '⚙️',
+                badge: 'High Demand',
+                desc: 'Auto components, metal fabrication, CNC machining, plastic molding, packaging, and industrial tools.',
+                activities: ['Raw Material BOQ', 'Plant & Machinery Capex', 'Capacity & Shift Planning', 'Power & Utility Load']
+              },
+              {
+                id: 'food_processing',
+                title: 'Food Processing & Agro',
+                icon: '🌾',
+                badge: 'PMEGP / PMFME Ready',
+                desc: 'Flour & rice mills, spice grinding, cold storage, dairy processing, fruit pulp, and edible oil units.',
+                activities: ['FSSAI & Quality Capex', 'Seasonal Crop Working Capital', 'Cold Storage Logistics', 'Yield Loss Projections']
+              },
+              {
+                id: 'agriculture',
+                title: 'Agriculture & Farming',
+                icon: '🚜',
+                badge: 'AIF Eligible',
+                desc: 'Hydroponics, hi-tech greenhouse farming, poultry & dairy farming, polyhouses, and organic fertilizer.',
+                activities: ['Land Prep & Irrigation', 'Crop Cycle Revenue Schedule', 'Subsidy Margin Breakdown', 'Polyhouse Capex']
+              },
+              {
+                id: 'textile',
+                title: 'Textile & Garments',
+                icon: '🧵',
+                badge: 'Export Focus',
+                desc: 'Garment manufacturing, weaving & spinning mills, silk processing, readymade apparel, and embroidery.',
+                activities: ['Loom & Sewing Capex', 'Yarn & Fabric Working Capital', 'Labor & Overhead Schedule', 'Order Execution Cycle']
+              },
+              {
+                id: 'healthcare',
+                title: 'Healthcare & Pharma',
+                icon: '🏥',
+                badge: 'NABH / ISO Standards',
+                desc: 'Diagnostic centers, medical device manufacturing, pharma formulation, specialty hospitals, and AYUSH.',
+                activities: ['Medical Equipment Capex', 'Cleanroom Installation', 'Consumables Inventory', 'Bed Capacity & Utilization']
+              },
+              {
+                id: 'it_services',
+                title: 'IT & Software Services',
+                icon: '💻',
+                badge: 'Fast Sanction',
+                desc: 'SaaS products, IT consulting, hardware assembly, data centers, and AI/ML tech solutions.',
+                activities: ['Cloud & Workstation Capex', 'Software Talent Cost Model', 'SaaS Recurring Revenue', 'IP & License Valuation']
+              },
+              {
+                id: 'renewable_energy',
+                title: 'Renewable Energy & EV',
+                icon: '⚡',
+                badge: 'PM-KUSUM Ready',
+                desc: 'Rooftop & ground solar plants, EV charging hubs, battery swapping stations, and biomass pellets.',
+                activities: ['PPA Tariff Calculations', 'Solar Panel & Inverter BOQ', 'Degradation & Maintenance', 'Grid Connection Expenses']
+              },
+              {
+                id: 'tourism',
+                title: 'Tourism & Hospitality',
+                icon: '🏨',
+                badge: 'State Policy Eligible',
+                desc: 'Eco-resorts, boutique hotels, theme parks, wellness sanctuaries, and adventure tourism setups.',
+                activities: ['Room Capex & Interiors', 'Seasonality Occupancy Rate', 'F&B Revenue Breakdown', 'Property Lease Schedules']
+              },
+              {
+                id: 'infrastructure',
+                title: 'Infrastructure & Logistics',
+                icon: '🏗️',
+                badge: 'Institutional Scale',
+                desc: 'Logistics hubs, dry warehouses, cold chain networks, commercial spaces, and transport fleets.',
+                activities: ['Warehouse Construction BOQ', 'Fleet Capex & Maintenance', 'Lease Rental Discounting', 'Throughput Capacity']
+              },
+              {
+                id: 'services',
+                title: 'Commercial Services',
+                icon: '💼',
+                badge: 'MSME Approved',
+                desc: 'Educational institutes, fitness chains, retail supermarkets, automated laundromats, and co-working spaces.',
+                activities: ['Fit-out & Interior Capex', 'Membership & Fee Cashflows', 'Working Capital Cycle', 'Staff Payroll Structure']
+              },
+              {
+                id: 'custom',
+                title: 'Custom & Emerging Sectors',
+                icon: '🎯',
+                badge: 'Tailored Model',
+                desc: 'Tailored DPR structures for unique business models, novel technologies, and specialized ventures.',
+                activities: ['Custom Capex Builder', 'Variable Cost Drivers', 'Flexible DSCR Calculator', 'Dynamic Revenue Scenarios']
+              }
+            ].map((sec) => (
+              <div
+                key={sec.id}
+                className="apple-bento-card"
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  background: '#FFFFFF',
+                  borderRadius: '24px',
+                  padding: '32px 28px',
+                  position: 'relative'
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+                    <div style={{
+                      width: '52px',
+                      height: '52px',
+                      borderRadius: '16px',
+                      background: '#F5F5F7',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '1.6rem',
+                      border: '1px solid rgba(0,0,0,0.06)'
+                    }}>
+                      {sec.icon}
+                    </div>
+                    <span style={{
+                      fontSize: '0.74rem',
+                      fontWeight: 700,
+                      color: '#0071E3',
+                      background: 'rgba(0, 113, 227, 0.08)',
+                      padding: '4px 12px',
+                      borderRadius: '9999px',
+                      border: '1px solid rgba(0, 113, 227, 0.15)'
+                    }}>
+                      {sec.badge}
+                    </span>
+                  </div>
+
+                  <h3 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1D1D1F', marginBottom: '10px' }}>
+                    {sec.title}
+                  </h3>
+
+                  <p style={{ fontSize: '0.92rem', color: '#64748B', lineHeight: 1.5, marginBottom: '20px' }}>
+                    {sec.desc}
+                  </p>
+
+                  <div style={{ borderTop: '1px dashed rgba(0,0,0,0.1)', paddingTop: '16px', marginBottom: '24px' }}>
+                    <div style={{ fontSize: '0.74rem', fontWeight: 700, color: '#86868B', letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: '10px' }}>
+                      Key DPR Sections & Analysis:
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                      {sec.activities.map((act, idx) => (
+                        <span key={idx} style={{
+                          fontSize: '0.76rem',
+                          background: '#F5F5F7',
+                          color: '#424245',
+                          padding: '4px 10px',
+                          borderRadius: '8px',
+                          fontWeight: 500
+                        }}>
+                          {act}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    sessionStorage.setItem('dpr_selected_sector', sec.id);
+                    saveSelection(selectedRouteKey);
+                    if (isLeadCaptured()) {
+                      setIsPlansModalOpen(true);
+                    } else {
+                      setIsAuthModalOpen(true);
+                    }
+                  }}
+                  className="apple-btn-secondary"
+                  style={{ width: '100%', justifyContent: 'center', padding: '0.75rem', fontSize: '0.88rem', borderRadius: '12px' }}
+                >
+                  Generate {sec.title.split(' ')[0]} DPR &rarr;
+                </button>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
 
       {/* 9.5 FUNDING ROUTES & PROJECT-SIZE DPR PLANS SECTION (FROM vkf-funding-plans.html) */}
       <section id="pricing" style={{ padding: '90px 24px 100px', background: 'linear-gradient(180deg, #F4FBFC 0%, #FFFFFF 46%)', borderTop: '1px solid rgba(0, 0, 0, 0.08)', position: 'relative', zIndex: 1 }}>
@@ -2117,6 +2314,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               <button onClick={() => scrollToSection('hero')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Home</button>
               <button onClick={() => scrollToSection('how-it-works')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Overview</button>
               <button onClick={() => scrollToSection('funding-needs')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Funding Needs</button>
+              <button onClick={() => scrollToSection('supported-sectors')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Sectors</button>
               <button onClick={() => scrollToSection('why-digital')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Financial Studio</button>
               <button onClick={() => scrollToSection('pricing')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>Pricing</button>
               <button onClick={() => scrollToSection('faq')} style={{ background: 'none', border: 'none', color: '#A1A1A6', cursor: 'pointer' }}>FAQ</button>
