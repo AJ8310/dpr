@@ -180,6 +180,9 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
           box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
           border-color: rgba(0, 113, 227, 0.2);
         }
+        .apple-bento-card:hover .sector-img {
+          transform: scale(1.06);
+        }
 
         .apple-pill {
           padding: 8px 16px;
@@ -1155,7 +1158,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               {
                 id: 'manufacturing',
                 title: 'Manufacturing & Engineering',
-                icon: '⚙️',
+                image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&auto=format&fit=crop&q=80',
                 badge: 'High Demand',
                 desc: 'Auto components, metal fabrication, CNC machining, plastic molding, packaging, and industrial tools.',
                 activities: ['Raw Material BOQ', 'Plant & Machinery Capex', 'Capacity & Shift Planning', 'Power & Utility Load']
@@ -1163,7 +1166,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               {
                 id: 'food_processing',
                 title: 'Food Processing & Agro',
-                icon: '🌾',
+                image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&auto=format&fit=crop&q=80',
                 badge: 'PMEGP / PMFME Ready',
                 desc: 'Flour & rice mills, spice grinding, cold storage, dairy processing, fruit pulp, and edible oil units.',
                 activities: ['FSSAI & Quality Capex', 'Seasonal Crop Working Capital', 'Cold Storage Logistics', 'Yield Loss Projections']
@@ -1171,7 +1174,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               {
                 id: 'agriculture',
                 title: 'Agriculture & Farming',
-                icon: '🚜',
+                image: 'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=600&auto=format&fit=crop&q=80',
                 badge: 'AIF Eligible',
                 desc: 'Hydroponics, hi-tech greenhouse farming, poultry & dairy farming, polyhouses, and organic fertilizer.',
                 activities: ['Land Prep & Irrigation', 'Crop Cycle Revenue Schedule', 'Subsidy Margin Breakdown', 'Polyhouse Capex']
@@ -1179,7 +1182,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               {
                 id: 'textile',
                 title: 'Textile & Garments',
-                icon: '🧵',
+                image: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?w=600&auto=format&fit=crop&q=80',
                 badge: 'Export Focus',
                 desc: 'Garment manufacturing, weaving & spinning mills, silk processing, readymade apparel, and embroidery.',
                 activities: ['Loom & Sewing Capex', 'Yarn & Fabric Working Capital', 'Labor & Overhead Schedule', 'Order Execution Cycle']
@@ -1187,7 +1190,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               {
                 id: 'healthcare',
                 title: 'Healthcare & Pharma',
-                icon: '🏥',
+                image: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=80',
                 badge: 'NABH / ISO Standards',
                 desc: 'Diagnostic centers, medical device manufacturing, pharma formulation, specialty hospitals, and AYUSH.',
                 activities: ['Medical Equipment Capex', 'Cleanroom Installation', 'Consumables Inventory', 'Bed Capacity & Utilization']
@@ -1195,7 +1198,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               {
                 id: 'it_services',
                 title: 'IT & Software Services',
-                icon: '💻',
+                image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=600&auto=format&fit=crop&q=80',
                 badge: 'Fast Sanction',
                 desc: 'SaaS products, IT consulting, hardware assembly, data centers, and AI/ML tech solutions.',
                 activities: ['Cloud & Workstation Capex', 'Software Talent Cost Model', 'SaaS Recurring Revenue', 'IP & License Valuation']
@@ -1203,7 +1206,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               {
                 id: 'renewable_energy',
                 title: 'Renewable Energy & EV',
-                icon: '⚡',
+                image: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?w=600&auto=format&fit=crop&q=80',
                 badge: 'PM-KUSUM Ready',
                 desc: 'Rooftop & ground solar plants, EV charging hubs, battery swapping stations, and biomass pellets.',
                 activities: ['PPA Tariff Calculations', 'Solar Panel & Inverter BOQ', 'Degradation & Maintenance', 'Grid Connection Expenses']
@@ -1211,7 +1214,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               {
                 id: 'tourism',
                 title: 'Tourism & Hospitality',
-                icon: '🏨',
+                image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&auto=format&fit=crop&q=80',
                 badge: 'State Policy Eligible',
                 desc: 'Eco-resorts, boutique hotels, theme parks, wellness sanctuaries, and adventure tourism setups.',
                 activities: ['Room Capex & Interiors', 'Seasonality Occupancy Rate', 'F&B Revenue Breakdown', 'Property Lease Schedules']
@@ -1219,7 +1222,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               {
                 id: 'infrastructure',
                 title: 'Infrastructure & Logistics',
-                icon: '🏗️',
+                image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&auto=format&fit=crop&q=80',
                 badge: 'Institutional Scale',
                 desc: 'Logistics hubs, dry warehouses, cold chain networks, commercial spaces, and transport fleets.',
                 activities: ['Warehouse Construction BOQ', 'Fleet Capex & Maintenance', 'Lease Rental Discounting', 'Throughput Capacity']
@@ -1227,7 +1230,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               {
                 id: 'services',
                 title: 'Commercial Services',
-                icon: '💼',
+                image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&auto=format&fit=crop&q=80',
                 badge: 'MSME Approved',
                 desc: 'Educational institutes, fitness chains, retail supermarkets, automated laundromats, and co-working spaces.',
                 activities: ['Fit-out & Interior Capex', 'Membership & Fee Cashflows', 'Working Capital Cycle', 'Staff Payroll Structure']
@@ -1235,7 +1238,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               {
                 id: 'custom',
                 title: 'Custom & Emerging Sectors',
-                icon: '🎯',
+                image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&auto=format&fit=crop&q=80',
                 badge: 'Tailored Model',
                 desc: 'Tailored DPR structures for unique business models, novel technologies, and specialized ventures.',
                 activities: ['Custom Capex Builder', 'Variable Cost Drivers', 'Flexible DSCR Calculator', 'Dynamic Revenue Scenarios']
@@ -1250,83 +1253,109 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                   justifyContent: 'space-between',
                   background: '#FFFFFF',
                   borderRadius: '24px',
-                  padding: '32px 28px',
+                  padding: '0',
+                  overflow: 'hidden',
                   position: 'relative'
                 }}
               >
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-                    <div style={{
-                      width: '52px',
-                      height: '52px',
-                      borderRadius: '16px',
-                      background: '#F5F5F7',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '1.6rem',
-                      border: '1px solid rgba(0,0,0,0.06)'
-                    }}>
-                      {sec.icon}
-                    </div>
-                    <span style={{
-                      fontSize: '0.74rem',
-                      fontWeight: 700,
-                      color: '#0071E3',
-                      background: 'rgba(0, 113, 227, 0.08)',
-                      padding: '4px 12px',
-                      borderRadius: '9999px',
-                      border: '1px solid rgba(0, 113, 227, 0.15)'
-                    }}>
-                      {sec.badge}
-                    </span>
-                  </div>
-
-                  <h3 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1D1D1F', marginBottom: '10px' }}>
+                {/* Sector Image Header Banner */}
+                <div style={{ position: 'relative', width: '100%', height: '175px', overflow: 'hidden', background: '#123B4A' }}>
+                  <img
+                    src={sec.image}
+                    alt={sec.title}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      transition: 'transform 0.4s ease'
+                    }}
+                    className="sector-img"
+                  />
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.65) 100%)'
+                  }} />
+                  <span style={{
+                    position: 'absolute',
+                    top: '12px',
+                    right: '12px',
+                    fontSize: '0.72rem',
+                    fontWeight: 700,
+                    color: '#FFFFFF',
+                    background: 'rgba(0, 113, 227, 0.85)',
+                    backdropFilter: 'blur(8px)',
+                    WebkitBackdropFilter: 'blur(8px)',
+                    padding: '4px 12px',
+                    borderRadius: '9999px',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                  }}>
+                    {sec.badge}
+                  </span>
+                  <h3 style={{
+                    position: 'absolute',
+                    bottom: '12px',
+                    left: '18px',
+                    right: '18px',
+                    fontSize: '1.25rem',
+                    fontWeight: 700,
+                    color: '#FFFFFF',
+                    margin: 0,
+                    lineHeight: 1.25,
+                    textShadow: '0 2px 4px rgba(0,0,0,0.4)'
+                  }}>
                     {sec.title}
                   </h3>
-
-                  <p style={{ fontSize: '0.92rem', color: '#64748B', lineHeight: 1.5, marginBottom: '20px' }}>
-                    {sec.desc}
-                  </p>
-
-                  <div style={{ borderTop: '1px dashed rgba(0,0,0,0.1)', paddingTop: '16px', marginBottom: '24px' }}>
-                    <div style={{ fontSize: '0.74rem', fontWeight: 700, color: '#86868B', letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: '10px' }}>
-                      Key DPR Sections & Analysis:
-                    </div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                      {sec.activities.map((act, idx) => (
-                        <span key={idx} style={{
-                          fontSize: '0.76rem',
-                          background: '#F5F5F7',
-                          color: '#424245',
-                          padding: '4px 10px',
-                          borderRadius: '8px',
-                          fontWeight: 500
-                        }}>
-                          {act}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    sessionStorage.setItem('dpr_selected_sector', sec.id);
-                    saveSelection(selectedRouteKey);
-                    if (isLeadCaptured()) {
-                      setIsPlansModalOpen(true);
-                    } else {
-                      setIsAuthModalOpen(true);
-                    }
-                  }}
-                  className="apple-btn-secondary"
-                  style={{ width: '100%', justifyContent: 'center', padding: '0.75rem', fontSize: '0.88rem', borderRadius: '12px' }}
-                >
-                  Generate {sec.title.split(' ')[0]} DPR &rarr;
-                </button>
+                {/* Card Content Body */}
+                <div style={{ padding: '24px 22px 24px', display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between' }}>
+                  <div>
+                    <p style={{ fontSize: '0.88rem', color: '#64748B', lineHeight: 1.5, marginBottom: '18px', minHeight: '42px' }}>
+                      {sec.desc}
+                    </p>
+
+                    <div style={{ borderTop: '1px dashed rgba(0,0,0,0.1)', paddingTop: '14px', marginBottom: '20px' }}>
+                      <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#86868B', letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: '8px' }}>
+                        Key DPR Sections & Analysis:
+                      </div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                        {sec.activities.map((act, idx) => (
+                          <span key={idx} style={{
+                            fontSize: '0.74rem',
+                            background: '#F5F5F7',
+                            color: '#424245',
+                            padding: '4px 9px',
+                            borderRadius: '6px',
+                            fontWeight: 500
+                          }}>
+                            {act}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sessionStorage.setItem('dpr_selected_sector', sec.id);
+                      saveSelection(selectedRouteKey);
+                      if (isLeadCaptured()) {
+                        setIsPlansModalOpen(true);
+                      } else {
+                        setIsAuthModalOpen(true);
+                      }
+                    }}
+                    className="apple-btn-secondary"
+                    style={{ width: '100%', justifyContent: 'center', padding: '0.75rem', fontSize: '0.88rem', borderRadius: '12px' }}
+                  >
+                    Generate {sec.title.split(' ')[0]} DPR &rarr;
+                  </button>
+                </div>
               </div>
             ))}
           </div>
