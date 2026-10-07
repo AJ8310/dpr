@@ -1177,315 +1177,306 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
       <section id="supported-sectors" style={{ padding: '100px 24px', background: '#F5F5F7', borderTop: '1px solid rgba(0, 0, 0, 0.06)', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
           
-          {/* Header Row with Title & Rolling Banner Controls */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '20px', marginBottom: '44px' }}>
-            <div style={{ maxWidth: '680px' }}>
-              <span className="apple-kicker">Supported Business Sectors</span>
-              <h2 style={{ fontSize: '3rem', fontWeight: 700, color: '#1D1D1F', lineHeight: 1.1, letterSpacing: '-0.03em' }}>
-                Built for Every Business Sector
-              </h2>
-              <p style={{ fontSize: '1.12rem', color: '#515154', lineHeight: 1.6, marginTop: '12px' }}>
-                Our AI engine generates institutional-grade Detailed Project Reports tailored to specific industry norms, machinery heads, and benchmark operational metrics.
-              </p>
-            </div>
-
-            {/* Banner Navigation & Auto-Roll Toggle Controls */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <button
-                type="button"
-                onClick={() => setIsSectorAutoRolling(!isSectorAutoRolling)}
-                style={{
-                  background: isSectorAutoRolling ? 'rgba(0, 113, 227, 0.08)' : '#FFFFFF',
-                  color: isSectorAutoRolling ? '#0071E3' : '#64748B',
-                  border: `1.5px solid ${isSectorAutoRolling ? 'rgba(0, 113, 227, 0.25)' : 'rgba(0, 0, 0, 0.12)'}`,
-                  borderRadius: '9999px',
-                  padding: '8px 16px',
-                  fontSize: '0.84rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  transition: 'all 0.2s ease'
-                }}
-              >
-                <span>{isSectorAutoRolling ? '⏸️ Pause Roll' : '▶️ Auto Roll'}</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => scrollSectorTrack('left')}
-                aria-label="Previous sector"
-                style={{
-                  width: '44px',
-                  height: '44px',
-                  borderRadius: '50%',
-                  background: '#FFFFFF',
-                  border: '1.5px solid rgba(0, 0, 0, 0.12)',
-                  color: '#1D1D1F',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '1.1rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-                  transition: 'all 0.2s ease'
-                }}
-              >
-                &larr;
-              </button>
-
-              <button
-                type="button"
-                onClick={() => scrollSectorTrack('right')}
-                aria-label="Next sector"
-                style={{
-                  width: '44px',
-                  height: '44px',
-                  borderRadius: '50%',
-                  background: '#FFFFFF',
-                  border: '1.5px solid rgba(0, 0, 0, 0.12)',
-                  color: '#1D1D1F',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '1.1rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-                  transition: 'all 0.2s ease'
-                }}
-              >
-                &rarr;
-              </button>
-            </div>
+          {/* Centered Header Row */}
+          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 48px' }}>
+            <span className="apple-kicker">Supported Business Sectors</span>
+            <h2 style={{ fontSize: '3rem', fontWeight: 700, color: '#1D1D1F', lineHeight: 1.1, letterSpacing: '-0.03em' }}>
+              Built for Every Business Sector
+            </h2>
+            <p style={{ fontSize: '1.12rem', color: '#515154', lineHeight: 1.6, marginTop: '12px' }}>
+              Our AI engine generates institutional-grade Detailed Project Reports tailored to specific industry norms, machinery heads, and benchmark operational metrics.
+            </p>
           </div>
 
-          {/* Rolling Track Container */}
-          <div
-            ref={sectorTrackRef}
-            className="no-scrollbar"
-            onMouseEnter={() => setIsSectorAutoRolling(false)}
-            onMouseLeave={() => setIsSectorAutoRolling(true)}
-            style={{
-              display: 'flex',
-              gap: '24px',
-              overflowX: 'auto',
-              scrollSnapType: 'x mandatory',
-              scrollBehavior: 'smooth',
-              padding: '8px 4px 20px',
-              WebkitOverflowScrolling: 'touch'
-            }}
-          >
-            {[
-              {
-                id: 'manufacturing',
-                title: 'Manufacturing & Engineering',
-                image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&auto=format&fit=crop&q=80',
-                badge: 'High Demand',
-                desc: 'Auto components, metal fabrication, CNC machining, plastic molding, packaging, and industrial tools.',
-                activities: ['Raw Material BOQ', 'Plant & Machinery Capex', 'Capacity & Shift Planning', 'Power & Utility Load']
-              },
-              {
-                id: 'food_processing',
-                title: 'Food Processing & Agro',
-                image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&auto=format&fit=crop&q=80',
-                badge: 'PMEGP / PMFME Ready',
-                desc: 'Flour & rice mills, spice grinding, cold storage, dairy processing, fruit pulp, and edible oil units.',
-                activities: ['FSSAI & Quality Capex', 'Seasonal Crop Working Capital', 'Cold Storage Logistics', 'Yield Loss Projections']
-              },
-              {
-                id: 'agriculture',
-                title: 'Agriculture & Farming',
-                image: 'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=600&auto=format&fit=crop&q=80',
-                badge: 'AIF Eligible',
-                desc: 'Hydroponics, hi-tech greenhouse farming, poultry & dairy farming, polyhouses, and organic fertilizer.',
-                activities: ['Land Prep & Irrigation', 'Crop Cycle Revenue Schedule', 'Subsidy Margin Breakdown', 'Polyhouse Capex']
-              },
-              {
-                id: 'textile',
-                title: 'Textile & Garments',
-                image: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?w=600&auto=format&fit=crop&q=80',
-                badge: 'Export Focus',
-                desc: 'Garment manufacturing, weaving & spinning mills, silk processing, readymade apparel, and embroidery.',
-                activities: ['Loom & Sewing Capex', 'Yarn & Fabric Working Capital', 'Labor & Overhead Schedule', 'Order Execution Cycle']
-              },
-              {
-                id: 'healthcare',
-                title: 'Healthcare & Pharma',
-                image: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=80',
-                badge: 'NABH / ISO Standards',
-                desc: 'Diagnostic centers, medical device manufacturing, pharma formulation, specialty hospitals, and AYUSH.',
-                activities: ['Medical Equipment Capex', 'Cleanroom Installation', 'Consumables Inventory', 'Bed Capacity & Utilization']
-              },
-              {
-                id: 'it_services',
-                title: 'IT & Software Services',
-                image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=600&auto=format&fit=crop&q=80',
-                badge: 'Fast Sanction',
-                desc: 'SaaS products, IT consulting, hardware assembly, data centers, and AI/ML tech solutions.',
-                activities: ['Cloud & Workstation Capex', 'Software Talent Cost Model', 'SaaS Recurring Revenue', 'IP & License Valuation']
-              },
-              {
-                id: 'renewable_energy',
-                title: 'Renewable Energy & EV',
-                image: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?w=600&auto=format&fit=crop&q=80',
-                badge: 'PM-KUSUM Ready',
-                desc: 'Rooftop & ground solar plants, EV charging hubs, battery swapping stations, and biomass pellets.',
-                activities: ['PPA Tariff Calculations', 'Solar Panel & Inverter BOQ', 'Degradation & Maintenance', 'Grid Connection Expenses']
-              },
-              {
-                id: 'tourism',
-                title: 'Tourism & Hospitality',
-                image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&auto=format&fit=crop&q=80',
-                badge: 'State Policy Eligible',
-                desc: 'Eco-resorts, boutique hotels, theme parks, wellness sanctuaries, and adventure tourism setups.',
-                activities: ['Room Capex & Interiors', 'Seasonality Occupancy Rate', 'F&B Revenue Breakdown', 'Property Lease Schedules']
-              },
-              {
-                id: 'infrastructure',
-                title: 'Infrastructure & Logistics',
-                image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&auto=format&fit=crop&q=80',
-                badge: 'Institutional Scale',
-                desc: 'Logistics hubs, dry warehouses, cold chain networks, commercial spaces, and transport fleets.',
-                activities: ['Warehouse Construction BOQ', 'Fleet Capex & Maintenance', 'Lease Rental Discounting', 'Throughput Capacity']
-              },
-              {
-                id: 'services',
-                title: 'Commercial Services',
-                image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&auto=format&fit=crop&q=80',
-                badge: 'MSME Approved',
-                desc: 'Educational institutes, fitness chains, retail supermarkets, automated laundromats, and co-working spaces.',
-                activities: ['Fit-out & Interior Capex', 'Membership & Fee Cashflows', 'Working Capital Cycle', 'Staff Payroll Structure']
-              },
-              {
-                id: 'custom',
-                title: 'Custom & Emerging Sectors',
-                image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&auto=format&fit=crop&q=80',
-                badge: 'Tailored Model',
-                desc: 'Tailored DPR structures for unique business models, novel technologies, and specialized ventures.',
-                activities: ['Custom Capex Builder', 'Variable Cost Drivers', 'Flexible DSCR Calculator', 'Dynamic Revenue Scenarios']
-              }
-            ].map((sec) => (
-              <div
-                key={sec.id}
-                className="apple-bento-card"
-                style={{
-                  flex: '0 0 350px',
-                  minWidth: '350px',
-                  maxWidth: '350px',
-                  scrollSnapAlign: 'start',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  background: '#FFFFFF',
-                  borderRadius: '24px',
-                  padding: '0',
-                  overflow: 'hidden',
-                  position: 'relative'
-                }}
-              >
-                {/* Sector Image Header Banner */}
-                <div style={{ position: 'relative', width: '100%', height: '175px', overflow: 'hidden', background: '#123B4A' }}>
-                  <img
-                    src={sec.image}
-                    alt={sec.title}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      transition: 'transform 0.4s ease'
-                    }}
-                    className="sector-img"
-                  />
-                  <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.65) 100%)'
-                  }} />
-                  <span style={{
-                    position: 'absolute',
-                    top: '12px',
-                    right: '12px',
-                    fontSize: '0.72rem',
-                    fontWeight: 700,
-                    color: '#FFFFFF',
-                    background: 'rgba(0, 113, 227, 0.85)',
-                    backdropFilter: 'blur(8px)',
-                    WebkitBackdropFilter: 'blur(8px)',
-                    padding: '4px 12px',
-                    borderRadius: '9999px',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
-                  }}>
-                    {sec.badge}
-                  </span>
-                  <h3 style={{
-                    position: 'absolute',
-                    bottom: '12px',
-                    left: '18px',
-                    right: '18px',
-                    fontSize: '1.25rem',
-                    fontWeight: 700,
-                    color: '#FFFFFF',
-                    margin: 0,
-                    lineHeight: 1.25,
-                    textShadow: '0 2px 4px rgba(0,0,0,0.4)'
-                  }}>
-                    {sec.title}
-                  </h3>
-                </div>
+          {/* Rolling Track Container Wrapper with Floating Side Navigation Arrows */}
+          <div style={{ position: 'relative', padding: '0 8px' }}>
+            
+            {/* Left Floating Arrow Button */}
+            <button
+              type="button"
+              onClick={() => scrollSectorTrack('left')}
+              aria-label="Scroll left"
+              style={{
+                position: 'absolute',
+                left: '-18px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                zIndex: 20,
+                width: '52px',
+                height: '52px',
+                borderRadius: '50%',
+                background: '#FFFFFF',
+                border: '1.5px solid rgba(0, 0, 0, 0.12)',
+                color: '#1D1D1F',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.3rem',
+                fontWeight: 800,
+                cursor: 'pointer',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              &larr;
+            </button>
 
-                {/* Card Content Body */}
-                <div style={{ padding: '24px 22px 24px', display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between' }}>
-                  <div>
-                    <p style={{ fontSize: '0.88rem', color: '#64748B', lineHeight: 1.5, marginBottom: '18px', minHeight: '42px' }}>
-                      {sec.desc}
-                    </p>
+            {/* Right Floating Arrow Button */}
+            <button
+              type="button"
+              onClick={() => scrollSectorTrack('right')}
+              aria-label="Scroll right"
+              style={{
+                position: 'absolute',
+                right: '-18px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                zIndex: 20,
+                width: '52px',
+                height: '52px',
+                borderRadius: '50%',
+                background: '#FFFFFF',
+                border: '1.5px solid rgba(0, 0, 0, 0.12)',
+                color: '#1D1D1F',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.3rem',
+                fontWeight: 800,
+                cursor: 'pointer',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              &rarr;
+            </button>
 
-                    <div style={{ borderTop: '1px dashed rgba(0,0,0,0.1)', paddingTop: '14px', marginBottom: '20px' }}>
-                      <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#86868B', letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: '8px' }}>
-                        Key DPR Sections & Analysis:
-                      </div>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                        {sec.activities.map((act, idx) => (
-                          <span key={idx} style={{
-                            fontSize: '0.74rem',
-                            background: '#F5F5F7',
-                            color: '#424245',
-                            padding: '4px 9px',
-                            borderRadius: '6px',
-                            fontWeight: 500
-                          }}>
-                            {act}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+            {/* Rolling Track Container */}
+            <div
+              ref={sectorTrackRef}
+              className="no-scrollbar"
+              onMouseEnter={() => setIsSectorAutoRolling(false)}
+              onMouseLeave={() => setIsSectorAutoRolling(true)}
+              style={{
+                display: 'flex',
+                gap: '24px',
+                overflowX: 'auto',
+                scrollSnapType: 'x mandatory',
+                scrollBehavior: 'smooth',
+                padding: '12px 6px 24px',
+                WebkitOverflowScrolling: 'touch'
+              }}
+            >
+              {[
+                {
+                  id: 'manufacturing',
+                  title: 'Manufacturing & Engineering',
+                  image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&auto=format&fit=crop&q=80',
+                  badge: 'High Demand',
+                  desc: 'Auto components, metal fabrication, CNC machining, plastic molding, packaging, and industrial tools.',
+                  activities: ['Raw Material BOQ', 'Plant & Machinery Capex', 'Capacity & Shift Planning', 'Power & Utility Load']
+                },
+                {
+                  id: 'food_processing',
+                  title: 'Food Processing & Agro',
+                  image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&auto=format&fit=crop&q=80',
+                  badge: 'PMEGP / PMFME Ready',
+                  desc: 'Flour & rice mills, spice grinding, cold storage, dairy processing, fruit pulp, and edible oil units.',
+                  activities: ['FSSAI & Quality Capex', 'Seasonal Crop Working Capital', 'Cold Storage Logistics', 'Yield Loss Projections']
+                },
+                {
+                  id: 'agriculture',
+                  title: 'Agriculture & Farming',
+                  image: 'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=600&auto=format&fit=crop&q=80',
+                  badge: 'AIF Eligible',
+                  desc: 'Hydroponics, hi-tech greenhouse farming, poultry & dairy farming, polyhouses, and organic fertilizer.',
+                  activities: ['Land Prep & Irrigation', 'Crop Cycle Revenue Schedule', 'Subsidy Margin Breakdown', 'Polyhouse Capex']
+                },
+                {
+                  id: 'textile',
+                  title: 'Textile & Garments',
+                  image: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?w=600&auto=format&fit=crop&q=80',
+                  badge: 'Export Focus',
+                  desc: 'Garment manufacturing, weaving & spinning mills, silk processing, readymade apparel, and embroidery.',
+                  activities: ['Loom & Sewing Capex', 'Yarn & Fabric Working Capital', 'Labor & Overhead Schedule', 'Order Execution Cycle']
+                },
+                {
+                  id: 'healthcare',
+                  title: 'Healthcare & Pharma',
+                  image: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=80',
+                  badge: 'NABH / ISO Standards',
+                  desc: 'Diagnostic centers, medical device manufacturing, pharma formulation, specialty hospitals, and AYUSH.',
+                  activities: ['Medical Equipment Capex', 'Cleanroom Installation', 'Consumables Inventory', 'Bed Capacity & Utilization']
+                },
+                {
+                  id: 'it_services',
+                  title: 'IT & Software Services',
+                  image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=600&auto=format&fit=crop&q=80',
+                  badge: 'Fast Sanction',
+                  desc: 'SaaS products, IT consulting, hardware assembly, data centers, and AI/ML tech solutions.',
+                  activities: ['Cloud & Workstation Capex', 'Software Talent Cost Model', 'SaaS Recurring Revenue', 'IP & License Valuation']
+                },
+                {
+                  id: 'renewable_energy',
+                  title: 'Renewable Energy & EV',
+                  image: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?w=600&auto=format&fit=crop&q=80',
+                  badge: 'PM-KUSUM Ready',
+                  desc: 'Rooftop & ground solar plants, EV charging hubs, battery swapping stations, and biomass pellets.',
+                  activities: ['PPA Tariff Calculations', 'Solar Panel & Inverter BOQ', 'Degradation & Maintenance', 'Grid Connection Expenses']
+                },
+                {
+                  id: 'tourism',
+                  title: 'Tourism & Hospitality',
+                  image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&auto=format&fit=crop&q=80',
+                  badge: 'State Policy Eligible',
+                  desc: 'Eco-resorts, boutique hotels, theme parks, wellness sanctuaries, and adventure tourism setups.',
+                  activities: ['Room Capex & Interiors', 'Seasonality Occupancy Rate', 'F&B Revenue Breakdown', 'Property Lease Schedules']
+                },
+                {
+                  id: 'infrastructure',
+                  title: 'Infrastructure & Logistics',
+                  image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&auto=format&fit=crop&q=80',
+                  badge: 'Institutional Scale',
+                  desc: 'Logistics hubs, dry warehouses, cold chain networks, commercial spaces, and transport fleets.',
+                  activities: ['Warehouse Construction BOQ', 'Fleet Capex & Maintenance', 'Lease Rental Discounting', 'Throughput Capacity']
+                },
+                {
+                  id: 'services',
+                  title: 'Commercial Services',
+                  image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&auto=format&fit=crop&q=80',
+                  badge: 'MSME Approved',
+                  desc: 'Educational institutes, fitness chains, retail supermarkets, automated laundromats, and co-working spaces.',
+                  activities: ['Fit-out & Interior Capex', 'Membership & Fee Cashflows', 'Working Capital Cycle', 'Staff Payroll Structure']
+                },
+                {
+                  id: 'custom',
+                  title: 'Custom & Emerging Sectors',
+                  image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&auto=format&fit=crop&q=80',
+                  badge: 'Tailored Model',
+                  desc: 'Tailored DPR structures for unique business models, novel technologies, and specialized ventures.',
+                  activities: ['Custom Capex Builder', 'Variable Cost Drivers', 'Flexible DSCR Calculator', 'Dynamic Revenue Scenarios']
+                }
+              ].map((sec) => (
+                <div
+                  key={sec.id}
+                  className="apple-bento-card"
+                  style={{
+                    flex: '0 0 350px',
+                    minWidth: '350px',
+                    maxWidth: '350px',
+                    scrollSnapAlign: 'start',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    background: '#FFFFFF',
+                    borderRadius: '24px',
+                    padding: '0',
+                    overflow: 'hidden',
+                    position: 'relative'
+                  }}
+                >
+                  {/* Sector Image Header Banner */}
+                  <div style={{ position: 'relative', width: '100%', height: '175px', overflow: 'hidden', background: '#123B4A' }}>
+                    <img
+                      src={sec.image}
+                      alt={sec.title}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        transition: 'transform 0.4s ease'
+                      }}
+                      className="sector-img"
+                    />
+                    <div style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      background: 'linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.65) 100%)'
+                    }} />
+                    <span style={{
+                      position: 'absolute',
+                      top: '12px',
+                      right: '12px',
+                      fontSize: '0.72rem',
+                      fontWeight: 700,
+                      color: '#FFFFFF',
+                      background: 'rgba(0, 113, 227, 0.85)',
+                      backdropFilter: 'blur(8px)',
+                      WebkitBackdropFilter: 'blur(8px)',
+                      padding: '4px 12px',
+                      borderRadius: '9999px',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                    }}>
+                      {sec.badge}
+                    </span>
+                    <h3 style={{
+                      position: 'absolute',
+                      bottom: '12px',
+                      left: '18px',
+                      right: '18px',
+                      fontSize: '1.25rem',
+                      fontWeight: 700,
+                      color: '#FFFFFF',
+                      margin: 0,
+                      lineHeight: 1.25,
+                      textShadow: '0 2px 4px rgba(0,0,0,0.4)'
+                    }}>
+                      {sec.title}
+                    </h3>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      sessionStorage.setItem('dpr_selected_sector', sec.id);
-                      saveSelection(selectedRouteKey);
-                      if (isLeadCaptured()) {
-                        setIsPlansModalOpen(true);
-                      } else {
-                        setIsAuthModalOpen(true);
-                      }
-                    }}
-                    className="apple-btn-secondary"
-                    style={{ width: '100%', justifyContent: 'center', padding: '0.75rem', fontSize: '0.88rem', borderRadius: '12px' }}
-                  >
-                    Generate {sec.title.split(' ')[0]} DPR &rarr;
-                  </button>
+                  {/* Card Content Body */}
+                  <div style={{ padding: '24px 22px 24px', display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between' }}>
+                    <div>
+                      <p style={{ fontSize: '0.88rem', color: '#64748B', lineHeight: 1.5, marginBottom: '18px', minHeight: '42px' }}>
+                        {sec.desc}
+                      </p>
+
+                      <div style={{ borderTop: '1px dashed rgba(0,0,0,0.1)', paddingTop: '14px', marginBottom: '20px' }}>
+                        <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#86868B', letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: '8px' }}>
+                          Key DPR Sections & Analysis:
+                        </div>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                          {sec.activities.map((act, idx) => (
+                            <span key={idx} style={{
+                              fontSize: '0.74rem',
+                              background: '#F5F5F7',
+                              color: '#424245',
+                              padding: '4px 9px',
+                              borderRadius: '6px',
+                              fontWeight: 500
+                            }}>
+                              {act}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        sessionStorage.setItem('dpr_selected_sector', sec.id);
+                        saveSelection(selectedRouteKey);
+                        if (isLeadCaptured()) {
+                          setIsPlansModalOpen(true);
+                        } else {
+                          setIsAuthModalOpen(true);
+                        }
+                      }}
+                      className="apple-btn-secondary"
+                      style={{ width: '100%', justifyContent: 'center', padding: '0.75rem', fontSize: '0.88rem', borderRadius: '12px' }}
+                    >
+                      Generate {sec.title.split(' ')[0]} DPR &rarr;
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+
           </div>
 
         </div>
