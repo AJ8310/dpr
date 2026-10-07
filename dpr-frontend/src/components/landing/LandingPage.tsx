@@ -60,7 +60,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
           sectorTrackRef.current.scrollBy({ left: 374, behavior: 'smooth' });
         }
       }
-    }, 3200);
+    }, 2400);
     return () => clearInterval(interval);
   }, [isSectorAutoRolling]);
 
