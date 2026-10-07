@@ -38,6 +38,32 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
   const [isPlansModalOpen, setIsPlansModalOpen] = useState(false);
   const [selectedRouteKey, setSelectedRouteKey] = useState<'govt' | 'bank' | 'inv'>('bank');
 
+  // Supported Business Sectors Rolling Banner State & Effect
+  const sectorTrackRef = React.useRef<HTMLDivElement>(null);
+  const [isSectorAutoRolling, setIsSectorAutoRolling] = useState(true);
+
+  const scrollSectorTrack = (direction: 'left' | 'right') => {
+    if (sectorTrackRef.current) {
+      const scrollAmount = direction === 'left' ? -374 : 374;
+      sectorTrackRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  React.useEffect(() => {
+    if (!isSectorAutoRolling) return;
+    const interval = setInterval(() => {
+      if (sectorTrackRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = sectorTrackRef.current;
+        if (scrollLeft + clientWidth >= scrollWidth - 15) {
+          sectorTrackRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          sectorTrackRef.current.scrollBy({ left: 374, behavior: 'smooth' });
+        }
+      }
+    }, 3200);
+    return () => clearInterval(interval);
+  }, [isSectorAutoRolling]);
+
   const saveSelection = (routeKey: string, planId?: string) => {
     const serviceMap: Record<string, string> = {
       govt: 'Govt Subsidy DPR',
@@ -289,6 +315,14 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
           .grid-5 { grid-template-columns: 1fr !important; }
           .flow-grid { grid-template-columns: 1fr !important; }
           .header-btn-secondary { display: none !important; }
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
       `}</style>
 
@@ -1139,21 +1173,111 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         </div>
       </section>
 
-      {/* 8.5 SUPPORTED BUSINESS SECTORS SECTION */}
+      {/* 8.5 SUPPORTED BUSINESS SECTORS SECTION (ROLLING BANNER) */}
       <section id="supported-sectors" style={{ padding: '100px 24px', background: '#F5F5F7', borderTop: '1px solid rgba(0, 0, 0, 0.06)', position: 'relative', zIndex: 1 }}>
-        <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
           
-          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 56px' }}>
-            <span className="apple-kicker">Supported Business Sectors</span>
-            <h2 style={{ fontSize: '3rem', fontWeight: 700, color: '#1D1D1F', lineHeight: 1.1, letterSpacing: '-0.03em' }}>
-              Built for Every Business Sector
-            </h2>
-            <p style={{ fontSize: '1.12rem', color: '#515154', lineHeight: 1.6, marginTop: '14px' }}>
-              Our AI engine generates institutional-grade Detailed Project Reports tailored to specific industry norms, machinery heads, and benchmark operational metrics.
-            </p>
+          {/* Header Row with Title & Rolling Banner Controls */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '20px', marginBottom: '44px' }}>
+            <div style={{ maxWidth: '680px' }}>
+              <span className="apple-kicker">Supported Business Sectors</span>
+              <h2 style={{ fontSize: '3rem', fontWeight: 700, color: '#1D1D1F', lineHeight: 1.1, letterSpacing: '-0.03em' }}>
+                Built for Every Business Sector
+              </h2>
+              <p style={{ fontSize: '1.12rem', color: '#515154', lineHeight: 1.6, marginTop: '12px' }}>
+                Our AI engine generates institutional-grade Detailed Project Reports tailored to specific industry norms, machinery heads, and benchmark operational metrics.
+              </p>
+            </div>
+
+            {/* Banner Navigation & Auto-Roll Toggle Controls */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <button
+                type="button"
+                onClick={() => setIsSectorAutoRolling(!isSectorAutoRolling)}
+                style={{
+                  background: isSectorAutoRolling ? 'rgba(0, 113, 227, 0.08)' : '#FFFFFF',
+                  color: isSectorAutoRolling ? '#0071E3' : '#64748B',
+                  border: `1.5px solid ${isSectorAutoRolling ? 'rgba(0, 113, 227, 0.25)' : 'rgba(0, 0, 0, 0.12)'}`,
+                  borderRadius: '9999px',
+                  padding: '8px 16px',
+                  fontSize: '0.84rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <span>{isSectorAutoRolling ? '⏸️ Pause Roll' : '▶️ Auto Roll'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => scrollSectorTrack('left')}
+                aria-label="Previous sector"
+                style={{
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '50%',
+                  background: '#FFFFFF',
+                  border: '1.5px solid rgba(0, 0, 0, 0.12)',
+                  color: '#1D1D1F',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.1rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                &larr;
+              </button>
+
+              <button
+                type="button"
+                onClick={() => scrollSectorTrack('right')}
+                aria-label="Next sector"
+                style={{
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '50%',
+                  background: '#FFFFFF',
+                  border: '1.5px solid rgba(0, 0, 0, 0.12)',
+                  color: '#1D1D1F',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.1rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                &rarr;
+              </button>
+            </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '24px' }}>
+          {/* Rolling Track Container */}
+          <div
+            ref={sectorTrackRef}
+            className="no-scrollbar"
+            onMouseEnter={() => setIsSectorAutoRolling(false)}
+            onMouseLeave={() => setIsSectorAutoRolling(true)}
+            style={{
+              display: 'flex',
+              gap: '24px',
+              overflowX: 'auto',
+              scrollSnapType: 'x mandatory',
+              scrollBehavior: 'smooth',
+              padding: '8px 4px 20px',
+              WebkitOverflowScrolling: 'touch'
+            }}
+          >
             {[
               {
                 id: 'manufacturing',
@@ -1248,6 +1372,10 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                 key={sec.id}
                 className="apple-bento-card"
                 style={{
+                  flex: '0 0 350px',
+                  minWidth: '350px',
+                  maxWidth: '350px',
+                  scrollSnapAlign: 'start',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
