@@ -29,10 +29,14 @@ def hash_password(password: str) -> str:
         return pwd_context.hash(password)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
+    if not plain_password or not hashed_password:
+        return False
     try:
-        pwd_bytes = plain_password.encode('utf-8')[:72]
-        hash_bytes = hashed_password.encode('utf-8')
-        return bcrypt.checkpw(pwd_bytes, hash_bytes)
+        if hashed_password.startswith("$2b$") or hashed_password.startswith("$2a$"):
+            pwd_bytes = plain_password.encode('utf-8')[:72]
+            hash_bytes = hashed_password.encode('utf-8')
+            return bcrypt.checkpw(pwd_bytes, hash_bytes)
+        return pwd_context.verify(plain_password, hashed_password)
     except Exception:
         try:
             return pwd_context.verify(plain_password, hashed_password)

@@ -52,9 +52,16 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
   };
 
   React.useEffect(() => {
-    // Pre-warm backend server silently on page load
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://dpr-0eje.onrender.com';
-    fetch(`${apiBase.replace(/\/$/, '')}/health/live`).catch(() => {});
+    // Proactive backend pre-warming to eliminate cold starts & login delays
+    const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'https://dpr-0eje.onrender.com').replace(/\/$/, '');
+    const pingBackend = () => {
+      fetch(`${apiBase}/health/live`).catch(() => {});
+      fetch(`${apiBase}/api/payment/config`).catch(() => {});
+    };
+
+    pingBackend();
+    const interval = setInterval(pingBackend, 180000); // 3 minutes keep-alive
+    return () => clearInterval(interval);
   }, []);
 
   const scrollToAuth = () => {

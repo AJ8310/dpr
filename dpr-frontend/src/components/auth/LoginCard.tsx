@@ -17,6 +17,18 @@ export default function LoginCard({ onLoginSuccess, onSwitchToRegister }: LoginC
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const prewarmBackend = () => {
+    if (typeof window !== 'undefined') {
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://dpr-0eje.onrender.com';
+      fetch(`${apiBase.replace(/\/$/, '')}/health/live`).catch(() => {});
+      fetch(`${apiBase.replace(/\/$/, '')}/api/payment/config`).catch(() => {});
+    }
+  };
+
+  React.useEffect(() => {
+    prewarmBackend();
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -110,6 +122,7 @@ export default function LoginCard({ onLoginSuccess, onSwitchToRegister }: LoginC
               className="input-modern"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onFocus={prewarmBackend}
               required
               placeholder="Enter your email address"
               style={{
@@ -142,6 +155,7 @@ export default function LoginCard({ onLoginSuccess, onSwitchToRegister }: LoginC
               className="input-modern"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onFocus={prewarmBackend}
               required
               placeholder="Enter your password"
               style={{
