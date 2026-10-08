@@ -1295,7 +1295,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                 {
                   id: 'textile',
                   title: 'Textile & Garments',
-                  image: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?w=600&auto=format&fit=crop&q=80',
+                  image: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&auto=format&fit=crop&q=80',
                   badge: 'Export Focus',
                   desc: 'Garment manufacturing, weaving & spinning mills, silk processing, readymade apparel, and embroidery.',
                   activities: ['Loom & Sewing Capex', 'Yarn & Fabric Working Capital', 'Labor & Overhead Schedule', 'Order Execution Cycle']
@@ -1311,7 +1311,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                 {
                   id: 'it_services',
                   title: 'IT & Software Services',
-                  image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=600&auto=format&fit=crop&q=80',
+                  image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80',
                   badge: 'Fast Sanction',
                   desc: 'SaaS products, IT consulting, hardware assembly, data centers, and AI/ML tech solutions.',
                   activities: ['Cloud & Workstation Capex', 'Software Talent Cost Model', 'SaaS Recurring Revenue', 'IP & License Valuation']
@@ -1319,7 +1319,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                 {
                   id: 'renewable_energy',
                   title: 'Renewable Energy & EV',
-                  image: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?w=600&auto=format&fit=crop&q=80',
+                  image: 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=800&auto=format&fit=crop&q=80',
                   badge: 'PM-KUSUM Ready',
                   desc: 'Rooftop & ground solar plants, EV charging hubs, battery swapping stations, and biomass pellets.',
                   activities: ['PPA Tariff Calculations', 'Solar Panel & Inverter BOQ', 'Degradation & Maintenance', 'Grid Connection Expenses']
