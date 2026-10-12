@@ -29,6 +29,9 @@ dist/
 *.sqlite3
 dpr-backend/uploads/*.pdf
 dpr-backend/uploads/*.html
+dpr-backend/uploads/*.png
+dpr-backend/uploads/*.jpg
+dpr-backend/uploads/*.jpeg
 dpr-backend/uploads/visual_cards/
 dpr-backend/uploads/charts/
 dpr-backend/uploads/documents/

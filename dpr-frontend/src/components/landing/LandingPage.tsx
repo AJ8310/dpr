@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import LoginCard from '@/components/auth/LoginCard';
 import RegisterCard from '@/components/auth/RegisterCard';
 import BackgroundWaves from '@/components/common/BackgroundWaves';
+import LanguageSelectModal from '@/components/common/LanguageSelectModal';
+import LanguageDropdown from '@/components/common/LanguageDropdown';
+import { useLanguage } from '@/context/LanguageContext';
 import { UserSession } from '@/types/dpr';
 
 interface LandingPageProps {
@@ -11,6 +14,7 @@ interface LandingPageProps {
 }
 
 export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
+  const { t, language } = useLanguage();
   const [authView, setAuthView] = useState<'inquiry' | 'login' | 'register'>('inquiry');
   const [activeDashTab, setActiveDashTab] = useState<'projections' | 'ratios' | 'repayments' | 'sensitivities'>('projections');
   const [machineryCost, setMachineryCost] = useState<number>(50); // in Lakhs
@@ -329,6 +333,9 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
       {/* Vector Background Waves */}
       <BackgroundWaves />
 
+      {/* Multilingual Selector Modal for Rural/Regional Users */}
+      <LanguageSelectModal />
+
       {/* 1. APPLE FROSTED GLASS STICKY HEADER */}
       <header style={{
         position: 'sticky',
@@ -354,28 +361,29 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                 DPRPro AI
               </div>
               <div className="header-tagline" style={{ fontSize: '0.74rem', color: '#86868B', fontWeight: 500, letterSpacing: '0.2px' }}>
-                Create Professional DPR Reports in Less Time
+                {t.common.tagline}
               </div>
             </div>
           </div>
 
           {/* Navigation Items */}
           <nav className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
-            <button onClick={() => scrollToSection('how-it-works')} className="apple-nav-link">Overview</button>
-            <button onClick={() => scrollToSection('funding-needs')} className="apple-nav-link">Funding Needs</button>
-            <button onClick={() => scrollToSection('supported-sectors')} className="apple-nav-link">Sectors</button>
-            <button onClick={() => scrollToSection('why-digital')} className="apple-nav-link">Financial Studio</button>
-            <button onClick={() => scrollToSection('pricing')} className="apple-nav-link">Pricing</button>
-            <button onClick={() => scrollToSection('faq')} className="apple-nav-link">FAQ</button>
+            <button onClick={() => scrollToSection('how-it-works')} className="apple-nav-link">{t.common.overview}</button>
+            <button onClick={() => scrollToSection('funding-needs')} className="apple-nav-link">{t.common.fundingNeeds}</button>
+            <button onClick={() => scrollToSection('supported-sectors')} className="apple-nav-link">{t.common.sectors}</button>
+            <button onClick={() => scrollToSection('why-digital')} className="apple-nav-link">{t.common.financialStudio}</button>
+            <button onClick={() => scrollToSection('pricing')} className="apple-nav-link">{t.common.pricing}</button>
+            <button onClick={() => scrollToSection('faq')} className="apple-nav-link">{t.common.faq}</button>
           </nav>
 
           {/* Header Action Buttons */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <LanguageDropdown variant="header" />
             <button onClick={scrollToAuth} className="apple-btn-secondary" style={{ padding: '0.55rem 1.2rem', fontSize: '0.86rem' }}>
-              Contact Team
+              {t.common.contactTeam}
             </button>
             <button onClick={() => { saveSelection(selectedRouteKey); setIsAuthModalOpen(true); }} className="apple-btn-primary" style={{ padding: '0.55rem 1.3rem', fontSize: '0.86rem' }}>
-              Create My DPR &rarr;
+              {t.common.createDpr} &rarr;
             </button>
           </div>
         </div>
@@ -396,7 +404,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               lineHeight: 1.05,
               letterSpacing: '-0.038em'
             }}>
-              Build Your Funding-Ready DPR, Smarter.
+              {t.hero.headline}
             </h1>
 
             {/* Speed Badge */}
@@ -413,7 +421,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               margin: '4px 0'
             }}>
               <span style={{ color: '#64748B', textDecoration: 'line-through', fontSize: '0.94rem', fontWeight: 600 }}>
-                3 weeks manual prep
+                {t.hero.manualPrep}
               </span>
               <span style={{
                 background: 'linear-gradient(135deg, #0071E3 0%, #005BB5 100%)',
@@ -427,13 +435,13 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                 alignItems: 'center',
                 gap: '4px'
               }}>
-                ⚡ &lt; 10 mins flow
+                {t.hero.speedBadge}
               </span>
             </div>
 
             {/* Subtitle */}
             <p style={{ fontSize: '1.18rem', color: '#515154', lineHeight: 1.5, maxWidth: '560px', fontWeight: 400 }}>
-              Turn your business, project and financial information into a professionally structured Detailed Project Report (DPR) — formatted for institutional credit appraisal.
+              {t.hero.subtitle}
             </p>
 
             {/* DPR For Tags */}
@@ -442,9 +450,9 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                 Prepare your DPR for
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                <span className="apple-pill">Bank & NBFC Loans</span>
-                <span className="apple-pill">Government Schemes & Subsidies</span>
-                <span className="apple-pill">Investor Funding</span>
+                <span className="apple-pill">{t.fundingNeeds.bankLoansTitle}</span>
+                <span className="apple-pill">{t.fundingNeeds.govtSubsidiesTitle}</span>
+                <span className="apple-pill">{t.fundingNeeds.investorTitle}</span>
               </div>
               <div style={{ fontSize: '0.82rem', color: '#86868B', marginTop: '10px' }}>
                 With automated financial projections, funding analysis and structured documentation.
@@ -454,10 +462,10 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             {/* Action Buttons */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', marginTop: '8px' }}>
               <button onClick={() => { saveSelection(selectedRouteKey); setIsAuthModalOpen(true); }} className="apple-btn-primary" style={{ padding: '0.9rem 2.2rem', fontSize: '1.02rem' }}>
-                Create My DPR &rarr;
+                {t.common.createDpr} &rarr;
               </button>
               <button onClick={scrollToAuth} className="apple-btn-secondary" style={{ padding: '0.9rem 2.2rem', fontSize: '1.02rem' }}>
-                Get in Touch
+                {t.hero.contactTeamBtn}
               </button>
             </div>
 
@@ -898,12 +906,12 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
           
           <div style={{ marginBottom: '56px' }}>
-            <span className="apple-kicker">Use Cases</span>
+            <span className="apple-kicker">{t.fundingNeeds.kicker}</span>
             <h2 style={{ fontSize: '2.8rem', fontWeight: 700, color: '#1D1D1F', lineHeight: 1.08, letterSpacing: '-0.03em' }}>
-              One DPR. Multiple Funding Goals.
+              {t.fundingNeeds.title}
             </h2>
             <p style={{ fontSize: '1.1rem', color: '#515154', lineHeight: 1.6, marginTop: '12px', maxWidth: '640px' }}>
-              Whether you're preparing for business expansion or seeking institutional finance, structure documentation around your specific objective.
+              {t.fundingNeeds.subtitle}
             </p>
           </div>
 
@@ -914,12 +922,12 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#F5F5F7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', marginBottom: '20px' }}>
                 🏛️
               </div>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#1D1D1F', marginBottom: '12px' }}>Bank & NBFC Loans</h3>
+              <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#1D1D1F', marginBottom: '12px' }}>{t.fundingNeeds.bankLoansTitle}</h3>
               <p style={{ fontSize: '0.98rem', color: '#86868B', lineHeight: 1.6, flexGrow: 1, marginBottom: '24px' }}>
-                Present your business, project heads, financial projections, and debt repayment schedules in a structured report.
+                {t.fundingNeeds.bankLoansDesc}
               </p>
               <button onClick={scrollToAuth} style={{ all: 'unset', cursor: 'pointer', fontWeight: 600, color: '#0071E3', fontSize: '0.95rem' }}>
-                Create Loan DPR &rarr;
+                {t.fundingNeeds.bankLoansBtn}
               </button>
             </div>
 
@@ -928,12 +936,12 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#F5F5F7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', marginBottom: '20px' }}>
                 🏛️
               </div>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#1D1D1F', marginBottom: '12px' }}>Government Subsidies</h3>
+              <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#1D1D1F', marginBottom: '12px' }}>{t.fundingNeeds.govtSubsidiesTitle}</h3>
               <p style={{ fontSize: '0.98rem', color: '#86868B', lineHeight: 1.6, flexGrow: 1, marginBottom: '24px' }}>
-                Prepare structured project reports for PMEGP, PMFME, State Industrial Policies, and MSME capital subsidy claims.
+                {t.fundingNeeds.govtSubsidiesDesc}
               </p>
               <button onClick={scrollToAuth} style={{ all: 'unset', cursor: 'pointer', fontWeight: 600, color: '#0071E3', fontSize: '0.95rem' }}>
-                Prepare Subsidy DPR &rarr;
+                {t.fundingNeeds.govtSubsidiesBtn}
               </button>
             </div>
 
@@ -942,12 +950,12 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#F5F5F7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', marginBottom: '20px' }}>
                 💼
               </div>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#1D1D1F', marginBottom: '12px' }}>Investor Funding</h3>
+              <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#1D1D1F', marginBottom: '12px' }}>{t.fundingNeeds.investorTitle}</h3>
               <p style={{ fontSize: '0.98rem', color: '#86868B', lineHeight: 1.6, flexGrow: 1, marginBottom: '24px' }}>
-                Consolidate your unit profile, unit economics, and multi-scenario sensitivities into a compelling pitch document.
+                {t.fundingNeeds.investorDesc}
               </p>
               <button onClick={scrollToAuth} style={{ all: 'unset', cursor: 'pointer', fontWeight: 600, color: '#0071E3', fontSize: '0.95rem' }}>
-                Build Investor DPR &rarr;
+                {t.fundingNeeds.investorBtn}
               </button>
             </div>
 
@@ -1179,12 +1187,12 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
           
           {/* Centered Header Row */}
           <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 48px' }}>
-            <span className="apple-kicker">Supported Business Sectors</span>
+            <span className="apple-kicker">{t.sectors.kicker}</span>
             <h2 style={{ fontSize: '3rem', fontWeight: 700, color: '#1D1D1F', lineHeight: 1.1, letterSpacing: '-0.03em' }}>
-              Built for Every Business Sector
+              {t.sectors.title}
             </h2>
             <p style={{ fontSize: '1.12rem', color: '#515154', lineHeight: 1.6, marginTop: '12px' }}>
-              Our AI engine generates institutional-grade Detailed Project Reports tailored to specific industry norms, machinery heads, and benchmark operational metrics.
+              {t.sectors.subtitle}
             </p>
           </div>
 
@@ -1437,7 +1445,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
 
                       <div style={{ borderTop: '1px dashed rgba(0,0,0,0.1)', paddingTop: '14px', marginBottom: '20px' }}>
                         <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#86868B', letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: '8px' }}>
-                          Key DPR Sections & Analysis:
+                          {t.sectors.keyAnalysis}
                         </div>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                           {sec.activities.map((act, idx) => (

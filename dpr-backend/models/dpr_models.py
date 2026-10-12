@@ -17,6 +17,7 @@ class MachineryItem(BaseModel):
 
 class DPRDataPayload(BaseModel):
     dpr_type: Optional[str] = "Bank Loan DPR"
+    language: Optional[str] = "en"
     
     # Section 01: Basic Information
     business_name: Optional[str] = "Enterprise"

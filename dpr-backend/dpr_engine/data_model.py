@@ -121,6 +121,7 @@ class DPRDocumentModel(BaseModel):
     job_id: Optional[str] = None
     created_at: str = Field(default_factory=lambda: datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     version: int = 1
+    language: str = "en"
     dpr_type: DPRTypeEnum = DPRTypeEnum.BANK_LOAN
     dpr_depth: DPRDepthEnum = DPRDepthEnum.CORE
     industry: IndustryCategoryEnum = IndustryCategoryEnum.MANUFACTURING

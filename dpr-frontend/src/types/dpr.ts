@@ -18,6 +18,7 @@ export interface MachineryItem {
 
 export interface DPRFormData {
   dpr_type: string;
+  language?: string;
   dpr_depth?: 'entry' | 'core' | 'team' | 'ent' | 'summary' | 'standard' | 'detailed' | 'comprehensive' | 'enterprise' | string;
   industry?: string;
   sector_id?: string;

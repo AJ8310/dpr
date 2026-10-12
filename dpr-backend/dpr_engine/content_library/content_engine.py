@@ -103,9 +103,26 @@ class DPRContentEngine:
             target_paragraphs = "9 to 12 exhaustive, institutional-grade, multi-paragraph narratives with ISO standards, HSN codes, ESG compliance, and 10-Yr strategic roadmap"
             plan_badge = "ENTERPRISE PLAN QUALITY TIER (ULTRA-PREMIUM INSTITUTIONAL & INVESTOR PITCH DPR)"
 
+        lang = str(getattr(doc, 'language', 'en') or 'en').lower()
+        if 'kn' in lang or 'kannada' in lang:
+            lang_instruction = (
+                "LANGUAGE REQUIREMENT: The narrative text and subheadings MUST be authored entirely in professional Kannada (ಕನ್ನಡ), "
+                "using authentic banking, industry, and MSME subsidy terminology (ಉದಾಹರಣೆಗೆ: ಬ್ಯಾಂಕ್ ಸಾಲ ಮಂಜೂರಾತಿ, ಪ್ರವರ್ತಕರ ಬಂಡವಾಳ, ಯಂತ್ರೋಪಕರಣ ವೆಚ್ಚ, DSCR ಅನುಪಾತ, ಸಬ್ಸಿಡಿ, ದುಡಿಯುವ ಬಂಡವಾಳ). "
+                "Ensure all HTML paragraph tags <p><strong>...</strong><br>...</p> remain syntactically well-formed."
+            )
+        elif 'hi' in lang or 'hindi' in lang:
+            lang_instruction = (
+                "LANGUAGE REQUIREMENT: The narrative text and subheadings MUST be authored entirely in professional Hindi (हिंदी), "
+                "using authentic banking, industry, and MSME subsidy terminology (जैसे: बैंक ऋण स्वीकृति, प्रवर्तक इक्विटी, मशीनरी लागत, DSCR अनुपात, सरकारी सब्सिडी, कार्यशील पूंजी). "
+                "Ensure all HTML paragraph tags <p><strong>...</strong><br>...</p> remain syntactically well-formed."
+            )
+        else:
+            lang_instruction = "LANGUAGE REQUIREMENT: The narrative text must be written in professional English with standard Indian banking credit appraisal terminology."
+
         system_instruction = (
             f"You are an expert Senior Financial Analyst and Technical DPR Author for Indian Lead Banks (SBI, Canara, HDFC) and MSME Schemes (PMEGP, SVSY, CGTMSE).\n"
             f"Generate authoritative, highly detailed HTML narratives tailored for: {plan_badge}.\n"
+            f"{lang_instruction}\n"
             f"Each narrative section MUST contain {target_paragraphs} using <p><strong>Subheading Title:</strong><br>Detailed text...</p> format.\n"
             f"Include specific technical standards (ISO 9001:2015, HSN codes), financial coverage metrics, market CAGRs, and operational workflows tailored to the client business."
         )

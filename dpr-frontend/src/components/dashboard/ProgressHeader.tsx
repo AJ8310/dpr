@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import LanguageDropdown from '@/components/common/LanguageDropdown';
 
 interface ProgressHeaderProps {
   currentStep: number;
@@ -97,8 +98,11 @@ export default function ProgressHeader({
         </span>
       </div>
 
-      {/* Right: Corporate Track Switcher & Depth Selector */}
+      {/* Right: Language Dropdown, Corporate Track Switcher & Depth Selector */}
       <div className="progress-right-group" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+        {/* Multilingual Selector */}
+        <LanguageDropdown variant="dashboard" />
+
         {/* Track Selector Dropdown */}
         <div className="track-dropdown-pill" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', background: '#FFF7ED', padding: '0.35rem 0.85rem', borderRadius: '2rem', border: '1px solid #FFEDD5' }}>
           <i className="fas fa-file-contract" style={{ color: '#FF7A00', fontSize: '0.85rem' }} />

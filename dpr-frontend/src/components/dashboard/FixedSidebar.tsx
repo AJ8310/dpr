@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface FixedSidebarProps {
   userName: string;
@@ -12,21 +13,72 @@ interface FixedSidebarProps {
   onCloseMobile?: () => void;
 }
 
-const SECTION_NAV_ITEMS = [
-  { label: '01. Basic Information', icon: 'fa-building' },
-  { label: '02. Members & Management', icon: 'fa-users' },
-  { label: '03. Product Specifications', icon: 'fa-boxes' },
-  { label: '04. Plant & Machinery', icon: 'fa-microchip' },
-  { label: '05. Market Strategy', icon: 'fa-chart-line' },
-  { label: '06. Manpower Plan', icon: 'fa-user-group' },
-  { label: '07. Cost & Financing', icon: 'fa-coins' },
-  { label: '08. Financial Projections', icon: 'fa-chart-simple' },
-  { label: '09. Infrastructure', icon: 'fa-hard-hat' },
-  { label: '10. SWOT Analysis', icon: 'fa-chart-pie' },
-  { label: '11. Social & Eco Impact', icon: 'fa-hand-holding-heart' },
-  { label: '12. Credit Standing', icon: 'fa-credit-card' },
-  { label: '13. Upload Site Images', icon: 'fa-image' },
-  { label: '14. Declaration & Report', icon: 'fa-stamp' },
+const SECTION_NAV_ITEMS_I18N = {
+  en: [
+    '01. Basic Information',
+    '02. Members & Management',
+    '03. Product Specifications',
+    '04. Plant & Machinery',
+    '05. Market Strategy',
+    '06. Manpower Plan',
+    '07. Cost & Financing',
+    '08. Financial Projections',
+    '09. Infrastructure',
+    '10. SWOT Analysis',
+    '11. Social & Eco Impact',
+    '12. Credit Standing',
+    '13. Upload Site Images',
+    '14. Declaration & Report',
+  ],
+  kn: [
+    '01. ಮೂಲ ಮಾಹಿತಿ',
+    '02. ಸದಸ್ಯರು ಮತ್ತು ನಿರ್ವಹಣೆ',
+    '03. ಉತ್ಪನ್ನದ ವಿವರಗಳು',
+    '04. ಯಂತ್ರೋಪಕರಣಗಳು',
+    '05. ಮಾರುಕಟ್ಟೆ ತಂತ್ರ',
+    '06. ಸಿಬ್ಬಂದಿ ಯೋಜನೆ',
+    '07. ವೆಚ್ಚ ಮತ್ತು ಹಣಕಾಸು',
+    '08. ಹಣಕಾಸಿನ ಮುನ್ಸೂಚನೆ',
+    '09. ಮೂಲಸೌಕರ್ಯ',
+    '10. SWOT ವಿಶ್ಲೇಷಣೆ',
+    '11. ಸಾಮಾಜಿಕ & ಪರಿಸರ ಪ್ರಭಾವ',
+    '12. ಕ್ರೆಡಿಟ್ ವಿವರ',
+    '13. ಚಿತ್ರಗಳ ಅಪ್‌ಲೋಡ್',
+    '14. ಘೋಷಣೆ & ವರದಿ ಸಲ್ಲಿಕೆ',
+  ],
+  hi: [
+    '01. बुनियादी जानकारी',
+    '02. सदस्य एवं प्रबंधन',
+    '03. उत्पाद विनिर्देश',
+    '04. संयंत्र और मशीनरी',
+    '05. बाजार रणनीति',
+    '06. जनशक्ति योजना',
+    '07. लागत एवं वित्तपोषण',
+    '08. वित्तीय अनुमान',
+    '09. बुनियादी ढांचा',
+    '10. स्वाट विश्लेषण',
+    '11. सामाजिक एवं पर्यावरणीय प्रभाव',
+    '12. साख स्थिति',
+    '13. साइट चित्र अपलोड',
+    '14. घोषणा एवं रिपोर्ट',
+  ],
+};
+
+const SECTION_ICONS = [
+  'fa-building',
+  'fa-users',
+  'fa-boxes',
+  'fa-microchip',
+  'fa-chart-line',
+  'fa-user-group',
+  'fa-coins',
+  'fa-chart-simple',
+  'fa-hard-hat',
+  'fa-chart-pie',
+  'fa-hand-holding-heart',
+  'fa-credit-card',
+  'fa-image',
+  'fa-stamp',
 ];
 
 export default function FixedSidebar({
@@ -38,6 +90,8 @@ export default function FixedSidebar({
   isMobileOpen = false,
   onCloseMobile,
 }: FixedSidebarProps) {
+  const { language, t } = useLanguage();
+  const stepLabels = SECTION_NAV_ITEMS_I18N[language] || SECTION_NAV_ITEMS_I18N.en;
   return (
     <aside
       className={`dpr-sidebar-container ${isMobileOpen ? 'mobile-open' : ''}`}
@@ -219,16 +273,17 @@ export default function FixedSidebar({
               gap: '0.4rem',
             }}
           >
-            <i className="fas fa-sign-out-alt"></i> Exit Application
+            <i className="fas fa-sign-out-alt"></i> {t.common.logout || 'Exit Application'}
           </button>
         </div>
       </div>
 
       {/* Navigation Step List */}
       <nav style={{ padding: '0 0.6rem' }}>
-        {SECTION_NAV_ITEMS.map((item, idx) => {
+        {stepLabels.map((label, idx) => {
           const isActive = idx === activeStepIndex;
           const isCompleted = idx < activeStepIndex;
+          const icon = SECTION_ICONS[idx] || 'fa-circle';
 
           return (
             <button
@@ -260,8 +315,8 @@ export default function FixedSidebar({
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                <i className={`fas ${item.icon} sidebar-step-icon`} style={{ width: '16px', fontSize: '0.85rem', color: isActive ? '#FF7A00' : isCompleted ? '#2DD4BF' : '#94A3B8', transition: 'all 0.25s ease' }} />
-                <span className="sidebar-step-label" style={{ transition: 'all 0.2s ease' }}>{item.label}</span>
+                <i className={`fas ${icon} sidebar-step-icon`} style={{ width: '16px', fontSize: '0.85rem', color: isActive ? '#FF7A00' : isCompleted ? '#2DD4BF' : '#94A3B8', transition: 'all 0.25s ease' }} />
+                <span className="sidebar-step-label" style={{ transition: 'all 0.2s ease' }}>{label}</span>
               </div>
               {isCompleted && <i className="fas fa-check-circle" style={{ fontSize: '0.75rem', color: '#2DD4BF' }} />}
             </button>
