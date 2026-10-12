@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Star, FlaskConical } from 'lucide-react';
 import { DPRFormData, MemberItem, MachineryItem } from '@/types/dpr';
 import {
   uploadBalanceSheet,
@@ -2547,7 +2548,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                       }}
                     >
                       <div style={{ fontWeight: 800, color: '#0F172A', fontSize: '0.98rem' }}>Enterprise Bankable</div>
-                      <div style={{ fontSize: '0.82rem', color: '#008C95', fontWeight: 700, margin: '4px 0' }}>40 – 60 Pages ⭐</div>
+                      <div style={{ fontSize: '0.82rem', color: '#008C95', fontWeight: 700, margin: '4px 0' }}>40 – 60 Pages <Star size={13} strokeWidth={1.75} style={{ display: 'inline', verticalAlign: '-2px' }} /></div>
                       <div style={{ fontSize: '0.78rem', color: '#64748B' }}>30 Chapters + 10 Annexure Schedules, 10-Yr Projections, BOQ, ESG.</div>
                     </div>
                   </div>
@@ -2583,7 +2584,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                           style={{ width: '18px', height: '18px', accentColor: '#EA580C', cursor: 'pointer' }}
                         />
                         <label htmlFor="test_one_rupee_mode" style={{ fontSize: '0.92rem', fontWeight: 700, color: '#C2410C', cursor: 'pointer', margin: 0 }}>
-                          🧪 Test ₹1 Payment Mode (Live Razorpay Receipt Test)
+                          <FlaskConical size={16} strokeWidth={1.75} style={{ display: 'inline', verticalAlign: '-3px', marginRight: 6 }} />Test ₹1 Payment Mode (Live Razorpay Receipt Test)
                         </label>
                       </div>
                     </div>

@@ -1,6 +1,19 @@
 'use client';
 
 import React from 'react';
+import { ShieldCheck, TrendingUp, Coins, Landmark, AlertTriangle, BarChart3, Bot } from 'lucide-react';
+
+const agentIcon = (name: string) => {
+  const n = name.toLowerCase();
+  const props = { size: 14, strokeWidth: 1.75 };
+  if (n.includes('privacy')) return <ShieldCheck {...props} />;
+  if (n.includes('market')) return <TrendingUp {...props} />;
+  if (n.includes('financial')) return <Coins {...props} />;
+  if (n.includes('scheme')) return <Landmark {...props} />;
+  if (n.includes('risk')) return <AlertTriangle {...props} />;
+  if (n.includes('credit')) return <BarChart3 {...props} />;
+  return <Bot {...props} />;
+};
 
 export interface AgentResultItem {
   agent_id: string;
@@ -30,42 +43,42 @@ export default function AgentPipelineCard({
   const defaultAgents: AgentResultItem[] = [
     {
       agent_id: 'privacy_agent',
-      name: '🛡️ Privacy & PII Protection Guardrail',
+      name: 'Privacy & PII Protection Guardrail',
       status: 'COMPLETED',
       confidence: 1.0,
       findings: ['Tokenized 100% sensitive PII (PAN, Aadhaar, Bank Details)', 'Zero raw PII transmitted to external LLM']
     },
     {
       agent_id: 'market_agent',
-      name: '📈 Market & SWOT Intelligence Agent',
+      name: 'Market & SWOT Intelligence Agent',
       status: 'COMPLETED',
       confidence: 0.96,
       findings: ['Verified 12.8% Sector CAGR in Karnataka district', 'Identified Retail (50%) & Institutional (30%) channels']
     },
     {
       agent_id: 'financial_agent',
-      name: '💰 Financial Integrity & Sensitivity Agent',
+      name: 'Financial Integrity & Sensitivity Agent',
       status: 'COMPLETED',
       confidence: 0.99,
       findings: ['5-Year Average DSCR: 1.85x (Exceeds 1.25x bank threshold)', 'Break-Even Point achieved at 42.5% capacity']
     },
     {
       agent_id: 'scheme_agent',
-      name: '🏛️ Government Scheme & Subsidy Agent',
+      name: 'Government Scheme & Subsidy Agent',
       status: 'COMPLETED',
       confidence: 0.98,
       findings: ['Matched PMMY Tarun Category (Collateral-Free up to ₹10L)', 'PMEGP 25%-35% Capital Subsidy Applicable']
     },
     {
       agent_id: 'risk_agent',
-      name: '⚠️ Risk & Mitigation Assessment Agent',
+      name: 'Risk & Mitigation Assessment Agent',
       status: 'COMPLETED',
       confidence: 0.95,
       findings: ['Raw material volatility mitigated via annual supplier contracts', 'Machinery downtime covered by AMC contract']
     },
     {
       agent_id: 'credit_agent',
-      name: '📊 Bank Credit & Readiness Rating Agent',
+      name: 'Bank Credit & Readiness Rating Agent',
       status: 'COMPLETED',
       confidence: 0.97,
       findings: ['VKF Credit Readiness Score: 88/100', 'Official Bank Cover Letter & Application Pack generated']
@@ -111,6 +124,7 @@ export default function AgentPipelineCard({
             
             <div className="flex items-center justify-between">
               <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                {agentIcon(agent.name)}
                 {agent.name}
               </h4>
               <div className="flex items-center gap-1.5">

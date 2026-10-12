@@ -119,35 +119,38 @@ DPR-5.0/
 - Supabase account
 - Google Gemini API key
 
-### Backend Setup
+### Backend Setup (Python FastAPI)
 
 ```bash
-# Clone the repository
-git clone https://github.com/spandanaworks/DPR-5.0.git
-cd DPR-5.0/dpr-backend
+cd dpr-backend
+
+# Create and activate a virtual environment
+python -m venv .venv
+# On Windows:
+.\.venv\Scripts\activate
+# On Linux/macOS:
+# source .venv/bin/activate
+
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Configure environment variables (copy and adjust .env.example)
+copy .env.example .env
+
+# Run the FastAPI backend server
+python -m uvicorn main:app --reload --port 5000
+```
+
+### Frontend Setup (Next.js 14)
+
+```bash
+cd dpr-frontend
 
 # Install dependencies
 npm install
 
-# Create .env file
-cat > .env << EOL
-PORT=5000
-SUPABASE_URL=your_supabase_url
-SUPABASE_ANON_KEY=your_supabase_anon_key
-GEMINI_API_KEY=your_gemini_api_key
-EOL
-
-# Start the backend
-node server.js
-```
-
-### Frontend Setup
-
-```bash
-# Open index.html with Live Server (VS Code extension)
-# Or use Python server
-cd DPR-5.0
-python -m http.server 5500
+# Run development server
+npm run dev
 ```
 
 ---

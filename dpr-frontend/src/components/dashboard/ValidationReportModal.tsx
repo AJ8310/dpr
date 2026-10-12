@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { AlertOctagon, AlertTriangle, Lightbulb, CheckCircle2, Package } from 'lucide-react';
 
 interface ValidationReportModalProps {
   isOpen: boolean;
@@ -72,7 +73,7 @@ export default function ValidationReportModal({
           {hardBlocks.length > 0 && (
             <div className="p-4 bg-red-50 border-l-4 border-red-500 rounded-r-xl">
               <h4 className="text-sm font-bold text-red-800 flex items-center gap-2">
-                <span>⛔</span> Hard Blockers ({hardBlocks.length}) — Action Required
+                <AlertOctagon size={16} strokeWidth={1.75} /> Hard Blockers ({hardBlocks.length}) — Action Required
               </h4>
               <ul className="mt-2 space-y-2 text-xs text-red-700">
                 {hardBlocks.map((item: any, idx: number) => (
@@ -88,7 +89,7 @@ export default function ValidationReportModal({
           {warnings.length > 0 && (
             <div className="p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-xl">
               <h4 className="text-sm font-bold text-amber-800 flex items-center gap-2">
-                <span>⚠️</span> Warnings & Policy Acknowledgements ({warnings.length})
+                <AlertTriangle size={16} strokeWidth={1.75} /> Warnings & Policy Acknowledgements ({warnings.length})
               </h4>
               <div className="mt-2 space-y-2 text-xs text-amber-900">
                 {warnings.map((item: any, idx: number) => (
@@ -115,7 +116,7 @@ export default function ValidationReportModal({
           {infoHints.length > 0 && (
             <div className="p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-xl">
               <h4 className="text-sm font-bold text-blue-800 flex items-center gap-2">
-                <span>💡</span> Bank Appraisal Recommendations ({infoHints.length})
+                <Lightbulb size={16} strokeWidth={1.75} /> Bank Appraisal Recommendations ({infoHints.length})
               </h4>
               <ul className="mt-2 space-y-1.5 text-xs text-blue-800">
                 {infoHints.map((item: any, idx: number) => (
@@ -131,7 +132,7 @@ export default function ValidationReportModal({
           {hardBlocks.length === 0 && warnings.length === 0 && (
             <div className="p-4 bg-emerald-50 border-l-4 border-emerald-500 rounded-r-xl text-emerald-800">
               <h4 className="text-sm font-bold flex items-center gap-2">
-                <span>✅</span> All Validation Checks Passed!
+                <CheckCircle2 size={16} strokeWidth={1.75} /> All Validation Checks Passed!
               </h4>
               <p className="text-xs mt-1 text-emerald-700">
                 Project cost reconciles, MUDRA category rules match, and financial ratios meet VKF appraisal benchmarks.
@@ -144,7 +145,7 @@ export default function ValidationReportModal({
             <div className="p-4 bg-slate-900 text-white rounded-xl space-y-3">
               <div className="flex items-center justify-between">
                 <h4 className="text-sm font-bold text-blue-400">
-                  📦 Bank Submission Pack Ready ({submissionPackData.submission_pack_id})
+                  <Package size={16} strokeWidth={1.75} style={{ display: 'inline', verticalAlign: '-3px', marginRight: 6 }} />Bank Submission Pack Ready ({submissionPackData.submission_pack_id})
                 </h4>
                 <span className="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-medium">
                   11-Part Application Pack

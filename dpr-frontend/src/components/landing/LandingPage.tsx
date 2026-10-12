@@ -8,6 +8,7 @@ import LanguageSelectModal from '@/components/common/LanguageSelectModal';
 import LanguageDropdown from '@/components/common/LanguageDropdown';
 import { useLanguage } from '@/context/LanguageContext';
 import { UserSession } from '@/types/dpr';
+import { Zap, Video, FileText, Sparkles, Clock, BarChart3, Users, AlertTriangle, Mail, Landmark, Briefcase, TrendingUp, Percent, Banknote, SlidersHorizontal } from 'lucide-react';
 
 interface LandingPageProps {
   onLoginSuccess: (session: UserSession) => void;
@@ -435,7 +436,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                 alignItems: 'center',
                 gap: '4px'
               }}>
-                {t.hero.speedBadge}
+                <Zap size={16} strokeWidth={1.75} style={{ display: 'inline', verticalAlign: '-3px', marginRight: 4 }} />{t.hero.speedBadge}
               </span>
             </div>
 
@@ -521,7 +522,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                       transition: 'all 0.2s ease'
                     }}
                   >
-                    🎥 Studio Demo
+                    <Video size={16} strokeWidth={1.75} style={{ display: 'inline', verticalAlign: '-3px', marginRight: 4 }} />Studio Demo
                   </button>
                   <button
                     type="button"
@@ -539,7 +540,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                       transition: 'all 0.2s ease'
                     }}
                   >
-                    📄 Report Blueprint
+                    <FileText size={16} strokeWidth={1.75} style={{ display: 'inline', verticalAlign: '-3px', marginRight: 4 }} />Report Blueprint
                   </button>
                 </div>
               </div>
@@ -602,7 +603,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                     pointerEvents: 'none'
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ color: '#0071E3', fontSize: '1rem' }}>✨</span>
+                      <span style={{ color: '#0071E3', fontSize: '1rem', display: 'flex' }}><Sparkles size={16} strokeWidth={1.75} /></span>
                       <span>AI-Powered Financial & Detailed Project Report Generator</span>
                     </div>
                   </div>
@@ -733,11 +734,11 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <div style={{ fontSize: '1.05rem', fontWeight: 600, color: '#1D1D1F', marginBottom: '4px' }}>Traditional challenges:</div>
             {[
-              { icon: '🕒', text: 'Weeks spent preparing and revising documents manually' },
-              { icon: '📊', text: 'Complex financial projections to build and check' },
-              { icon: '📄', text: 'Repetitive work across Excel spreadsheets and Word files' },
-              { icon: '👥', text: 'High dependence on external consultant turnaround times' },
-              { icon: '⚠️', text: 'Delays whenever project inputs or loan amounts change' }
+              { icon: <Clock size={20} strokeWidth={1.75} />, text: 'Weeks spent preparing and revising documents manually' },
+              { icon: <BarChart3 size={20} strokeWidth={1.75} />, text: 'Complex financial projections to build and check' },
+              { icon: <FileText size={20} strokeWidth={1.75} />, text: 'Repetitive work across Excel spreadsheets and Word files' },
+              { icon: <Users size={20} strokeWidth={1.75} />, text: 'High dependence on external consultant turnaround times' },
+              { icon: <AlertTriangle size={20} strokeWidth={1.75} />, text: 'Delays whenever project inputs or loan amounts change' }
             ].map((item, idx) => (
               <div key={idx} style={{
                 display: 'flex',
@@ -751,7 +752,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                 fontWeight: 500,
                 color: '#1D1D1F'
               }}>
-                <span style={{ fontSize: '1.2rem' }}>{item.icon}</span>
+                <span style={{ display: 'flex', color: '#0071E3' }}>{item.icon}</span>
                 <span>{item.text}</span>
               </div>
             ))}
@@ -920,7 +921,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             {/* Card 1 */}
             <div className="apple-bento-card" style={{ display: 'flex', flexDirection: 'column' }}>
               <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#F5F5F7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', marginBottom: '20px' }}>
-                🏛️
+                <Landmark size={26} strokeWidth={1.5} color="#0071E3" />
               </div>
               <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#1D1D1F', marginBottom: '12px' }}>{t.fundingNeeds.bankLoansTitle}</h3>
               <p style={{ fontSize: '0.98rem', color: '#86868B', lineHeight: 1.6, flexGrow: 1, marginBottom: '24px' }}>
@@ -934,7 +935,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             {/* Card 2 */}
             <div className="apple-bento-card" style={{ display: 'flex', flexDirection: 'column' }}>
               <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#F5F5F7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', marginBottom: '20px' }}>
-                🏛️
+                <Landmark size={26} strokeWidth={1.5} color="#0071E3" />
               </div>
               <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#1D1D1F', marginBottom: '12px' }}>{t.fundingNeeds.govtSubsidiesTitle}</h3>
               <p style={{ fontSize: '0.98rem', color: '#86868B', lineHeight: 1.6, flexGrow: 1, marginBottom: '24px' }}>
@@ -948,7 +949,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             {/* Card 3 */}
             <div className="apple-bento-card" style={{ display: 'flex', flexDirection: 'column' }}>
               <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#F5F5F7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', marginBottom: '20px' }}>
-                💼
+                <Briefcase size={26} strokeWidth={1.5} color="#0071E3" />
               </div>
               <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#1D1D1F', marginBottom: '12px' }}>{t.fundingNeeds.investorTitle}</h3>
               <p style={{ fontSize: '0.98rem', color: '#86868B', lineHeight: 1.6, flexGrow: 1, marginBottom: '24px' }}>
@@ -1029,10 +1030,10 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             {/* Left Tabs */}
             <div style={{ borderRight: '1px solid rgba(0, 0, 0, 0.06)', background: '#FFFFFF', display: 'flex', flexDirection: 'column' }}>
               {[
-                { id: 'projections', label: 'Projections', desc: '5-year Profit & Loss forecast' },
-                { id: 'ratios', label: 'Key Ratios', desc: 'DSCR, Debt-Equity & Margins' },
-                { id: 'repayments', label: 'Loan Repayments', desc: 'Principal & Interest amortization' },
-                { id: 'sensitivities', label: 'Sensitivity Analysis', desc: 'Break-even & capacity utilization' }
+                { id: 'projections', Icon: TrendingUp, label: 'Projections', desc: '5-year Profit & Loss forecast' },
+                { id: 'ratios', Icon: Percent, label: 'Key Ratios', desc: 'DSCR, Debt-Equity & Margins' },
+                { id: 'repayments', Icon: Banknote, label: 'Loan Repayments', desc: 'Principal & Interest amortization' },
+                { id: 'sensitivities', Icon: SlidersHorizontal, label: 'Sensitivity Analysis', desc: 'Break-even & capacity utilization' }
               ].map((tab) => {
                 const isSelected = activeDashTab === tab.id;
                 return (
@@ -1054,7 +1055,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                       fontWeight: 700,
                       flexShrink: 0
                     }}>
-                      📊
+                      <tab.Icon size={20} strokeWidth={1.75} />
                     </div>
                     <div>
                       <b style={{ fontSize: '0.98rem', color: '#1D1D1F' }}>{tab.label}</b>
@@ -2156,7 +2157,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '1.05rem', fontWeight: 500, color: '#1D1D1F' }}>
                   <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#FFFFFF', border: '1px solid rgba(0, 0, 0, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#0071E3' }}>
-                    ✉️
+                    <Mail size={20} strokeWidth={1.75} />
                   </div>
                   <a href="mailto:support@infopaceindia.com" style={{ color: '#1D1D1F', textDecoration: 'none' }}>
                     support@infopaceindia.com
@@ -2233,7 +2234,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
 
                   {inquirySubmitted ? (
                     <div style={{ padding: '24px', background: 'rgba(52, 199, 89, 0.1)', borderRadius: '16px', border: '1px solid rgba(52, 199, 89, 0.2)', textAlign: 'center', color: '#248A3D', fontWeight: 600 }}>
-                      ✅ Thank you! Your project details have been submitted. Our team will contact you shortly.
+                      Thank you! Your project details have been submitted. Our team will contact you shortly.
                     </div>
                   ) : (
                     <form onSubmit={handleInquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
