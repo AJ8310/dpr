@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { sendChatMessage } from '@/lib/api';
+import { useLanguage } from '@/context/LanguageContext';
+import { wizardTranslations } from '@/i18n/wizardTranslations';
 
 interface Message {
   sender: 'bot' | 'user';
@@ -19,6 +21,8 @@ export default function FloatingChatbotWidget({
   onNavigateStep,
   currentSectionName,
 }: FloatingChatbotWidgetProps) {
+  const { language } = useLanguage();
+  const tW = wizardTranslations[language] || wizardTranslations.en;
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -167,8 +171,8 @@ export default function FloatingChatbotWidget({
           <img src="/media_1787130170152.png" alt="Advisor" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 15%' }} />
         </div>
         <div style={{ textAlign: 'left' }}>
-          <div style={{ fontSize: '0.82rem', fontWeight: 800 }}>DPR AI Advisor</div>
-          <div style={{ fontSize: '0.68rem', color: '#FFE600' }}>Ask any query</div>
+          <div style={{ fontSize: '0.82rem', fontWeight: 800 }}>{tW.advisor.title}</div>
+          <div style={{ fontSize: '0.68rem', color: '#FFE600' }}>{tW.advisor.askQuery}</div>
         </div>
       </button>
 
@@ -310,7 +314,7 @@ export default function FloatingChatbotWidget({
           >
             <input
               type="text"
-              placeholder={currentSectionName ? `Ask query on ${currentSectionName}...` : "Ask any query (download, edit, DSCR, PMEGP)..."}
+              placeholder={currentSectionName ? `${tW.advisor.askQuery} (${currentSectionName})...` : tW.advisor.placeholder}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               style={{

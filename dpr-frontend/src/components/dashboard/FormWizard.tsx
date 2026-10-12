@@ -24,6 +24,8 @@ import { compressImageClientSide } from '@/lib/imageCompressor';
 import DPRGenerationModal from './DPRGenerationModal';
 import DynamicQuestionRenderer, { QuestionSchema } from './DynamicQuestionRenderer';
 import ProgressiveSectorWrapper, { QuestionGroup } from './ProgressiveSectorWrapper';
+import { useLanguage } from '@/context/LanguageContext';
+import { wizardTranslations } from '@/i18n/wizardTranslations';
 
 interface FormWizardProps {
   initialService: string;
@@ -33,6 +35,8 @@ interface FormWizardProps {
 }
 
 export default function FormWizard({ initialService, activeStep, setActiveStep }: FormWizardProps) {
+  const { language } = useLanguage();
+  const tW = wizardTranslations[language] || wizardTranslations.en;
   const [formData, setFormData] = useState<DPRFormData>({
     dpr_type: initialService || 'Bank Loan DPR',
     sector_id: 'manufacturing',
@@ -1154,7 +1158,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
             gap: '0.5rem',
           }}
         >
-          <i className="fas fa-arrow-left"></i> Previous
+          <i className="fas fa-arrow-left"></i> {tW.progressive.previous}
         </button>
       )}
       <button
@@ -1164,7 +1168,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         className="btn-next-spacious"
         style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem' }}
       >
-        <i className="fas fa-check-circle"></i> {saving ? 'Saving...' : 'Save & Continue'} <i className="fas fa-arrow-right"></i>
+        <i className="fas fa-check-circle"></i> {saving ? tW.progressive.saving : tW.progressive.saveContinue} <i className="fas fa-arrow-right"></i>
       </button>
     </div>
   );
@@ -1270,10 +1274,10 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
             </div>
             <div>
               <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#123B4A', margin: 0, marginBottom: '0.2rem' }}>
-                Smart Document Auto-Fill
+                {tW.autoFill.title}
               </h4>
               <p style={{ fontSize: '0.86rem', color: '#66818C', margin: 0 }}>
-                Upload GST Certificate, Udyam MSME, Quotations, Bank Statements, or Proposal PDF/Image. The engine will auto-fill your fields below!
+                {tW.autoFill.desc}
               </p>
             </div>
           </div>
@@ -1297,7 +1301,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                 transition: 'all 0.2s ease',
               }}
             >
-              <i className="fas fa-trash-alt"></i> Reset Form
+              <i className="fas fa-trash-alt"></i> {tW.autoFill.resetBtn}
             </button>
 
             <label
@@ -1317,7 +1321,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
               }}
             >
               <i className="fas fa-file-upload"></i>
-              {parsingDoc ? 'Parsing & Auto-Filling...' : 'Upload Document to Auto-Fill'}
+              {parsingDoc ? tW.autoFill.parsing : tW.autoFill.uploadBtn}
               <input
                 type="file"
                 accept=".pdf,.png,.jpg,.jpeg,.txt,.json,.docx,.csv"
@@ -1351,21 +1355,21 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       {activeStep === 0 && (
         <div className="dpr-section-card">
           <ProgressiveSectorWrapper
-            title="Sector 1: Basic Information & Business Identity"
-            subtitle="Complete business registration, sector selection, and location details"
+            title={tW.sectors[0]?.title || "Sector 1: Basic Information & Business Identity"}
+            subtitle={tW.sectors[0]?.subtitle || "Complete business registration, sector selection, and location details"}
             isSaving={saving}
             onCompleteSector={handleSaveAndContinue}
             questions={[
               {
                 id: 'sector_activity',
-                title: 'Business Sector & Activity Selection',
-                description: 'Select your sector & sub-activity for dynamic schema resolution',
+                title: tW.s1Fields.q1_title,
+                description: tW.s1Fields.q1_desc,
                 content: (
                   <div style={{ background: 'linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)', border: '1.5px solid #FF7A00', borderRadius: '16px', padding: '1.4rem 1.6rem' }}>
                     <div className="grid-3">
                       <div>
                         <label style={{ fontSize: '0.82rem', fontWeight: 800, color: '#9A3412', display: 'block', marginBottom: '0.35rem' }}>
-                          1. Business Sector <span style={{ color: '#DC2626' }}>*</span>
+                          {tW.s1Fields.sectorLabel} <span style={{ color: '#DC2626' }}>*</span>
                         </label>
                         <select
                           name="sector_id"
@@ -1387,16 +1391,16 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                             { id: 'infrastructure', name: 'Infrastructure & Logistics' }
                           ]).map((sec: any) => (
                             <option key={sec.id} value={sec.id}>
-                              {sec.name}
+                              {tW.masterSectors[sec.id] || sec.name}
                             </option>
                           ))}
-                          <option value="other">Other (Specify Custom Sector)</option>
+                          <option value="other">{tW.s1Fields.otherSector}</option>
                         </select>
                       </div>
 
                       <div>
                         <label style={{ fontSize: '0.82rem', fontWeight: 800, color: '#9A3412', display: 'block', marginBottom: '0.35rem' }}>
-                          2. Business Activity / Sub-Sector <span style={{ color: '#DC2626' }}>*</span>
+                          {tW.s1Fields.activityLabel} <span style={{ color: '#DC2626' }}>*</span>
                         </label>
                         <select
                           name="activity_id"
@@ -1415,16 +1419,16 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                             { id: 'cold_storage_hub', name: 'Multi-Commodity Cold Storage Warehouse' }
                           ]).map((act: any) => (
                             <option key={act.id} value={act.id}>
-                              {act.name}
+                              {tW.masterActivities[act.id] || act.name}
                             </option>
                           ))}
-                          <option value="other">Other (Specify Custom Activity)</option>
+                          <option value="other">{tW.s1Fields.otherActivity}</option>
                         </select>
                       </div>
 
                       <div>
                         <label style={{ fontSize: '0.82rem', fontWeight: 800, color: '#9A3412', display: 'block', marginBottom: '0.35rem' }}>
-                          3. Project Classification <span style={{ color: '#DC2626' }}>*</span>
+                          {tW.s1Fields.classificationLabel} <span style={{ color: '#DC2626' }}>*</span>
                         </label>
                         <select
                           name="project_type_id"
@@ -1441,10 +1445,10 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                             { id: 'startup', name: 'Tech Startup / Innovation Venture' }
                           ]).map((pt: any) => (
                             <option key={pt.id} value={pt.id}>
-                              {pt.name}
+                              {tW.masterProjectTypes[pt.id] || pt.name}
                             </option>
                           ))}
-                          <option value="other">Other (Specify Custom Classification)</option>
+                          <option value="other">{tW.s1Fields.otherClassification}</option>
                         </select>
                       </div>
                     </div>
@@ -1453,61 +1457,63 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
               },
               {
                 id: 'business_identity',
-                title: 'Business Identity & Overview',
-                description: 'Legal business name, group name, and operational overview',
+                title: tW.s1Fields.q2_title,
+                description: tW.s1Fields.q2_desc,
                 content: (
                   <div>
                     <div className="grid-2" style={{ marginBottom: '1rem' }}>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Business Name</label>
-                        <input type="text" name="business_name" className="input-modern" placeholder="Business Name" value={formData.business_name} onChange={handleChange} required />
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.businessName}</label>
+                        <input type="text" name="business_name" className="input-modern" placeholder={tW.s1Fields.businessName} value={formData.business_name} onChange={handleChange} required />
                       </div>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Group / Organization Name</label>
-                        <input type="text" name="group_name" className="input-modern" placeholder="Group Name" value={formData.group_name} onChange={handleChange} />
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.groupName}</label>
+                        <input type="text" name="group_name" className="input-modern" placeholder={tW.s1Fields.groupName} value={formData.group_name} onChange={handleChange} />
                       </div>
                     </div>
                     <div>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Business Overview</label>
-                      <textarea name="business_desc" className="input-modern" rows={2} placeholder="Brief Description of Business" value={formData.business_desc} onChange={handleChange} />
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.businessDesc}</label>
+                      <textarea name="business_desc" className="input-modern" rows={2} placeholder={tW.s1Fields.businessDesc} value={formData.business_desc} onChange={handleChange} />
                     </div>
                   </div>
                 ),
               },
               {
                 id: 'tax_registrations',
-                title: 'Entity Type & Tax Registrations',
-                description: 'Entity constitution (Proprietorship/Pvt Ltd), CIN, GST, PAN, Udyam, FSSAI',
+                title: tW.s1Fields.q3_title,
+                description: tW.s1Fields.q3_desc,
                 content: (
                   <div>
                     <div className="grid-3" style={{ marginBottom: '1rem' }}>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Entity Type</label>
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.entityType}</label>
                         <select name="entity_type" className="input-modern" value={formData.entity_type} onChange={handleChange}>
-                          <option>Proprietorship</option><option>Partnership</option><option>LLP</option><option>Private Limited Company</option><option>JLG</option><option>SHG</option>
+                          {['Proprietorship', 'Partnership', 'LLP', 'Private Limited Company', 'JLG', 'SHG'].map((et) => (
+                            <option key={et} value={et}>{tW.entityTypes[et] || et}</option>
+                          ))}
                         </select>
                       </div>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>CIN No.</label>
-                        <input type="text" name="cin" className="input-modern" placeholder="CIN No." value={formData.cin} onChange={handleChange} />
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.cin}</label>
+                        <input type="text" name="cin" className="input-modern" placeholder={tW.s1Fields.cin} value={formData.cin} onChange={handleChange} />
                       </div>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>GST No.</label>
-                        <input type="text" name="gst_no" className="input-modern" placeholder="GST No." value={formData.gst_no} onChange={handleChange} />
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.gst}</label>
+                        <input type="text" name="gst_no" className="input-modern" placeholder={tW.s1Fields.gst} value={formData.gst_no} onChange={handleChange} />
                       </div>
                     </div>
                     <div className="grid-3">
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>PAN No.</label>
-                        <input type="text" name="pan_no" className="input-modern" placeholder="PAN No." value={formData.pan_no} onChange={handleChange} />
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.pan}</label>
+                        <input type="text" name="pan_no" className="input-modern" placeholder={tW.s1Fields.pan} value={formData.pan_no} onChange={handleChange} />
                       </div>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>MSME / Udyam No.</label>
-                        <input type="text" name="udyam_no" className="input-modern" placeholder="Udyam No." value={formData.udyam_no} onChange={handleChange} />
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.udyam}</label>
+                        <input type="text" name="udyam_no" className="input-modern" placeholder={tW.s1Fields.udyam} value={formData.udyam_no} onChange={handleChange} />
                       </div>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>FSSAI No.</label>
-                        <input type="text" name="fssai_no" className="input-modern" placeholder="FSSAI License No." value={formData.fssai_no} onChange={handleChange} />
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.fssai}</label>
+                        <input type="text" name="fssai_no" className="input-modern" placeholder={tW.s1Fields.fssai} value={formData.fssai_no} onChange={handleChange} />
                       </div>
                     </div>
                   </div>
@@ -1515,50 +1521,50 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
               },
               {
                 id: 'location_contact',
-                title: 'Location, Contact & Bank Account Details',
-                description: 'Village/Town, District, State, contact details, and banking information',
+                title: tW.s1Fields.q4_title,
+                description: tW.s1Fields.q4_desc,
                 content: (
                   <div>
                     <div className="grid-3" style={{ marginBottom: '1rem' }}>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Village / Town</label>
-                        <input type="text" name="village" className="input-modern" placeholder="Village" value={formData.village} onChange={handleChange} />
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.village}</label>
+                        <input type="text" name="village" className="input-modern" placeholder={tW.s1Fields.village} value={formData.village} onChange={handleChange} />
                       </div>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>District</label>
-                        <input type="text" name="district" className="input-modern" placeholder="District" value={formData.district} onChange={handleChange} />
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.district}</label>
+                        <input type="text" name="district" className="input-modern" placeholder={tW.s1Fields.district} value={formData.district} onChange={handleChange} />
                       </div>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>State</label>
-                        <input type="text" name="state" className="input-modern" placeholder="State" value={formData.state} onChange={handleChange} />
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.state}</label>
+                        <input type="text" name="state" className="input-modern" placeholder={tW.s1Fields.state} value={formData.state} onChange={handleChange} />
                       </div>
                     </div>
                     <div className="grid-3" style={{ marginBottom: '1rem' }}>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Contact Person Name</label>
-                        <input type="text" name="contact_name" className="input-modern" placeholder="Your name" value={formData.contact_name} onChange={handleChange} />
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.contactName}</label>
+                        <input type="text" name="contact_name" className="input-modern" placeholder={tW.s1Fields.contactName} value={formData.contact_name} onChange={handleChange} />
                       </div>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Contact Number</label>
-                        <input type="text" name="contact_number" className="input-modern" placeholder="Contact Number" value={formData.contact_number} onChange={handleChange} />
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.contactNumber}</label>
+                        <input type="text" name="contact_number" className="input-modern" placeholder={tW.s1Fields.contactNumber} value={formData.contact_number} onChange={handleChange} />
                       </div>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Email Address</label>
-                        <input type="email" name="email" className="input-modern" placeholder="Your email address" value={formData.email} onChange={handleChange} />
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.email}</label>
+                        <input type="email" name="email" className="input-modern" placeholder={tW.s1Fields.email} value={formData.email} onChange={handleChange} />
                       </div>
                     </div>
                     <div className="grid-3">
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Bank Name</label>
-                        <input type="text" name="bank_name" className="input-modern" placeholder="Bank Name" value={formData.bank_name} onChange={handleChange} />
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.bankName}</label>
+                        <input type="text" name="bank_name" className="input-modern" placeholder={tW.s1Fields.bankName} value={formData.bank_name} onChange={handleChange} />
                       </div>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Bank Branch</label>
-                        <input type="text" name="bank_branch" className="input-modern" placeholder="Bank Branch" value={formData.bank_branch} onChange={handleChange} />
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.bankBranch}</label>
+                        <input type="text" name="bank_branch" className="input-modern" placeholder={tW.s1Fields.bankBranch} value={formData.bank_branch} onChange={handleChange} />
                       </div>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>IFSC Code</label>
-                        <input type="text" name="ifsc" className="input-modern" placeholder="IFSC Code" value={formData.ifsc} onChange={handleChange} />
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.ifsc}</label>
+                        <input type="text" name="ifsc" className="input-modern" placeholder={tW.s1Fields.ifsc} value={formData.ifsc} onChange={handleChange} />
                       </div>
                     </div>
                   </div>
@@ -1566,40 +1572,39 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
               },
               {
                 id: 'track_specific_questions',
-                title: `${formData.dpr_type || 'Bank Loan DPR'} Service Questions`,
-                description: 'Tailored questions for your selected DPR service',
+                title: tW.s1Fields.q5_title,
+                description: tW.s1Fields.q5_desc,
                 content: (
                   <div>
                     {/* BANK DPR TRACK QUESTIONS */}
                     {formData.dpr_type.includes('Bank') && (
                       <div className="grid-3">
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Primary Lending Bank</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.primaryBank}</label>
                           <input type="text" name="primary_lending_bank" className="input-modern" placeholder="e.g. State Bank of India" value={formData.primary_lending_bank || ''} onChange={handleChange} />
                         </div>
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Bank Loan Scheme</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.loanScheme}</label>
                           <input type="text" name="bank_loan_scheme_name" className="input-modern" placeholder="e.g. Commercial Term Loan / Cash Credit" value={formData.bank_loan_scheme_name || ''} onChange={handleChange} />
                         </div>
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Collateral Offered</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.collateral}</label>
                           <select name="collateral_offered" className="input-modern" value={formData.collateral_offered || 'CGTMSE Guarantee (Collateral Free)'} onChange={handleChange}>
-                            <option>CGTMSE Guarantee (Collateral Free)</option>
-                            <option>Property Mortgage (Residential/Commercial)</option>
-                            <option>Fixed Deposit Pledged</option>
-                            <option>Industrial Shed Land Mortgage</option>
+                            {['CGTMSE Guarantee (Collateral Free)', 'Property Mortgage (Residential/Commercial)', 'Fixed Deposit Pledged', 'Industrial Shed Land Mortgage'].map((opt) => (
+                              <option key={opt} value={opt}>{tW.collateralOptions[opt] || opt}</option>
+                            ))}
                           </select>
                         </div>
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Repayment Moratorium (Months)</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.moratorium}</label>
                           <input type="number" name="moratorium_period_months" className="input-modern" placeholder="6" value={formData.moratorium_period_months || 6} onChange={handleChange} />
                         </div>
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Repayment Tenure (Years)</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.tenure}</label>
                           <input type="number" name="repayment_tenure_years" className="input-modern" placeholder="5" value={formData.repayment_tenure_years || 5} onChange={handleChange} />
                         </div>
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Interest Rate % (p.a.)</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.interestRate}</label>
                           <input type="number" step="0.1" name="interest_rate_percent" className="input-modern" placeholder="10.5" value={formData.interest_rate_percent || 10.5} onChange={handleChange} />
                         </div>
                       </div>
@@ -1609,47 +1614,47 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                     {(formData.dpr_type.includes('Govt') || formData.dpr_type.includes('Subsidy')) && (
                       <div className="grid-3">
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Target Government Scheme</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.targetGovtScheme}</label>
                           <select name="govt_scheme_name" className="input-modern" value={formData.govt_scheme_name || 'PMEGP'} onChange={handleChange}>
-                            <option>PMEGP (Prime Minister Employment Generation Programme)</option>
-                            <option>MUDRA Loan Scheme</option>
-                            <option>PMFME (PM Formalisation of Micro Food Processing)</option>
-                            <option>KVIC / KVIB Rural Enterprise Subsidy</option>
-                            <option>District Industries Centre (DIC) State Subsidy</option>
+                            {['PMEGP (Prime Minister Employment Generation Programme)', 'MUDRA Loan Scheme', 'PMFME (PM Formalisation of Micro Food Processing)', 'KVIC / KVIB Rural Enterprise Subsidy', 'District Industries Centre (DIC) State Subsidy'].map((s) => (
+                              <option key={s} value={s}>{tW.govtSchemeOptions[s] || s}</option>
+                            ))}
                           </select>
                         </div>
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Nodal Implementing Agency</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.nodalAgency}</label>
                           <select name="nodal_agency" className="input-modern" value={formData.nodal_agency || 'KVIC'} onChange={handleChange}>
-                            <option>KVIC (Khadi & Village Industries Commission)</option>
-                            <option>KVIB (Karnataka State KVIB)</option>
-                            <option>DIC (District Industries Centre)</option>
+                            {['KVIC (Khadi & Village Industries Commission)', 'KVIB (Karnataka State KVIB)', 'DIC (District Industries Centre)'].map((a) => (
+                              <option key={a} value={a}>{tW.nodalAgencyOptions[a] || a}</option>
+                            ))}
                           </select>
                         </div>
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Location Subsidy Category</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.locationSubsidy}</label>
                           <select name="location_subsidy_category" className="input-modern" value={formData.location_subsidy_category || 'Rural Area (35% Subsidy)'} onChange={handleChange}>
-                            <option>Rural Area (35% Special / 25% General Subsidy)</option>
-                            <option>Urban Area (25% Special / 15% General Subsidy)</option>
+                            {['Rural Area (35% Special / 25% General Subsidy)', 'Urban Area (25% Special / 15% General Subsidy)'].map((loc) => (
+                              <option key={loc} value={loc}>{tW.locationOptions[loc] || loc}</option>
+                            ))}
                           </select>
                         </div>
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Social Beneficiary Category</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.socialCategory}</label>
                           <select name="social_category" className="input-modern" value={formData.social_category || 'Special Category (Women / SC / ST / OBC)'} onChange={handleChange}>
-                            <option>Special Category (Women / SC / ST / OBC / Ex-Servicemen)</option>
-                            <option>General Category</option>
+                            {['Special Category (Women / SC / ST / OBC / Ex-Servicemen)', 'General Category'].map((soc) => (
+                              <option key={soc} value={soc}>{tW.socialOptions[soc] || soc}</option>
+                            ))}
                           </select>
                         </div>
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>EDP Training Status</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.edpStatus}</label>
                           <select name="edp_training_status" className="input-modern" value={formData.edp_training_status || 'Completed (10-Day Training)'} onChange={handleChange}>
-                            <option>Completed (10-Day Online/Offline Training Certificate)</option>
-                            <option>Registered / Pending Training Slot</option>
-                            <option>Exempted (Technical Degree / Diploma Holder)</option>
+                            {['Completed (10-Day Online/Offline Training Certificate)', 'Registered / Pending Training Slot', 'Exempted (Technical Degree / Diploma Holder)'].map((edp) => (
+                              <option key={edp} value={edp}>{tW.edpOptions[edp] || edp}</option>
+                            ))}
                           </select>
                         </div>
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Subsidy Margin Claim (₹)</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.subsidyClaim}</label>
                           <input type="number" name="subsidy_margin_money_claim" className="input-modern" placeholder="350000" value={formData.subsidy_margin_money_claim || 350000} onChange={handleChange} />
                         </div>
                       </div>
@@ -1659,15 +1664,15 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                     {(formData.dpr_type.includes('Investor') || formData.dpr_type.includes('Pitch')) && (
                       <div className="grid-3">
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Investment Ask Amount (₹)</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.investmentAsk}</label>
                           <input type="number" name="investment_ask" className="input-modern" placeholder="5000000" value={formData.investment_ask || 5000000} onChange={handleChange} />
                         </div>
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Equity Offered (%)</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.equityOffered}</label>
                           <input type="number" step="0.5" name="equity_offered_percent" className="input-modern" placeholder="15" value={formData.equity_offered_percent || 15} onChange={handleChange} />
                         </div>
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Pre-Money Valuation (₹)</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.s1Fields.valuation}</label>
                           <input type="number" name="pre_money_valuation" className="input-modern" placeholder="28333333" value={formData.pre_money_valuation || 28333333} onChange={handleChange} />
                         </div>
                       </div>
@@ -1685,15 +1690,15 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       {activeStep === 1 && (
         <div className="dpr-section-card">
           <ProgressiveSectorWrapper
-            title="Sector 2: Members & Promoter Profile"
-            subtitle="Enter details of promoters, managing directors, and key management team"
+            title={tW.sectors[1]?.title || "Sector 2: Members & Promoter Profile"}
+            subtitle={tW.sectors[1]?.subtitle || "Enter details of promoters, managing directors, and key management team"}
             isSaving={saving}
             onCompleteSector={handleSaveAndContinue}
             questions={[
               {
                 id: 'promoters_list',
-                title: 'Promoter & Management Team Schedule',
-                description: 'Add members, designation, qualification, experience, and gender details',
+                title: tW.sectors[1]?.questions?.promoters_list?.title || 'Promoter & Management Team Schedule',
+                description: tW.sectors[1]?.questions?.promoters_list?.desc || 'Add members, designation, qualification, experience, and gender details',
                 content: (
                   <div>
                     <div style={{ overflowX: 'auto', marginBottom: '1rem' }}>
@@ -1743,15 +1748,15 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       {activeStep === 2 && (
         <div className="dpr-section-card">
           <ProgressiveSectorWrapper
-            title="Sector 3: Product & Production Details"
-            subtitle="Specify products, daily capacity, pricing, raw material inputs, and USP"
+            title={tW.sectors[2]?.title || "Sector 3: Product & Production Details"}
+            subtitle={tW.sectors[2]?.subtitle || "Specify products, daily capacity, pricing, raw material inputs, and USP"}
             isSaving={saving}
             onCompleteSector={handleSaveAndContinue}
             questions={[
               {
                 id: 'primary_product',
-                title: 'Primary Product & HSN Code',
-                description: 'Enter your primary manufactured item or service category',
+                title: tW.sectors[2]?.questions?.primary_product?.title || 'Primary Product & HSN Code',
+                description: tW.sectors[2]?.questions?.primary_product?.desc || 'Enter your primary manufactured item or service category',
                 content: (
                   <div className="grid-2">
                     <div>
@@ -1767,8 +1772,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
               },
               {
                 id: 'capacity_pricing',
-                title: 'Daily Capacity & Selling Price',
-                description: 'Daily output volume, unit measurement, and sales price',
+                title: tW.sectors[2]?.questions?.capacity_pricing?.title || 'Daily Capacity & Selling Price',
+                description: tW.sectors[2]?.questions?.capacity_pricing?.desc || 'Daily output volume, unit measurement, and sales price',
                 content: (
                   <div className="grid-3">
                     <div>
@@ -1790,8 +1795,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
               },
               {
                 id: 'raw_materials_cost',
-                title: 'Raw Materials & Input Costs',
-                description: 'Description of key raw materials, sourcing, and unit cost',
+                title: tW.sectors[2]?.questions?.raw_materials_cost?.title || 'Raw Materials & Input Costs',
+                description: tW.sectors[2]?.questions?.raw_materials_cost?.desc || 'Description of key raw materials, sourcing, and unit cost',
                 content: (
                   <div>
                     <div style={{ marginBottom: '1rem' }}>
@@ -1817,8 +1822,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
               },
               {
                 id: 'usp',
-                title: 'Unique Selling Proposition (USP)',
-                description: 'Key differentiators, quality standards, and competitive advantages',
+                title: tW.sectors[2]?.questions?.usp?.title || 'Unique Selling Proposition (USP)',
+                description: tW.sectors[2]?.questions?.usp?.desc || 'Key differentiators, quality standards, and competitive advantages',
                 content: (
                   <div>
                     <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Unique Selling Proposition (USP)</label>
@@ -1836,15 +1841,15 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       {activeStep === 3 && (
         <div className="dpr-section-card">
           <ProgressiveSectorWrapper
-            title="Sector 4: Machinery & Equipment Schedule"
-            subtitle="Plant machinery items, pricing, quantities, and supplier sourcing location"
+            title={tW.sectors[3]?.title || "Sector 4: Machinery & Equipment Schedule"}
+            subtitle={tW.sectors[3]?.subtitle || "Plant machinery items, pricing, quantities, and supplier sourcing location"}
             isSaving={saving}
             onCompleteSector={handleSaveAndContinue}
             questions={[
               {
                 id: 'machinery_table',
-                title: 'Plant Machinery Items Schedule',
-                description: 'Add machinery items, unit prices, and quantities',
+                title: tW.sectors[3]?.questions?.machinery_table?.title || 'Plant Machinery Items Schedule',
+                description: tW.sectors[3]?.questions?.machinery_table?.desc || 'Add machinery items, unit prices, and quantities',
                 content: (
                   <div>
                     <div style={{ overflowX: 'auto', marginBottom: '1rem' }}>
@@ -1880,8 +1885,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
               },
               {
                 id: 'supplier_details',
-                title: 'Machinery Supplier Information',
-                description: 'Supplier name and sourcing location details',
+                title: tW.sectors[3]?.questions?.supplier_details?.title || 'Machinery Supplier Information',
+                description: tW.sectors[3]?.questions?.supplier_details?.desc || 'Supplier name and sourcing location details',
                 content: (
                   <div className="grid-2">
                     <div>
@@ -1905,15 +1910,15 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       {activeStep === 4 && (
         <div className="dpr-section-card">
           <ProgressiveSectorWrapper
-            title="Sector 5: Market Analysis & Competitor Study"
-            subtitle="Target customers, sales channels, and competitor landscape"
+            title={tW.sectors[4]?.title || "Sector 5: Market Analysis & Competitor Study"}
+            subtitle={tW.sectors[4]?.subtitle || "Target customer segments, demand-supply gap, pricing, and distribution model"}
             isSaving={saving}
             onCompleteSector={handleSaveAndContinue}
             questions={[
               {
                 id: 'target_customers',
-                title: 'Target Customers & Market Segments',
-                description: 'Identify primary buyers, industry segments, and consumer profiles',
+                title: tW.sectors[4]?.questions?.target_customers?.title || 'Target Customers & Market Segments',
+                description: tW.sectors[4]?.questions?.target_customers?.desc || 'Identify primary buyers, industry segments, and consumer profiles',
                 content: (
                   <div>
                     <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Target Customers / Market Segments</label>
@@ -1923,8 +1928,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
               },
               {
                 id: 'sales_channels',
-                title: 'Sales Locations & Distribution Channels',
-                description: 'Geographical sales coverage, dealers, retail, or direct B2B channels',
+                title: tW.sectors[4]?.questions?.sales_channels?.title || 'Sales Locations & Distribution Channels',
+                description: tW.sectors[4]?.questions?.sales_channels?.desc || 'Geographical sales coverage, dealers, retail, or direct B2B channels',
                 content: (
                   <div>
                     <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Sales Locations & Distribution Channels</label>
@@ -1934,8 +1939,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
               },
               {
                 id: 'competitors',
-                title: 'Main Competitors & Positioning',
-                description: 'Key local/national competitors and competitive strategy',
+                title: tW.sectors[4]?.questions?.competitors?.title || 'Main Competitors & Positioning',
+                description: tW.sectors[4]?.questions?.competitors?.desc || 'Key local/national competitors and competitive strategy',
                 content: (
                   <div>
                     <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Main Competitors</label>
@@ -1953,48 +1958,53 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       {activeStep === 5 && (
         <div className="dpr-section-card">
           <ProgressiveSectorWrapper
-            title="Sector 6: Human Resource & Manpower Expenses"
-            subtitle="Staff headcount and monthly salary breakdown across management, skilled, unskilled, and admin"
+            title={tW.sectors[5]?.title || "Sector 6: Human Resource & Manpower Expenses"}
+            subtitle={tW.sectors[5]?.subtitle || "Staff headcount and monthly salary breakdown across management, skilled, unskilled, and admin"}
             isSaving={saving}
             onCompleteSector={handleSaveAndContinue}
             questions={[
               {
                 id: 'hr_breakdown',
-                title: 'Human Resource & Manpower Schedule',
-                description: 'Specify headcount and monthly remuneration per staff tier',
+                title: tW.sectors[5]?.questions?.hr_breakdown?.title || 'Human Resource & Manpower Schedule',
+                description: tW.sectors[5]?.questions?.hr_breakdown?.desc || 'Specify headcount and monthly remuneration per staff tier',
                 content: (
                   <div>
                     <table className="table-elegant" style={{ marginBottom: '1rem' }}>
                       <thead>
-                        <tr><th>Category</th><th>Number of Persons</th><th>Monthly Salary (₹)</th><th>Monthly Cost (₹)</th></tr>
+                        <tr>
+                          <th>{tW.labels?.category || 'Category'}</th>
+                          <th>{tW.labels?.numberOfPersons || 'Number of Persons'}</th>
+                          <th>{tW.labels?.monthlySalary || 'Monthly Salary (₹)'}</th>
+                          <th>{tW.labels?.monthlyCost || 'Monthly Cost (₹)'}</th>
+                        </tr>
                       </thead>
                       <tbody>
                         <tr>
-                          <td>Management</td>
+                          <td>{tW.labels?.management || 'Management'}</td>
                           <td><input type="number" name="mgmt_count" className="input-modern" value={formData.mgmt_count} onChange={handleChange} /></td>
                           <td><input type="number" name="mgmt_salary" className="input-modern" value={formData.mgmt_salary} onChange={handleChange} /></td>
                           <td><input type="number" className="input-modern" readOnly value={formData.mgmt_count * formData.mgmt_salary} /></td>
                         </tr>
                         <tr>
-                          <td>Supervisory</td>
+                          <td>{tW.labels?.supervisory || 'Supervisory'}</td>
                           <td><input type="number" name="sup_count" className="input-modern" value={formData.sup_count} onChange={handleChange} /></td>
                           <td><input type="number" name="sup_salary" className="input-modern" value={formData.sup_salary} onChange={handleChange} /></td>
                           <td><input type="number" className="input-modern" readOnly value={formData.sup_count * formData.sup_salary} /></td>
                         </tr>
                         <tr>
-                          <td>Skilled Workers</td>
+                          <td>{tW.labels?.skilledWorkers || 'Skilled Workers'}</td>
                           <td><input type="number" name="skill_count" className="input-modern" value={formData.skill_count} onChange={handleChange} /></td>
                           <td><input type="number" name="skill_salary" className="input-modern" value={formData.skill_salary} onChange={handleChange} /></td>
                           <td><input type="number" className="input-modern" readOnly value={formData.skill_count * formData.skill_salary} /></td>
                         </tr>
                         <tr>
-                          <td>Unskilled Workers</td>
+                          <td>{tW.labels?.unskilledWorkers || 'Unskilled Workers'}</td>
                           <td><input type="number" name="unskill_count" className="input-modern" value={formData.unskill_count} onChange={handleChange} /></td>
                           <td><input type="number" name="unskill_salary" className="input-modern" value={formData.unskill_salary} onChange={handleChange} /></td>
                           <td><input type="number" className="input-modern" readOnly value={formData.unskill_count * formData.unskill_salary} /></td>
                         </tr>
                         <tr>
-                          <td>Administrative</td>
+                          <td>{tW.labels?.administrative || 'Administrative'}</td>
                           <td><input type="number" name="admin_count" className="input-modern" value={formData.admin_count} onChange={handleChange} /></td>
                           <td><input type="number" name="admin_salary" className="input-modern" value={formData.admin_salary} onChange={handleChange} /></td>
                           <td><input type="number" className="input-modern" readOnly value={formData.admin_count * formData.admin_salary} /></td>
@@ -2002,10 +2012,10 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                       </tbody>
                       <tfoot>
                         <tr style={{ background: '#EFF6FF', fontWeight: 800 }}>
-                          <td>TOTAL</td>
-                          <td>{totalStaffCount} Persons</td>
+                          <td>{tW.labels?.total || 'TOTAL'}</td>
+                          <td>{totalStaffCount} {tW.labels?.persons || 'Persons'}</td>
                           <td></td>
-                          <td>₹{totalMonthlySalary.toLocaleString()} / month</td>
+                          <td>₹{totalMonthlySalary.toLocaleString()} {tW.labels?.perMonth || '/ month'}</td>
                         </tr>
                       </tfoot>
                     </table>
@@ -2022,49 +2032,49 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       {activeStep === 6 && (
         <div className="dpr-section-card">
           <ProgressiveSectorWrapper
-            title="Sector 7: Financial Estimates & Capital Outlay"
-            subtitle="Land, building, machinery, working capital margin, and means of finance breakdown"
+            title={tW.sectors[6]?.title || "Sector 7: Financial Estimates & Capital Outlay"}
+            subtitle={tW.sectors[6]?.subtitle || "Land, building, machinery, working capital margin, and means of finance breakdown"}
             isSaving={saving}
             onCompleteSector={handleSaveAndContinue}
             questions={[
               {
                 id: 'project_cost_capex',
-                title: 'Project Cost Breakdown (CAPEX)',
-                description: 'Land, civil building, machinery total, furniture, and working capital',
+                title: tW.sectors[6]?.questions?.project_cost_capex?.title || 'Project Cost Breakdown (CAPEX)',
+                description: tW.sectors[6]?.questions?.project_cost_capex?.desc || 'Land, civil building, machinery total, furniture, and working capital',
                 content: (
                   <div>
                     <div className="grid-2" style={{ marginBottom: '1rem' }}>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Land Cost (₹)</label>
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.landCost || 'Land Cost (₹)'}</label>
                         <input type="number" name="land_cost" className="input-modern" value={formData.land_cost} onChange={handleChange} />
                       </div>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Building Cost (₹)</label>
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.buildingCost || 'Building Cost (₹)'}</label>
                         <input type="number" name="building_cost" className="input-modern" value={formData.building_cost} onChange={handleChange} />
                       </div>
                     </div>
                     <div className="grid-2" style={{ marginBottom: '1rem' }}>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Plant & Machinery Total (₹)</label>
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.machineryTotal || 'Plant & Machinery Total (₹)'}</label>
                         <input type="number" className="input-modern" readOnly value={machineryTotal} />
                       </div>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Furniture & Fixtures (₹)</label>
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.furnitureCost || 'Furniture & Fixtures (₹)'}</label>
                         <input type="number" name="furniture_cost" className="input-modern" value={formData.furniture_cost} onChange={handleChange} />
                       </div>
                     </div>
                     <div className="grid-2" style={{ marginBottom: '1rem' }}>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Working Capital (₹)</label>
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.workingCapital || 'Working Capital (₹)'}</label>
                         <input type="number" name="working_capital" className="input-modern" value={formData.working_capital} onChange={handleChange} />
                       </div>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Other Preliminary Expenses (₹)</label>
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.otherCost || 'Other Preliminary Expenses (₹)'}</label>
                         <input type="number" name="other_cost" className="input-modern" value={formData.other_cost} onChange={handleChange} />
                       </div>
                     </div>
                     <div style={{ background: '#F1F5F9', padding: '0.75rem 1rem', borderRadius: '0.65rem', fontWeight: 800, color: '#0A192F', display: 'flex', justifyContent: 'space-between' }}>
-                      <span>TOTAL PROJECT COST</span>
+                      <span>{tW.labels?.totalProjectCost || 'TOTAL PROJECT COST'}</span>
                       <span>₹{totalProjectCost.toLocaleString()}</span>
                     </div>
                   </div>
@@ -2072,20 +2082,20 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
               },
               {
                 id: 'means_of_finance',
-                title: 'Means of Finance Breakdown',
-                description: 'Promoter equity contribution, bank loan required, and government subsidy',
+                title: tW.sectors[6]?.questions?.means_of_finance?.title || 'Means of Finance Breakdown',
+                description: tW.sectors[6]?.questions?.means_of_finance?.desc || 'Promoter equity contribution, bank loan required, and government subsidy',
                 content: (
                   <div className="grid-3">
                     <div>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Promoter Contribution (₹)</label>
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.promoterContribution || 'Promoter Contribution (₹)'}</label>
                       <input type="number" name="promoter_contribution" className="input-modern" value={formData.promoter_contribution} onChange={handleChange} />
                     </div>
                     <div>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Bank Loan Required (₹)</label>
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.bankLoanRequired || 'Bank Loan Required (₹)'}</label>
                       <input type="number" name="bank_loan" className="input-modern" value={formData.bank_loan} onChange={handleChange} />
                     </div>
                     <div>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Subsidy / Grant (₹)</label>
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.subsidyGrant || 'Subsidy / Grant (₹)'}</label>
                       <input type="number" name="subsidy" className="input-modern" value={formData.subsidy} onChange={handleChange} />
                     </div>
                   </div>
@@ -2101,27 +2111,32 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       {activeStep === 7 && (
         <div className="dpr-section-card">
           <ProgressiveSectorWrapper
-            title="Sector 8: 5-Year Financial Projections"
-            subtitle="Projected capacity utilization %, annual interest expenses, and depreciation schedule"
+            title={tW.sectors[7]?.title || "Sector 8: 5-Year Financial Projections"}
+            subtitle={tW.sectors[7]?.subtitle || "Projected capacity utilization %, annual interest expenses, and depreciation schedule"}
             isSaving={saving}
             onCompleteSector={handleSaveAndContinue}
             questions={[
               {
                 id: 'financial_projections',
-                title: '5-Year Operational Projections Schedule',
-                description: 'Capacity utilization %, interest expenses, and annual depreciation schedule',
+                title: tW.sectors[7]?.questions?.financial_projections?.title || '5-Year Operational Projections Schedule',
+                description: tW.sectors[7]?.questions?.financial_projections?.desc || 'Capacity utilization %, interest expenses, and annual depreciation schedule',
                 content: (
                   <div>
                     <div style={{ overflowX: 'auto', marginBottom: '1rem' }}>
                       <table className="table-elegant">
                         <thead>
                           <tr>
-                            <th>Particulars</th><th>Year 1</th><th>Year 2</th><th>Year 3</th><th>Year 4</th><th>Year 5</th>
+                            <th>{tW.labels?.particulars || 'Particulars'}</th>
+                            <th>{tW.labels?.year1 || 'Year 1'}</th>
+                            <th>{tW.labels?.year2 || 'Year 2'}</th>
+                            <th>{tW.labels?.year3 || 'Year 3'}</th>
+                            <th>{tW.labels?.year4 || 'Year 4'}</th>
+                            <th>{tW.labels?.year5 || 'Year 5'}</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
-                            <td>Capacity Utilization (%)</td>
+                            <td>{tW.labels?.capacityUtilization || 'Capacity Utilization (%)'}</td>
                             <td><input type="number" name="cap_year1" className="input-modern" value={formData.cap_year1} onChange={handleChange} /></td>
                             <td><input type="number" name="cap_year2" className="input-modern" value={formData.cap_year2} onChange={handleChange} /></td>
                             <td><input type="number" name="cap_year3" className="input-modern" value={formData.cap_year3} onChange={handleChange} /></td>
@@ -2129,7 +2144,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                             <td><input type="number" name="cap_year5" className="input-modern" value={formData.cap_year5} onChange={handleChange} /></td>
                           </tr>
                           <tr>
-                            <td>Interest Expense (₹)</td>
+                            <td>{tW.labels?.interestExpense || 'Interest Expense (₹)'}</td>
                             <td><input type="number" name="int_year1" className="input-modern" value={formData.int_year1} onChange={handleChange} /></td>
                             <td><input type="number" name="int_year2" className="input-modern" value={formData.int_year2} onChange={handleChange} /></td>
                             <td><input type="number" name="int_year3" className="input-modern" value={formData.int_year3} onChange={handleChange} /></td>
@@ -2137,7 +2152,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                             <td><input type="number" name="int_year5" className="input-modern" value={formData.int_year5} onChange={handleChange} /></td>
                           </tr>
                           <tr>
-                            <td>Depreciation (₹)</td>
+                            <td>{tW.labels?.depreciation || 'Depreciation (₹)'}</td>
                             <td><input type="number" name="dep_year1" className="input-modern" value={formData.dep_year1} onChange={handleChange} /></td>
                             <td><input type="number" name="dep_year2" className="input-modern" value={formData.dep_year2} onChange={handleChange} /></td>
                             <td><input type="number" name="dep_year3" className="input-modern" value={formData.dep_year3} onChange={handleChange} /></td>
@@ -2160,27 +2175,27 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       {activeStep === 8 && (
         <div className="dpr-section-card">
           <ProgressiveSectorWrapper
-            title="Sector 9: Infrastructure & Utilities Requirements"
-            subtitle="Workspace status, power grid load, water consumption, rent, and operational timeline"
+            title={tW.sectors[8]?.title || "Sector 9: Infrastructure & Utilities Requirements"}
+            subtitle={tW.sectors[8]?.subtitle || "Workspace status, power grid load, water consumption, rent, and operational timeline"}
             isSaving={saving}
             onCompleteSector={handleSaveAndContinue}
             questions={[
               {
                 id: 'workspace_area',
-                title: 'Workspace Status & Power Requirement',
-                description: 'Owned/Rented workspace, built-up area in sq.ft., and power requirement',
+                title: tW.sectors[8]?.questions?.workspace_area?.title || 'Workspace Status & Power Requirement',
+                description: tW.sectors[8]?.questions?.workspace_area?.desc || 'Owned/Rented workspace, built-up area in sq.ft., and power requirement',
                 content: (
                   <div className="grid-3">
                     <div>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Workspace Status</label>
-                      <input type="text" name="workspace" className="input-modern" value={formData.workspace} onChange={handleChange} placeholder="Owned / Rented" />
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.workspaceStatus || 'Workspace Status'}</label>
+                      <input type="text" name="workspace" className="input-modern" value={formData.workspace} onChange={handleChange} placeholder={tW.labels?.ownedRented || "Owned / Rented"} />
                     </div>
                     <div>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Built-up Area (sq.ft.)</label>
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.builtupArea || 'Built-up Area (sq.ft.)'}</label>
                       <input type="number" name="builtup_area" className="input-modern" value={formData.builtup_area} onChange={handleChange} />
                     </div>
                     <div>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Power Required (HP / KVA)</label>
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.powerRequired || 'Power Required (HP / KVA)'}</label>
                       <input type="number" name="power_required" className="input-modern" value={formData.power_required} onChange={handleChange} />
                     </div>
                   </div>
@@ -2188,20 +2203,20 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
               },
               {
                 id: 'water_rent_timeline',
-                title: 'Water Utilities, Rent & Setup Timeline',
-                description: 'Water requirement, monthly rent, and months to start commercial operations',
+                title: tW.sectors[8]?.questions?.water_rent_timeline?.title || 'Water Utilities, Rent & Setup Timeline',
+                description: tW.sectors[8]?.questions?.water_rent_timeline?.desc || 'Water requirement, monthly rent, and months to start commercial operations',
                 content: (
                   <div className="grid-3">
                     <div>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Water Required (L/day)</label>
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.waterRequired || 'Water Required (L/day)'}</label>
                       <input type="number" name="water_required" className="input-modern" value={formData.water_required} onChange={handleChange} />
                     </div>
                     <div>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Monthly Rent (₹)</label>
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.monthlyRent || 'Monthly Rent (₹)'}</label>
                       <input type="number" name="monthly_rent" className="input-modern" value={formData.monthly_rent} onChange={handleChange} />
                     </div>
                     <div>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Time to Start Operations (months)</label>
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.timeToStartOps || 'Time to Start Operations (months)'}</label>
                       <input type="number" name="start_time" className="input-modern" value={formData.start_time} onChange={handleChange} />
                     </div>
                   </div>
@@ -2217,23 +2232,23 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       {activeStep === 9 && (
         <div className="dpr-section-card">
           <ProgressiveSectorWrapper
-            title="Sector 10: SWOT Analysis"
-            subtitle="Internal strengths, weaknesses, external market opportunities, and competitive threats"
+            title={tW.sectors[9]?.title || "Sector 10: SWOT Analysis"}
+            subtitle={tW.sectors[9]?.subtitle || "Internal strengths, weaknesses, external market opportunities, and competitive threats"}
             isSaving={saving}
             onCompleteSector={handleSaveAndContinue}
             questions={[
               {
                 id: 'strengths_weaknesses',
-                title: 'Internal Strengths & Weaknesses',
-                description: 'Core organizational capabilities and operational limitations',
+                title: tW.sectors[9]?.questions?.strengths_weaknesses?.title || 'Internal Strengths & Weaknesses',
+                description: tW.sectors[9]?.questions?.strengths_weaknesses?.desc || 'Core organizational capabilities and operational limitations',
                 content: (
                   <div>
                     <div style={{ marginBottom: '1rem' }}>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Strengths</label>
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.strengths || 'Strengths'}</label>
                       <textarea name="strengths" rows={2} className="input-modern" value={formData.strengths} onChange={handleChange} />
                     </div>
                     <div style={{ marginBottom: '1rem' }}>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Weaknesses</label>
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.weaknesses || 'Weaknesses'}</label>
                       <textarea name="weaknesses" rows={2} className="input-modern" value={formData.weaknesses} onChange={handleChange} />
                     </div>
                   </div>
@@ -2241,16 +2256,16 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
               },
               {
                 id: 'opportunities_threats',
-                title: 'External Opportunities & Threats',
-                description: 'Market growth drivers, demand trends, and external risks',
+                title: tW.sectors[9]?.questions?.opportunities_threats?.title || 'External Opportunities & Threats',
+                description: tW.sectors[9]?.questions?.opportunities_threats?.desc || 'Market growth drivers, demand trends, and external risks',
                 content: (
                   <div>
                     <div style={{ marginBottom: '1rem' }}>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Opportunities</label>
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.opportunities || 'Opportunities'}</label>
                       <textarea name="opportunities" rows={2} className="input-modern" value={formData.opportunities} onChange={handleChange} />
                     </div>
                     <div style={{ marginBottom: '1rem' }}>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Threats</label>
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.threats || 'Threats'}</label>
                       <textarea name="threats" rows={2} className="input-modern" value={formData.threats} onChange={handleChange} />
                     </div>
                   </div>
@@ -2266,27 +2281,27 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       {activeStep === 10 && (
         <div className="dpr-section-card">
           <ProgressiveSectorWrapper
-            title="Sector 11: Social & Environmental Impact"
-            subtitle="Employment generation for local community, women, and youth, plus green initiatives"
+            title={tW.sectors[10]?.title || "Sector 11: Social & Environmental Impact"}
+            subtitle={tW.sectors[10]?.subtitle || "Employment generation for local community, women, and youth, plus green initiatives"}
             isSaving={saving}
             onCompleteSector={handleSaveAndContinue}
             questions={[
               {
                 id: 'employment_breakdown',
-                title: 'Direct Employment Generation',
-                description: 'Number of jobs created for local residents, women, and youth',
+                title: tW.sectors[10]?.questions?.employment_breakdown?.title || 'Direct Employment Generation',
+                description: tW.sectors[10]?.questions?.employment_breakdown?.desc || 'Number of jobs created for local residents, women, and youth',
                 content: (
                   <div className="grid-3">
                     <div>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Local Employment (Persons)</label>
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.localEmployment || 'Local Employment (Persons)'}</label>
                       <input type="number" name="local_employment" className="input-modern" value={formData.local_employment} onChange={handleChange} />
                     </div>
                     <div>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Women Employment (Persons)</label>
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.womenEmployment || 'Women Employment (Persons)'}</label>
                       <input type="number" name="women_employment" className="input-modern" value={formData.women_employment} onChange={handleChange} />
                     </div>
                     <div>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Youth Employment (Persons)</label>
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.youthEmployment || 'Youth Employment (Persons)'}</label>
                       <input type="number" name="youth_employment" className="input-modern" value={formData.youth_employment} onChange={handleChange} />
                     </div>
                   </div>
@@ -2294,22 +2309,22 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
               },
               {
                 id: 'eco_practices',
-                title: 'Environmental Sustainability & Skill Training',
-                description: 'Eco-friendly manufacturing, waste management, and employee training',
+                title: tW.sectors[10]?.questions?.eco_practices?.title || 'Environmental Sustainability & Skill Training',
+                description: tW.sectors[10]?.questions?.eco_practices?.desc || 'Eco-friendly manufacturing, waste management, and employee training',
                 content: (
                   <div>
                     <div className="grid-2" style={{ marginBottom: '1rem' }}>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Eco-friendly Practices (Yes/No)</label>
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.ecoPractices || 'Eco-friendly Practices (Yes/No)'}</label>
                         <input type="text" name="eco_friendly" className="input-modern" value={formData.eco_friendly} onChange={handleChange} />
                       </div>
                       <div>
-                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Skill Training Provided (Yes/No)</label>
+                        <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.skillTraining || 'Skill Training Provided (Yes/No)'}</label>
                         <input type="text" name="training" className="input-modern" value={formData.training} onChange={handleChange} />
                       </div>
                     </div>
                     <div>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Eco-friendly Initiatives Description</label>
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.ecoDescription || 'Eco-friendly Initiatives Description'}</label>
                       <textarea name="eco_description" rows={2} className="input-modern" value={formData.eco_description} onChange={handleChange} />
                     </div>
                   </div>
@@ -2325,40 +2340,40 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       {activeStep === 11 && (
         <div className="dpr-section-card">
           <ProgressiveSectorWrapper
-            title="Sector 12: Credit Standing & History Profile"
-            subtitle="CIBIL profile, prior loan history, existing liabilities, or scheme standing"
+            title={tW.sectors[11]?.title || "Sector 12: Credit Standing & History Profile"}
+            subtitle={tW.sectors[11]?.subtitle || "CIBIL profile, prior loan history, existing liabilities, or scheme standing"}
             isSaving={saving}
             onCompleteSector={handleSaveAndContinue}
             questions={[
               {
                 id: 'credit_standing',
-                title: 'Credit Score & Past Loan History',
-                description: 'CIBIL score, prior borrowing experience, and existing loan balances',
+                title: tW.sectors[11]?.questions?.credit_standing?.title || 'Credit Score & Past Loan History',
+                description: tW.sectors[11]?.questions?.credit_standing?.desc || 'CIBIL score, prior borrowing experience, and existing loan balances',
                 content: (
                   <div>
                     {(formData.dpr_type === 'Bank Loan DPR' || !formData.dpr_type) && (
                       <>
                         <div className="grid-3" style={{ marginBottom: '1rem' }}>
                           <div>
-                            <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>CIBIL Score</label>
+                            <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.cibilScore || 'CIBIL Score'}</label>
                             <input type="number" name="cibil_score" className="input-modern" value={formData.cibil_score} onChange={handleChange} />
                           </div>
                           <div>
-                            <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Taken Loan Before? (Yes/No)</label>
+                            <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.takenLoanBefore || 'Taken Loan Before? (Yes/No)'}</label>
                             <input type="text" name="loan_before" className="input-modern" value={formData.loan_before} onChange={handleChange} />
                           </div>
                           <div>
-                            <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Existing Loan Amount (₹)</label>
+                            <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.existingLoanAmount || 'Existing Loan Amount (₹)'}</label>
                             <input type="number" name="existing_loan" className="input-modern" value={formData.existing_loan} onChange={handleChange} />
                           </div>
                         </div>
                         <div className="grid-2">
                           <div>
-                            <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Outstanding Amount (₹)</label>
+                            <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.outstandingAmount || 'Outstanding Amount (₹)'}</label>
                             <input type="number" name="outstanding" className="input-modern" value={formData.outstanding} onChange={handleChange} />
                           </div>
                           <div>
-                            <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Default History (Yes/No)</label>
+                            <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.defaultHistory || 'Default History (Yes/No)'}</label>
                             <input type="text" name="default_history" className="input-modern" value={formData.default_history} onChange={handleChange} />
                           </div>
                         </div>
@@ -2368,15 +2383,15 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                     {formData.dpr_type === 'Govt Subsidy DPR' && (
                       <div className="grid-3">
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Target Scheme</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.targetScheme || 'Target Scheme'}</label>
                           <input type="text" name="scheme_name" className="input-modern" value={(formData as any).scheme_name || 'PMEGP'} onChange={handleChange} />
                         </div>
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>DIC Office Jurisdiction</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.dicJurisdiction || 'DIC Office Jurisdiction'}</label>
                           <input type="text" name="dic_jurisdiction" className="input-modern" value={(formData as any).dic_jurisdiction || 'DIC Bengaluru Urban'} onChange={handleChange} />
                         </div>
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Social Category</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.applicantCategory || 'Social Category'}</label>
                           <input type="text" name="applicant_category" className="input-modern" value={(formData as any).applicant_category || 'General'} onChange={handleChange} />
                         </div>
                       </div>
@@ -2385,15 +2400,15 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                     {formData.dpr_type === 'Investor / Business Pitch DPR' && (
                       <div className="grid-3">
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Venture Growth Stage</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.pitchStage || 'Venture Growth Stage'}</label>
                           <input type="text" name="pitch_stage" className="input-modern" value={(formData as any).pitch_stage || 'Early Revenue Stage'} onChange={handleChange} />
                         </div>
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Pre-Money Valuation (₹)</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.preMoneyValuation || 'Pre-Money Valuation (₹)'}</label>
                           <input type="number" name="pre_money_valuation" className="input-modern" value={(formData as any).pre_money_valuation || 85000000} onChange={handleChange} />
                         </div>
                         <div>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Current Monthly MRR (₹)</label>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.currentMrr || 'Current Monthly MRR (₹)'}</label>
                           <input type="number" name="current_mrr" className="input-modern" value={(formData as any).current_mrr || 850000} onChange={handleChange} />
                         </div>
                       </div>
@@ -2411,54 +2426,54 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       {activeStep === 12 && (
         <div className="dpr-section-card">
           <ProgressiveSectorWrapper
-            title="Sector 13: Report Image & Photo Uploads"
-            subtitle="Company logo, product sample photo, facility machinery, and promoter team images"
+            title={tW.sectors[12]?.title || "Sector 13: Report Image & Photo Uploads"}
+            subtitle={tW.sectors[12]?.subtitle || "Company logo, product sample photo, facility machinery, and promoter team images"}
             isSaving={saving}
             onCompleteSector={handleSaveAndContinue}
             questions={[
               {
                 id: 'images_upload',
-                title: 'Upload Company & Product Photos',
-                description: 'Logo, product photos, plant facility, and management team pictures',
+                title: tW.sectors[12]?.questions?.images_upload?.title || 'Upload Company & Product Photos',
+                description: tW.sectors[12]?.questions?.images_upload?.desc || 'Logo, product photos, plant facility, and management team pictures',
                 content: (
                   <div className="grid-2">
                     <div style={{ background: '#F8FAFC', padding: '1rem', borderRadius: '0.75rem', border: '1px solid #E2E8F0' }}>
-                      <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0A192F', display: 'block', marginBottom: '0.4rem' }}>Company Logo</label>
+                      <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0A192F', display: 'block', marginBottom: '0.4rem' }}>{tW.labels?.companyLogo || 'Company Logo'}</label>
                       <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'logo_path')} style={{ fontSize: '0.85rem' }} />
                       {formData.logo_path && (
                         <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#F0FDFA', padding: '0.4rem 0.6rem', borderRadius: '0.5rem', border: '1px solid #99F6E4' }}>
                           <img src={resolveImageUrl(formData.logo_path)} alt="Logo Preview" style={{ width: '40px', height: '40px', objectFit: 'contain', borderRadius: '4px', background: '#fff', border: '1px solid #CBD5E1' }} />
-                          <span style={{ fontSize: '0.75rem', color: '#0D9488', fontWeight: 600 }}>✓ Saved & Applied to Report</span>
+                          <span style={{ fontSize: '0.75rem', color: '#0D9488', fontWeight: 600 }}>{tW.labels?.savedApplied || '✓ Saved & Applied to Report'}</span>
                         </div>
                       )}
                     </div>
                     <div style={{ background: '#F8FAFC', padding: '1rem', borderRadius: '0.75rem', border: '1px solid #E2E8F0' }}>
-                      <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0A192F', display: 'block', marginBottom: '0.4rem' }}>Product Sample Image</label>
+                      <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0A192F', display: 'block', marginBottom: '0.4rem' }}>{tW.labels?.productSample || 'Product Sample Image'}</label>
                       <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'product_path')} style={{ fontSize: '0.85rem' }} />
                       {formData.product_path && (
                         <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#F0FDFA', padding: '0.4rem 0.6rem', borderRadius: '0.5rem', border: '1px solid #99F6E4' }}>
                           <img src={resolveImageUrl(formData.product_path)} alt="Product Preview" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #CBD5E1' }} />
-                          <span style={{ fontSize: '0.75rem', color: '#0D9488', fontWeight: 600 }}>✓ Saved & Applied to Report</span>
+                          <span style={{ fontSize: '0.75rem', color: '#0D9488', fontWeight: 600 }}>{tW.labels?.savedApplied || '✓ Saved & Applied to Report'}</span>
                         </div>
                       )}
                     </div>
                     <div style={{ background: '#F8FAFC', padding: '1rem', borderRadius: '0.75rem', border: '1px solid #E2E8F0' }}>
-                      <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0A192F', display: 'block', marginBottom: '0.4rem' }}>Facility / Machinery Image</label>
+                      <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0A192F', display: 'block', marginBottom: '0.4rem' }}>{tW.labels?.facilityMachinery || 'Facility / Machinery Image'}</label>
                       <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'facility_path')} style={{ fontSize: '0.85rem' }} />
                       {formData.facility_path && (
                         <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#F0FDFA', padding: '0.4rem 0.6rem', borderRadius: '0.5rem', border: '1px solid #99F6E4' }}>
                           <img src={resolveImageUrl(formData.facility_path)} alt="Facility Preview" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #CBD5E1' }} />
-                          <span style={{ fontSize: '0.75rem', color: '#0D9488', fontWeight: 600 }}>✓ Saved & Applied to Report</span>
+                          <span style={{ fontSize: '0.75rem', color: '#0D9488', fontWeight: 600 }}>{tW.labels?.savedApplied || '✓ Saved & Applied to Report'}</span>
                         </div>
                       )}
                     </div>
                     <div style={{ background: '#F8FAFC', padding: '1rem', borderRadius: '0.75rem', border: '1px solid #E2E8F0' }}>
-                      <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0A192F', display: 'block', marginBottom: '0.4rem' }}>Team Photo</label>
+                      <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0A192F', display: 'block', marginBottom: '0.4rem' }}>{tW.labels?.teamPhoto || 'Team Photo'}</label>
                       <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'team_path')} style={{ fontSize: '0.85rem' }} />
                       {formData.team_path && (
                         <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#F0FDFA', padding: '0.4rem 0.6rem', borderRadius: '0.5rem', border: '1px solid #99F6E4' }}>
                           <img src={resolveImageUrl(formData.team_path)} alt="Team Preview" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #CBD5E1' }} />
-                          <span style={{ fontSize: '0.75rem', color: '#0D9488', fontWeight: 600 }}>✓ Saved & Applied to Report</span>
+                          <span style={{ fontSize: '0.75rem', color: '#0D9488', fontWeight: 600 }}>{tW.labels?.savedApplied || '✓ Saved & Applied to Report'}</span>
                         </div>
                       )}
                     </div>
@@ -2475,27 +2490,27 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       {activeStep === 13 && (
         <div className="dpr-section-card">
           <ProgressiveSectorWrapper
-            title="Sector 14: Declaration & Final Report Generation"
-            subtitle="Authorised signatory details, report depth selection, and PDF / DOCX compilation"
+            title={tW.sectors[13]?.title || "Sector 14: Declaration & Final Report Generation"}
+            subtitle={tW.sectors[13]?.subtitle || "Authorised signatory details, report depth selection, and PDF / DOCX compilation"}
             isSaving={generating}
             onCompleteSector={handleGeneratePDF}
             questions={[
               {
                 id: 'declaration_statement',
-                title: 'Authorised Signatory Declaration',
-                description: 'Enter declarant name, designation, and location',
+                title: tW.sectors[13]?.questions?.declaration_statement?.title || 'Authorised Signatory Declaration',
+                description: tW.sectors[13]?.questions?.declaration_statement?.desc || 'Enter declarant name, designation, and location',
                 content: (
                   <div className="grid-3">
                     <div>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Declarant Name</label>
-                      <input type="text" name="declarant_name" className="input-modern" placeholder="Your name" value={formData.declarant_name} onChange={handleChange} />
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.declarantName || 'Declarant Name'}</label>
+                      <input type="text" name="declarant_name" className="input-modern" placeholder={tW.labels?.yourName || "Your name"} value={formData.declarant_name} onChange={handleChange} />
                     </div>
                     <div>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Designation</label>
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.designation || 'Designation'}</label>
                       <input type="text" name="designation" className="input-modern" value={formData.designation} onChange={handleChange} />
                     </div>
                     <div>
-                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>Place</label>
+                      <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0A192F', display: 'block', marginBottom: '0.3rem' }}>{tW.labels?.place || 'Place'}</label>
                       <input type="text" name="place" className="input-modern" value={formData.place} onChange={handleChange} />
                     </div>
                   </div>
@@ -2503,8 +2518,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
               },
               {
                 id: 'report_depth',
-                title: 'Target DPR Report Length & Depth',
-                description: 'Choose Standard (15-20 Pgs), Comprehensive (25-35 Pgs), or Enterprise (40-60 Pgs)',
+                title: tW.sectors[13]?.questions?.report_depth?.title || 'Target DPR Report Length & Depth',
+                description: tW.sectors[13]?.questions?.report_depth?.desc || 'Choose Standard (15-20 Pgs), Comprehensive (25-35 Pgs), or Enterprise (40-60 Pgs)',
                 content: (
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
                     <div
@@ -2517,9 +2532,9 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                         cursor: 'pointer',
                       }}
                     >
-                      <div style={{ fontWeight: 800, color: '#0F172A', fontSize: '0.98rem' }}>Standard DPR</div>
-                      <div style={{ fontSize: '0.82rem', color: '#008C95', fontWeight: 700, margin: '4px 0' }}>15 – 20 Pages</div>
-                      <div style={{ fontSize: '0.78rem', color: '#64748B' }}>16 Core Chapters, 5-Yr Financials, DSCR Analysis.</div>
+                      <div style={{ fontWeight: 800, color: '#0F172A', fontSize: '0.98rem' }}>{tW.labels?.standardDpr || 'Standard DPR'}</div>
+                      <div style={{ fontSize: '0.82rem', color: '#008C95', fontWeight: 700, margin: '4px 0' }}>{tW.labels?.standardPages || '15 – 20 Pages'}</div>
+                      <div style={{ fontSize: '0.78rem', color: '#64748B' }}>{tW.labels?.standardDesc || '16 Core Chapters, 5-Yr Financials, DSCR Analysis.'}</div>
                     </div>
 
                     <div
@@ -2532,9 +2547,9 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                         cursor: 'pointer',
                       }}
                     >
-                      <div style={{ fontWeight: 800, color: '#0F172A', fontSize: '0.98rem' }}>Comprehensive MSME</div>
-                      <div style={{ fontSize: '0.82rem', color: '#008C95', fontWeight: 700, margin: '4px 0' }}>25 – 35 Pages</div>
-                      <div style={{ fontSize: '0.78rem', color: '#64748B' }}>22 Chapters, 36-Mo Cash Flow, Tandon Assessment, Risk Matrix.</div>
+                      <div style={{ fontWeight: 800, color: '#0F172A', fontSize: '0.98rem' }}>{tW.labels?.comprehensiveMsme || 'Comprehensive MSME'}</div>
+                      <div style={{ fontSize: '0.82rem', color: '#008C95', fontWeight: 700, margin: '4px 0' }}>{tW.labels?.comprehensivePages || '25 – 35 Pages'}</div>
+                      <div style={{ fontSize: '0.78rem', color: '#64748B' }}>{tW.labels?.comprehensiveDesc || '22 Chapters, 36-Mo Cash Flow, Tandon Assessment, Risk Matrix.'}</div>
                     </div>
 
                     <div
@@ -2547,17 +2562,17 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                         cursor: 'pointer',
                       }}
                     >
-                      <div style={{ fontWeight: 800, color: '#0F172A', fontSize: '0.98rem' }}>Enterprise Bankable</div>
-                      <div style={{ fontSize: '0.82rem', color: '#008C95', fontWeight: 700, margin: '4px 0' }}>40 – 60 Pages <Star size={13} strokeWidth={1.75} style={{ display: 'inline', verticalAlign: '-2px' }} /></div>
-                      <div style={{ fontSize: '0.78rem', color: '#64748B' }}>30 Chapters + 10 Annexure Schedules, 10-Yr Projections, BOQ, ESG.</div>
+                      <div style={{ fontWeight: 800, color: '#0F172A', fontSize: '0.98rem' }}>{tW.labels?.enterpriseBankable || 'Enterprise Bankable'}</div>
+                      <div style={{ fontSize: '0.82rem', color: '#008C95', fontWeight: 700, margin: '4px 0' }}>{tW.labels?.enterprisePages || '40 – 60 Pages'} <Star size={13} strokeWidth={1.75} style={{ display: 'inline', verticalAlign: '-2px' }} /></div>
+                      <div style={{ fontSize: '0.78rem', color: '#64748B' }}>{tW.labels?.enterpriseDesc || '30 Chapters + 10 Annexure Schedules, 10-Yr Projections, BOQ, ESG.'}</div>
                     </div>
                   </div>
                 ),
               },
               {
                 id: 'approve_compile',
-                title: 'User Approval & Report Generation',
-                description: 'Compile publication-ready PDF or editable Word DOCX report',
+                title: tW.sectors[13]?.questions?.approve_compile?.title || 'User Approval & Report Generation',
+                description: tW.sectors[13]?.questions?.approve_compile?.desc || 'Compile publication-ready PDF or editable Word DOCX report',
                 content: (
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.2rem', paddingTop: '0.8rem' }}>
                     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -2571,7 +2586,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                           style={{ width: '18px', height: '18px', accentColor: '#008C95', cursor: 'pointer' }}
                         />
                         <label htmlFor="associated_with_vkf" style={{ fontSize: '0.92rem', fontWeight: 700, color: '#0F172A', cursor: 'pointer', margin: 0 }}>
-                          Associated / Partnered with VKF
+                          {tW.labels?.associatedVkf || 'Associated / Partnered with VKF'}
                         </label>
                       </div>
 
@@ -2584,7 +2599,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                           style={{ width: '18px', height: '18px', accentColor: '#EA580C', cursor: 'pointer' }}
                         />
                         <label htmlFor="test_one_rupee_mode" style={{ fontSize: '0.92rem', fontWeight: 700, color: '#C2410C', cursor: 'pointer', margin: 0 }}>
-                          <FlaskConical size={16} strokeWidth={1.75} style={{ display: 'inline', verticalAlign: '-3px', marginRight: 6 }} />Test ₹1 Payment Mode (Live Razorpay Receipt Test)
+                          <FlaskConical size={16} strokeWidth={1.75} style={{ display: 'inline', verticalAlign: '-3px', marginRight: 6 }} />{tW.labels?.testRupeeMode || 'Test ₹1 Payment Mode (Live Razorpay Receipt Test)'}
                         </label>
                       </div>
                     </div>
@@ -2592,7 +2607,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                     {paymentUnlocked && (
                       <div style={{ padding: '0.8rem 1.6rem', background: '#F0FDFA', border: '1.5px solid #008C95', borderRadius: '0.75rem', color: '#008C95', fontWeight: 800, fontSize: '0.98rem', textAlign: 'center' }}>
                         <i className="fas fa-check-circle" style={{ marginRight: '8px' }}></i>
-                        PAYMENT VERIFIED! YOUR REPORT IS FULLY UNLOCKED
+                        {tW.labels?.paymentVerified || 'PAYMENT VERIFIED! YOUR REPORT IS FULLY UNLOCKED'}
                       </div>
                     )}
 
@@ -2604,7 +2619,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                         className="btn-next-spacious"
                         style={{ padding: '1.1rem 2.2rem', fontSize: '1rem', background: paymentUnlocked ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #008C95 0%, #006F78 100%)', boxShadow: '0 8px 25px rgba(0, 140, 149, 0.35)' }}
                       >
-                        <i className={paymentUnlocked ? "fas fa-download" : "fas fa-lock-open"}></i> {generating ? 'Compiling PDF Engine Report...' : paymentUnlocked ? 'DOWNLOAD FINAL PDF REPORT (UNLOCKED)' : `PAY ₹${getDisplayPrice()} & UNLOCK FINAL PDF REPORT`}
+                        <i className={paymentUnlocked ? "fas fa-download" : "fas fa-lock-open"}></i> {generating ? (tW.labels?.compilingPdf || 'Compiling PDF Engine Report...') : paymentUnlocked ? (tW.labels?.downloadPdfUnlocked || 'DOWNLOAD FINAL PDF REPORT (UNLOCKED)') : `${tW.labels?.payPdf || 'PAY & UNLOCK FINAL PDF REPORT'} (₹${getDisplayPrice()})`}
                       </button>
 
                       <button
@@ -2614,7 +2629,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                         className="btn-next-spacious"
                         style={{ padding: '1.1rem 2.2rem', fontSize: '1rem', background: 'linear-gradient(135deg, #FF7A00 0%, #EA580C 100%)', boxShadow: '0 8px 25px rgba(255, 122, 0, 0.35)' }}
                       >
-                        <i className="fas fa-file-word"></i> {generating ? 'Compiling Word DOCX...' : paymentUnlocked ? 'DOWNLOAD EDITABLE DOCX (UNLOCKED)' : `PAY ₹${getDisplayPrice()} & UNLOCK EDITABLE DOCX`}
+                        <i className="fas fa-file-word"></i> {generating ? (tW.labels?.compilingDocx || 'Compiling Word DOCX...') : paymentUnlocked ? (tW.labels?.downloadDocxUnlocked || 'DOWNLOAD EDITABLE DOCX (UNLOCKED)') : `${tW.labels?.payDocx || 'PAY & UNLOCK EDITABLE DOCX'} (₹${getDisplayPrice()})`}
                       </button>
                     </div>
 
@@ -2626,7 +2641,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                           disabled={checkingPayment}
                           style={{ background: 'none', border: 'none', color: '#008C95', textDecoration: 'underline', fontSize: '0.86rem', cursor: 'pointer', fontWeight: 700 }}
                         >
-                          {checkingPayment ? 'Checking Live Razorpay Payment Status...' : 'Already completed payment on UPI / QR? Click here to verify & unlock report →'}
+                          {checkingPayment ? (tW.labels?.checkingPayment || 'Checking Live Razorpay Payment Status...') : (tW.labels?.verifyUpi || 'Already completed payment on UPI / QR? Click here to verify & unlock report →')}
                         </button>
                       </div>
                     )}

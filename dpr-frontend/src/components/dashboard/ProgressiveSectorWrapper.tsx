@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
+import { wizardTranslations } from '@/i18n/wizardTranslations';
 
 export interface QuestionGroup {
   id: string;
@@ -28,6 +30,8 @@ export default function ProgressiveSectorWrapper({
   onCompleteSector,
   isSaving = false,
 }: ProgressiveSectorWrapperProps) {
+  const { language } = useLanguage();
+  const tW = wizardTranslations[language] || wizardTranslations.en;
   const [currentIdx, setCurrentIdx] = useState(0);
   const [showAll, setShowAll] = useState(false);
 
@@ -100,7 +104,7 @@ export default function ProgressiveSectorWrapper({
             }}
           >
             <i className={showAll ? 'fas fa-list-ul' : 'fas fa-layer-group'} />
-            {showAll ? 'Show Question-by-Question' : 'Show All Questions'}
+            {showAll ? tW.progressive.showSingle : tW.progressive.showAll}
           </button>
         </div>
       </div>
@@ -137,7 +141,7 @@ export default function ProgressiveSectorWrapper({
                   fontWeight: 800,
                 }}
               >
-                Question {currentIdx + 1} of {totalQuestions}
+                {tW.progressive.questionOf(currentIdx + 1, totalQuestions)}
               </span>
               <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#1E293B' }}>
                 {questions[currentIdx]?.title}
@@ -145,7 +149,7 @@ export default function ProgressiveSectorWrapper({
             </div>
 
             <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#008C95' }}>
-              {progressPct}% Completed
+              {tW.progressive.completed(progressPct)}
             </span>
           </div>
 
@@ -432,7 +436,7 @@ export default function ProgressiveSectorWrapper({
                 transition: 'all 0.2s ease',
               }}
             >
-              <i className="fas fa-arrow-left" /> Previous Question
+              <i className="fas fa-arrow-left" /> {tW.progressive.prevQuestion}
             </button>
 
             <button
@@ -458,12 +462,12 @@ export default function ProgressiveSectorWrapper({
               {isLastQuestion ? (
                 <>
                   <i className="fas fa-check-circle" />{' '}
-                  {isSaving ? 'Saving Sector...' : 'Save & Continue to Next Sector'}{' '}
+                  {isSaving ? tW.progressive.saving : tW.progressive.saveComplete}{' '}
                   <i className="fas fa-arrow-right" />
                 </>
               ) : (
                 <>
-                  Next Question <i className="fas fa-arrow-right" />
+                  {tW.progressive.nextQuestion} <i className="fas fa-arrow-right" />
                 </>
               )}
             </button>

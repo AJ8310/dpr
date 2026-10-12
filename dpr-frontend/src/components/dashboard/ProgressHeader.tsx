@@ -2,6 +2,8 @@
 
 import React from 'react';
 import LanguageDropdown from '@/components/common/LanguageDropdown';
+import { useLanguage } from '@/context/LanguageContext';
+import { wizardTranslations } from '@/i18n/wizardTranslations';
 
 interface ProgressHeaderProps {
   currentStep: number;
@@ -20,6 +22,8 @@ export default function ProgressHeader({
   onChangeService,
   onChangeDepth,
 }: ProgressHeaderProps) {
+  const { language } = useLanguage();
+  const tW = wizardTranslations[language] || wizardTranslations.en;
   const progressPercent = Math.round(((currentStep + 1) / totalSteps) * 100);
 
   return (
@@ -77,7 +81,7 @@ export default function ProgressHeader({
             gap: '0.45rem',
           }}
         >
-          <i className="fas fa-layer-group"></i> Progress
+          <i className="fas fa-layer-group"></i> {tW.header.progress}
         </span>
 
         {/* Progress Bar */}
@@ -94,7 +98,7 @@ export default function ProgressHeader({
         </div>
 
         <span style={{ fontWeight: 800, fontSize: '0.86rem', color: '#123B4A' }}>
-          Step {currentStep + 1}/{totalSteps} <span style={{ color: '#008C95', fontSize: '0.8rem' }}>({progressPercent}%)</span>
+          {tW.header.step(currentStep + 1, totalSteps)} <span style={{ color: '#008C95', fontSize: '0.8rem' }}>({progressPercent}%)</span>
         </span>
       </div>
 
@@ -106,7 +110,7 @@ export default function ProgressHeader({
         {/* Track Selector Dropdown */}
         <div className="track-dropdown-pill" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', background: '#FFF7ED', padding: '0.35rem 0.85rem', borderRadius: '2rem', border: '1px solid #FFEDD5' }}>
           <i className="fas fa-file-contract" style={{ color: '#FF7A00', fontSize: '0.85rem' }} />
-          <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#C2410C' }}>Service:</span>
+          <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#C2410C' }}>{tW.header.service}</span>
           <select
             value={selectedService}
             onChange={(e) => onChangeService && onChangeService(e.target.value)}
@@ -120,16 +124,16 @@ export default function ProgressHeader({
               outline: 'none',
             }}
           >
-            <option value="Bank Loan DPR">Bank Loan DPR</option>
-            <option value="Govt Subsidy DPR">Govt Subsidy DPR</option>
-            <option value="Investor / Business Pitch DPR">Investor / Business Pitch DPR</option>
+            <option value="Bank Loan DPR">{tW.header.services.bank}</option>
+            <option value="Govt Subsidy DPR">{tW.header.services.govt}</option>
+            <option value="Investor / Business Pitch DPR">{tW.header.services.investor}</option>
           </select>
         </div>
 
         {/* DPR Depth Selector Dropdown */}
         <div className="depth-dropdown-pill" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', background: '#F0FDFA', padding: '0.35rem 0.85rem', borderRadius: '2rem', border: '1px solid #CCFBF1' }}>
           <i className="fas fa-book-open" style={{ color: '#008C95', fontSize: '0.85rem' }} />
-          <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F766E' }}>Depth:</span>
+          <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F766E' }}>{tW.header.depth}</span>
           <select
             value={selectedDepth}
             onChange={(e) => onChangeDepth && onChangeDepth(e.target.value as any)}
@@ -143,9 +147,9 @@ export default function ProgressHeader({
               outline: 'none',
             }}
           >
-            <option value="summary">Summary (10–15 pgs)</option>
-            <option value="standard">Standard (20–30 pgs)</option>
-            <option value="detailed">Detailed (40–60 pgs)</option>
+            <option value="summary">{tW.header.depths.summary}</option>
+            <option value="standard">{tW.header.depths.standard}</option>
+            <option value="detailed">{tW.header.depths.detailed}</option>
           </select>
         </div>
       </div>
