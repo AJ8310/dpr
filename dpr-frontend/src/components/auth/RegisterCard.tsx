@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { registerUser } from '@/lib/api';
 import { UserSession } from '@/types/dpr';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface RegisterCardProps {
   onRegisterSuccess: (session: UserSession) => void;
@@ -10,6 +11,7 @@ interface RegisterCardProps {
 }
 
 export default function RegisterCard({ onRegisterSuccess, onSwitchToLogin }: RegisterCardProps) {
+  const { t, language } = useLanguage();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -67,10 +69,10 @@ export default function RegisterCard({ onRegisterSuccess, onSwitchToLogin }: Reg
       {/* Title & Subtitle */}
       <div style={{ marginBottom: '1.6rem' }}>
         <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#123B4A', marginBottom: '0.3rem' }}>
-          Create Your Account
+          {language === 'kn' ? 'ನಿಮ್ಮ ಖಾತೆ ರಚಿಸಿ' : language === 'hi' ? 'अपना खाता बनाएं' : 'Create Your Account'}
         </h2>
         <p style={{ fontSize: '0.9rem', color: '#66818C' }}>
-          Start building your Detailed Project Report
+          {language === 'kn' ? 'ನಿಮ್ಮ ವಿಸ್ತೃತ ಯೋಜನಾ ವರದಿ (DPR) ನಿರ್ಮಿಸಲು ಪ್ರಾರಂಭಿಸಿ' : language === 'hi' ? 'अपनी विस्तृत परियोजना रिपोर्ट तैयार करना शुरू करें' : 'Start building your Detailed Project Report'}
         </p>
       </div>
 
@@ -88,7 +90,7 @@ export default function RegisterCard({ onRegisterSuccess, onSwitchToLogin }: Reg
 
         <div style={{ marginBottom: '1.2rem' }}>
           <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#123B4A', marginBottom: '0.45rem' }}>
-            Full Name
+            {t.contact.fullName}
           </label>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <i className="far fa-user" style={{ position: 'absolute', left: '1rem', color: '#66818C', fontSize: '0.95rem' }} />
@@ -98,7 +100,7 @@ export default function RegisterCard({ onRegisterSuccess, onSwitchToLogin }: Reg
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              placeholder="Your name"
+              placeholder={language === 'kn' ? 'ನಿಮ್ಮ ಹೆಸರು' : language === 'hi' ? 'आपका नाम' : 'Your name'}
               style={{ paddingLeft: '2.7rem', borderRadius: '12px', border: '1px solid #DDF4F3' }}
             />
           </div>
@@ -106,7 +108,7 @@ export default function RegisterCard({ onRegisterSuccess, onSwitchToLogin }: Reg
 
         <div style={{ marginBottom: '1.2rem' }}>
           <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#123B4A', marginBottom: '0.45rem' }}>
-            Email Address
+            {t.contact.email}
           </label>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <i className="far fa-envelope" style={{ position: 'absolute', left: '1rem', color: '#66818C', fontSize: '0.95rem' }} />
@@ -116,7 +118,7 @@ export default function RegisterCard({ onRegisterSuccess, onSwitchToLogin }: Reg
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="Your email address"
+              placeholder={language === 'kn' ? 'ನಿಮ್ಮ ಇಮೇಲ್ ವಿಳಾಸ' : language === 'hi' ? 'आपका ईमेल पता' : 'Your email address'}
               style={{ paddingLeft: '2.7rem', borderRadius: '12px', border: '1px solid #DDF4F3' }}
             />
           </div>
@@ -124,7 +126,7 @@ export default function RegisterCard({ onRegisterSuccess, onSwitchToLogin }: Reg
 
         <div style={{ marginBottom: '1.2rem' }}>
           <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#123B4A', marginBottom: '0.45rem' }}>
-            Password
+            {language === 'kn' ? 'ಪಾಸ್‌ವರ್ಡ್' : language === 'hi' ? 'पासवर्ड' : 'Password'}
           </label>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <i className="fas fa-lock" style={{ position: 'absolute', left: '1rem', color: '#66818C', fontSize: '0.95rem' }} />
@@ -135,7 +137,7 @@ export default function RegisterCard({ onRegisterSuccess, onSwitchToLogin }: Reg
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
-              placeholder="Create a strong password"
+              placeholder={language === 'kn' ? 'ಬಲಿಷ್ಠ ಪಾಸ್‌ವರ್ಡ್ ರಚಿಸಿ' : language === 'hi' ? 'मजबूत पासवर्ड बनाएं' : 'Create a strong password'}
               style={{ paddingLeft: '2.7rem', borderRadius: '12px', border: '1px solid #DDF4F3' }}
             />
           </div>
@@ -144,20 +146,20 @@ export default function RegisterCard({ onRegisterSuccess, onSwitchToLogin }: Reg
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.8rem' }}>
           <div>
             <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#123B4A', marginBottom: '0.4rem' }}>
-              Organization
+              {language === 'kn' ? 'ಸಂಸ್ಥೆ / ಉದ್ಯಮ' : language === 'hi' ? 'संस्था / संगठन' : 'Organization'}
             </label>
             <input
               type="text"
               className="input-modern"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
-              placeholder="Your organization"
+              placeholder={language === 'kn' ? 'ನಿಮ್ಮ ಸಂಸ್ಥೆ' : language === 'hi' ? 'आपका संगठन' : 'Your organization'}
               style={{ borderRadius: '12px', border: '1px solid #DDF4F3' }}
             />
           </div>
           <div>
             <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#123B4A', marginBottom: '0.4rem' }}>
-              Phone Number
+              {t.contact.phone}
             </label>
             <input
               type="text"
@@ -187,17 +189,17 @@ export default function RegisterCard({ onRegisterSuccess, onSwitchToLogin }: Reg
             transition: 'all 0.2s ease',
           }}
         >
-          {loading ? 'Creating Account...' : 'Register Account'}
+          {loading ? (language === 'kn' ? 'ಖಾತೆ ರಚಿಸಲಾಗುತ್ತಿದೆ...' : language === 'hi' ? 'खाता बनाया जा रहा है...' : 'Creating Account...') : (language === 'kn' ? 'ಖಾತೆ ನೋಂದಾಯಿಸಿ' : language === 'hi' ? 'खाता पंजीकृत करें' : 'Register Account')}
         </button>
 
         <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.88rem', color: '#66818C' }}>
-          Already have an account?{' '}
+          {language === 'kn' ? 'ಈಗಾಗಲೇ ಖಾತೆ ಹೊಂದಿದ್ದೀರಾ?' : language === 'hi' ? 'पहले से ही एक खाता है?' : 'Already have an account?'}{' '}
           <button
             type="button"
             onClick={onSwitchToLogin}
             style={{ background: 'none', border: 'none', color: '#008C95', fontWeight: 700, cursor: 'pointer', padding: 0 }}
           >
-            Sign In
+            {t.common.signIn}
           </button>
         </div>
       </form>

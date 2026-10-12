@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { loginUser } from '@/lib/api';
 import { UserSession } from '@/types/dpr';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface LoginCardProps {
   onLoginSuccess: (session: UserSession) => void;
@@ -10,6 +11,7 @@ interface LoginCardProps {
 }
 
 export default function LoginCard({ onLoginSuccess, onSwitchToRegister }: LoginCardProps) {
+  const { t, language } = useLanguage();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -78,10 +80,10 @@ export default function LoginCard({ onLoginSuccess, onSwitchToRegister }: LoginC
       {/* Title & Subtitle */}
       <div style={{ marginBottom: '1.6rem' }}>
         <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#123B4A', marginBottom: '0.3rem' }}>
-          Welcome Back
+          {language === 'kn' ? 'ಮರಳಿ ಸುಸ್ವಾಗತ' : language === 'hi' ? 'वापसी पर स्वागत है' : 'Welcome Back'}
         </h2>
         <p style={{ fontSize: '0.9rem', color: '#66818C' }}>
-          Sign in to continue your DPR journey.
+          {language === 'kn' ? 'ನಿಮ್ಮ ಡಿಪಿಆರ್ ಮುಂದುವರಿಸಲು ಲಾಗಿನ್ ಮಾಡಿ.' : language === 'hi' ? 'अपनी डीपीआर जारी रखने के लिए साइन इन करें।' : 'Sign in to continue your DPR journey.'}
         </p>
       </div>
 
@@ -105,7 +107,7 @@ export default function LoginCard({ onLoginSuccess, onSwitchToRegister }: LoginC
         {/* 1. Email Address */}
         <div style={{ marginBottom: '1.4rem' }}>
           <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#123B4A', marginBottom: '0.45rem' }}>
-            Email Address
+            {t.contact.email}
           </label>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <i
@@ -124,7 +126,7 @@ export default function LoginCard({ onLoginSuccess, onSwitchToRegister }: LoginC
               onChange={(e) => setEmail(e.target.value)}
               onFocus={prewarmBackend}
               required
-              placeholder="Enter your email address"
+              placeholder={language === 'kn' ? 'ನಿಮ್ಮ ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ನಮೂದಿಸಿ' : language === 'hi' ? 'अपना ईमेल पता दर्ज करें' : 'Enter your email address'}
               style={{
                 paddingLeft: '2.7rem',
                 borderRadius: '12px',
@@ -138,7 +140,7 @@ export default function LoginCard({ onLoginSuccess, onSwitchToRegister }: LoginC
         {/* 2. Password */}
         <div style={{ marginBottom: '1.2rem' }}>
           <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#123B4A', marginBottom: '0.45rem' }}>
-            Password
+            {language === 'kn' ? 'ಪಾಸ್‌ವರ್ಡ್' : language === 'hi' ? 'पासवर्ड' : 'Password'}
           </label>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <i
@@ -157,7 +159,7 @@ export default function LoginCard({ onLoginSuccess, onSwitchToRegister }: LoginC
               onChange={(e) => setPassword(e.target.value)}
               onFocus={prewarmBackend}
               required
-              placeholder="Enter your password"
+              placeholder={language === 'kn' ? 'ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್ ನಮೂದಿಸಿ' : language === 'hi' ? 'अपना पासवर्ड दर्ज करें' : 'Enter your password'}
               style={{
                 paddingLeft: '2.7rem',
                 paddingRight: '2.7rem',
@@ -194,14 +196,14 @@ export default function LoginCard({ onLoginSuccess, onSwitchToRegister }: LoginC
               onChange={(e) => setRememberMe(e.target.checked)}
               style={{ accentColor: '#008C95', cursor: 'pointer' }}
             />
-            Remember me
+            {language === 'kn' ? 'ನನ್ನನ್ನು ನೆನಪಿನಲ್ಲಿಡಿ' : language === 'hi' ? 'मुझे याद रखें' : 'Remember me'}
           </label>
           <a
             href="#forgot"
             onClick={(e) => { e.preventDefault(); alert('Password reset link sent to your registered email.'); }}
             style={{ color: '#008C95', fontWeight: 600, textDecoration: 'none' }}
           >
-            Forgot Password?
+            {language === 'kn' ? 'ಪಾಸ್‌ವರ್ಡ್ ಮರೆತಿರಾ?' : language === 'hi' ? 'पासवर्ड भूल गए?' : 'Forgot Password?'}
           </a>
         </div>
 
@@ -223,13 +225,13 @@ export default function LoginCard({ onLoginSuccess, onSwitchToRegister }: LoginC
             transition: 'all 0.2s ease',
           }}
         >
-          {loading ? 'Signing In...' : 'Sign In →'}
+          {loading ? (language === 'kn' ? 'ಲಾಗಿನ್ ಆಗುತ್ತಿದೆ...' : language === 'hi' ? 'साइन इन हो रहा है...' : 'Signing In...') : (t.common.signIn + ' →')}
         </button>
 
         {/* Divider */}
         <div style={{ display: 'flex', alignItems: 'center', margin: '1.2rem 0', gap: '0.75rem' }}>
           <div style={{ flex: 1, height: '1px', background: '#E2E8F0' }} />
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94A3B8', letterSpacing: '0.5px' }}>OR</span>
+          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94A3B8', letterSpacing: '0.5px' }}>{language === 'kn' ? 'ಅಥವಾ' : language === 'hi' ? 'या' : 'OR'}</span>
           <div style={{ flex: 1, height: '1px', background: '#E2E8F0' }} />
         </div>
 
@@ -255,18 +257,18 @@ export default function LoginCard({ onLoginSuccess, onSwitchToRegister }: LoginC
           }}
         >
           <i className="fab fa-google" style={{ color: '#EA4335', fontSize: '1rem' }} />
-          Continue with Google
+          {language === 'kn' ? 'ಗೂಗಲ್ ಮೂಲಕ ಮುಂದುವರಿಯಿರಿ' : language === 'hi' ? 'गूगल के साथ जारी रखें' : 'Continue with Google'}
         </button>
 
         {/* Footer */}
         <div style={{ textAlign: 'center', marginTop: '1.4rem', fontSize: '0.88rem', color: '#66818C' }}>
-          New to VKF DPR?{' '}
+          {language === 'kn' ? 'ಹೊಸ ಬಳಕೆದಾರರೇ?' : language === 'hi' ? 'नए उपयोगकर्ता हैं?' : 'New to VKF DPR?'}{' '}
           <button
             type="button"
             onClick={onSwitchToRegister}
             style={{ background: 'none', border: 'none', color: '#008C95', fontWeight: 700, cursor: 'pointer', padding: 0 }}
           >
-            Get Started →
+            {language === 'kn' ? 'ಇಲ್ಲಿ ನೋಂದಾಯಿಸಿ →' : language === 'hi' ? 'यहाँ पंजीकरण करें →' : 'Get Started →'}
           </button>
         </div>
       </form>
