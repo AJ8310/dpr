@@ -17,8 +17,10 @@ class ImageManagementEngine:
         output_path: str,
         header_bg: str = '#0F172A'
     ) -> str:
+        if os.path.exists(output_path) and os.path.getsize(output_path) > 1000:
+            return output_path
         try:
-            fig, ax = plt.subplots(figsize=(6.5, 3.8), dpi=300)
+            fig, ax = plt.subplots(figsize=(6.5, 3.8), dpi=110)
             ax.axis('off')
             ax.set_facecolor('#F8FAFC')
             fig.patch.set_facecolor('#F8FAFC')
@@ -39,7 +41,7 @@ class ImageManagementEngine:
             ax.text(0.5, 0.08, f"Verified Spec: {footer}", color='#64748B', weight='bold', fontsize=7.5, ha='center', va='center', transform=ax.transAxes)
 
             plt.tight_layout()
-            plt.savefig(output_path, bbox_inches='tight', dpi=300)
+            plt.savefig(output_path, bbox_inches='tight', dpi=110)
             plt.close(fig)
             return output_path
         except Exception as e:

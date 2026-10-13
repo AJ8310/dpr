@@ -130,17 +130,21 @@ class MockLLMProvider(BaseLLMProvider):
 class GeminiLLMProvider(BaseLLMProvider):
     """
     Live Google Gemini LLM Provider for real-world high-value DPR intelligence.
+    Equipped with a circuit breaker to ensure report generation latency remains sub-second if remote network stalls.
     """
+    _circuit_broken: bool = False
 
     def __init__(self, api_key: str):
         self.api_key = api_key
-        self.models = ["gemini-flash-lite-latest"]
+        self.models = ["gemini-1.5-flash", "gemini-flash-lite-latest"]
         self.fallback_mock = MockLLMProvider()
 
     def generate(self, prompt: str, system_instruction: Optional[str] = None) -> str:
+        if GeminiLLMProvider._circuit_broken:
+            return self.fallback_mock.generate(prompt, system_instruction)
+
         import urllib.request
         import json
-        import time
 
         full_prompt = f"{system_instruction}\n\n{prompt}" if system_instruction else prompt
         payload_bytes = json.dumps({
@@ -151,16 +155,20 @@ class GeminiLLMProvider(BaseLLMProvider):
             endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent?key={self.api_key}"
             req = urllib.request.Request(endpoint, data=payload_bytes, headers={"Content-Type": "application/json"})
             try:
-                with urllib.request.urlopen(req, timeout=8) as resp:
+                with urllib.request.urlopen(req, timeout=2.5) as resp:
                     data = json.loads(resp.read().decode("utf-8"))
                     return data["candidates"][0]["content"]["parts"][0]["text"].strip()
             except Exception as e:
-                print(f"[GeminiLLMProvider Notice] Live API model '{m}' notice: {e}")
+                GeminiLLMProvider._circuit_broken = True
+                print(f"[GeminiLLMProvider Notice] Live API model '{m}' timed out or errored: {e}. Circuit breaker activated; falling back to deterministic engine.")
+                break
 
-        print("[GeminiLLMProvider Notice] Live API call fallback to Mock Provider.")
         return self.fallback_mock.generate(prompt, system_instruction)
 
     def structured_generate(self, prompt: str, output_schema: Dict[str, Any], system_instruction: Optional[str] = None) -> Dict[str, Any]:
+        if GeminiLLMProvider._circuit_broken:
+            return self.fallback_mock.structured_generate(prompt, output_schema, system_instruction)
+
         import urllib.request
         import json
 
@@ -174,20 +182,22 @@ class GeminiLLMProvider(BaseLLMProvider):
             endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent?key={self.api_key}"
             req = urllib.request.Request(endpoint, data=payload_bytes, headers={"Content-Type": "application/json"})
             try:
-                with urllib.request.urlopen(req, timeout=8) as resp:
+                with urllib.request.urlopen(req, timeout=2.5) as resp:
                     data = json.loads(resp.read().decode("utf-8"))
                     text_resp = data["candidates"][0]["content"]["parts"][0]["text"].strip()
                     return json.loads(text_resp)
             except Exception as e:
-                print(f"[GeminiLLMProvider Notice] Live API structured model '{m}' notice: {e}")
+                GeminiLLMProvider._circuit_broken = True
+                print(f"[GeminiLLMProvider Notice] Live API structured model '{m}' timed out or errored: {e}. Circuit breaker activated; falling back to deterministic engine.")
+                break
 
-        print("[GeminiLLMProvider Notice] Live API call fallback to Mock Provider.")
         return self.fallback_mock.structured_generate(prompt, output_schema, system_instruction)
 
 def get_llm_provider() -> BaseLLMProvider:
     from dotenv import load_dotenv
     load_dotenv(override=True)
+    live_enabled = os.getenv("ENABLE_LIVE_GEMINI", "false").strip().lower() in ("true", "1", "yes")
     api_key = os.getenv("GEMINI_API_KEY", "").strip()
-    if api_key and not api_key.startswith("AQ.") and len(api_key) > 20:
+    if live_enabled and api_key and not api_key.startswith("AQ.") and len(api_key) > 20 and not GeminiLLMProvider._circuit_broken:
         return GeminiLLMProvider(api_key)
     return MockLLMProvider()

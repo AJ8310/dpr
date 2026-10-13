@@ -657,7 +657,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       } else {
         clearInterval(interval);
       }
-    }, 1800);
+    }, 350);
 
     return interval;
   };
@@ -1007,11 +1007,10 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
     const tR = reportI18nMap[activeLang] || reportI18nMap.en;
 
     try {
-      await new Promise((res) => setTimeout(res, 3500));
       clearInterval(progressInterval);
       setProgressPercent(100);
       setStepName(tR.finalizingStep);
-      await new Promise((res) => setTimeout(res, 600));
+      await new Promise((res) => setTimeout(res, 150));
 
       const totalOutlay = (data.land_cost || 0) + (data.building_cost || 0) + ((data as any).plant_cost || 0) + (data.working_capital || 0) + ((data as any).contingency || 0);
       const equityAmt = (data as any).equity_amount || (totalOutlay * 0.25);
@@ -1230,7 +1229,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       setProgressPercent(100);
       setStepName(language === 'kn' ? 'ಅಂತಿಮಗೊಳಿಸಲಾಗುತ್ತಿದೆ: PDF ವರದಿ ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ!' : language === 'hi' ? 'अंतिम रूप दिया जा रहा है: पीडीएफ रिपोर्ट सफलतापूर्वक तैयार!' : 'Finalizing: PDF Report generated successfully!');
       
-      await new Promise((res) => setTimeout(res, 600));
+      await new Promise((res) => setTimeout(res, 150));
 
       const url = window.URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
       const link = document.createElement('a');

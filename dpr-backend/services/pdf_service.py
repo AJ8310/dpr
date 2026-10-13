@@ -16,7 +16,9 @@ CHROMIUM_LOW_MEM_FLAGS = [
     "--disable-background-networking",
     "--disable-default-apps",
     "--disable-sync",
-    "--no-first-run"
+    "--no-first-run",
+    "--disable-features=IsolateOrigins,site-per-process",
+    "--blink-settings=imagesEnabled=true"
 ]
 
 def _generate_pdf_sync(html_content: str, output_path: str) -> str:
@@ -28,7 +30,9 @@ def _generate_pdf_sync(html_content: str, output_path: str) -> str:
                 args=CHROMIUM_LOW_MEM_FLAGS
             )
             page = browser.new_page()
-            page.set_content(html_content, wait_until="load", timeout=15000)
+            page.route("**/fonts.googleapis.com/**", lambda route: route.abort())
+            page.route("**/fonts.gstatic.com/**", lambda route: route.abort())
+            page.set_content(html_content, wait_until="domcontentloaded", timeout=12000)
             page.pdf(
                 path=output_path,
                 format="A4",
@@ -75,7 +79,9 @@ class PDFService:
                     args=CHROMIUM_LOW_MEM_FLAGS
                 )
                 page = await browser.new_page(viewport={"width": 1280, "height": 1024})
-                await page.set_content(html_content, wait_until="load", timeout=15000)
+                await page.route("**/fonts.googleapis.com/**", lambda route: route.abort())
+                await page.route("**/fonts.gstatic.com/**", lambda route: route.abort())
+                await page.set_content(html_content, wait_until="domcontentloaded", timeout=12000)
                 await page.pdf(
                     path=output_path,
                     format="A4",

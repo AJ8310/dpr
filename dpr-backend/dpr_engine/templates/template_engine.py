@@ -440,7 +440,7 @@ class DPRTemplateCompositionEngine:
     def compose_html_document(cls, doc: DPRDocumentModel, templates_dir: str) -> str:
         # Resolve structure, narratives, and diagrams
         structure_info = DPRStructureEngine.resolve_structure(doc)
-        narratives = DPRContentEngine.generate_narratives(doc)
+        narratives = (doc.narratives if (doc.narratives and len(doc.narratives) > 0) else None) or DPRContentEngine.generate_narratives(doc)
         diagrams = DeterministicDiagramEngine.generate_html_diagrams(doc)
 
         upload_dir = os.path.join(os.path.dirname(templates_dir), "uploads")

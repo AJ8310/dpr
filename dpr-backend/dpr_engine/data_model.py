@@ -362,9 +362,10 @@ class DPRDocumentModel(BaseModel):
     place: str = ""
     declaration_date: str = ""
 
-    # Generated Graphics Paths
+    # Generated Graphics Paths & Narratives
     chart_paths: Dict[str, str] = {}
     diagram_paths: Dict[str, str] = {}
+    narratives: Dict[str, Any] = {}
 
     # Corporate Financial & ESG Advanced Metrics
     corporate_npv: Any = 0.0
