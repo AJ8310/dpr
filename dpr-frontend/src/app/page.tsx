@@ -22,8 +22,13 @@ export default function Home() {
   useEffect(() => {
     // Clear any legacy demo keys from browser storage
     sessionStorage.removeItem('dpr_current_user_main');
-    localStorage.removeItem('dpr_current_user_main');
     localStorage.removeItem('dpr_users_main');
+
+    const draftBackup = typeof window !== 'undefined' ? (localStorage.getItem('dpr_draft_backup') || sessionStorage.getItem('dpr_draft_backup')) : null;
+    if (draftBackup && (draftBackup.includes('ಕಾವೇರಿ') || draftBackup.includes('Speed') || draftBackup.includes('WarmRun') || draftBackup.includes('SriDurga') || draftBackup.includes('Demo') || draftBackup.includes('demo'))) {
+      localStorage.removeItem('dpr_draft_backup');
+      sessionStorage.removeItem('dpr_draft_backup');
+    }
 
     const storedSession = sessionStorage.getItem('dpr_session');
     if (storedSession) {

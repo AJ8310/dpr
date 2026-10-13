@@ -200,30 +200,48 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       }
     }
 
+    const isSampleData = (d: any) => {
+      if (!d) return false;
+      const b = String(d.business_name || '').toLowerCase();
+      return b.includes('ಕಾವೇರಿ') || b.includes('speed') || b.includes('warmrun') || b.includes('sridurga') || b.includes('demo') || b.includes('sample');
+    };
+
     // Auto-restore user's saved draft from backend database (or local backup fallback)
     getLatestDraft()
       .then((res) => {
         if (res && res.has_draft && res.data) {
-          setFormData((prev) => ({
-            ...prev,
-            ...res.data,
-          }));
-          if (typeof res.data.activeStep === 'number' && res.data.activeStep >= 0 && res.data.activeStep <= 13) {
-            setActiveStep(res.data.activeStep);
+          if (isSampleData(res.data)) {
+            clearDraft().catch(() => {});
+            if (typeof window !== 'undefined') {
+              localStorage.removeItem('dpr_draft_backup');
+              sessionStorage.removeItem('dpr_draft_backup');
+            }
+          } else {
+            setFormData((prev) => ({
+              ...prev,
+              ...res.data,
+            }));
+            if (typeof res.data.activeStep === 'number' && res.data.activeStep >= 0 && res.data.activeStep <= 13) {
+              setActiveStep(res.data.activeStep);
+            }
+            const busName = res.business_name || res.data.business_name || 'your project';
+            setRestoredNotice(`Restored your saved progress for "${busName}". You can resume filling from where you left off.`);
           }
-          const busName = res.business_name || res.data.business_name || 'your project';
-          setRestoredNotice(`Restored your saved progress for "${busName}". You can resume filling from where you left off.`);
         } else if (typeof window !== 'undefined') {
           const localBackup = localStorage.getItem('dpr_draft_backup');
           if (localBackup) {
             try {
               const parsed = JSON.parse(localBackup);
               if (parsed) {
-                setFormData((prev) => ({ ...prev, ...parsed }));
-                if (typeof parsed.activeStep === 'number' && parsed.activeStep >= 0 && parsed.activeStep <= 13) {
-                  setActiveStep(parsed.activeStep);
+                if (isSampleData(parsed)) {
+                  localStorage.removeItem('dpr_draft_backup');
+                } else {
+                  setFormData((prev) => ({ ...prev, ...parsed }));
+                  if (typeof parsed.activeStep === 'number' && parsed.activeStep >= 0 && parsed.activeStep <= 13) {
+                    setActiveStep(parsed.activeStep);
+                  }
+                  setRestoredNotice('Restored your saved draft progress from local backup.');
                 }
-                setRestoredNotice('Restored your saved draft progress from local backup.');
               }
             } catch (e) {}
           }
@@ -237,11 +255,15 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
             try {
               const parsed = JSON.parse(localBackup);
               if (parsed) {
-                setFormData((prev) => ({ ...prev, ...parsed }));
-                if (typeof parsed.activeStep === 'number' && parsed.activeStep >= 0 && parsed.activeStep <= 13) {
-                  setActiveStep(parsed.activeStep);
+                if (isSampleData(parsed)) {
+                  localStorage.removeItem('dpr_draft_backup');
+                } else {
+                  setFormData((prev) => ({ ...prev, ...parsed }));
+                  if (typeof parsed.activeStep === 'number' && parsed.activeStep >= 0 && parsed.activeStep <= 13) {
+                    setActiveStep(parsed.activeStep);
+                  }
+                  setRestoredNotice('Restored your saved draft progress from local backup.');
                 }
-                setRestoredNotice('Restored your saved draft progress from local backup.');
               }
             } catch (e) {}
           }
@@ -468,155 +490,6 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
     }
   };
 
-  const handleLoadKannadaSampleData = async () => {
-    const kannadaSample: Partial<DPRFormData> = {
-      dpr_type: 'Bank Loan DPR',
-      sector_id: 'manufacturing',
-      activity_id: 'cnc_machining',
-      project_type_id: 'new_project',
-      project_scale: 'medium',
-      business_name: 'ಕಾವೇರಿ ಪ್ರಿಸಿಷನ್ ಕಾಂಪೊನೆಂಟ್ಸ್ ವರ್ಕ್ಸ್',
-      group_name: 'ರಾಜೇಶ್ ಕುಮಾರ್ ಎಂಟರ್‌ಪ್ರೈಸಸ್',
-      business_desc: 'ಅಂತರರಾಷ್ಟ್ರೀಯ ಐಎಸ್‌ಒ 9001:2015 ಗುಣಮಟ್ಟಕ್ಕೆ ಅನುಗುಣವಾಗಿ ಆಟೋಮೊಬೈಲ್ ಮತ್ತು ಏರೋಸ್ಪೇಸ್ ಕ್ಷೇತ್ರಗಳಿಗೆ ಅಗತ್ಯವಿರುವ ಹೈ-ಪ್ರಿಸಿಷನ್ ಸಿಎನ್‌ಸಿ ಮ್ಯಾಚಿನ್ ಕಾಂಪೊನೆಂಟ್‌ಗಳನ್ನು ತಯಾರಿಸುವ ಅತ್ಯಾಧುನಿಕ ಕೈಗಾರಿಕಾ ಉತ್ಪಾದನಾ ಘಟಕ.',
-      entity_type: 'Proprietorship',
-      cin: 'U29253KA2024PTC184920',
-      gst_no: '29ABCDE1234F1Z5',
-      pan_no: 'ABCDE1234F',
-      udyam_no: 'UDYAM-KR-03-0048291',
-      village: 'ಪೀಣ್ಯ 2ನೇ ಹಂತ, ಕೈಗಾರಿಕಾ ಪ್ರದೇಶ',
-      block: 'ಬೆಂಗಳೂರು ಉತ್ತರ',
-      district: 'ಬೆಂಗಳೂರು ನಗರ',
-      state: 'ಕರ್ನಾಟಕ',
-      contact_name: 'ರಾಜೇಶ್ ಕುಮಾರ್',
-      contact_number: '9845012345',
-      email: 'rajesh@kaveriprecision.com',
-      bank_name: 'ಸ್ಟೇಟ್ ಬ್ಯಾಂಕ್ ಆಫ್ ಇಂಡಿಯಾ',
-      bank_branch: 'ಪೀಣ್ಯ SME ಶಾಖೆ, ಬೆಂಗಳೂರು',
-      account_number: '38291048592',
-      ifsc: 'SBIN0001234',
-      primary_lending_bank: 'ಸ್ಟೇಟ್ ಬ್ಯಾಂಕ್ ಆಫ್ ಇಂಡಿಯಾ',
-      bank_loan_scheme_name: 'SME ವಾಣಿಜ್ಯ ಅವಧಿ ಸಾಲ ಮತ್ತು ನಗದು ಸಾಲ',
-      collateral_offered: 'CGTMSE Guarantee (Collateral Free)',
-      moratorium_period_months: 6,
-      repayment_tenure_years: 5,
-      interest_rate_percent: 10.5,
-      primary_product: 'ನಿಖರ ಸಿಎನ್‌ಸಿ ಮ್ಯಾಚಿನ್ಡ್ ಆಟೋ ಟ್ರಾನ್ಸ್‌ಮಿಷನ್ ಫ್ಲೇಂಜ್‌ಗಳು ಮತ್ತು ಶಾಫ್ಟ್‌ಗಳು',
-      hsn_code: '8483',
-      daily_capacity: 150,
-      capacity_unit: 'Units',
-      selling_price: 1250,
-      raw_materials: 'ಅಲಾಯ್ ಸ್ಟೀಲ್ ರಾಡ್‌ಗಳು (EN8D, EN19), ಸ್ಪೆಷಲ್ ಗ್ರೇಡ್ ಎರಕಹೊಯ್ದ ಲೋಹ, ಕಟಿಂಗ್ ಕೂಲಂಟ್ಸ್ ಮತ್ತು ಕಾರ್ಬೈಡ್ ಟೂಲ್ಸ್',
-      input_cost: 650,
-      working_days: 300,
-      market_growth: 14.5,
-      usp: 'ಮೈಕ್ರಾನ್ ಮಟ್ಟದ ನಿಖರತೆ (+/- 0.005mm), 3D ಸಿಎಂಎಂ ತಪಾಸಣೆ, ಶೂನ್ಯ ದೋಷ ದರ ಮತ್ತು 48 ಗಂಟೆಗಳ ಒಳಗಡೆ ಗ್ರಾಹಕರಿಗೆ ಸಕಾಲಿಕ ಡೆಲಿವರಿ.',
-      machinery: [
-        { id: 'm1', name: 'ಸಿಎನ್‌ಸಿ ಟರ್ನಿಂಗ್ ಸೆಂಟರ್ (Ace Micromatic LT-20 XL)', quantity: 2, price: 2850000, total: 5700000 },
-        { id: 'm2', name: 'ವರ್ಟಿಕಲ್ ಮ್ಯಾಚಿನಿಂಗ್ ಸೆಂಟರ್ (VMC 850 4-Axis)', quantity: 1, price: 3800000, total: 3800000 },
-        { id: 'm3', name: 'ಸ್ವಯಂಚಾಲಿತ ಸರ್ಫೇಸ್ ಗ್ರೈಂಡರ್ ಮತ್ತು ಟೂಲ್ ಸೆಟ್ಟರ್', quantity: 1, price: 950000, total: 950000 },
-        { id: 'm4', name: '3D ಕೋಆರ್ಡಿನೇಟ್ ಮೆಷರಿಂಗ್ ಮೆಷಿನ್ (CMM ಕ್ವಾಲಿಟಿ ಲ್ಯಾಬ್)', quantity: 1, price: 800000, total: 800000 },
-      ],
-      supplier_name: 'ಏಸ್ ಮೈಕ್ರೋಮ್ಯಾಟಿಕ್ ಗ್ರೂಪ್ / ಹಾಸ್ ಆಟೊಮೇಷನ್ ಇಂಡಿಯಾ',
-      supplier_location: 'ಬೆಂಗಳೂರು ಮತ್ತು ಪುಣೆ',
-      target_customers: 'ಟಿಯರ್-1 ಆಟೋಮೊಬೈಲ್ ಒಇಎಂ ತಯಾರಕರು (ಬಾಷ್, ಟಿವಿಎಸ್, ಟೊಯೋಟಾ ಕಿರ್ಲೋಸ್ಕರ್ ಪೂರೈಕೆದಾರರು), ಏರೋಸ್ಪೇಸ್ ಮತ್ತು ಹೆವಿ ಮೆಷಿನರಿ ತಯಾರಕರು.',
-      sales_location: 'ಕರ್ನಾಟಕ ಮತ್ತು ತಮಿಳುನಾಡಿನಾದ್ಯಂತ ವಾರ್ಷಿಕ ಪೂರೈಕೆ ಒಪ್ಪಂದಗಳ ಮೂಲಕ ಶೇ. 70 ಮಾರಾಟ; ಜಿಇಎಂ (GeM) ಸರ್ಕಾರಿ ಪೋರ್ಟಲ್ ಮತ್ತು ನೇರ ಕಾರ್ಪೊರೇಟ್ ಆರ್ಡರ್‌ಗಳ ಮೂಲಕ ಶೇ. 30 ಮಾರಾಟ.',
-      competitors: 'ಪೀಣ್ಯ ಮತ್ತು ಬೊಮ್ಮಸಂದ್ರ ಕೈಗಾರಿಕಾ ಪ್ರದೇಶದಲ್ಲಿರುವ ಸ್ಥಳೀಯ ಸಿಎನ್‌ಸಿ ಜಾಬ್ ವರ್ಕ್ಸ್ ಘಟಕಗಳು.',
-      mgmt_count: 2,
-      mgmt_salary: 45000,
-      sup_count: 2,
-      sup_salary: 28000,
-      skill_count: 5,
-      skill_salary: 18000,
-      unskill_count: 4,
-      unskill_salary: 14000,
-      admin_count: 2,
-      admin_salary: 20000,
-      land_area: '5,000 Sq.Ft',
-      land_cost: 2500000,
-      building_area: '3,200 Sq.Ft',
-      building_cost: 4500000,
-      furniture_cost: 400000,
-      working_capital: 5250000,
-      other_cost: 500000,
-      promoter_contribution: 6250000,
-      bank_loan: 18750000,
-      subsidy: 0,
-      cash_in_hand: 500000,
-      bank_balance: 1500000,
-      inventory_value: 1250000,
-      receivables: 2000000,
-      fixed_land: 2500000,
-      fixed_building: 4500000,
-      fixed_machinery: 11250000,
-      fixed_furniture: 400000,
-      short_term_loan: 0,
-      creditors: 1000000,
-      long_term_loan: 17750000,
-      owner_capital: 6250000,
-      retained_earnings: 0,
-      cap_year1: 60,
-      cap_year2: 75,
-      cap_year3: 85,
-      cap_year4: 90,
-      cap_year5: 95,
-      int_year1: 1875000,
-      int_year2: 1500000,
-      int_year3: 1125000,
-      int_year4: 750000,
-      int_year5: 375000,
-      dep_year1: 2237500,
-      dep_year2: 1901875,
-      dep_year3: 1616594,
-      dep_year4: 1374105,
-      dep_year5: 1167989,
-      workspace: 'Industrial Park Shed (Owned / KIADB Allotment)',
-      builtup_area: 3200,
-      power_required: 45,
-      water_required: 2500,
-      monthly_rent: 0,
-      start_time: 3,
-      strengths: '4-ಆಕ್ಸಿಸ್ ಸಾಮರ್ಥ್ಯವಿರುವ ಅತ್ಯಾಧುನಿಕ ಸಿಎನ್‌ಸಿ ಯಂತ್ರಗಳು, 14 ವರ್ಷಗಳ ಟೂಲಿಂಗ್ ಅನುಭವವಿರುವ ಪ್ರವರ್ತಕರು, ಐಎಸ್‌ಒ 9001 ಗುಣಮಟ್ಟ ಲ್ಯಾಬ್, ಪೀಣ್ಯ ಕೈಗಾರಿಕಾ ವಲಯದಲ್ಲಿ ಆಯಕಟ್ಟಿನ ಸ್ಥಳ.',
-      weaknesses: 'ಆರಂಭಿಕ ಹಂತದಲ್ಲಿ ಉಪಕರಣಗಳಿಗೆ ಹೆಚ್ಚಿನ ಬಂಡವಾಳದ ಅಗತ್ಯ, ನಿರಂತರ ಹೈ-ಟೆನ್ಷನ್ ವಿದ್ಯುತ್ ಮೇಲಿನ ಅವಲಂಬನೆ, 45-ದಿನಗಳ ಕ್ರೆಡಿಟ್ ಅವಧಿಯಲ್ಲಿ ದುಡಿಯುವ ಬಂಡವಾಳದ ಅವಶ್ಯಕತೆ.',
-      opportunities: 'ಬೆಂಗಳೂರಿನಲ್ಲಿ ಇವಿ (ಎಲೆಕ್ಟ್ರಿಕ್ ವೆಹಿಕಲ್) ಘಟಕಗಳ ಹೆಚ್ಚಿದ ಬೇಡಿಕೆ, ರಕ್ಷಣಾ ಇಲಾಖೆ ಕಾಂಪೊನೆಂಟ್ ತಯಾರಿಕೆಗೆ ಸರ್ಕಾರಿ ಸಬ್ಸಿಡಿ ಪ್ರೋತ್ಸಾಹ, ಮಧ್ಯಪ್ರಾಚ್ಯ ಮತ್ತು ಏಷ್ಯನ್ ಮಾರುಕಟ್ಟೆಗಳಿಗೆ ರಫ್ತು ಅವಕಾಶ.',
-      threats: 'ಕಚ್ಚಾ ಅಲಾಯ್ ಸ್ಟೀಲ್ ಬೆಲೆಗಳಲ್ಲಿ ಅನಿಶ್ಚಿತತೆ, ಕೈಗಾರಿಕಾ ವಿದ್ಯುತ್ ದರ ಏರಿಕೆ, ಅಸಂಘಟಿತ ಸಣ್ಣ ಜಾಬ್ ವರ್ಕ್ಸ್ ಘಟಕಗಳಿಂದ ಬೆಲೆ ಪೈಪೋಟಿ.',
-      local_employment: 15,
-      women_employment: 6,
-      youth_employment: 8,
-      eco_friendly: 'Yes',
-      eco_description: 'ಶೂನ್ಯ ದ್ರವ ಹೊರಸೂಸುವಿಕೆ (ZLD), ಸ್ವಯಂಚಾಲಿತ ಕೂಲಂಟ್ ಮರುಬಳಕೆ ಘಟಕ, ಇಂಧನ-ದಕ್ಷ IE3 ಮೋಟಾರ್‌ಗಳು ಮತ್ತು 100% ಲೋಹದ ತುಣುಕುಗಳನ್ನು ಮರುಬಳಕೆ ಮಾಡುವ ಪರಿಸರ-ಸ್ನೇಹಿ ವ್ಯವಸ್ಥೆ.',
-      training: 'ಸರ್ಕಾರಿ ಐಟಿಐ ಪೀಣ್ಯ ಮತ್ತು ಜಿಟಿಟಿಸಿ (GTTC) ಸಂಸ್ಥೆಗಳೊಂದಿಗೆ ಡಿಪ್ಲೊಮಾ ಅಪ್ರೆಂಟಿಸ್ ತರಬೇತಿಗಾಗಿ ಒಡಂಬಡಿಕೆ ಮಾಡಿಕೊಳ್ಳಲಾಗಿದೆ.',
-      cibil_score: 785,
-      loan_before: 'Yes',
-      existing_loan: 0,
-      outstanding: 0,
-      default_history: 'None',
-      declarant_name: 'ರಾಜೇಶ್ ಕುಮಾರ್',
-      designation: 'ವ್ಯವಸ್ಥಾಪಕ ಪಾಲುದಾರರು / ಪ್ರವರ್ತಕರು',
-      place: 'ಬೆಂಗಳೂರು',
-      declaration_date: new Date().toISOString().split('T')[0],
-      dpr_depth: 'ent',
-      associated_with_vkf: true,
-    };
-
-    setFormData((prev) => ({
-      ...prev,
-      ...kannadaSample,
-    }));
-    setActiveStep(13); // Jump straight to Section 14 (Review, Download & Declaration)
-    setPaymentUnlocked(true); // Unlock download buttons immediately for review
-    setIsTestOneRupee(true);
-    setAutofillSuccessMsg('✓ ಕನ್ನಡ ಮಾದರಿ ಡೇಟಾವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಭರ್ತಿ ಮಾಡಲಾಗಿದೆ! ನೀವು ನೇರವಾಗಿ 14 ನೇ ವಿಭಾಗದಲ್ಲಿ ವರದಿ ಪರಿಶೀಲನೆ ಮತ್ತು ಡೌನ್‌ಲೋಡ್ ಮಾಡಬಹುದು.');
-
-    try {
-      const payload = { ...formData, ...kannadaSample, activeStep: 13 };
-      await saveDPRData(payload);
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('dpr_draft_backup', JSON.stringify(payload));
-      }
-    } catch (e) {
-      console.warn('Sample save draft notice:', e);
-    }
-  };
 
   const handleSaveData = async () => {
     setSaving(true);
@@ -1781,28 +1654,6 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
           </div>
 
           <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap' }}>
-            <button
-              type="button"
-              onClick={handleLoadKannadaSampleData}
-              style={{
-                background: 'linear-gradient(135deg, #FF7A00 0%, #D97706 100%)',
-                color: '#FFFFFF',
-                border: 'none',
-                padding: '0.8rem 1.4rem',
-                borderRadius: '12px',
-                fontWeight: 800,
-                fontSize: '0.9rem',
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.6rem',
-                boxShadow: '0 4px 14px rgba(255, 122, 0, 0.35)',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              <i className="fas fa-magic"></i> {tW.autoFill.loadKannadaDemo || 'ಕನ್ನಡ ಮಾದರಿ ಡೇಟಾ ಭರ್ತಿ ಮಾಡಿ (1-ಕ್ಲಿಕ್)'}
-            </button>
-
             <button
               type="button"
               onClick={handleClearFormAndDraft}

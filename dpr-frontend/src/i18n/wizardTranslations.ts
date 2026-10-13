@@ -29,7 +29,6 @@ export interface WizardTranslations {
     resetBtn: string;
     uploadBtn: string;
     parsing: string;
-    loadKannadaDemo?: string;
   };
   progressive: {
     showAll: string;
@@ -137,7 +136,6 @@ export const wizardTranslations: Record<Language, WizardTranslations> = {
       resetBtn: 'Reset Form',
       uploadBtn: 'Upload Document to Auto-Fill',
       parsing: 'Parsing & Auto-Filling...',
-      loadKannadaDemo: 'Load Kannada Sample Data (ಕನ್ನಡ ಮಾದರಿ ಡೇಟಾ)',
     },
     progressive: {
       showAll: 'Show All Questions',
@@ -513,7 +511,6 @@ export const wizardTranslations: Record<Language, WizardTranslations> = {
       resetBtn: 'ಫಾರ್ಮ್ ಮರುಹೊಂದಿಸಿ',
       uploadBtn: 'ಸ್ವಯಂ ಭರ್ತಿಗಾಗಿ ದಾಖಲೆ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ',
       parsing: 'ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ & ಭರ್ತಿ ಮಾಡಲಾಗುತ್ತಿದೆ...',
-      loadKannadaDemo: 'ಕನ್ನಡ ಮಾದರಿ ಡೇಟಾ ಭರ್ತಿ ಮಾಡಿ (1-ಕ್ಲಿಕ್)',
     },
     progressive: {
       showAll: 'ಎಲ್ಲಾ ಪ್ರಶ್ನೆಗಳನ್ನು ತೋರಿಸಿ',
@@ -889,7 +886,6 @@ export const wizardTranslations: Record<Language, WizardTranslations> = {
       resetBtn: 'फ़ॉर्म रीसेट करें',
       uploadBtn: 'ऑटो-फ़िल के लिए दस्तावेज़ अपलोड करें',
       parsing: 'विश्लेषण एवं ऑटो-फ़िल जारी है...',
-      loadKannadaDemo: 'कन्नड़ नमूना डेटा भरें (1-क्लिक)',
     },
     progressive: {
       showAll: 'सभी प्रश्न दिखाएं',
