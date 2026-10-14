@@ -1,0 +1,7 @@
+.venv
+__pycache__
+*.pyc
+dpr.db
+scratch
+tests
+.env

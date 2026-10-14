@@ -1,0 +1,51 @@
+# Build the backend image, push it to Artifact Registry and deploy it to Cloud Run.
+# Env vars / secrets are NOT set here: they are kept from the existing service.
+substitutions:
+  _REGION: asia-south1
+  _SERVICE: ajay-dpr
+  _REPO: cloud-run-source-deploy
+
+steps:
+  - id: build
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$COMMIT_SHA
+      - -f
+      - dpr-backend/Dockerfile
+      - dpr-backend
+
+  - id: push
+    name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$COMMIT_SHA
+
+  - id: deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_SERVICE}
+      - --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$COMMIT_SHA
+      - --region=${_REGION}
+      - --platform=managed
+      - --allow-unauthenticated
+      - --port=8080
+      - --memory=2Gi
+      - --cpu=2
+      - --timeout=900
+      - --concurrency=10
+      - --min-instances=1
+      - --max-instances=1
+      - --no-cpu-throttling
+      - --cpu-boost
+      - --execution-environment=gen2
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: E2_HIGHCPU_8
+
+timeout: 1800s
