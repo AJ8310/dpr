@@ -34,8 +34,8 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DPR_FRONTEND }}
-          projectId: dpr-frontend
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DETAILED_PROJECT_REPORT }}
+          projectId: detailed-project-report
           channelId: live
           entryPoint: dpr-frontend
 
@@ -45,6 +45,6 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DPR_FRONTEND }}
-          projectId: dpr-frontend
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DETAILED_PROJECT_REPORT }}
+          projectId: detailed-project-report
           entryPoint: dpr-frontend
