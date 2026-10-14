@@ -26,8 +26,8 @@ class Settings(BaseSettings):
     CORS_ORIGINS: list[str] = [
         o.strip().strip("[]\"'") for o in os.getenv(
             "CORS_ORIGINS",
-            "https://detailed-project-report.web.app,"
-            "https://detailed-project-report.firebaseapp.com,"
+            "https://dpr-frontend-badcf.web.app,"
+            "https://dpr-frontend-badcf.firebaseapp.com,"
             "http://localhost:3000,http://127.0.0.1:3000,"
             "http://localhost:5500,http://127.0.0.1:5500",
         ).split(",") if o.strip()
