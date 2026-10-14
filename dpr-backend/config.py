@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     
     # Allowed CORS Origins
     CORS_ORIGINS: list[str] = [
-        o.strip().strip('[]"'') for o in os.getenv(
+        o.strip().strip("[]\"'") for o in os.getenv(
             "CORS_ORIGINS",
             "https://detailed-project-report.web.app,"
             "https://detailed-project-report.firebaseapp.com,"
