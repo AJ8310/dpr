@@ -1,0 +1,38 @@
+# Build the static Next.js frontend and deploy it to Firebase Hosting.
+# Auth uses the Cloud Build service account (no keys): it needs the
+# "Firebase Hosting Admin" role on the Firebase project.
+substitutions:
+  _FIREBASE_PROJECT: dpr-frontend-badcf
+
+steps:
+  - id: install
+    name: node:20
+    dir: dpr-frontend
+    entrypoint: npm
+    args: ["ci"]
+
+  - id: build
+    name: node:20
+    dir: dpr-frontend
+    entrypoint: npm
+    args: ["run", "build"]
+
+  - id: deploy
+    name: node:20
+    dir: dpr-frontend
+    entrypoint: npx
+    args:
+      - --yes
+      - firebase-tools@latest
+      - deploy
+      - --only
+      - hosting
+      - --project
+      - ${_FIREBASE_PROJECT}
+      - --non-interactive
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  substitution_option: ALLOW_LOOSE
+
+timeout: 900s
