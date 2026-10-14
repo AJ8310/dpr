@@ -358,7 +358,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
   const resolveImageUrl = (path: string | undefined | null) => {
     if (!path) return '';
     if (path.startsWith('data:') || path.startsWith('http')) return path;
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://dpr-0eje.onrender.com';
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://ajay-dpr-779289230442.asia-south1.run.app';
     return `${apiBase.replace(/\/$/, '')}${path.startsWith('/') ? '' : '/'}${path}`;
   };
 

@@ -84,7 +84,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
 
   React.useEffect(() => {
     // Proactive backend pre-warming to eliminate cold starts & login delays
-    const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'https://dpr-0eje.onrender.com').replace(/\/$/, '');
+    const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'https://ajay-dpr-779289230442.asia-south1.run.app').replace(/\/$/, '');
     const pingBackend = () => {
       fetch(`${apiBase}/health/live`).catch(() => {});
       fetch(`${apiBase}/api/payment/config`).catch(() => {});

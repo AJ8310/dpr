@@ -21,7 +21,7 @@ export default function DocumentCompilationView({ projectId, snapshotId }: { pro
   const [selectedFormat, setSelectedFormat] = useState<"PDF" | "DOCX" | "HTML">("PDF");
   const [message, setMessage] = useState<string | null>(null);
 
-  const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://dpr-0eje.onrender.com';
+  const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://ajay-dpr-779289230442.asia-south1.run.app';
 
   const fetchDocuments = async () => {
     try {

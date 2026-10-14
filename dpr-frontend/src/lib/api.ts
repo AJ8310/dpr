@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { DPRFormData } from '@/types/dpr';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_BASE_URL || 'https://dpr-0eje.onrender.com';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_BASE_URL || 'https://ajay-dpr-779289230442.asia-south1.run.app';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
