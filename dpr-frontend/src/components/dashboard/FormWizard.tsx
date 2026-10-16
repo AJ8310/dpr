@@ -539,7 +539,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
     setGenerating(true);
     const progressInterval = startProgressSimulation();
 
-    const activeLang = ((data.language || language || (typeof window !== 'undefined' ? (sessionStorage.getItem('dpr_selected_language') || localStorage.getItem('dpr_selected_language')) : null) || 'en') as 'en' | 'kn' | 'hi');
+    const activeLang = ((data.language || language || (typeof window !== 'undefined' ? (sessionStorage.getItem('dpr_selected_language') || localStorage.getItem('dpr_language_preference') || localStorage.getItem('dpr_selected_language')) : null) || 'en') as 'en' | 'kn' | 'hi');
 
     const reportI18nMap = {
       en: {
@@ -1095,7 +1095,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
     try {
       const payloadWithLanguage = {
         ...formData,
-        language: formData.language || language || (typeof window !== 'undefined' ? (sessionStorage.getItem('dpr_selected_language') || localStorage.getItem('dpr_selected_language')) : null) || 'en'
+        language: formData.language || language || (typeof window !== 'undefined' ? (sessionStorage.getItem('dpr_selected_language') || localStorage.getItem('dpr_language_preference') || localStorage.getItem('dpr_selected_language')) : null) || 'en'
       };
       const blob = await generatePDF(payloadWithLanguage);
       clearInterval(progressInterval);
@@ -1246,7 +1246,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
   const handlePayAndGenerateDocx = async () => {
     const dataWithLang = {
       ...formData,
-      language: formData.language || language || (typeof window !== 'undefined' ? (sessionStorage.getItem('dpr_selected_language') || localStorage.getItem('dpr_selected_language')) : null) || 'en'
+      language: formData.language || language || (typeof window !== 'undefined' ? (sessionStorage.getItem('dpr_selected_language') || localStorage.getItem('dpr_language_preference') || localStorage.getItem('dpr_selected_language')) : null) || 'en'
     };
     if (paymentUnlocked) {
       await downloadClientReport(dataWithLang, 'docx');

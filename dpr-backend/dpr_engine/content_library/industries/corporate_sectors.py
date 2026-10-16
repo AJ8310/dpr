@@ -24,6 +24,56 @@ class CorporateSectorsNarrative:
         corporate_wacc = safe_float(doc.corporate_wacc, 10.5)
         corporate_project_irr = safe_float(doc.corporate_project_irr, 18.5)
         corporate_equity_irr = safe_float(doc.corporate_equity_irr, 24.2)
+        lang = str(getattr(doc, 'language', 'en') or 'en').lower()
+
+        if 'kn' in lang or 'kannada' in lang:
+            return {
+                "exec_summary": (
+                    f"<p><strong>1.1 ಕಾರ್ಯತಂತ್ರದ ನವೀಕರಿಸಬಹುದಾದ ಇಂಧನ ಯೋಜನೆ:</strong><br>"
+                    f"{b_name} ಒಂದು ಉನ್ನತ ಇಳುವರಿಯ ಗ್ರಿಡ್-ಸಂಪರ್ಕಿತ ಸೌರ ದ್ಯುತಿವಿದ್ಯುಜ್ಜನಕ (PV) ನವೀಕರಿಸಬಹುದಾದ ವಿದ್ಯುತ್ ಉತ್ಪಾದನಾ ಯೋಜನೆಯಾಗಿದ್ದು, {doc.district}, {doc.state} ನಲ್ಲಿ ನೆಲೆಗೊಂಡಿದೆ. "
+                    f"ರಾಜ್ಯ ವಿದ್ಯುತ್ ಸರಬರಾಜು ಕಂಪನಿಗಳೊಂದಿಗೆ (ESCOMs) ಮತ್ತು ಕೈಗಾರಿಕಾ ಗ್ರಾಹಕರೊಂದಿಗೆ 25-ವರ್ಷಗಳ ವಿದ್ಯುತ್ ಖರೀದಿ ಒಪ್ಪಂದದ (PPA) ಅಡಿಯಲ್ಲಿ ಸ್ವಚ್ಛ ವಿದ್ಯುತ್ ಶಕ್ತಿಯನ್ನು ಉತ್ಪಾದಿಸಲು ಈ ಘಟಕವನ್ನು ವಿನ್ಯಾಸಗೊಳಿಸಲಾಗಿದೆ.</p>"
+                    f"<p><strong>1.2 ಆರ್ಥಿಕ ವೆಚ್ಚ ಮತ್ತು ಮೌಲ್ಯಮಾಪನ ಸಾರಾಂಶ:</strong><br>"
+                    f"ಒಟ್ಟು ಯೋಜನಾ ಬಂಡವಾಳ ವೆಚ್ಚ: <strong>₹{total_cost:,.2f}</strong>, ಪ್ರವರ್ತಕರ ಇಕ್ವಿಟಿ <strong>₹{promoter_contribution:,.2f}</strong> ಮತ್ತು ಬ್ಯಾಂಕ್ ಸಾಲ <strong>₹{bank_loan:,.2f}</strong> ಬೆಂಬಲದೊಂದಿಗೆ. "
+                    f"ಕಾರ್ಪೊರೇಟ್ ಮೌಲ್ಯಮಾಪನ ಮಾನದಂಡಗಳು ಉನ್ನತ ಆದಾಯವನ್ನು ಖಚಿತಪಡಿಸುತ್ತವೆ: WACC <strong>{corporate_wacc:.1f}%</strong> ನಲ್ಲಿ ರಿಯಾಯಿತಿ ನಗದು ಹರಿವಿನ ನಿವ್ವಳ ಪ್ರಸ್ತುತ ಮೌಲ್ಯ (NPV) <strong>₹{corporate_npv:,.2f}</strong>, "
+                    f"ಯೋಜನಾ IRR <strong>{corporate_project_irr:.1f}%</strong>, ಮತ್ತು ಇಕ್ವಿಟಿ IRR <strong>{corporate_equity_irr:.1f}%</strong>.</p>"
+                ),
+                "business_overview": (
+                    f"<p><strong>2.1 ಸಾಂಸ್ಥಿಕ ಯೋಜನಾ ಡೆವಲಪರ್ ಪ್ರೊಫೈಲ್:</strong><br>"
+                    f"{b_name} ಅನುಮೋದಿತ ಗ್ರಿಡ್ ಇಂಟರ್‌ಕನೆಕ್ಷನ್ ಕ್ಲಿಯರೆನ್ಸ್, KERC / CERC ನಿಯಂತ್ರಕ ನೋಂದಣಿಗಳು ಮತ್ತು CEIG ಸುರಕ್ಷತಾ ಅನುಮೋದನೆಗಳನ್ನು ಹೊಂದಿದೆ. "
+                    f"ಯೋಜನಾ ನಿರ್ವಹಣಾ ತಂಡವು ಸೌರ EPC, ಉಪಕೇಂದ್ರ ಎಂಜಿನಿಯರಿಂಗ್ ಮತ್ತು ವಿದ್ಯುತ್ ವ್ಯಾಪಾರದಲ್ಲಿ ಆಳವಾದ ಅನುಭವವನ್ನು ಹೊಂದಿದೆ.</p>"
+                ),
+                "project_background": (
+                    f"<p><strong>3.1 ರಾಷ್ಟ್ರೀಯ ಸೌರ ಶಕ್ತಿ ಪರಿವರ್ತನೆ:</strong><br>"
+                    f"ಭಾರತವು 2030 ರ ವೇಳೆಗೆ 500 GW ಪಳೆಯುಳಿಕೆಯೇತರ ಇಂಧನ ಸಾಮರ್ಥ್ಯವನ್ನು ಗುರಿಯಾಗಿಸಿಕೊಂಡಿದೆ. {doc.state} ರಾಜ್ಯದಲ್ಲಿ ಲಭ್ಯವಿರುವ ಅತ್ಯುತ್ತಮ ಸೌರ ವಿಕಿರಣವು ಯೋಜನೆಗೆ ಸೂಕ್ತ ಪರಿಸರವನ್ನು ಒದಗಿಸುತ್ತದೆ.</p>"
+                ),
+                "product_description": (
+                    f"<p><strong>4.1 ಸ್ವಚ್ಛ ವಿದ್ಯುತ್ ಉತ್ಪಾದನೆ:</strong><br>"
+                    f"ಪ್ರಾಥಮಿಕ ವಿತರಣೆ: ನವೀಕರಿಸಬಹುದಾದ ಸೌರ ವಿದ್ಯುತ್ ಶಕ್ತಿ (HSN ಕೋಡ್: 27160000). ಸ್ವಯಂಚಾಲಿತ SCADA ಟ್ರ್ಯಾಕಿಂಗ್‌ನೊಂದಿಗೆ ಅತ್ಯುನ್ನತ CUF (>24%).</p>"
+                ),
+                "market_analysis": (
+                    f"<p><strong>5.1 ವಿದ್ಯುತ್ ಖರೀದಿ ಮಾರುಕಟ್ಟೆ ಮತ್ತು ದರ ಖಾತರಿ:</strong><br>"
+                    f"ರಾಜ್ಯ ನವೀಕರಿಸಬಹುದಾದ ಇಂಧನ ಸಂಗ್ರಹಣೆ ನೀತಿಗಳ ಅಡಿಯಲ್ಲಿ 25-ವರ್ಷಗಳ ದೀರ್ಘಾವಧಿಯ PPA ಗಳು ಮತ್ತು ಎಸ್ಕ್ರೋ ಕಾರ್ಯವಿಧಾನಗಳಿಂದ ಮಾರುಕಟ್ಟೆ ಬೇಡಿಕೆಯನ್ನು ಭದ್ರಪಡಿಸಲಾಗಿದೆ.</p>"
+                ),
+                "technical_feasibility": (
+                    f"<p><strong>6.1 ತಾಂತ್ರಿಕ ಕಾರ್ಯಸಾಧ್ಯತೆ ಮತ್ತು ಇಂಜಿನಿಯರಿಂಗ್ ವಿವರಣೆ:</strong><br>"
+                    f"ಹೆಚ್ಚಿನ ದಕ್ಷತೆಯ TOPCon ಮಾನೋಕ್ರಿಸ್ಟಲಿನ್ ಬೈಫೇಸಿಯಲ್ ಸೋಲಾರ್ ಮಾಡ್ಯೂಲ್‌ಗಳು (>680Wp ರೇಟಿಂಗ್) ಮತ್ತು ಸಿಂಗಲ್-ಆಕ್ಸಿಸ್ ಸ್ವಯಂಚಾಲಿತ ಸೌರ ಟ್ರ್ಯಾಕರ್‌ಗಳನ್ನು ಬಳಸಿಕೊಳ್ಳುತ್ತದೆ (PR > 81.5%). "
+                    f"KERC/CERC ಗ್ರಿಡ್ ಕೋಡ್ ಮಾನದಂಡಗಳ ಅಡಿಯಲ್ಲಿ 33kV/110kV ಉಪಕೇಂದ್ರ ಮಟ್ಟದಲ್ಲಿ SCADA ನೈಜ-ಸಮಯದ ಮೇಲ್ವಿಚಾರಣೆಯೊಂದಿಗೆ ಸಂಪರ್ಕ ಕಲ್ಪಿಸಲಾಗಿದೆ.</p>"
+                ),
+                "risk_analysis": (
+                    f"<p><strong>7.1 ಅಪಾಯ ನಿರ್ವಹಣೆ ಮತ್ತು ತಗ್ಗಿಸುವಿಕೆ:</strong><br>"
+                    f"ಸೌರ ಸಂಪನ್ಮೂಲ ಮಾದರಿಯ ಮೂಲಕ ಸೌರ ವಿಕಿರಣದ ಅಪಾಯವನ್ನು ತಗ್ಗಿಸಲಾಗಿದೆ; ಗ್ರಿಡ್ ಕಡಿತದ ಅಪಾಯವನ್ನು ಆದ್ಯತೆಯ 'ಮಸ್ಟ್-ರನ್' ವಿತರಣಾ ಸ್ಥಾನಮಾನದ ಮೂಲಕ ಭದ್ರಪಡಿಸಲಾಗಿದೆ.</p>"
+                ),
+                "swot_analysis": (
+                    f"<p><strong>8.1 ಸಾಮರ್ಥ್ಯಗಳು:</strong> 25-ವರ್ಷಗಳ ದೀರ್ಘಾವಧಿಯ PPA ಆದಾಯ ಭದ್ರತೆ, TOPCon ಮಾಡ್ಯೂಲ್‌ಗಳು, ಕಡಿಮೆ ನಿರ್ವಹಣಾ ವೆಚ್ಚ (OPEX).</p>"
+                    f"<p><strong>8.2 ದೌರ್ಬಲ್ಯಗಳು:</strong> ಆರಂಭಿಕ ಹೆಚ್ಚಿನ ಭೂಮಿ ಖರೀದಿ ವೆಚ್ಚ.</p>"
+                    f"<p><strong>8.3 ಅವಕಾಶಗಳು:</strong> ಹಸಿರು ಹೈಡ್ರೋಜನ್ ಸಂಯೋಜನೆ ಮತ್ತು ಕಾರ್ಪೊರೇಟ್ ಓಪನ್-ಆಕ್ಸೆಸ್ ವಿಸ್ತರಣೆ.</p>"
+                    f"<p><strong>8.4 ಸವಾಲುಗಳು:</strong> ಗ್ರಿಡ್ ಪ್ರಸರಣ ದಟ್ಟಣೆ ಮತ್ತು ನಿಯಂತ್ರಕ ದರ ಮರುಸಂಧಾನಗಳು.</p>"
+                ),
+                "conclusion": (
+                    f"<p><strong>9.1 ಅಂತಿಮ ಶಿಫಾರಸು:</strong><br>"
+                    f"ಧನಾತ್ಮಕ NPV ₹{doc.corporate_npv:,.2f} ಮತ್ತು ಯೋಜನಾ IRR {doc.corporate_project_irr:.1f}% ನೊಂದಿಗೆ, ₹{doc.bank_loan:,.2f} ಗಳ ಬ್ಯಾಂಕ್ ಅವಧಿ ಸಾಲವನ್ನು ಮಂಜೂರು ಮಾಡಲು ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
+                )
+            }
 
         return {
             "exec_summary": (
@@ -77,6 +127,30 @@ class CorporateSectorsNarrative:
     @staticmethod
     def get_ev_battery_sections(doc: DPRDocumentModel) -> Dict[str, str]:
         b_name = doc.business_name or "EV Battery Giga Project"
+        lang = str(getattr(doc, 'language', 'en') or 'en').lower()
+        if 'kn' in lang or 'kannada' in lang:
+            return {
+                "exec_summary": (
+                    f"<p><strong>1.1 ಮುಂದುವರಿದ ಎಲೆಕ್ಟ್ರಿಕ್ ವೆಹಿಕಲ್ ಇಂಧನ ಶೇಖರಣಾ ಯೋಜನೆ:</strong><br>"
+                    f"{b_name} {doc.district}, {doc.state} ನಲ್ಲಿ ಸ್ಥಾಪಿಸಲಾದ ಸುಧಾರಿತ ಲಿಥಿಯಂ-ಐಯಾನ್ ಬ್ಯಾಟರಿ ಪ್ಯಾಕ್ ಮತ್ತು ಶಕ್ತಿ ಶೇಖರಣಾ ವ್ಯವಸ್ಥೆ (ESS) ಉತ್ಪಾದನಾ ಘಟಕವಾಗಿದೆ. "
+                    f"ಸುಧಾರಿತ ರಸಾಯನಶಾಸ್ತ್ರ ಕೋಶ (ACC) ಬ್ಯಾಟರಿ ಶೇಖರಣೆಗಾಗಿ PLI (ಉತ್ಪಾದನೆ-ಸಂಯೋಜಿತ ಪ್ರೋತ್ಸಾಹ) ಯೋಜನೆ ನಿಯಮಗಳಿಗೆ ಅನುಗುಣವಾಗಿದೆ. "
+                    f"ಒಟ್ಟು ಬಂಡವಾಳ ವೆಚ್ಚ: <strong>₹{doc.total_cost:,.2f}</strong>, ಯೋಜನಾ IRR: <strong>{doc.corporate_project_irr:.1f}%</strong>, NPV: <strong>₹{doc.corporate_npv:,.2f}</strong>.</p>"
+                ),
+                "technical_feasibility": (
+                    f"<p><strong>6.1 ಗಿಗಾ-ಫ್ಯಾಕ್ಟರಿ ಸ್ವಯಂಚಾಲಿತ ಅಸೆಂಬ್ಲಿ ಲೈನ್:</strong><br>"
+                    f"ಸ್ವಯಂಚಾಲಿತ ಲೇಸರ್ ವೆಲ್ಡಿಂಗ್, ಸೆಲ್ ಗ್ರೇಡಿಂಗ್, ಬ್ಯಾಟರಿ ಮ್ಯಾನೇಜ್‌ಮೆಂಟ್ ಸಿಸ್ಟಮ್ (BMS) ಏಕೀಕರಣ ಮತ್ತು ಥರ್ಮಲ್ ರನ್‌ಅವೇ ಸುರಕ್ಷತೆಯನ್ನು ಒಳಗೊಂಡಿದೆ. "
+                    f"ಉನ್ನತ-ನಿಖರತೆಯ ಸೆಲ್ ಅಸೆಂಬ್ಲಿಗಾಗಿ ISO 14644-1 ಕ್ಲಾಸ್ 7 ಡ್ರೈ ರೂಮ್‌ಗಳನ್ನು ಹೊಂದಿದೆ.</p>"
+                ),
+                "swot_analysis": (
+                    f"<p><strong>8.1 ಸಾಮರ್ಥ್ಯಗಳು:</strong> PLI ಯೋಜನೆಯ ಪ್ರೋತ್ಸಾಹ, ಸ್ವಯಂಚಾಲಿತ ಲೇಸರ್ ವೆಲ್ಡಿಂಗ್, ಹೆಚ್ಚಿನ ಸಾಂದ್ರತೆಯ ಬ್ಯಾಟರಿ ರಚನೆ.</p>"
+                    f"<p><strong>8.2 ದೌರ್ಬಲ್ಯಗಳು:</strong> ಲಿಥಿಯಂ ಮತ್ತು ಕೋಬಾಲ್ಟ್ ಕಚ್ಚಾ ವಸ್ತುಗಳಿಗೆ ಆಮದು ಅವಲಂಬನೆ.</p>"
+                    f"<p><strong>8.3 ಅವಕಾಶಗಳು:</strong> ದೇಶೀಯ ಇವಿ ವಾಹನಗಳ ಹೆಚ್ಚಳ ಮತ್ತು ಟೆಲಿಕಾಂ BESS ಇಂಧನ ಸಂಗ್ರಹಣಾ ಬೇಡಿಕೆ.</p>"
+                    f"<p><strong>8.4 ಸವಾಲುಗಳು:</strong> ತಂತ್ರಜ್ಞಾನದಲ್ಲಿ ಕ್ಷಿಪ್ರ ಬದಲಾವಣೆಗಳು ಮತ್ತು ಕಚ್ಚಾ ವಸ್ತುಗಳ ಬೆಲೆ ಏರಿಳಿತ.</p>"
+                ),
+                "conclusion": (
+                    f"<p><strong>9.1 ಶಿಫಾರಸು:</strong> ₹{doc.bank_loan:,.2f} ಗಳ ಬ್ಯಾಂಕ್ ಅವಧಿ ಸಾಲವನ್ನು ಮಂಜೂರು ಮಾಡಲು ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
+                )
+            }
         return {
             "exec_summary": (
                 f"<p><strong>1.1 Advanced Electric Vehicle Energy Storage Mandate:</strong><br>"
@@ -102,6 +176,29 @@ class CorporateSectorsNarrative:
     @staticmethod
     def get_pharma_sections(doc: DPRDocumentModel) -> Dict[str, str]:
         b_name = doc.business_name or "Pharma Formulations Enterprise"
+        lang = str(getattr(doc, 'language', 'en') or 'en').lower()
+        if 'kn' in lang or 'kannada' in lang:
+            return {
+                "exec_summary": (
+                    f"<p><strong>1.1 WHO-GMP ಪ್ರಮಾಣೀಕೃತ ಔಷಧ ಸೂತ್ರೀಕರಣ ಘಟಕ:</strong><br>"
+                    f"{b_name} {doc.district}, {doc.state} ನಲ್ಲಿ WHO-GMP ಮತ್ತು US-FDA ಕಂಪ್ಲೈಂಟ್ ಔಷಧೀಯ ಸೂತ್ರೀಕರಣ ಮತ್ತು ಸಕ್ರಿಯ ಔಷಧೀಯ ಪದಾರ್ಥಗಳ (API) ಉತ್ಪಾದನಾ ಸೌಲಭ್ಯವಾಗಿದೆ. "
+                    f"ಒಟ್ಟು ಬಂಡವಾಳ ವೆಚ್ಚ: <strong>₹{doc.total_cost:,.2f}</strong>, ಯೋಜನಾ IRR: <strong>{doc.corporate_project_irr:.1f}%</strong>, NPV: <strong>₹{doc.corporate_npv:,.2f}</strong>.</p>"
+                ),
+                "technical_feasibility": (
+                    f"<p><strong>6.1 ಸ್ಟೆರೈಲ್ ರಿಯಾಕ್ಷನ್ ಮತ್ತು ಲೈಯೋಫಿಲೈಸೇಶನ್ ಸೌಲಭ್ಯ:</strong><br>"
+                    f"SS316L ಸ್ಟೆರೈಲ್ ರಿಯಾಕ್ಷನ್ ವೆಸೆಲ್‌ಗಳು, ಲೈಯೋಫಿಲೈಸರ್‌ಗಳು ಮತ್ತು ಝೀರೋ ಲಿಕ್ವಿಡ್ ಡಿಸ್ಚಾರ್ಜ್ (ZLD) ತ್ಯಾಜ್ಯ ಸಂಸ್ಕರಣಾ ಘಟಕವನ್ನು ಹೊಂದಿದೆ. "
+                    f"ಕಟ್ಟುನಿಟ್ಟಾದ cGMP ಪ್ರೋಟೋಕಾಲ್‌ಗಳು ಮತ್ತು 21 CFR Part 11 ನಿಯಮಗಳನ್ನು ಪಾಲಿಸುತ್ತದೆ.</p>"
+                ),
+                "swot_analysis": (
+                    f"<p><strong>8.1 ಸಾಮರ್ಥ್ಯಗಳು:</strong> WHO-GMP ಪ್ರಮಾಣೀಕರಣ, SS316L ಕ್ಲೀನ್‌ರೂಮ್‌ಗಳು, cGMP ಅನುಸರಣೆ.</p>"
+                    f"<p><strong>8.2 ದೌರ್ಬಲ್ಯಗಳು:</strong> ಹೆಚ್ಚಿನ ನಿಯಂತ್ರಕ ಆಡಿಟ್ ಮತ್ತು ಪ್ರಮಾಣೀಕರಣ ವೆಚ್ಚಗಳು.</p>"
+                    f"<p><strong>8.3 ಅವಕಾಶಗಳು:</strong> ಜೆನೆರಿಕ್ ಔಷಧಿಗಳ ರಫ್ತು ವಿಸ್ತರಣೆ ಮತ್ತು ದೇಶೀಯ ಆರೋಗ್ಯ ಸೇವಾ ಬೇಡಿಕೆ.</p>"
+                    f"<p><strong>8.4 ಸವಾಲುಗಳು:</strong> ಕಠಿಣ ನಿಯಂತ್ರಕ ತಪಾಸಣೆಗಳು ಮತ್ತು ಕಚ್ಚಾ ಸಾಮಗ್ರಿಗಳ ಬೆಲೆ ಏರಿಕೆ.</p>"
+                ),
+                "conclusion": (
+                    f"<p><strong>9.1 ಶಿಫಾರಸು:</strong> ₹{doc.bank_loan:,.2f} ಗಳ ಬ್ಯಾಂಕ್ ಹಣಕಾಸು ಸಾಲವನ್ನು ಮಂಜೂರು ಮಾಡಲು ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
+                )
+            }
         return {
             "exec_summary": (
                 f"<p><strong>1.1 WHO-GMP Compliant Formulations Mandate:</strong><br>"
@@ -127,6 +224,29 @@ class CorporateSectorsNarrative:
     @staticmethod
     def get_data_center_sections(doc: DPRDocumentModel) -> Dict[str, str]:
         b_name = doc.business_name or "Cloud Data Center Infrastructure"
+        lang = str(getattr(doc, 'language', 'en') or 'en').lower()
+        if 'kn' in lang or 'kannada' in lang:
+            return {
+                "exec_summary": (
+                    f"<p><strong>1.1 ಶ್ರೇಣಿ-IV ಹೈಪರ್‌ಸ್ಕೇಲ್ ಡೇಟಾ ಸೆಂಟರ್ ಯೋಜನೆ:</strong><br>"
+                    f"{b_name} {doc.district}, {doc.state} ನಲ್ಲಿ ಟೈರ್-IV ಹೈಪರ್‌ಸ್ಕೇಲ್ ಡೇಟಾ ಸೆಂಟರ್ ಮತ್ತು ಎಂಟರ್‌ಪ್ರೈಸ್ ಕ್ಲೌಡ್ ಮೂಲಸೌಕರ್ಯ ಸೌಲಭ್ಯವಾಗಿದೆ. "
+                    f"ಒಟ್ಟು ಬಂಡವಾಳ ವೆಚ್ಚ: <strong>₹{doc.total_cost:,.2f}</strong>, ಯೋಜನಾ IRR: <strong>{doc.corporate_project_irr:.1f}%</strong>, NPV: <strong>₹{doc.corporate_npv:,.2f}</strong>.</p>"
+                ),
+                "technical_feasibility": (
+                    f"<p><strong>6.1 ಹೈಪರ್‌ಸ್ಕೇಲ್ ಕೂಲಿಂಗ್ ಮತ್ತು ಹೆಚ್ಚುವರಿ ಬ್ಯಾಕಪ್ ವ್ಯವಸ್ಥೆ:</strong><br>"
+                    f"ದ್ರವ ಇಮ್ಮರ್ಶನ್ ಕೂಲಿಂಗ್ ಮತ್ತು ಡ್ಯುಯಲ್ 110kV ಗ್ರಿಡ್ ವಿದ್ಯುತ್ ಸಂಪರ್ಕದೊಂದಿಗೆ PUE < 1.35 ಗಾಗಿ ವಿನ್ಯಾಸಗೊಳಿಸಲಾಗಿದೆ. "
+                    f"N+N UPS ಬ್ಯಾಕಪ್, ISO 27001 ಸೈಬರ್ ಭದ್ರತಾ ಪ್ರಮಾಣೀಕರಣ ಮತ್ತು ಕ್ಯಾರಿಯರ್-ತಟಸ್ಥ ಫೈಬರ್ ಸಂಪರ್ಕವನ್ನು ಹೊಂದಿದೆ.</p>"
+                ),
+                "swot_analysis": (
+                    f"<p><strong>8.1 ಸಾಮರ್ಥ್ಯಗಳು:</strong> ಟೈರ್-IV 99.995% ಅಪ್‌ಟೈಮ್, PUE < 1.35 ಶಕ್ತಿ ದಕ್ಷತೆ, ISO 27001 ಭದ್ರತೆ.</p>"
+                    f"<p><strong>8.2 ದೌರ್ಬಲ್ಯಗಳು:</strong> ಹೆಚ್ಚಿನ ವಿದ್ಯುತ್ ಬಳಕೆ ಮತ್ತು ನಿರಂತರ ಬಂಡವಾಳ ಮರುಹೂಡಿಕೆ.</p>"
+                    f"<p><strong>8.3 ಅವಕಾಶಗಳು:</strong> ಡೇಟಾ ಸ್ಥಳೀಕರಣ ನೀತಿಗಳು ಮತ್ತು AI/ML ಕಂಪ್ಯೂಟಿಂಗ್ ಬೇಡಿಕೆ ವಿಸ್ತರಣೆ.</p>"
+                    f"<p><strong>8.4 ಸವಾಲುಗಳು:</strong> ವಿದ್ಯುತ್ ದರ ಹೆಚ್ಚಳ ಮತ್ತು ಸೈಬರ್ ಭದ್ರತಾ ಬೆದರಿಕೆಗಳು.</p>"
+                ),
+                "conclusion": (
+                    f"<p><strong>9.1 ಶಿಫಾರಸು:</strong> ₹{doc.bank_loan:,.2f} ಗಳ ಬ್ಯಾಂಕ್ ಸಾಲ ಸೌಲಭ್ಯವನ್ನು ಮಂಜೂರು ಮಾಡಲು ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
+                )
+            }
         return {
             "exec_summary": (
                 f"<p><strong>1.1 Tier-IV Hyperscale Data Center Mandate:</strong><br>"

@@ -34,6 +34,10 @@ class FoodProcessingNarrative:
         corporate_project_irr = safe_float(doc.corporate_project_irr, 22.4)
         m_total = sum(safe_float(m.total) for m in doc.machinery) if doc.machinery else total_cost * 0.40
 
+        lang = str(getattr(doc, 'language', 'en') or 'en').lower()
+        if 'kn' in lang or 'kannada' in lang:
+            return FoodProcessingNarrative._get_kannada_sections(doc, b_name, product, district, state, total_cost, land_cost, building_cost, electrification_cost, working_capital, promoter_contribution, bank_loan, subsidy, avg_dscr, bep_percent, corporate_project_irr, m_total)
+
         return {
             "exec_summary": (
                 f"<p><strong>1.1 Executive Overview & Agro-Industrial Rationale:</strong><br>"
@@ -112,5 +116,88 @@ class FoodProcessingNarrative:
                 f"(including <strong>{doc.women_employment} women micro-entrepreneurs</strong>) and offering fair pricing to 200+ local farming families. "
                 f"With strong cash flows, an average DSCR of <strong>{doc.avg_dscr:.2f}</strong>, and full credit guarantee coverage, the proposed bank loan request of "
                 f"<strong>₹{doc.bank_loan:,.2f}</strong> is strongly recommended for financial sanction.</p>"
+            )
+        }
+
+    @staticmethod
+    def _get_kannada_sections(doc: DPRDocumentModel, b_name, product, district, state, total_cost, land_cost, building_cost, electrification_cost, working_capital, promoter_contribution, bank_loan, subsidy, avg_dscr, bep_percent, corporate_project_irr, m_total) -> Dict[str, str]:
+        return {
+            "exec_summary": (
+                f"<p><strong>1.1 ಕಾರ್ಯಾಂಗ ಅವಲೋಕನ ಮತ್ತು ಕೃಷಿ-ಕೈಗಾರಿಕಾ ಸಮರ್ಥನೆ:</strong><br>"
+                f"{b_name} ಎಂಬುದು {district}, {state} ದಲ್ಲಿ ಸ್ಥಾಪಿಸಲಾದ ಸಮಗ್ರ ಕೃಷಿ-ಆಹಾರ ಸಂಸ್ಕರಣಾ ಘಟಕವಾಗಿದೆ. "
+                f"ಈ ಘಟಕವು ಕಟ್ಟುನಿಟ್ಟಾದ FSSAI ಗ್ರೇಡ್ 1 ಆಹಾರ ಸುರಕ್ಷತಾ ಮಾನದಂಡಗಳಿಗೆ ಅನುಗುಣವಾಗಿ ಪ್ರೀಮಿಯಂ <strong>{product}</strong> "
+                f"ನ ನೈರ್ಮಲ್ಯ ಸಂಸ್ಕರಣೆ, ಕೋಲ್ಡ್-ಮಿಲ್ಲಿಂಗ್ ಮತ್ತು ವ್ಯಾಕ್ಯೂಮ್ ಪ್ಯಾಕೇಜಿಂಗ್‌ಗೆ ಸಮರ್ಪಿತವಾಗಿದೆ. ಸ್ಥಳೀಯ ರೈತ ಉತ್ಪಾದಕ ಸಂಸ್ಥೆಗಳಿಂದ (FPO) ನೇರವಾಗಿ ಕೃಷಿ ಉತ್ಪನ್ನಗಳನ್ನು ಖರೀದಿಸುವ ಮೂಲಕ "
+                f"ಮಧ್ಯವರ್ತಿಗಳನ್ನು ನಿವಾರಿಸಿ ರೈತರಿಗೆ ಲಾಭದಾಯಕ ಬೆಲೆಯನ್ನು ಒದಗಿಸುತ್ತದೆ.</p>"
+                f"<p><strong>1.2 ಬಂಡವಾಳ ಹೂಡಿಕೆ ಮತ್ತು ವೆಚ್ಚ ಹಂಚಿಕೆ:</strong><br>"
+                f"ಯೋಜನೆಯ ಒಟ್ಟು ಬಂಡವಾಳ ವೆಚ್ಚವು <strong>₹{total_cost:,.2f}</strong> ಆಗಿದೆ. "
+                f"ಇದು ಭೂಮಿ ನಿವೇಶನ ಸಿದ್ಧತೆ (₹{land_cost:,.2f}), ನೈರ್ಮಲ್ಯ ಸಂಸ್ಕರಣಾ ಶೆಡ್ ನಿರ್ಮಾಣ (₹{building_cost:,.2f}), "
+                f"SS304 ಸ್ಟೇನ್‌ಲೆಸ್ ಸ್ಟೀಲ್ ಆಹಾರ ಯಂತ್ರೋಪಕರಣಗಳು (₹{m_total:,.2f}), ಶೀತಲ ಸಂಗ್ರಹಾಗಾರ ಮೂಲಸೌಕರ್ಯ (₹{electrification_cost:,.2f}), "
+                f"ಮತ್ತು ಆರಂಭಿಕ ದುಡಿಯುವ ಬಂಡವಾಳ (₹{working_capital:,.2f}) ಒಳಗೊಂಡಿದೆ. ಹಣಕಾಸು ರಚನೆಯು ಪ್ರವರ್ತಕರ ಇಕ್ವಿಟಿ ಬಂಡವಾಳ "
+                f"<strong>₹{promoter_contribution:,.2f}</strong>, ಬ್ಯಾಂಕ್ ಸಾಲ <strong>₹{bank_loan:,.2f}</strong>, ಮತ್ತು PMFME ಬಂಡವಾಳ ಸಬ್ಸಿಡಿ ಮೊತ್ತ <strong>₹{subsidy:,.2f}</strong> ಒಳಗೊಂಡಿದೆ.</p>"
+                f"<p><strong>1.3 ಹಣಕಾಸಿನ ಕಾರ್ಯಸಾಧ್ಯತೆ ಮತ್ತು ಸಾಲ ಸುರಕ್ಷತೆ:</strong><br>"
+                f"ಹಣಕಾಸು ಮುನ್ನೋಟಗಳು ಬಲವಾದ ನಗದು ಹರಿವನ್ನು ದೃಢಪಡಿಸುತ್ತವೆ. ಯೋಜನೆಯು 5-ವರ್ಷಗಳ ಸರಾಸರಿ ಸಾಲ ಸೇವಾ ವ್ಯಾಪ್ತಿ ಅನುಪಾತ (DSCR) "
+                f"<strong>{avg_dscr:.2f}</strong>, ಬ್ರೇಕ್-ಈವನ್ ಪಾಯಿಂಟ್ <strong>{bep_percent:.1f}%</strong>, ಮತ್ತು ಯೋಜನಾ IRR "
+                f"<strong>{corporate_project_irr:.1f}%</strong> ಸಾಧಿಸುತ್ತದೆ. ಸಾಲ ಮರುಪಾವತಿಯು CGTMSE ಕ್ರೆಡಿಟ್ ಗ್ಯಾರಂಟಿ ಮೂಲಕ ಸಂಪೂರ್ಣ ಸುರಕ್ಷಿತವಾಗಿದೆ.</p>"
+            ),
+            "business_overview": (
+                f"<p><strong>2.1 ಶಾಸನಬದ್ಧ ಅನುಸರಣೆ ಮತ್ತು ಪ್ರಮಾಣೀಕರಣಗಳು:</strong><br>"
+                f"{b_name} ಎಂಬುದು {state} ದಲ್ಲಿ ನೋಂದಾಯಿತ ಉದ್ಯಮವಾಗಿದ್ದು, FSSAI ಕೇಂದ್ರ ಆಹಾರ ಸುರಕ್ಷತಾ ಪರವಾನಗಿ ({doc.fssai_no or '11224999000999'}), "
+                f"ಉದ್ಯಮ್ ನೋಂದಣಿ ({doc.udyam_no or 'ನೋಂದಾಯಿಸಲಾಗಿದೆ'}), ಜಿಎಸ್‌ಟಿ ({doc.gst_no or 'ಸಕ್ರಿಯ'}), ಮತ್ತು ವ್ಯಾಪಾರ ಪರವಾನಗಿ ಹೊಂದಿದೆ. ಎಲ್ಲಾ ಯಂತ್ರೋಪಕರಣಗಳು HACCP ಮತ್ತು ISO 22000 ಮಾನದಂಡಗಳ ಅಡಿಯಲ್ಲಿ SS304/SS316 ಆಹಾರ ದರ್ಜೆಯ ಸ್ಟೀಲ್‌ನಿಂದ ಕೂಡಿವೆ.</p>"
+                f"<p><strong>2.2 ರೈತರ ಖರೀದಿ ಜಾಲ ಮತ್ತು ಪೂರೈಕೆ ಭದ್ರತೆ:</strong><br>"
+                f"ಆಡಳಿತ ಮಂಡಳಿಯು {district} ಸುತ್ತಮುತ್ತಲಿನ ರೈತ ಉತ್ಪಾದಕ ಸಂಸ್ಥೆಗಳು (FPO) ಮತ್ತು ಸ್ಥಳೀಯ ರೈತ ಸಂಘಗಳೊಂದಿಗೆ ಅಧಿಕೃತ ಒಪ್ಪಂದಗಳನ್ನು ಹೊಂದಿದೆ. "
+                f"ಈ ನೇರ ಕೃಷಿ ಮಾದರಿಯು ಸ್ಥಿರ ದರಗಳಲ್ಲಿ ಗುಣಮಟ್ಟದ ಕಚ್ಚಾ ವಸ್ತುಗಳ ಲಭ್ಯತೆಯನ್ನು ಖಚಿತಪಡಿಸುತ್ತದೆ.</p>"
+            ),
+            "project_background": (
+                f"<p><strong>3.1 ಕೃಷಿ ಸಂಸ್ಕರಣಾ ವಲಯದಲ್ಲಿನ ಮಾರುಕಟ್ಟೆ ಅವಕಾಶಗಳು:</strong><br>"
+                f"ಭಾರತವು ವಿಶ್ವದ ಅಗ್ರ ಕೃಷಿ ಉತ್ಪಾದಕ ರಾಷ್ಟ್ರವಾಗಿದ್ದರೂ, ಸಾಕಷ್ಟು ಸಂಸ್ಕರಣಾ ಸೌಲಭ್ಯಗಳ ಕೊರತೆಯಿಂದ ಕೊಯ್ಲಿನ ನಂತರದ ನಷ್ಟಗಳು ಹೆಚ್ಚಾಗಿವೆ. "
+                f"ಕೇಂದ್ರ ಆಹಾರ ಸಂಸ್ಕರಣಾ ಸಚಿವಾಲಯ (MoFPI) ಮತ್ತು ಕರ್ನಾಟಕ ಸರ್ಕಾರವು PMFME / PMEGP ಅಡಿಯಲ್ಲಿ 35% ಬಂಡವಾಳ ಸಬ್ಸಿಡಿಯನ್ನು ಒದಗಿಸುತ್ತಿದೆ.</p>"
+                f"<p><strong>3.2 ನೈಸರ್ಗಿಕ ಮತ್ತು ಸಾವಯವ ಆಹಾರದ ಬೇಡಿಕೆ:</strong><br>"
+                f"ಆರೋಗ್ಯ ಜಾಗೃತಿ ಮತ್ತು ನೈಸರ್ಗಿಕ ಆಹಾರಗಳ ಬೇಡಿಕೆ ಗ್ರಾಹಕರಲ್ಲಿ ಹೆಚ್ಚುತ್ತಿದೆ. "
+                f"{b_name} ಕೃತಕ ಬಣ್ಣ ಮತ್ತು ಸಂರಕ್ಷಕಗಳಿಲ್ಲದ ಶುದ್ಧ ಪ್ಯಾಕೇಜ್ಡ್ ಆಹಾರ ಉತ್ಪನ್ನಗಳನ್ನು ಪೂರೈಸುತ್ತದೆ.</p>"
+            ),
+            "product_description": (
+                f"<p><strong>4.1 ವಾಣಿಜ್ಯ ಉತ್ಪನ್ನ ಪೋರ್ಟ್‌ಫೋಲಿಯೊ ಮತ್ತು ಮಾನದಂಡಗಳು:</strong><br>"
+                f"ಮುಖ್ಯ ಉತ್ಪನ್ನವು <strong>{product}</strong> (HSN ಕೋಡ್: <strong>{doc.hsn_code or '1102'}</strong>) ಆಗಿದೆ. "
+                f"ಪರಿಸರಸ್ನೇಹಿ ಉನ್ನತ ತಡೆಗೋಡೆ ಪೌಚ್‌ಗಳಲ್ಲಿ ನೈಟ್ರೋಜನ್ ಫ್ಲಶ್‌ನೊಂದಿಗೆ ಪ್ಯಾಕ್ ಮಾಡಲಾಗುತ್ತದೆ.</p>"
+                f"<p><strong>4.2 ಉತ್ಪಾದನಾ ಸಾಮರ್ಥ್ಯ ಮತ್ತು ಕಾರ್ಯಾಚರಣೆ:</strong><br>"
+                f"ಸ್ಥಾಪಿತ ಸಂಸ್ಕರಣಾ ಸಾಮರ್ಥ್ಯ: <strong>ದಿನಕ್ಕೆ {doc.daily_capacity:,.0f} {doc.capacity_unit}</strong>, ವರ್ಷಕ್ಕೆ <strong>{doc.working_days} ಕೆಲಸದ ದಿನಗಳು</strong>. "
+                f"ಪ್ರಮುಖ ಯುಎಸ್‌ಪಿ: {doc.usp or '100% ಶುದ್ಧ ಸಾಂಪ್ರದಾಯಿಕ ಸಂಸ್ಕರಣೆ ಮತ್ತು ತಾಜಾತನ ರಕ್ಷಣೆ.'}</p>"
+            ),
+            "market_analysis": (
+                f"<p><strong>5.1 ಮಾರುಕಟ್ಟೆ ಬೆಳವಣಿಗೆ ಮತ್ತು ಜನಸಂಖ್ಯಾ ಪ್ರವೃತ್ತಿ:</strong><br>"
+                f"ಭಾರತದಲ್ಲಿ ಪ್ಯಾಕೇಜ್ಡ್ ಆಹಾರ ಕ್ಷೇತ್ರವು ವಾರ್ಷಿಕ <strong>{doc.market_growth:.1f}% CAGR</strong> ದರದಲ್ಲಿ ಬೆಳೆಯುತ್ತಿದೆ. "
+                f"ಸೂಪರ್‌ಮಾರ್ಕೆಟ್‌ಗಳು ಮತ್ತು ಆನ್‌ಲೈನ್ ಪೋರ್ಟಲ್‌ಗಳ ಮೂಲಕ ನಿರಂತರ ಬೇಡಿಕೆ ಇರುತ್ತದೆ.</p>"
+                f"<p><strong>5.2 ಚಿಲ್ಲರೆ ಮತ್ತು ಸಾಂಸ್ಥಿಕ ವಿತರಣಾ ತಂತ್ರ:</strong><br>"
+                f"ಗುರಿ ಗ್ರಾಹಕರು: {doc.target_customers or 'ಸೂಪರ್‌ಮಾರ್ಕೆಟ್ ಸರಪಳಿಗಳು, ಸಾವಯವ ವಿಶೇಷ ಮಳಿಗೆಗಳು, ಇ-ಕಾಮರ್ಸ್ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್‌ಗಳು ಮತ್ತು ಸಾಂಸ್ಥಿಕ ಖರೀದಿದಾರರು'}. "
+                f"ಮಾರಾಟ ವ್ಯಾಪ್ತಿ: {doc.sales_location or 'ಕರ್ನಾಟಕ, ತಮಿಳುನಾಡು, ಕೇರಳ ಮತ್ತು ಪ್ರಮುಖ ದಕ್ಷಿಣ ಭಾರತದ ನಗರಗಳು'}."
+                f"</p>"
+            ),
+            "technical_feasibility": (
+                f"<p><strong>6.1 ಆಹಾರ ಎಂಜಿನಿಯರಿಂಗ್ ಮತ್ತು ನೈರ್ಮಲ್ಯ ಸಂಸ್ಕರಣಾ ಮಾರ್ಗ:</strong><br>"
+                f"ಪ್ರಕ್ರಿಯೆಯು ಧಾನ್ಯ ಶುಚಿಗೊಳಿಸುವಿಕೆ, ಡಿ-ಸ್ಟೋನಿಂಗ್, ಕೋಲ್ಡ್ ಪಲ್ವರೈಸಿಂಗ್, ಮ್ಯಾಗ್ನೆಟಿಕ್ ಮೆಟಲ್ ಬೇರ್ಪಡಿಕೆ ಮತ್ತು ಸ್ವಯಂಚಾಲಿತ ಪೌಚ್ ಸೀಲಿಂಗ್ ಒಳಗೊಂಡಿದೆ. "
+                f"ಉಪಕರಣ ಪೂರೈಕೆದಾರರು: {doc.supplier_name or 'ಪ್ರಮಾಣೀಕೃತ ಸ್ಟೇನ್‌ಲೆಸ್ ಫುಡ್ ಮೆಷಿನರಿ ತಯಾರಕರು'}.</p>"
+                f"<p><strong>6.2 ಯುಟಿಲಿಟಿಗಳು ಮತ್ತು ಪರಿಸರ ಸಂರಕ್ಷಣೆ:</strong><br>"
+                f"•  <strong>ವಿದ್ಯುತ್:</strong> ಮಂಜೂರಾದ ವಾಣಿಜ್ಯ ವಿದ್ಯುತ್ ಲೋಡ್ {doc.power_required or 25} HP/kW ಮತ್ತು 100% DG ಬ್ಯಾಕಪ್.<br>"
+                f"•  <strong>ನೀರು ಮತ್ತು ನೈರ್ಮಲ್ಯ:</strong> CIP ಪ್ರೋಟೋಕಾಲ್‌ಗಳೊಂದಿಗೆ RO ನೀರು ಶುದ್ಧೀಕರಣ ಘಟಕ ({doc.water_required or 2000} LPD).<br>"
+                f"•  <strong>ಶೀತಲ ಶೇಖರಣೆ:</strong> ಹಾಳಾಗುವ ವಸ್ತುಗಳ ರಕ್ಷಣೆಗಾಗಿ ತಾಪಮಾನ ನಿಯಂತ್ರಿತ ಕೋಲ್ಡ್ ರೂಮ್.</p>"
+            ),
+            "risk_analysis": (
+                f"<p><strong>7.1 ಕೃಷಿ ಅಪಾಯ ನಿರ್ವಹಣಾ ಚೌಕಟ್ಟು:</strong><br>"
+                f"•  <strong>ಕಾಲೋಚಿತ ಪೂರೈಕೆ ಏರಿಳಿತ:</strong> ಬಹು-ಜಿಲ್ಲಾ ಗುತ್ತಿಗೆ ಕೃಷಿ ಮತ್ತು ಬಹು-ಬೆಳೆ ಸಂಸ್ಕರಣೆಯಿಂದ ನಿವಾರಿಸಲಾಗುತ್ತದೆ.<br>"
+                f"•  <strong>ಹಾಳಾಗುವ ಅಪಾಯ:</strong> 4°C ನಿಂದ 8°C ತಾಪಮಾನ ನಿಯಂತ್ರಣ ಹೊಂದಿರುವ ಕೋಲ್ಡ್ ರೂಮ್ ಮೂಲಕ ರಕ್ಷಣೆ.<br>"
+                f"•  <strong>ಗುಣಮಟ್ಟದ ಅಪಾಯ:</strong> ಆಂತರಿಕ ಪರೀಕ್ಷಾ ಪ್ರಯೋಗಾಲಯ ಮತ್ತು ಕಟ್ಟುನಿಟ್ಟಾದ FSSAI ಮಾದರಿ ಪರೀಕ್ಷೆ.</p>"
+            ),
+            "swot_analysis": (
+                f"<p><strong>8.1 ಸಾಮರ್ಥ್ಯಗಳು:</strong> {doc.strengths or 'ನೇರ ರೈತರ ಸಂಪರ್ಕ, ಆಧುನಿಕ SS304 ಫುಡ್-ಗ್ರೇಡ್ ಯಂತ್ರಗಳು, FSSAI ಪ್ರಮಾಣೀಕರಣ, ಕೋಲ್ಡ್ ಸ್ಟೋರೇಜ್ ಬ್ಯಾಕಪ್.'}</p>"
+                f"<p><strong>8.2 ದೌರ್ಬಲ್ಯಗಳು:</strong> {doc.weaknesses or 'ಕಾಲೋಚಿತ ಬೆಳೆ ಲಭ್ಯತೆ ಮತ್ತು ಆರಂಭಿಕ ಚಿಲ್ಲರೆ ವಿತರಣಾ ಜಾಲ ವಿಸ್ತರಣೆ.'}</p>"
+                f"<p><strong>8.3 ಅವಕಾಶಗಳು:</strong> {doc.opportunities or 'PMFME 35% ಸರ್ಕಾರಿ ಬಂಡವಾಳ ಸಬ್ಸಿಡಿ, ಇ-ಕಾಮರ್ಸ್ ಮಾರಾಟ ವಿಸ್ತರಣೆ, ಸಾವಯವ ರಫ್ತು ಸಾಮರ್ಥ್ಯ.'}</p>"
+                f"<p><strong>8.4 ಸವಾಲುಗಳು:</strong> {doc.threats or 'ಅಕಾಲಿಕ ಹವಾಮಾನ ಬದಲಾವಣೆ ಮತ್ತು ಕಚ್ಚಾ ಸಾಮಗ್ರಿಗಳ ಬೆಲೆ ಏರಿಳಿತ.'}</p>"
+            ),
+            "conclusion": (
+                f"<p><strong>9.1 ಶಿಫಾರಸು ಮತ್ತು ಸಾಮಾಜಿಕ-ಆರ್ಥಿಕ ಪರಿಣಾಮ:</strong><br>"
+                f"{b_name} ಯೋಜನೆಯು <strong>{doc.local_employment} ಸ್ಥಳೀಯ ನೇರ ಉದ್ಯೋಗಗಳನ್ನು</strong> "
+                f"(ಇದರಲ್ಲಿ <strong>{doc.women_employment} ಮಹಿಳಾ ಉದ್ಯೋಗಿಗಳು</strong> ಸೇರಿದ್ದಾರೆ) ಸೃಷ್ಟಿಸುತ್ತದೆ ಮತ್ತು 200 ಕ್ಕೂ ಹೆಚ್ಚು ಸ್ಥಳೀಯ ರೈತ ಕುಟುಂಬಗಳಿಗೆ ನ್ಯಾಯಯುತ ಬೆಲೆ ಒದಗಿಸುತ್ತದೆ. "
+                f"ಬಲವಾದ ನಗದು ಹರಿವು, ಸರಾಸರಿ DSCR <strong>{doc.avg_dscr:.2f}</strong> ನೊಂದಿಗೆ ಬ್ಯಾಂಕ್ ಸಾಲ ಮೊತ್ತ "
+                f"<strong>₹{doc.bank_loan:,.2f}</strong> ಅನ್ನು ತಕ್ಷಣದ ಆರ್ಥಿಕ ಮಂಜೂರಾತಿಗಾಗಿ ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
             )
         }

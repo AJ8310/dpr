@@ -141,7 +141,7 @@ export async function getProjectDocuments(projectId: string) {
 // Legacy helpers & Chatbot
 export async function saveDPRData(dprData: DPRFormData) {
   if (typeof window !== 'undefined' && !dprData.language) {
-    dprData.language = sessionStorage.getItem('dpr_selected_language') || localStorage.getItem('dpr_selected_language') || 'en';
+    dprData.language = sessionStorage.getItem('dpr_selected_language') || localStorage.getItem('dpr_language_preference') || localStorage.getItem('dpr_selected_language') || 'en';
   }
   const response = await api.post('/api/dpr/save', dprData);
   return response.data;
@@ -164,7 +164,7 @@ export async function getMyDPRs() {
 
 export async function generatePDF(dprData: DPRFormData) {
   if (typeof window !== 'undefined' && !dprData.language) {
-    dprData.language = sessionStorage.getItem('dpr_selected_language') || localStorage.getItem('dpr_selected_language') || 'en';
+    dprData.language = sessionStorage.getItem('dpr_selected_language') || localStorage.getItem('dpr_language_preference') || localStorage.getItem('dpr_selected_language') || 'en';
   }
   const response = await api.post('/api/dpr/generate-pdf', dprData, {
     responseType: 'blob',

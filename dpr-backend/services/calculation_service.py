@@ -418,6 +418,9 @@ class CalculationService:
         dist_name = str(result.get("district") or "Bengaluru")
         state_name = str(result.get("state") or "Karnataka")
 
+        lang = str(data.get("language") or result.get("language") or "en").lower().strip()
+        result["language"] = lang
+
         try:
             from dpr_engine.data_model import DPRDocumentModel
             from dpr_engine.content_library.content_engine import DPRContentEngine
@@ -439,7 +442,8 @@ class CalculationService:
                 state=state_name,
                 industry=str(result.get("sector_id") or "manufacturing"),
                 avg_dscr=float(avg_dscr),
-                bep_percent=float(bep_percent)
+                bep_percent=float(bep_percent),
+                language=lang
             )
             engine_narratives = DPRContentEngine.generate_narratives(doc_obj)
             narratives.update(engine_narratives)
@@ -447,26 +451,47 @@ class CalculationService:
             print(f"DPRContentEngine narrative integration notice: {err}")
 
         if not narratives.get("product_description"):
-            narratives["product_description"] = (
-                f"<p><strong>4.1 Commercial Production & Technology Overview:</strong><br>"
-                f"The unit <strong>{b_name}</strong> operates in the <strong>{sec_name}</strong> sector producing high-grade <strong>{prod_name}</strong>. "
-                f"The facility is equipped with automated processing equipment, CNC machinery lines, and digital quality assurance tools. "
-                f"Production complies with ISO 9001:2015 standards, national environmental mandates, and industrial safety codes.</p>"
-                f"<p><strong>4.2 Quality Assurance & Processing Workflow:</strong><br>"
-                f"Raw materials undergo rigorous incoming quality inspection, followed by automated precision machining, heat treatment, "
-                f"surface finishing, and computerized 3D coordinate measuring (CMM) testing before batch packaging and dispatch.</p>"
-            )
+            if 'kn' in lang:
+                narratives["product_description"] = (
+                    f"<p><strong>4.1 ವಾಣಿಜ್ಯ ಉತ್ಪಾದನೆ ಮತ್ತು ತಂತ್ರಜ್ಞಾನ ವಿವರಣೆ:</strong><br>"
+                    f"<strong>{b_name}</strong> ಘಟಕವು <strong>{sec_name}</strong> ವಲಯದಲ್ಲಿ ಅತ್ಯುನ್ನತ ಗುಣಮಟ್ಟದ <strong>{prod_name}</strong> "
+                    f"ಉತ್ಪಾದನೆಯಲ್ಲಿ ತೊಡಗಿದೆ. ಈ ಘಟಕವು ಸ್ವಯಂಚಾಲಿತ ಸಂಸ್ಕರಣಾ ಯಂತ್ರೋಪಕರಣಗಳು, ಸಿಎನ್‌ಸಿ ಲೈನ್‌ಗಳು ಮತ್ತು ಡಿಜಿಟಲ್ ಗುಣಮಟ್ಟ ಖಾತರಿ ಸಾಧನಗಳನ್ನು ಒಳಗೊಂಡಿದೆ. "
+                    f"ಉತ್ಪಾದನೆಯು ISO 9001:2015 ಮಾನದಂಡಗಳು, ರಾಷ್ಟ್ರೀಯ ಪರಿಸರ ನಿಯಮಗಳು ಮತ್ತು ಕೈಗಾರಿಕಾ ಸುರಕ್ಷತಾ ಮಾನದಂಡಗಳಿಗೆ ಸಂಪೂರ್ಣವಾಗಿ ಬದ್ಧವಾಗಿದೆ.</p>"
+                    f"<p><strong>4.2 ಗುಣಮಟ್ಟ ಖಾತರಿ ಮತ್ತು ಸಂಸ್ಕರಣಾ ಹರಿವು:</strong><br>"
+                    f"ಕಚ್ಚಾ ಸಾಮಗ್ರಿಗಳು ಕಟ್ಟುನಿಟ್ಟಾದ ಆರಂಭಿಕ ಗುಣಮಟ್ಟ ತಪಾಸಣೆಗೆ ಒಳಗಾಗುತ್ತವೆ, ನಂತರ ಸ್ವಯಂಚಾಲಿತ ನಿಖರ ಸಂಸ್ಕರಣೆ, ಶಾಖ ಚಿಕಿತ್ಸೆ, "
+                    f"ಮೇಲ್ಮೈ ಫಿನಿಶಿಂಗ್ ಮತ್ತು 3D CMM ಪರೀಕ್ಷೆಯ ನಂತರ ಬ್ಯಾಚ್ ಪ್ಯಾಕಿಂಗ್ ಮತ್ತು ವಿತರಣೆಗೆ ಕಳುಹಿಸಲಾಗುತ್ತದೆ.</p>"
+                )
+            else:
+                narratives["product_description"] = (
+                    f"<p><strong>4.1 Commercial Production & Technology Overview:</strong><br>"
+                    f"The unit <strong>{b_name}</strong> operates in the <strong>{sec_name}</strong> sector producing high-grade <strong>{prod_name}</strong>. "
+                    f"The facility is equipped with automated processing equipment, CNC machinery lines, and digital quality assurance tools. "
+                    f"Production complies with ISO 9001:2015 standards, national environmental mandates, and industrial safety codes.</p>"
+                    f"<p><strong>4.2 Quality Assurance & Processing Workflow:</strong><br>"
+                    f"Raw materials undergo rigorous incoming quality inspection, followed by automated precision machining, heat treatment, "
+                    f"surface finishing, and computerized 3D coordinate measuring (CMM) testing before batch packaging and dispatch.</p>"
+                )
         
         if not narratives.get("market_analysis"):
-            narratives["market_analysis"] = (
-                f"<p><strong>5.1 Industry Size, Growth & Demand Forecasting:</strong><br>"
-                f"The market potential for <strong>{b_name}</strong> in the <strong>{sec_name}</strong> sector across {dist_name}, {state_name} "
-                f"is expanding at an annual CAGR of <strong>11.5%</strong>. Growth is propelled by expanding infrastructure projects, rising domestic consumption, "
-                f"and government MSME incentive programs under Atmanirbhar Bharat.</p>"
-                f"<p><strong>5.2 Target Market & B2B Supply Network:</strong><br>"
-                f"Target customers encompass OEM industrial manufacturers, regional commercial contractors, and institutional buyers. "
-                f"Sales realization is secured via annual corporate supply contracts, direct B2B buyer agreements, and digital industrial trade hubs.</p>"
-            )
+            if 'kn' in lang:
+                narratives["market_analysis"] = (
+                    f"<p><strong>5.1 ಉದ್ಯಮ ಗಾತ್ರ, ಬೆಳವಣಿಗೆ ಮತ್ತು ಬೇಡಿಕೆ ಮುನ್ನೋಟ:</strong><br>"
+                    f"{dist_name}, {state_name} ದಾದ್ಯಂತ <strong>{sec_name}</strong> ವಲಯದಲ್ಲಿ <strong>{b_name}</strong> ನ ಮಾರುಕಟ್ಟೆ ಸಂಭಾವ್ಯತೆಯು "
+                    f"ವಾರ್ಷಿಕ <strong>11.5%</strong> ಸಂಯುಕ್ತ ಬೆಳವಣಿಗೆ ದರದಲ್ಲಿ (CAGR) ವಿಸ್ತರಿಸುತ್ತಿದೆ. ಮೂಲಸೌಕರ್ಯ ಯೋಜನೆಗಳು ಮತ್ತು ಕೇಂದ್ರ ಸರ್ಕಾರದ ಆತ್ಮನಿರ್ಭರ ಭಾರತ್ MSME ಪ್ರೋತ್ಸಾಹಗಳು ಈ ಬೆಳವಣಿಗೆಯನ್ನು ಮುನ್ನಡೆಸುತ್ತಿವೆ.</p>"
+                    f"<p><strong>5.2 ಗುರಿ ಮಾರುಕಟ್ಟೆ ಮತ್ತು B2B ಸರಬರಾಜು ಜಾಲ:</strong><br>"
+                    f"ಗುರಿ ಗ್ರಾಹಕರು OEM ಕೈಗಾರಿಕಾ ತಯಾರಕರು, ಪ್ರಾದೇಶಿಕ ವಾಣಿಜ್ಯ ಗುತ್ತಿಗೆದಾರರು ಮತ್ತು ಸಾಂಸ್ಥಿಕ ಖರೀದಿದಾರರನ್ನು ಒಳಗೊಂಡಿದ್ದಾರೆ. "
+                    f"ವಾರ್ಷಿಕ ಕಾರ್ಪೊರೇಟ್ ಪೂರೈಕೆ ಒಪ್ಪಂದಗಳು, ನೇರ B2B ಖರೀದಿ ಒಪ್ಪಂದಗಳು ಮತ್ತು ಡಿಜಿಟಲ್ ಕೈಗಾರಿಕಾ ವ್ಯಾಪಾರ ಕೇಂದ್ರಗಳ ಮೂಲಕ ಮಾರಾಟವನ್ನು ಖಾತರಿಪಡಿಸಲಾಗುತ್ತದೆ.</p>"
+                )
+            else:
+                narratives["market_analysis"] = (
+                    f"<p><strong>5.1 Industry Size, Growth & Demand Forecasting:</strong><br>"
+                    f"The market potential for <strong>{b_name}</strong> in the <strong>{sec_name}</strong> sector across {dist_name}, {state_name} "
+                    f"is expanding at an annual CAGR of <strong>11.5%</strong>. Growth is propelled by expanding infrastructure projects, rising domestic consumption, "
+                    f"and government MSME incentive programs under Atmanirbhar Bharat.</p>"
+                    f"<p><strong>5.2 Target Market & B2B Supply Network:</strong><br>"
+                    f"Target customers encompass OEM industrial manufacturers, regional commercial contractors, and institutional buyers. "
+                    f"Sales realization is secured via annual corporate supply contracts, direct B2B buyer agreements, and digital industrial trade hubs.</p>"
+                )
 
         result["narratives"] = narratives
 
@@ -544,12 +569,20 @@ class CalculationService:
 
         # 10. Bill of Quantities (BOQ) & Raw Material Procurement Matrix
         raw_mat_name = str(data.get("raw_materials") or "Industrial Commercial Grade Raw Material").title()
-        result["boq_raw_materials"] = [
-            {"item": f"{raw_mat_name} (Grade A)", "unit": "Tons / Kg", "annual_qty": "1,200", "rate": "₹150/unit", "total_cost": round(max_annual_revenue * 0.35, 2)},
-            {"item": "Auxiliary Process Chemicals & Additives", "unit": "Liters", "annual_qty": "450", "rate": "₹320/unit", "total_cost": round(max_annual_revenue * 0.08, 2)},
-            {"item": "Packaging Boxes, Containers & Labels", "unit": "Units", "annual_qty": "25,000", "rate": "₹18/unit", "total_cost": round(max_annual_revenue * 0.05, 2)},
-            {"item": "Consumables & Machine Spare Parts", "unit": "Sets", "annual_qty": "12", "rate": "₹25,000/set", "total_cost": round(max_annual_revenue * 0.04, 2)}
-        ]
+        if 'kn' in lang:
+            result["boq_raw_materials"] = [
+                {"item": f"{raw_mat_name} (ದರ್ಜೆ ಎ)", "unit": "ಟನ್‌ಗಳು / ಕೆಜಿ", "annual_qty": "1,200", "rate": "₹150/ಘಟಕ", "total_cost": round(max_annual_revenue * 0.35, 2)},
+                {"item": "ಸಹಾಯಕ ಪ್ರಕ್ರಿಯೆ ರಾಸಾಯನಿಕಗಳು ಮತ್ತು ಸಂಸ್ಕರಣಾ ಮಿಶ್ರಣಗಳು", "unit": "ಲೀಟರ್‌ಗಳು", "annual_qty": "450", "rate": "₹320/ಘಟಕ", "total_cost": round(max_annual_revenue * 0.08, 2)},
+                {"item": "ಪ್ಯಾಕೇಜಿಂಗ್ ಬಾಕ್ಸ್‌ಗಳು, ಕಂಟೈನರ್‌ಗಳು ಮತ್ತು ಲೇಬಲ್‌ಗಳು", "unit": "ಘಟಕಗಳು", "annual_qty": "25,000", "rate": "₹18/ಘಟಕ", "total_cost": round(max_annual_revenue * 0.05, 2)},
+                {"item": "ಯಂತ್ರ ಬಿಡಿಭಾಗಗಳು ಮತ್ತು ನಿರ್ವಹಣಾ ಸಾಮಗ್ರಿಗಳು", "unit": "ಸೆಟ್‌ಗಳು", "annual_qty": "12", "rate": "₹25,000/ಸೆಟ್", "total_cost": round(max_annual_revenue * 0.04, 2)}
+            ]
+        else:
+            result["boq_raw_materials"] = [
+                {"item": f"{raw_mat_name} (Grade A)", "unit": "Tons / Kg", "annual_qty": "1,200", "rate": "₹150/unit", "total_cost": round(max_annual_revenue * 0.35, 2)},
+                {"item": "Auxiliary Process Chemicals & Additives", "unit": "Liters", "annual_qty": "450", "rate": "₹320/unit", "total_cost": round(max_annual_revenue * 0.08, 2)},
+                {"item": "Packaging Boxes, Containers & Labels", "unit": "Units", "annual_qty": "25,000", "rate": "₹18/unit", "total_cost": round(max_annual_revenue * 0.05, 2)},
+                {"item": "Consumables & Machine Spare Parts", "unit": "Sets", "annual_qty": "12", "rate": "₹25,000/set", "total_cost": round(max_annual_revenue * 0.04, 2)}
+            ]
 
         result["dpr_depth"] = str(data.get("dpr_depth", "enterprise") or "enterprise")
 

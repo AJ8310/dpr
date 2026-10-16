@@ -473,7 +473,7 @@
 <div class="section-container">
     <h2 class="section-header">{{ report_i18n.sec2_title | default("2. OBJECTIVES OF SVSY & CORPORATE PROFILE") }}</h2>
     <div>
-        {{ (narratives.business_overview if (narratives is defined and narratives and narratives.business_overview) else '<p>The Swami Vivekananda Self Employment Scheme (SVSY) aims to provide sustainable self-employment opportunities to unorganized youth across Karnataka. By promoting group micro-enterprises and linking them with banking channels and credit guarantees, the initiative fosters rural entrepreneurship and economic self-reliance.</p>') | safe }}
+        {{ (narratives.business_overview if (narratives is defined and narratives and narratives.business_overview) else ('<p>ಕರ್ನಾಟಕದಾದ್ಯಂತ ಯುವಜನರಿಗೆ ಸುಸ್ಥಿರ ಸ್ವಯಂ ಉದ್ಯೋಗಾವಕಾಶಗಳನ್ನು ಒದಗಿಸಲು ಸ್ವಾಮಿ ವಿವೇಕಾನಂದ ಸ್ವಯಂ ಉದ್ಯೋಗ ಯೋಜನೆಯು (SVSY) ಸಾಲ ಮತ್ತು ಬ್ಯಾಂಕಿಂಗ್ ಸೌಲಭ್ಯಗಳನ್ನು ಒದಗಿಸುತ್ತದೆ.</p>' if report_lang == 'kn' else '<p>The Swami Vivekananda Self Employment Scheme (SVSY) aims to provide sustainable self-employment opportunities to unorganized youth across Karnataka. By promoting group micro-enterprises and linking them with banking channels and credit guarantees, the initiative fosters rural entrepreneurship and economic self-reliance.</p>')) | safe }}
     </div>
 </div>
 
@@ -481,7 +481,7 @@
 <div class="section-container">
     <h2 class="section-header">{{ report_i18n.sec3_title | default("3. MACROECONOMIC ENVIRONMENT & PROJECT BACKGROUND") }}</h2>
     <div>
-        {{ (narratives.project_background if (narratives is defined and narratives and narratives.project_background) else '<p>Vision Karnataka Foundation (VKF) acts as an aggregator of social impact service providers and entrepreneurs to drive transformational sustainable growth aligned with UN SDGs.</p>') | safe }}
+        {{ (narratives.project_background if (narratives is defined and narratives and narratives.project_background) else ('<p>ವಿಷನ್ ಕರ್ನಾಟಕ ಫೌಂಡೇಶನ್ (VKF) ಉದ್ಯಮಿಗಳಿಗೆ ಸಮಗ್ರ ಬೆಂಬಲ, ಮಾರ್ಗದರ್ಶನ ಮತ್ತು ಸುಸ್ಥಿರ ಆರ್ಥಿಕ ಬೆಳವಣಿಗೆಯನ್ನು ಒದಗಿಸುವ ಪ್ರಮುಖ ಸಾಂಸ್ಥಿಕ ವೇದಿಕೆಯಾಗಿದೆ.</p>' if report_lang == 'kn' else '<p>Vision Karnataka Foundation (VKF) acts as an aggregator of social impact service providers and entrepreneurs to drive transformational sustainable growth aligned with UN SDGs.</p>')) | safe }}
     </div>
 </div>
 
@@ -489,7 +489,7 @@
 <div class="section-container">
     <h2 class="section-header">{{ report_i18n.sec4_title | default("4. NAME OF THE PRODUCT AND TECHNOLOGY") }}</h2>
     <div>
-        {{ (narratives.product_description if (narratives is defined and narratives and narratives.product_description) else '<p>Commercial production and processing technology deployment.</p>') | safe }}
+        {{ (narratives.product_description if (narratives is defined and narratives and narratives.product_description) else ('<p>ವಾಣಿಜ್ಯ ಉತ್ಪಾದನೆ ಮತ್ತು ಸುಧಾರಿತ ಸಂಸ್ಕರಣಾ ತಂತ್ರಜ್ಞಾನ ನಿಯೋಜನೆ.</p>' if report_lang == 'kn' else '<p>Commercial production and processing technology deployment.</p>')) | safe }}
     </div>
 </div>
 
@@ -497,21 +497,21 @@
 <div class="section-container">
     <h2 class="section-header">{{ report_i18n.sec5_title | default("5. DELIVERABLES AND MARKET OF THE PRODUCT") }}</h2>
     <div>
-        {{ (narratives.market_analysis if (narratives is defined and narratives and narratives.market_analysis) else '<p>Robust commercial market demand across regional industrial clusters in Karnataka.</p>') | safe }}
+        {{ (narratives.market_analysis if (narratives is defined and narratives and narratives.market_analysis) else ('<p>ಕರ್ನಾಟಕ ಮತ್ತು ಪ್ರಾದೇಶಿಕ ಕೈಗಾರಿಕಾ ವಲಯಗಳಲ್ಲಿ ಭಾರಿ ವಾಣಿಜ್ಯ ಮಾರುಕಟ್ಟೆ ಬೇಡಿಕೆ ಇದೆ.</p>' if report_lang == 'kn' else '<p>Robust commercial market demand across regional industrial clusters in Karnataka.</p>')) | safe }}
     </div>
 
     <h3 class="subsection-header">{{ report_i18n.sec5_sub_assump | default("Detailed Project Assumptions Table:") }}</h3>
     <table class="dpr-table">
         <thead>
-            <tr><th style="width: 50%;">{{ report_i18n.th_particulars | default("Parameter") }}</th><th style="width: 50%;">{{ report_i18n.th_amount | default("Model Value") }}</th></tr>
+            <tr><th style="width: 50%;">{{ report_i18n.th_parameter | default("Parameter") }}</th><th style="width: 50%;">{{ report_i18n.th_model_value | default("Model Value") }}</th></tr>
         </thead>
         <tbody>
-            <tr><td>Assumed Installed Capacity per Day</td><td>{{daily_capacity}} {{capacity_unit}}/day</td></tr>
-            <tr><td>Working Days per Year</td><td>{{working_days}} days</td></tr>
-            <tr><td>Working Hours per Day</td><td>8–10 hours</td></tr>
-            <tr><td>Capacity Utilization Profile</td><td>Year 1: 60-65% | Year 2: 70-75% | Year 3: 80-85% | Year 4-5: 90-95%</td></tr>
-            <tr><td>Average Raw Material Cost per Unit</td><td>₹{{input_cost_per_unit}}</td></tr>
-            <tr><td>Average Sale Price per Unit</td><td>₹{{selling_price}}</td></tr>
+            <tr><td>{{ report_i18n.assump_capacity_day | default("Assumed Installed Capacity per Day") }}</td><td>{{daily_capacity}} {{capacity_unit}}/{% if report_lang == 'kn' %}ದಿನ{% else %}day{% endif %}</td></tr>
+            <tr><td>{{ report_i18n.assump_working_days | default("Working Days per Year") }}</td><td>{{working_days}} {% if report_lang == 'kn' %}ದಿನಗಳು{% else %}days{% endif %}</td></tr>
+            <tr><td>{{ report_i18n.assump_working_hours | default("Working Hours per Day") }}</td><td>8–10 {% if report_lang == 'kn' %}ಗಂಟೆಗಳು{% else %}hours{% endif %}</td></tr>
+            <tr><td>{{ report_i18n.assump_capacity_util | default("Capacity Utilization Profile") }}</td><td>{% if report_lang == 'kn' %}ವರ್ಷ 1: 60-65% | ವರ್ಷ 2: 70-75% | ವರ್ಷ 3: 80-85% | ವರ್ಷ 4-5: 90-95%{% else %}Year 1: 60-65% | Year 2: 70-75% | Year 3: 80-85% | Year 4-5: 90-95%{% endif %}</td></tr>
+            <tr><td>{{ report_i18n.assump_raw_cost | default("Average Raw Material Cost per Unit") }}</td><td>₹{{input_cost_per_unit}}</td></tr>
+            <tr><td>{{ report_i18n.assump_sale_price | default("Average Sale Price per Unit") }}</td><td>₹{{selling_price}}</td></tr>
         </tbody>
     </table>
 
@@ -533,9 +533,9 @@
         </tbody>
     </table>
     {% else %}
-    <p>Plant & Machinery Cost: <strong>₹{{machinery_total | default(total_cost * 0.4)}}</strong> (Includes automated machines and tools).</p>
+    <p>{{ report_i18n.assump_plant_mach_cost | default("Plant & Machinery Cost:") }} <strong>₹{{machinery_total | default(total_cost * 0.4)}}</strong> {{ report_i18n.assump_plant_mach_inc | default("(Includes automated machines and tools).") }}</p>
     {% endif %}
-    <p><strong>Supplier Details:</strong> {{supplier_name | default("Authorized OEM Equipment Suppliers")}}, Location: {{supplier_location | default("Bengaluru / Coimbatore")}}.</p>
+    <p><strong>{{ report_i18n.assump_supplier | default("Supplier Details:") }}</strong> {{supplier_name | default("Authorized OEM Equipment Suppliers")}}, {{ report_i18n.assump_location | default("Location:") }} {{supplier_location | default("Bengaluru / Coimbatore")}}.</p>
 </div>
 
 <!-- 6. ROLE OF EACH MEMBER & TECHNICAL FEASIBILITY -->
@@ -544,22 +544,22 @@
     <div>
         {{ (narratives.technical_feasibility if (narratives is defined and narratives and narratives.technical_feasibility) else '') | safe }}
     </div>
-    <p style="margin-top: 10px;">Total Manpower Requirement: <strong>{{hr_summary.total_staff}} Persons</strong> | Monthly Wages Budget: <strong>₹{{hr_summary.monthly_salary_cost | inr}}</strong></p>
+    <p style="margin-top: 10px;">{{ report_i18n.lbl_total_manpower_req | default("Total Manpower Requirement:") }} <strong>{{hr_summary.total_staff}} {{ report_i18n.lbl_persons | default("Persons") }}</strong> | {{ report_i18n.lbl_monthly_wages_budget | default("Monthly Wages Budget:") }} <strong>₹{{hr_summary.monthly_salary_cost | inr}}</strong></p>
     <table class="dpr-table">
         <thead>
-            <tr><th style="width: 40%;">Role / Category</th><th style="width: 20%;" class="num-col">Personnel Count</th><th style="width: 20%;" class="num-col">Monthly Salary (₹)</th><th style="width: 20%;" class="num-col">Monthly Total (₹)</th></tr>
+            <tr><th style="width: 40%;">{{ report_i18n.th_role_category | default("Role / Category") }}</th><th style="width: 20%;" class="num-col">{{ report_i18n.th_personnel_count | default("Personnel Count") }}</th><th style="width: 20%;" class="num-col">{{ report_i18n.th_monthly_salary | default("Monthly Salary (₹)") }}</th><th style="width: 20%;" class="num-col">{{ report_i18n.th_monthly_total | default("Monthly Total (₹)") }}</th></tr>
         </thead>
         <tbody>
-            <tr><td>Management & Technical Lead</td><td class="num-col">{{mgmt_count | default(2)}}</td><td class="num-col">₹{{mgmt_salary | default(40000) | inr}}</td><td class="num-col">₹{{hr_summary.mgmt_cost | inr}}</td></tr>
-            <tr><td>Supervisory Staff</td><td class="num-col">{{sup_count | default(2)}}</td><td class="num-col">₹{{sup_salary | default(25000) | inr}}</td><td class="num-col">₹{{hr_summary.sup_cost | inr}}</td></tr>
-            <tr><td>Skilled Operators</td><td class="num-col">{{skill_count | default(5)}}</td><td class="num-col">₹{{skill_salary | default(18000) | inr}}</td><td class="num-col">₹{{hr_summary.skill_cost | inr}}</td></tr>
-            <tr><td>Unskilled Helpers</td><td class="num-col">{{unskill_count | default(5)}}</td><td class="num-col">₹{{unskill_salary | default(14000) | inr}}</td><td class="num-col">₹{{hr_summary.unskill_cost | inr}}</td></tr>
-            <tr><td>Administrative & Sales</td><td class="num-col">{{admin_count | default(2)}}</td><td class="num-col">₹{{admin_salary | default(20000) | inr}}</td><td class="num-col">₹{{hr_summary.admin_cost | inr}}</td></tr>
+            <tr><td>{{ report_i18n.mp_management | default("Management & Technical Lead") }}</td><td class="num-col">{{mgmt_count | default(2)}}</td><td class="num-col">₹{{mgmt_salary | default(40000) | inr}}</td><td class="num-col">₹{{hr_summary.mgmt_cost | inr}}</td></tr>
+            <tr><td>{{ report_i18n.mp_supervisors | default("Supervisory Staff & Engineers") }}</td><td class="num-col">{{sup_count | default(2)}}</td><td class="num-col">₹{{sup_salary | default(25000) | inr}}</td><td class="num-col">₹{{hr_summary.sup_cost | inr}}</td></tr>
+            <tr><td>{{ report_i18n.mp_skilled | default("Skilled Operators & Technicians") }}</td><td class="num-col">{{skill_count | default(5)}}</td><td class="num-col">₹{{skill_salary | default(18000) | inr}}</td><td class="num-col">₹{{hr_summary.skill_cost | inr}}</td></tr>
+            <tr><td>{{ report_i18n.mp_unskilled | default("Unskilled Helpers & Labourers") }}</td><td class="num-col">{{unskill_count | default(5)}}</td><td class="num-col">₹{{unskill_salary | default(14000) | inr}}</td><td class="num-col">₹{{hr_summary.unskill_cost | inr}}</td></tr>
+            <tr><td>{{ report_i18n.mp_admin | default("Administrative, Accounts & Sales") }}</td><td class="num-col">{{admin_count | default(2)}}</td><td class="num-col">₹{{admin_salary | default(20000) | inr}}</td><td class="num-col">₹{{hr_summary.admin_cost | inr}}</td></tr>
             <tr class="total-row">
                 <td>{{ report_i18n.th_total_manpower | default("TOTAL MANPOWER") }}</td>
-                <td class="num-col">{{hr_summary.total_staff}} Persons</td>
+                <td class="num-col">{{hr_summary.total_staff}} {{ report_i18n.lbl_persons | default("Persons") }}</td>
                 <td class="num-col">-</td>
-                <td class="num-col">₹{{hr_summary.monthly_salary_cost | inr}} / month</td>
+                <td class="num-col">₹{{hr_summary.monthly_salary_cost | inr}} / {% if report_lang == 'kn' %}ತಿಂಗಳು{% else %}month{% endif %}</td>
             </tr>
         </tbody>
     </table>
@@ -572,9 +572,7 @@
         {{ (narratives.risk_analysis if (narratives is defined and narratives and narratives.risk_analysis) else '') | safe }}
     </div>
     <p>
-        Soft intervention plays a pivotal role in transitioning raw micro-enterprises into commercially sustainable industrial units. 
-        Under the VKF framework, structured capacity building modules are deployed in collaboration with regional institutes 
-        including <strong>CEDOK (Centre for Entrepreneurship Development of Karnataka)</strong>, <strong>RUDSETI</strong>, and MSME Development Institutes.
+        {{ report_i18n.soft_desc | default("Soft intervention plays a pivotal role in transitioning raw micro-enterprises into commercially sustainable industrial units. Under the VKF framework, structured capacity building modules are deployed in collaboration with regional institutes including CEDOK (Centre for Entrepreneurship Development of Karnataka), RUDSETI, and MSME Development Institutes.") }}
     </p>
 </div>
 
@@ -589,13 +587,13 @@
             <tr><th style="width: 60%;">{{ report_i18n.th_expenditure_head | default("Project Expenditure Head") }}</th><th style="width: 25%;" class="num-col">{{ report_i18n.th_amount | default("Amount (₹)") }}</th><th style="width: 15%;" class="num-col">{{ report_i18n.th_pct_total | default("% of Total") }}</th></tr>
         </thead>
         <tbody>
-            <tr><td>Land & Site Development</td><td class="num-col">₹{{land_cost | inr}}</td><td class="num-col">{{ (((land_cost / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
-            <tr><td>Civil Works & Building Shed</td><td class="num-col">₹{{building_cost | inr}}</td><td class="num-col">{{ (((building_cost / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
-            <tr><td>Plant, Machinery & Equipment</td><td class="num-col">₹{{machinery_total | inr}}</td><td class="num-col">{{ (((machinery_total / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
-            <tr><td>Electrification & Utility Setup</td><td class="num-col">₹{{electrification_cost | default(0) | inr}}</td><td class="num-col">{{ ((((electrification_cost | default(0)) / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
-            <tr><td>Furniture, Office & Fixtures</td><td class="num-col">₹{{furniture_cost | default(0) | inr}}</td><td class="num-col">{{ ((((furniture_cost | default(0)) / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
-            <tr><td>Working Capital Margin</td><td class="num-col">₹{{working_capital | inr}}</td><td class="num-col">{{ (((working_capital / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
-            <tr><td>Pre-operative Expenses</td><td class="num-col">₹{{other_cost | default(0) | inr}}</td><td class="num-col">{{ ((((other_cost | default(0)) / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>{{ report_i18n.capex_land | default("Land & Site Development") }}</td><td class="num-col">₹{{land_cost | inr}}</td><td class="num-col">{{ (((land_cost / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>{{ report_i18n.capex_building | default("Civil Works & Building Shed") }}</td><td class="num-col">₹{{building_cost | inr}}</td><td class="num-col">{{ (((building_cost / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>{{ report_i18n.capex_machinery | default("Plant, Machinery & Equipment") }}</td><td class="num-col">₹{{machinery_total | inr}}</td><td class="num-col">{{ (((machinery_total / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>{{ report_i18n.capex_electrification | default("Electrification & Utility Setup") }}</td><td class="num-col">₹{{electrification_cost | default(0) | inr}}</td><td class="num-col">{{ ((((electrification_cost | default(0)) / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>{{ report_i18n.capex_furniture | default("Furniture, Office & Fixtures") }}</td><td class="num-col">₹{{furniture_cost | default(0) | inr}}</td><td class="num-col">{{ ((((furniture_cost | default(0)) / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>{{ report_i18n.capex_working_capital | default("Working Capital Margin") }}</td><td class="num-col">₹{{working_capital | inr}}</td><td class="num-col">{{ (((working_capital / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>{{ report_i18n.capex_preoperative | default("Pre-operative Expenses & Contingency") }}</td><td class="num-col">₹{{other_cost | default(0) | inr}}</td><td class="num-col">{{ ((((other_cost | default(0)) / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
             <tr class="total-row">
                 <td>{{ report_i18n.th_total_project_cost | default("TOTAL PROJECT COST") }}</td>
                 <td class="num-col">₹{{total_cost | inr}}</td>
@@ -632,9 +630,15 @@
 <div class="section-container">
     <h2 class="section-header">{{ report_i18n.sec9_title | default("9. LAND & INFRASTRUCTURE STATUS") }}</h2>
     <p>
+        {% if report_lang == 'kn' %}
+        ಉತ್ಪಾದನಾ ಘಟಕವು <strong>{{village}}, {{block}}, {{district}}, {{state}}</strong> ನಲ್ಲಿ ನೆಲೆಗೊಂಡಿದೆ. 
+        ಪ್ರವರ್ತಕರು <strong>{{workspace | default("ದೀರ್ಘಾವಧಿ ಗುತ್ತಿಗೆ ಒಪ್ಪಂದ (10 ವರ್ಷಗಳು)")}}</strong> ಅಡಿಯಲ್ಲಿ <strong>{{builtup_area | default(2500)}} ಚದರ ಅಡಿ</strong> ವಿಸ್ತೀರ್ಣವನ್ನು ಹೊಂದಿದ್ದು, 
+        ಭಾರಿ ಸಾರಿಗೆ ವಾಹನಗಳಿಗೆ ಸೂಕ್ತವಾದ ಕೈಗಾರಿಕಾ ವಲಯದಲ್ಲಿ ಸ್ಥಾಪಿಸಲಾಗಿದೆ.
+        {% else %}
         The manufacturing facility is located at <strong>{{village}}, {{block}}, {{district}}, {{state}}</strong>. 
         The promoter has secured a built-up area of <strong>{{builtup_area | default(2500)}} sq.ft.</strong> under a <strong>{{workspace | default("Long-term Lease Agreement (10 Years)")}}</strong>, 
         positioned in a designated industrial zone with adequate logistics access for heavy transport vehicles.
+        {% endif %}
     </p>
 </div>
 
@@ -645,11 +649,11 @@
         {{ (narratives.swot_analysis if (narratives is defined and narratives and narratives.swot_analysis) else '') | safe }}
     </div>
     <table class="dpr-table" style="margin-top: 10px;">
-        <tr><th style="width: 20%;">Pillar</th><th style="width: 80%;">Details</th></tr>
-        <tr><td><strong>Strengths</strong></td><td>{{strengths | default("Modern automated machinery, skilled promoter team, strong regional demand.")}}</td></tr>
-        <tr><td><strong>Weaknesses</strong></td><td>{{weaknesses | default("Initial capital intensive setup and market distribution network expansion.")}}</td></tr>
-        <tr><td><strong>Opportunities</strong></td><td>{{opportunities | default("Growing market demand, government subsidy support, and product expansion.")}}</td></tr>
-        <tr><td><strong>Threats</strong></td><td>{{threats | default("Raw material price fluctuations and competitive market entry.")}}</td></tr>
+        <tr><th style="width: 20%;">{{ report_i18n.th_pillar | default("Pillar") }}</th><th style="width: 80%;">{{ report_i18n.th_details | default("Details") }}</th></tr>
+        <tr><td><strong>{{ report_i18n.swot_strengths | default("Strengths") }}</strong></td><td>{{strengths | default(report_i18n.swot_strengths_default | default("Modern automated machinery, skilled promoter team, strong regional demand."))}}</td></tr>
+        <tr><td><strong>{{ report_i18n.swot_weaknesses | default("Weaknesses") }}</strong></td><td>{{weaknesses | default(report_i18n.swot_weaknesses_default | default("Initial capital intensive setup and market distribution network expansion."))}}</td></tr>
+        <tr><td><strong>{{ report_i18n.swot_opportunities | default("Opportunities") }}</strong></td><td>{{opportunities | default(report_i18n.swot_opportunities_default | default("Growing market demand, government subsidy support, and product expansion."))}}</td></tr>
+        <tr><td><strong>{{ report_i18n.swot_threats | default("Threats") }}</strong></td><td>{{threats | default(report_i18n.swot_threats_default | default("Raw material price fluctuations and competitive market entry."))}}</td></tr>
     </table>
 </div>
 
@@ -677,13 +681,13 @@
         <div class="image-cell">
             <div class="image-card-box">
                 <img src="{{user_facility_b64 | default(facility_path) | default(facility_card_b64) | default(product_sample_3_b64)}}" alt="Facility Machine Layout Visual">
-                <div class="image-card-caption">Plant Equipment & Machinery Layout</div>
+                <div class="image-card-caption">{{ report_i18n.lbl_image_facility | default("Plant Equipment & Machinery Layout") }}</div>
             </div>
         </div>
         <div class="image-cell">
             <div class="image-card-box">
                 <img src="{{user_team_b64 | default(team_path) | default(quality_card_b64) | default(product_sample_2_b64)}}" alt="Quality Assay & Staffing Visual">
-                <div class="image-card-caption">Quality Assurance & Staffing Profile</div>
+                <div class="image-card-caption">{{ report_i18n.lbl_image_team | default("Quality Assurance & Staffing Profile") }}</div>
             </div>
         </div>
     </div>
@@ -704,19 +708,19 @@
         <tbody>
             {% if projections %}
             <tr>
-                <td>Capacity Utilization (%)</td>
+                <td>{{ report_i18n.cf_cap_util | default("Capacity Utilization (%)") }}</td>
                 {% for p in projections %}<td class="num-col">{{p.capacity_utilization}}%</td>{% endfor %}
             </tr>
             <tr>
-                <td>Gross Revenue (A)</td>
+                <td>{{ report_i18n.cf_gross_revenue | default("Gross Revenue (A)") }}</td>
                 {% for p in projections %}<td class="num-col">₹{{p.revenue | inr}}</td>{% endfor %}
             </tr>
             <tr>
-                <td>Raw Material & Operating Cost (B)</td>
+                <td>{{ report_i18n.cf_raw_opex | default("Raw Material & Operating Cost (B)") }}</td>
                 {% for p in projections %}<td class="num-col">₹{{p.total_opex | inr}}</td>{% endfor %}
             </tr>
             <tr class="total-row">
-                <td>Net Cash Flow / Profit Before Interest (A - B)</td>
+                <td>{{ report_i18n.cf_pbdit | default("Net Cash Flow / Profit Before Interest (A - B)") }}</td>
                 {% for p in projections %}<td class="num-col">₹{{p.ebitda | inr}}</td>{% endfor %}
             </tr>
             {% endif %}
@@ -731,15 +735,15 @@
         <tbody>
             {% if projections %}
             <tr>
-                <td>Net Cash Flow Available</td>
+                <td>{{ report_i18n.cf_cash_avail | default("Net Cash Flow Available") }}</td>
                 {% for p in projections %}<td class="num-col">₹{{p.ebitda | inr}}</td>{% endfor %}
             </tr>
             <tr>
-                <td>Interest Repayment</td>
+                <td>{{ report_i18n.cf_interest | default("Interest Repayment") }}</td>
                 {% for p in projections %}<td class="num-col">₹{{p.interest | inr}}</td>{% endfor %}
             </tr>
             <tr class="total-row">
-                <td>Debt Service Coverage Ratio (DSCR)</td>
+                <td>{{ report_i18n.cf_dscr | default("Debt Service Coverage Ratio (DSCR)") }}</td>
                 {% for p in projections %}<td class="num-col"><strong>{{p.dscr}}</strong></td>{% endfor %}
             </tr>
             {% endif %}
@@ -747,8 +751,8 @@
     </table>
 
     <div class="legal-box">
-        <strong>Average 5-Year DSCR: {{avg_dscr}}</strong> | Break-Even Point: <strong>{{bep_percent}}%</strong>. 
-        The debt service coverage ratio comfortably exceeds bank lending benchmarks (1.50).
+        <strong>{{ report_i18n.lbl_avg_dscr | default("Average 5-Year DSCR:") }} {{avg_dscr}}</strong> | {{ report_i18n.lbl_bep | default("Break-Even Point:") }} <strong>{{bep_percent}}%</strong>. 
+        {{ report_i18n.fin_viability_summary | default("All projections confirm strong financial viability, high cash cushion, and absolute debt servicing security. The debt service coverage ratio comfortably exceeds bank lending benchmarks (1.50).") }}
     </div>
 </div>
 
@@ -786,7 +790,7 @@
     <h3 class="subsection-header">{{ report_i18n.sec13_sub_val | default("ADVANCED CORPORATE FINANCIAL VALUATION (DCF & IRR ANALYSIS)") }}</h3>
     <table class="dpr-table">
         <thead>
-            <tr><th style="width: 45%;">Corporate Financial Parameter</th><th style="width: 25%;">Calculated Value</th><th style="width: 30%;">Corporate Benchmark</th></tr>
+            <tr><th style="width: 45%;">{{ report_i18n.th_corp_param | default("Corporate Financial Parameter") }}</th><th style="width: 25%;">{{ report_i18n.th_calc_val | default("Calculated Value") }}</th><th style="width: 30%;">{{ report_i18n.th_benchmark | default("Corporate Benchmark") }}</th></tr>
         </thead>
         <tbody>
             <tr><td>Weighted Average Cost of Capital (WACC)</td><td><strong>{{corporate_wacc}}%</strong></td><td>10.0% – 12.5%</td></tr>
@@ -794,7 +798,7 @@
             <tr><td>Project Internal Rate of Return (Project IRR)</td><td><strong>{{corporate_project_irr}}%</strong></td><td>≥ 15.0%</td></tr>
             <tr><td>Equity Internal Rate of Return (Equity IRR)</td><td><strong>{{corporate_equity_irr}}%</strong></td><td>≥ 18.0%</td></tr>
             <tr><td>Corporate Debt-to-Equity Ratio</td><td><strong>{{debt_equity_ratio}}</strong></td><td>≤ 3.0 : 1</td></tr>
-            <tr><td>Capital Payback Period</td><td><strong>{{corporate_payback_years}} Years</strong></td><td>3 – 6 Years</td></tr>
+            <tr><td>Capital Payback Period</td><td><strong>{{corporate_payback_years}} {% if report_lang == 'kn' %}ವರ್ಷಗಳು{% else %}Years{% endif %}</strong></td><td>3 – 6 {% if report_lang == 'kn' %}ವರ್ಷಗಳು{% else %}Years{% endif %}</td></tr>
         </tbody>
     </table>
 
@@ -803,7 +807,7 @@
     <h3 class="subsection-header">{{ report_i18n.sec13_sub_sens | default("MULTI-SCENARIO SENSITIVITY ANALYSIS MATRIX") }}</h3>
     <table class="dpr-table">
         <thead>
-            <tr><th style="width: 35%;">Stress Test Scenario</th><th style="width: 20%;">Projected DSCR</th><th style="width: 25%;">NPV Impact (₹)</th><th style="width: 20%;">Project Viability</th></tr>
+            <tr><th style="width: 35%;">{{ report_i18n.th_stress_scenario | default("Stress Test Scenario") }}</th><th style="width: 20%;">{{ report_i18n.th_proj_dscr | default("Projected DSCR") }}</th><th style="width: 25%;">{{ report_i18n.th_npv_impact | default("NPV Impact (₹)") }}</th><th style="width: 20%;">{{ report_i18n.th_viability_status | default("Project Viability") }}</th></tr>
         </thead>
         <tbody>
             <tr><td>Base Case Model</td><td><strong>{{sensitivity_matrix.base_dscr}}</strong></td><td>₹{{sensitivity_matrix.base_npv}}</td><td>Base Benchmark</td></tr>
@@ -820,7 +824,7 @@
     <h3 class="subsection-header">{{ report_i18n.sec13_sub_esg | default("ESG (ENVIRONMENTAL, SOCIAL & GOVERNANCE) & TCRM SCORECARD") }}</h3>
     <table class="dpr-table">
         <thead>
-            <tr><th style="width: 60%;">ESG & TCRM Dimension</th><th style="width: 40%;">Evaluation Rating</th></tr>
+            <tr><th style="width: 60%;">{{ report_i18n.th_esg_dimension | default("ESG & TCRM Dimension") }}</th><th style="width: 40%;">{{ report_i18n.th_eval_rating | default("Evaluation Rating") }}</th></tr>
         </thead>
         <tbody>
             <tr><td>Environmental Pillar (E)</td><td>{{esg_scorecard.environmental}}</td></tr>
@@ -843,18 +847,18 @@
     </div>
     <table class="dpr-table" style="margin-top: 10px;">
         <thead>
-            <tr><th style="width: 26%;">Working Capital Parameter</th><th style="width: 10%;">Holding Period</th><th style="width: 12.8%;" class="num-col">Year 1 (₹)</th><th style="width: 12.8%;" class="num-col">Year 2 (₹)</th><th style="width: 12.8%;" class="num-col">Year 3 (₹)</th><th style="width: 12.8%;" class="num-col">Year 4 (₹)</th><th style="width: 12.8%;" class="num-col">Year 5 (₹)</th></tr>
+            <tr><th style="width: 26%;">{{ report_i18n.th_wc_param | default("Working Capital Parameter") }}</th><th style="width: 10%;">{{ report_i18n.th_holding_period | default("Holding Period") }}</th><th style="width: 12.8%;" class="num-col">{{ report_i18n.th_y1 | default("Year 1") }} (₹)</th><th style="width: 12.8%;" class="num-col">{{ report_i18n.th_y2 | default("Year 2") }} (₹)</th><th style="width: 12.8%;" class="num-col">{{ report_i18n.th_y3 | default("Year 3") }} (₹)</th><th style="width: 12.8%;" class="num-col">{{ report_i18n.th_y4 | default("Year 4") }} (₹)</th><th style="width: 12.8%;" class="num-col">{{ report_i18n.th_y5 | default("Year 5") }} (₹)</th></tr>
         </thead>
         <tbody>
-            <tr><td>Raw Material Stock Holding</td><td>30 Days</td><td class="num-col">₹{{ (total_cost * 0.12) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.14) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.16) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.18) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.20) | inr }}</td></tr>
-            <tr><td>Work-in-Process (WIP) Inventory</td><td>15 Days</td><td class="num-col">₹{{ (total_cost * 0.05) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.06) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.07) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.08) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.09) | inr }}</td></tr>
-            <tr><td>Finished Goods Inventory</td><td>30 Days</td><td class="num-col">₹{{ (total_cost * 0.10) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.11) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.12) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.13) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.14) | inr }}</td></tr>
-            <tr><td>Trade Receivables / Debtors</td><td>30 Days</td><td class="num-col">₹{{ (total_cost * 0.15) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.18) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.20) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.22) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.25) | inr }}</td></tr>
-            <tr class="total-row"><td>Gross Working Capital Requirement</td><td>-</td><td class="num-col"><strong>₹{{ (total_cost * 0.42) | inr }}</strong></td><td class="num-col"><strong>₹{{ (total_cost * 0.49) | inr }}</strong></td><td class="num-col"><strong>₹{{ (total_cost * 0.55) | inr }}</strong></td><td class="num-col"><strong>₹{{ (total_cost * 0.61) | inr }}</strong></td><td class="num-col"><strong>₹{{ (total_cost * 0.68) | inr }}</strong></td></tr>
-            <tr><td>Less: Trade Creditors / Raw Material Credit</td><td>30 Days</td><td class="num-col">₹{{ (total_cost * 0.10) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.12) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.13) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.15) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.16) | inr }}</td></tr>
-            <tr class="total-row"><td>Net Working Capital Gap (NWC)</td><td>-</td><td class="num-col"><strong>₹{{ working_capital | inr }}</strong></td><td class="num-col"><strong>₹{{ (working_capital * 1.15) | inr }}</strong></td><td class="num-col"><strong>₹{{ (working_capital * 1.30) | inr }}</strong></td><td class="num-col"><strong>₹{{ (working_capital * 1.45) | inr }}</strong></td><td class="num-col"><strong>₹{{ (working_capital * 1.60) | inr }}</strong></td></tr>
-            <tr><td>Promoter Working Capital Margin (25%)</td><td>-</td><td class="num-col">₹{{ (working_capital * 0.25) | inr }}</td><td class="num-col">₹{{ (working_capital * 0.2875) | inr }}</td><td class="num-col">₹{{ (working_capital * 0.325) | inr }}</td><td class="num-col">₹{{ (working_capital * 0.3625) | inr }}</td><td class="num-col">₹{{ (working_capital * 0.40) | inr }}</td></tr>
-            <tr class="total-row"><td>Assessed Bank Cash Credit / Working Capital Limit (75%)</td><td>-</td><td class="num-col"><strong>₹{{ (working_capital * 0.75) | inr }}</strong></td><td class="num-col"><strong>₹{{ (working_capital * 0.8625) | inr }}</strong></td><td class="num-col"><strong>₹{{ (working_capital * 0.975) | inr }}</strong></td><td class="num-col"><strong>₹{{ (working_capital * 1.0875) | inr }}</strong></td><td class="num-col"><strong>₹{{ (working_capital * 1.20) | inr }}</strong></td></tr>
+            <tr><td>{{ report_i18n.tan_rm_stock | default("Raw Material Stock Holding") }}</td><td>30 {% if report_lang == 'kn' %}ದಿನಗಳು{% else %}Days{% endif %}</td><td class="num-col">₹{{ (total_cost * 0.12) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.14) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.16) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.18) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.20) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.tan_wip | default("Work-in-Process (WIP) Inventory") }}</td><td>15 {% if report_lang == 'kn' %}ದಿನಗಳು{% else %}Days{% endif %}</td><td class="num-col">₹{{ (total_cost * 0.05) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.06) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.07) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.08) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.09) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.tan_fg | default("Finished Goods Inventory") }}</td><td>30 {% if report_lang == 'kn' %}ದಿನಗಳು{% else %}Days{% endif %}</td><td class="num-col">₹{{ (total_cost * 0.10) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.11) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.12) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.13) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.14) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.tan_debtors | default("Trade Receivables / Debtors") }}</td><td>30 {% if report_lang == 'kn' %}ದಿನಗಳು{% else %}Days{% endif %}</td><td class="num-col">₹{{ (total_cost * 0.15) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.18) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.20) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.22) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.25) | inr }}</td></tr>
+            <tr class="total-row"><td>{{ report_i18n.tan_gross_wc | default("Gross Working Capital Requirement") }}</td><td>-</td><td class="num-col"><strong>₹{{ (total_cost * 0.42) | inr }}</strong></td><td class="num-col"><strong>₹{{ (total_cost * 0.49) | inr }}</strong></td><td class="num-col"><strong>₹{{ (total_cost * 0.55) | inr }}</strong></td><td class="num-col"><strong>₹{{ (total_cost * 0.61) | inr }}</strong></td><td class="num-col"><strong>₹{{ (total_cost * 0.68) | inr }}</strong></td></tr>
+            <tr><td>{{ report_i18n.tan_less_creditors | default("Less: Trade Creditors / Raw Material Credit") }}</td><td>30 {% if report_lang == 'kn' %}ದಿನಗಳು{% else %}Days{% endif %}</td><td class="num-col">₹{{ (total_cost * 0.10) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.12) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.13) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.15) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.16) | inr }}</td></tr>
+            <tr class="total-row"><td>{{ report_i18n.tan_nwc | default("Net Working Capital Gap (NWC)") }}</td><td>-</td><td class="num-col"><strong>₹{{ working_capital | inr }}</strong></td><td class="num-col"><strong>₹{{ (working_capital * 1.15) | inr }}</strong></td><td class="num-col"><strong>₹{{ (working_capital * 1.30) | inr }}</strong></td><td class="num-col"><strong>₹{{ (working_capital * 1.45) | inr }}</strong></td><td class="num-col"><strong>₹{{ (working_capital * 1.60) | inr }}</strong></td></tr>
+            <tr><td>{{ report_i18n.tan_promoter_margin | default("Promoter Working Capital Margin (25%)") }}</td><td>-</td><td class="num-col">₹{{ (working_capital * 0.25) | inr }}</td><td class="num-col">₹{{ (working_capital * 0.2875) | inr }}</td><td class="num-col">₹{{ (working_capital * 0.325) | inr }}</td><td class="num-col">₹{{ (working_capital * 0.3625) | inr }}</td><td class="num-col">₹{{ (working_capital * 0.40) | inr }}</td></tr>
+            <tr class="total-row"><td>{{ report_i18n.tan_bank_cc | default("Assessed Bank Cash Credit / Working Capital Limit (75%)") }}</td><td>-</td><td class="num-col"><strong>₹{{ (working_capital * 0.75) | inr }}</strong></td><td class="num-col"><strong>₹{{ (working_capital * 0.8625) | inr }}</strong></td><td class="num-col"><strong>₹{{ (working_capital * 0.975) | inr }}</strong></td><td class="num-col"><strong>₹{{ (working_capital * 1.0875) | inr }}</strong></td><td class="num-col"><strong>₹{{ (working_capital * 1.20) | inr }}</strong></td></tr>
         </tbody>
     </table>
 </div>
@@ -867,14 +871,14 @@
     </div>
     <table class="dpr-table" style="margin-top: 10px;">
         <thead>
-            <tr><th style="width: 25%;">Asset Block</th><th style="width: 9%;" class="num-col">Depr Rate (%)</th><th style="width: 13.2%;" class="num-col">Year 1 (₹)</th><th style="width: 13.2%;" class="num-col">Year 2 (₹)</th><th style="width: 13.2%;" class="num-col">Year 3 (₹)</th><th style="width: 13.2%;" class="num-col">Year 4 (₹)</th><th style="width: 13.2%;" class="num-col">Year 5 (₹)</th></tr>
+            <tr><th style="width: 25%;">{{ report_i18n.th_asset_block | default("Asset Block") }}</th><th style="width: 9%;" class="num-col">{{ report_i18n.th_depr_rate | default("Depr Rate (%)") }}</th><th style="width: 13.2%;" class="num-col">{{ report_i18n.th_y1 | default("Year 1") }} (₹)</th><th style="width: 13.2%;" class="num-col">{{ report_i18n.th_y2 | default("Year 2") }} (₹)</th><th style="width: 13.2%;" class="num-col">{{ report_i18n.th_y3 | default("Year 3") }} (₹)</th><th style="width: 13.2%;" class="num-col">{{ report_i18n.th_y4 | default("Year 4") }} (₹)</th><th style="width: 13.2%;" class="num-col">{{ report_i18n.th_y5 | default("Year 5") }} (₹)</th></tr>
         </thead>
         <tbody>
-            <tr><td>Building & Civil Works</td><td class="num-col">10.0%</td><td class="num-col">₹{{ (building_cost * 0.10) | inr }}</td><td class="num-col">₹{{ (building_cost * 0.09) | inr }}</td><td class="num-col">₹{{ (building_cost * 0.081) | inr }}</td><td class="num-col">₹{{ (building_cost * 0.0729) | inr }}</td><td class="num-col">₹{{ (building_cost * 0.0656) | inr }}</td></tr>
-            <tr><td>Plant & Machinery Equipment</td><td class="num-col">15.0%</td><td class="num-col">₹{{ (machinery_total * 0.15) | inr }}</td><td class="num-col">₹{{ (machinery_total * 0.1275) | inr }}</td><td class="num-col">₹{{ (machinery_total * 0.1084) | inr }}</td><td class="num-col">₹{{ (machinery_total * 0.0921) | inr }}</td><td class="num-col">₹{{ (machinery_total * 0.0783) | inr }}</td></tr>
-            <tr><td>Electrification & Utility Setup</td><td class="num-col">15.0%</td><td class="num-col">₹{{ (electrification_cost * 0.15) | inr }}</td><td class="num-col">₹{{ (electrification_cost * 0.1275) | inr }}</td><td class="num-col">₹{{ (electrification_cost * 0.1084) | inr }}</td><td class="num-col">₹{{ (electrification_cost * 0.0921) | inr }}</td><td class="num-col">₹{{ (electrification_cost * 0.0783) | inr }}</td></tr>
-            <tr><td>Furniture, Office & Fixtures</td><td class="num-col">10.0%</td><td class="num-col">₹{{ (furniture_cost * 0.10) | inr }}</td><td class="num-col">₹{{ (furniture_cost * 0.09) | inr }}</td><td class="num-col">₹{{ (furniture_cost * 0.081) | inr }}</td><td class="num-col">₹{{ (furniture_cost * 0.0729) | inr }}</td><td class="num-col">₹{{ (furniture_cost * 0.0656) | inr }}</td></tr>
-            <tr class="total-row"><td>TOTAL ANNUAL DEPRECIATION ALLOWANCE</td><td class="num-col">-</td><td class="num-col"><strong>₹{{ ((building_cost*0.10) + (machinery_total*0.15) + (electrification_cost*0.15) + (furniture_cost*0.10)) | inr }}</strong></td><td class="num-col"><strong>₹{{ ((building_cost*0.09) + (machinery_total*0.1275) + (electrification_cost*0.1275) + (furniture_cost*0.09)) | inr }}</strong></td><td class="num-col"><strong>₹{{ ((building_cost*0.081) + (machinery_total*0.1084) + (electrification_cost*0.1084) + (furniture_cost*0.081)) | inr }}</strong></td><td class="num-col"><strong>₹{{ ((building_cost*0.0729) + (machinery_total*0.0921) + (electrification_cost*0.0921) + (furniture_cost*0.0729)) | inr }}</strong></td><td class="num-col"><strong>₹{{ ((building_cost*0.0656) + (machinery_total*0.0783) + (electrification_cost*0.0783) + (furniture_cost*0.0656)) | inr }}</strong></td></tr>
+            <tr><td>{{ report_i18n.dep_building | default("Building & Civil Works") }}</td><td class="num-col">10.0%</td><td class="num-col">₹{{ (building_cost * 0.10) | inr }}</td><td class="num-col">₹{{ (building_cost * 0.09) | inr }}</td><td class="num-col">₹{{ (building_cost * 0.081) | inr }}</td><td class="num-col">₹{{ (building_cost * 0.0729) | inr }}</td><td class="num-col">₹{{ (building_cost * 0.0656) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.dep_machinery | default("Plant & Machinery Equipment") }}</td><td class="num-col">15.0%</td><td class="num-col">₹{{ (machinery_total * 0.15) | inr }}</td><td class="num-col">₹{{ (machinery_total * 0.1275) | inr }}</td><td class="num-col">₹{{ (machinery_total * 0.1084) | inr }}</td><td class="num-col">₹{{ (machinery_total * 0.0921) | inr }}</td><td class="num-col">₹{{ (machinery_total * 0.0783) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.dep_electrification | default("Electrification & Utility Setup") }}</td><td class="num-col">15.0%</td><td class="num-col">₹{{ (electrification_cost * 0.15) | inr }}</td><td class="num-col">₹{{ (electrification_cost * 0.1275) | inr }}</td><td class="num-col">₹{{ (electrification_cost * 0.1084) | inr }}</td><td class="num-col">₹{{ (electrification_cost * 0.0921) | inr }}</td><td class="num-col">₹{{ (electrification_cost * 0.0783) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.dep_furniture | default("Furniture, Office & Fixtures") }}</td><td class="num-col">10.0%</td><td class="num-col">₹{{ (furniture_cost * 0.10) | inr }}</td><td class="num-col">₹{{ (furniture_cost * 0.09) | inr }}</td><td class="num-col">₹{{ (furniture_cost * 0.081) | inr }}</td><td class="num-col">₹{{ (furniture_cost * 0.0729) | inr }}</td><td class="num-col">₹{{ (furniture_cost * 0.0656) | inr }}</td></tr>
+            <tr class="total-row"><td>{{ report_i18n.dep_total | default("TOTAL ANNUAL DEPRECIATION ALLOWANCE") }}</td><td class="num-col">-</td><td class="num-col"><strong>₹{{ ((building_cost*0.10) + (machinery_total*0.15) + (electrification_cost*0.15) + (furniture_cost*0.10)) | inr }}</strong></td><td class="num-col"><strong>₹{{ ((building_cost*0.09) + (machinery_total*0.1275) + (electrification_cost*0.1275) + (furniture_cost*0.09)) | inr }}</strong></td><td class="num-col"><strong>₹{{ ((building_cost*0.081) + (machinery_total*0.1084) + (electrification_cost*0.1084) + (furniture_cost*0.081)) | inr }}</strong></td><td class="num-col"><strong>₹{{ ((building_cost*0.0729) + (machinery_total*0.0921) + (electrification_cost*0.0921) + (furniture_cost*0.0729)) | inr }}</strong></td><td class="num-col"><strong>₹{{ ((building_cost*0.0656) + (machinery_total*0.0783) + (electrification_cost*0.0783) + (furniture_cost*0.0656)) | inr }}</strong></td></tr>
         </tbody>
     </table>
 </div>
@@ -886,17 +890,17 @@
         {{ (narratives.tcrm_technology_readiness if (narratives is defined and narratives and narratives.tcrm_technology_readiness) else '') | safe }}
     </div>
     <p style="margin-top: 10px;">
-        Term loan repayment is structured over <strong>5 years ({{repayment_tenure_years | default(5)}} Years)</strong> following a <strong>{{moratorium_period_months | default(6)}}-month moratorium period</strong> at an annual interest rate of <strong>{{interest_rate_percent | default(10.0)}}% per annum</strong>.
+        {{ report_i18n.amort_text | default("Term loan repayment is structured over 5 years following a 6-month moratorium period at an annual interest rate of 10.0% per annum.") }}
     </p>
     <table class="dpr-table">
         <thead>
-            <tr><th>Financial Year</th><th class="num-col">Opening Balance (₹)</th><th class="num-col">Principal Repayment (₹)</th><th class="num-col">Interest Expense (₹)</th><th class="num-col">Closing Balance (₹)</th></tr>
+            <tr><th>{{ report_i18n.th_fin_year | default("Financial Year") }}</th><th class="num-col">{{ report_i18n.th_opening_balance | default("Opening Balance (₹)") }}</th><th class="num-col">{{ report_i18n.th_principal_repay | default("Principal Repayment (₹)") }}</th><th class="num-col">{{ report_i18n.th_interest_exp | default("Interest Expense (₹)") }}</th><th class="num-col">{{ report_i18n.th_closing_balance | default("Closing Balance (₹)") }}</th></tr>
         </thead>
         <tbody>
             {% if projections %}
             {% for p in projections %}
             <tr>
-                <td><strong>Year {{p.year}}</strong></td>
+                <td><strong>{% if report_lang == 'kn' %}ವರ್ಷ {{p.year}}{% else %}Year {{p.year}}{% endif %}</strong></td>
                 <td class="num-col">₹{{ (bank_loan * (1 - (loop.index0 * 0.20))) | inr }}</td>
                 <td class="num-col">₹{{ (bank_loan * 0.20) | inr }}</td>
                 <td class="num-col">₹{{ p.interest | inr }}</td>
@@ -927,7 +931,7 @@
             <col style="width: 12%;">
         </colgroup>
         <thead>
-            <tr><th>Yr</th><th class="num-col">Cap %</th><th class="num-col">Gross Revenue (₹)</th><th class="num-col">Operating Expenses (₹)</th><th class="num-col">PBDIT (₹)</th><th class="num-col">Interest (₹)</th><th class="num-col">Depr (₹)</th><th class="num-col">PAT (₹)</th><th class="num-col">DSCR</th></tr>
+            <tr><th>{{ report_i18n.th_yr | default("Yr") }}</th><th class="num-col">Cap %</th><th class="num-col">{{ report_i18n.th_revenue | default("Gross Revenue (₹)") }}</th><th class="num-col">{{ report_i18n.th_operating_costs | default("Operating Expenses (₹)") }}</th><th class="num-col">{{ report_i18n.th_pbdit | default("PBDIT (₹)") }}</th><th class="num-col">{{ report_i18n.th_interest | default("Interest (₹)") }}</th><th class="num-col">{{ report_i18n.th_depr | default("Depr (₹)") }}</th><th class="num-col">{{ report_i18n.th_pat | default("PAT (₹)") }}</th><th class="num-col">{{ report_i18n.th_dscr | default("DSCR") }}</th></tr>
         </thead>
         <tbody>
             {% if projections_10yr %}
@@ -968,7 +972,7 @@
             <col style="width: 14%;">
         </colgroup>
         <thead>
-            <tr><th>Mth</th><th>Yr</th><th class="num-col">Revenue (₹)</th><th class="num-col">Operating Costs (₹)</th><th class="num-col">PBDIT (₹)</th><th class="num-col">Interest (₹)</th><th class="num-col">Principal (₹)</th><th class="num-col">Closing Loan (₹)</th><th class="num-col">Net Cash (₹)</th></tr>
+            <tr><th>{{ report_i18n.th_mth | default("Mth") }}</th><th>{{ report_i18n.th_yr | default("Yr") }}</th><th class="num-col">{{ report_i18n.th_revenue | default("Revenue (₹)") }}</th><th class="num-col">{{ report_i18n.th_operating_costs | default("Operating Costs (₹)") }}</th><th class="num-col">{{ report_i18n.th_pbdit | default("PBDIT (₹)") }}</th><th class="num-col">{{ report_i18n.th_interest | default("Interest (₹)") }}</th><th class="num-col">{{ report_i18n.th_principal | default("Principal (₹)") }}</th><th class="num-col">{{ report_i18n.th_closing_loan | default("Closing Loan (₹)") }}</th><th class="num-col">{{ report_i18n.th_net_cash | default("Net Cash (₹)") }}</th></tr>
         </thead>
         <tbody>
             {% if monthly_cashflow_36m %}
@@ -998,7 +1002,7 @@
     </div>
     <table class="dpr-table" style="margin-top: 10px;">
         <thead>
-            <tr><th>Raw Material Item / Component</th><th>Unit</th><th class="num-col">Annual Qty Required</th><th class="num-col">Unit Rate (₹)</th><th class="num-col">Total Cost (₹)</th></tr>
+            <tr><th>{{ report_i18n.th_raw_item | default("Raw Material Item / Component") }}</th><th>{{ report_i18n.th_unit | default("Unit") }}</th><th class="num-col">{{ report_i18n.th_annual_qty | default("Annual Qty Required") }}</th><th class="num-col">{{ report_i18n.th_unit_rate | default("Unit Rate (₹)") }}</th><th class="num-col">{{ report_i18n.th_total_cost | default("Total Cost (₹)") }}</th></tr>
         </thead>
         <tbody>
             {% if boq_raw_materials %}
@@ -1024,15 +1028,15 @@
     </div>
     <table class="dpr-table" style="margin-top: 10px;">
         <thead>
-            <tr><th>Staff Category</th><th class="num-col">No. of Personnel</th><th class="num-col">Monthly Salary / Person (₹)</th><th class="num-col">Total Monthly Outlay (₹)</th><th class="num-col">Total Annual Outlay (₹)</th></tr>
+            <tr><th>{{ report_i18n.th_staff_category | default("Staff Category") }}</th><th class="num-col">{{ report_i18n.th_no_personnel | default("No. of Personnel") }}</th><th class="num-col">{{ report_i18n.th_monthly_salary_person | default("Monthly Salary / Person (₹)") }}</th><th class="num-col">{{ report_i18n.th_monthly_total | default("Total Monthly Outlay (₹)") }}</th><th class="num-col">{{ report_i18n.th_annual_total | default("Total Annual Outlay (₹)") }}</th></tr>
         </thead>
         <tbody>
-            <tr><td>Management & Executives</td><td class="num-col">{{mgmt_count}}</td><td class="num-col">₹{{mgmt_salary | inr}}</td><td class="num-col">₹{{hr_summary.mgmt_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.mgmt_cost * 12) | inr }}</td></tr>
-            <tr><td>Supervisors & Engineers</td><td class="num-col">{{sup_count}}</td><td class="num-col">₹{{sup_salary | inr}}</td><td class="num-col">₹{{hr_summary.sup_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.sup_cost * 12) | inr }}</td></tr>
-            <tr><td>Skilled Technicians / Operators</td><td class="num-col">{{skill_count}}</td><td class="num-col">₹{{skill_salary | inr}}</td><td class="num-col">₹{{hr_summary.skill_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.skill_cost * 12) | inr }}</td></tr>
-            <tr><td>Unskilled Helpers & Labourers</td><td class="num-col">{{unskill_count}}</td><td class="num-col">₹{{unskill_salary | inr}}</td><td class="num-col">₹{{hr_summary.unskill_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.unskill_cost * 12) | inr }}</td></tr>
-            <tr><td>Administrative & Security Staff</td><td class="num-col">{{admin_count}}</td><td class="num-col">₹{{admin_salary | inr}}</td><td class="num-col">₹{{hr_summary.admin_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.admin_cost * 12) | inr }}</td></tr>
-            <tr class="total-row"><td>TOTAL ORGANIZATIONAL MANPOWER</td><td class="num-col"><strong>{{hr_summary.total_staff}}</strong></td><td class="num-col">-</td><td class="num-col"><strong>₹{{hr_summary.monthly_salary_cost | inr}}</strong></td><td class="num-col"><strong>₹{{hr_summary.annual_salary_cost | inr}}</strong></td></tr>
+            <tr><td>{{ report_i18n.mp_management | default("Management & Executives") }}</td><td class="num-col">{{mgmt_count}}</td><td class="num-col">₹{{mgmt_salary | inr}}</td><td class="num-col">₹{{hr_summary.mgmt_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.mgmt_cost * 12) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.mp_supervisors | default("Supervisors & Engineers") }}</td><td class="num-col">{{sup_count}}</td><td class="num-col">₹{{sup_salary | inr}}</td><td class="num-col">₹{{hr_summary.sup_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.sup_cost * 12) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.mp_skilled | default("Skilled Technicians / Operators") }}</td><td class="num-col">{{skill_count}}</td><td class="num-col">₹{{skill_salary | inr}}</td><td class="num-col">₹{{hr_summary.skill_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.skill_cost * 12) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.mp_unskilled | default("Unskilled Helpers & Labourers") }}</td><td class="num-col">{{unskill_count}}</td><td class="num-col">₹{{unskill_salary | inr}}</td><td class="num-col">₹{{hr_summary.unskill_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.unskill_cost * 12) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.mp_admin | default("Administrative & Security Staff") }}</td><td class="num-col">{{admin_count}}</td><td class="num-col">₹{{admin_salary | inr}}</td><td class="num-col">₹{{hr_summary.admin_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.admin_cost * 12) | inr }}</td></tr>
+            <tr class="total-row"><td>{{ report_i18n.th_total_manpower | default("TOTAL ORGANIZATIONAL MANPOWER") }}</td><td class="num-col"><strong>{{hr_summary.total_staff}}</strong></td><td class="num-col">-</td><td class="num-col"><strong>₹{{hr_summary.monthly_salary_cost | inr}}</strong></td><td class="num-col"><strong>₹{{hr_summary.annual_salary_cost | inr}}</strong></td></tr>
         </tbody>
     </table>
 </div>
@@ -1042,21 +1046,21 @@
     <h2 class="section-header">{{ report_i18n.sec21_title | default("21. TANDON & NAYAK COMMITTEE WORKING CAPITAL NORMS") }}</h2>
     <table class="dpr-table">
         <thead>
-            <tr><th>Working Capital Assessment Parameter</th><th class="num-col">Method I (75% NWC Gap)</th><th class="num-col">Method II (75% Current Assets)</th></tr>
+            <tr><th>{{ report_i18n.th_wc_param | default("Working Capital Assessment Parameter") }}</th><th class="num-col">{{ report_i18n.th_method1 | default("Method I (75% NWC Gap)") }}</th><th class="num-col">{{ report_i18n.th_method2 | default("Method II (75% Current Assets)") }}</th></tr>
         </thead>
         <tbody>
             {% if tandon_assessment %}
-            <tr><td>Gross Projected Current Assets (CA)</td><td class="num-col">₹{{tandon_assessment.current_assets | inr}}</td><td class="num-col">₹{{tandon_assessment.current_assets | inr}}</td></tr>
-            <tr><td>Less: Current Liabilities (CL)</td><td class="num-col">₹{{tandon_assessment.current_liabilities | inr}}</td><td class="num-col">₹{{tandon_assessment.current_liabilities | inr}}</td></tr>
-            <tr><td>Net Working Capital Gap (CA - CL)</td><td class="num-col">₹{{tandon_assessment.working_capital_gap | inr}}</td><td class="num-col">₹{{tandon_assessment.working_capital_gap | inr}}</td></tr>
-            <tr><td>Minimum Promoter NWC Margin (25%)</td><td class="num-col">₹{{ (tandon_assessment.working_capital_gap * 0.25) | inr }}</td><td class="num-col">₹{{tandon_assessment.minimum_nwc_contribution | inr}}</td></tr>
-            <tr class="total-row"><td>Maximum Permissible Bank Finance (MPBF)</td><td class="num-col"><strong>₹{{tandon_assessment.mpbf_method_1 | inr}}</strong></td><td class="num-col"><strong>₹{{tandon_assessment.mpbf_method_2 | inr}}</strong></td></tr>
+            <tr><td>{{ report_i18n.tan_gross_ca | default("Gross Projected Current Assets (CA)") }}</td><td class="num-col">₹{{tandon_assessment.current_assets | inr}}</td><td class="num-col">₹{{tandon_assessment.current_assets | inr}}</td></tr>
+            <tr><td>{{ report_i18n.tan_less_cl | default("Less: Current Liabilities (CL)") }}</td><td class="num-col">₹{{tandon_assessment.current_liabilities | inr}}</td><td class="num-col">₹{{tandon_assessment.current_liabilities | inr}}</td></tr>
+            <tr><td>{{ report_i18n.tan_nwc | default("Net Working Capital Gap (CA - CL)") }}</td><td class="num-col">₹{{tandon_assessment.working_capital_gap | inr}}</td><td class="num-col">₹{{tandon_assessment.working_capital_gap | inr}}</td></tr>
+            <tr><td>{{ report_i18n.tan_min_promoter_margin | default("Minimum Promoter NWC Margin (25%)") }}</td><td class="num-col">₹{{ (tandon_assessment.working_capital_gap * 0.25) | inr }}</td><td class="num-col">₹{{tandon_assessment.minimum_nwc_contribution | inr}}</td></tr>
+            <tr class="total-row"><td>{{ report_i18n.tan_mpbf | default("Maximum Permissible Bank Finance (MPBF)") }}</td><td class="num-col"><strong>₹{{tandon_assessment.mpbf_method_1 | inr}}</strong></td><td class="num-col"><strong>₹{{tandon_assessment.mpbf_method_2 | inr}}</strong></td></tr>
             {% else %}
-            <tr><td>Gross Projected Current Assets (CA)</td><td class="num-col">₹{{ (total_cost * 0.45) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.45) | inr }}</td></tr>
-            <tr><td>Less: Current Liabilities (CL)</td><td class="num-col">₹{{ (total_cost * 0.12) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.12) | inr }}</td></tr>
-            <tr><td>Net Working Capital Gap (CA - CL)</td><td class="num-col">₹{{ working_capital | inr }}</td><td class="num-col">₹{{ working_capital | inr }}</td></tr>
-            <tr><td>Minimum Promoter NWC Margin (25%)</td><td class="num-col">₹{{ (working_capital * 0.25) | inr }}</td><td class="num-col">₹{{ (working_capital * 0.25) | inr }}</td></tr>
-            <tr class="total-row"><td>Maximum Permissible Bank Finance (MPBF)</td><td class="num-col"><strong>₹{{ (working_capital * 0.75) | inr }}</strong></td><td class="num-col"><strong>₹{{ (working_capital * 0.75) | inr }}</strong></td></tr>
+            <tr><td>{{ report_i18n.tan_gross_ca | default("Gross Projected Current Assets (CA)") }}</td><td class="num-col">₹{{ (total_cost * 0.45) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.45) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.tan_less_cl | default("Less: Current Liabilities (CL)") }}</td><td class="num-col">₹{{ (total_cost * 0.12) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.12) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.tan_nwc | default("Net Working Capital Gap (CA - CL)") }}</td><td class="num-col">₹{{ working_capital | inr }}</td><td class="num-col">₹{{ working_capital | inr }}</td></tr>
+            <tr><td>{{ report_i18n.tan_min_promoter_margin | default("Minimum Promoter NWC Margin (25%)") }}</td><td class="num-col">₹{{ (working_capital * 0.25) | inr }}</td><td class="num-col">₹{{ (working_capital * 0.25) | inr }}</td></tr>
+            <tr class="total-row"><td>{{ report_i18n.tan_mpbf | default("Maximum Permissible Bank Finance (MPBF)") }}</td><td class="num-col"><strong>₹{{ (working_capital * 0.75) | inr }}</strong></td><td class="num-col"><strong>₹{{ (working_capital * 0.75) | inr }}</strong></td></tr>
             {% endif %}
         </tbody>
     </table>
@@ -1066,9 +1070,15 @@
 <div class="section-container">
     <h2 class="section-header">{{ report_i18n.sec22_title | default("22. TECHNOLOGY COMMERCIALIZATION & READINESS LEVEL (TCRM) AUDIT") }}</h2>
     <div style="background: #F8FAFC; border: 1.5px solid #CBD5E1; padding: 15px; border-radius: 8px;">
+        {% if report_lang == 'kn' %}
+        <p>• <strong>ಒಟ್ಟು TCRM ಸನ್ನದ್ಧತೆ ಅಂಕ:</strong> {{ (tcrm_rating.tcrm_score if (tcrm_rating is defined and tcrm_rating) else "8.5 / 10") }}</p>
+        <p>• <strong>ತಂತ್ರಜ್ಞಾನ ಸನ್ನದ್ಧತೆಯ ಮಟ್ಟ (TRL):</strong> {{ (tcrm_rating.trl_level if (tcrm_rating is defined and tcrm_rating) else "TRL 9 (ವಾಣಿಜ್ಯ ಉತ್ಪಾದನೆ ಸಾಬೀತಾಗಿದೆ)") }}</p>
+        <p>• <strong>ವಾಣಿಜ್ಯೀಕರಣ ಸ್ಥಿತಿ:</strong> ಶೂನ್ಯ ಮೂಲಮಾದರಿ ಅಪಾಯದೊಂದಿಗೆ ಸಾಬೀತಾದ ಉತ್ಪಾದನಾ ಮಾರ್ಗ ತಂತ್ರಜ್ಞಾನ.</p>
+        {% else %}
         <p>• <strong>Overall TCRM Readiness Score:</strong> {{ (tcrm_rating.tcrm_score if (tcrm_rating is defined and tcrm_rating) else "8.5 / 10") }}</p>
         <p>• <strong>Technology Readiness Level:</strong> {{ (tcrm_rating.trl_level if (tcrm_rating is defined and tcrm_rating) else "TRL 9 (Commercial Production Proven)") }}</p>
         <p>• <strong>Commercialization Status:</strong> Proven production line technology with zero prototype risk.</p>
+        {% endif %}
     </div>
 </div>
 
@@ -1077,13 +1087,20 @@
     <h2 class="section-header">{{ report_i18n.sec23_title | default("23. ESG & ENVIRONMENTAL SUSTAINABILITY SCORECARD") }}</h2>
     <table class="dpr-table">
         <thead>
-            <tr><th>ESG Evaluation Pillar</th><th>Score / Rating</th><th>Key Sustainability Measures</th></tr>
+            <tr><th>{{ report_i18n.th_esg_dimension | default("ESG Evaluation Pillar") }}</th><th>{{ report_i18n.th_eval_rating | default("Score / Rating") }}</th><th>{{ report_i18n.th_key_measures | default("Key Sustainability Measures") }}</th></tr>
         </thead>
         <tbody>
+            {% if report_lang == 'kn' %}
+            <tr><td>ಪರಿಸರ ಅನುಸರಣೆ (Environmental)</td><td>{{esg_scorecard.environmental}}</td><td>ಶೂನ್ಯ ತ್ಯಾಜ್ಯ ನೀರು ಹೊರಸೂಸುವಿಕೆ, ಶಕ್ತಿ-ಸಮರ್ಥ ಎಲ್ಇಡಿ ಮತ್ತು ಸೌರ ವಿದ್ಯುತ್ ಬಳಕೆ.</td></tr>
+            <tr><td>ಸಾಮಾಜಿಕ ಪ್ರಭಾವ ಮತ್ತು ಕಲ್ಯಾಣ (Social)</td><td>{{esg_scorecard.social}}</td><td>ಸ್ಥಳೀಯ ಉದ್ಯೋಗ ಸೃಷ್ಟಿ ({{local_employment}} ಸಿಬ್ಬಂದಿ), ಮಹಿಳಾ ಸಬಲೀಕರಣ ({{women_employment}} ಸಿಬ್ಬಂದಿ).</td></tr>
+            <tr><td>ಕಾರ್ಪೊರೇಟ್ ಆಡಳಿತ (Governance)</td><td>{{esg_scorecard.governance}}</td><td>ಪಾರದರ್ಶಕ ಶಾಸನಬದ್ಧ ಸಲ್ಲಿಕೆಗಳು, ಜಿಎಸ್‌ಟಿ ಅನುಸರಣೆ, ಸ್ವತಂತ್ರ ಲೆಕ್ಕಪರಿಶೋಧನಾ ಸಮಿತಿ.</td></tr>
+            <tr class="total-row"><td>ಒಟ್ಟು ಇಎಸ್‌ಜಿ (ESG) ಅನುಸರಣಾ ಸ್ಥಿತಿ</td><td>-</td><td><strong>{{esg_scorecard.esg_overall_rating}}</strong></td></tr>
+            {% else %}
             <tr><td>Environmental Compliance</td><td>{{esg_scorecard.environmental}}</td><td>Zero effluent discharge, energy-efficient LED & solar power adoption.</td></tr>
             <tr><td>Social Impact & Welfare</td><td>{{esg_scorecard.social}}</td><td>Local employment generation ({{local_employment}} staff), women empowerment ({{women_employment}} staff).</td></tr>
             <tr><td>Corporate Governance</td><td>{{esg_scorecard.governance}}</td><td>Transparent statutory filings, GST compliance, independent audit committee.</td></tr>
             <tr class="total-row"><td>OVERALL ESG COMPLIANCE STATUS</td><td>-</td><td><strong>{{esg_scorecard.esg_overall_rating}}</strong></td></tr>
+            {% endif %}
         </tbody>
     </table>
 </div>
@@ -1096,21 +1113,37 @@
     </div>
     <table class="dpr-table" style="margin-top: 10px;">
         <thead>
-            <tr><th>Sensitivity Stress Scenario</th><th>Projected Average DSCR</th><th>NPV Rating</th><th>Bankability Status</th></tr>
+            <tr><th>{{ report_i18n.th_stress_scenario | default("Sensitivity Stress Scenario") }}</th><th>{{ report_i18n.th_proj_dscr | default("Projected Average DSCR") }}</th><th>{{ report_i18n.th_npv_impact | default("NPV Rating") }}</th><th>{{ report_i18n.th_viability_status | default("Bankability Status") }}</th></tr>
         </thead>
         <tbody>
             {% if sensitivity_matrix and sensitivity_matrix.cost_plus_10 is defined %}
+            {% if report_lang == 'kn' %}
+            <tr><td>ಮೂಲ ಕಾರ್ಯಾಚರಣೆ ಸನ್ನಿವೇಶ (Base Case)</td><td>{{sensitivity_matrix.base_dscr}}</td><td>{{sensitivity_matrix.base_npv}}</td><td><strong>ಬ್ಯಾಂಕೇಬಲ್</strong></td></tr>
+            <tr><td>ಸನ್ನಿವೇಶ A: ಕಚ್ಚಾ ಸಾಮಗ್ರಿ ವೆಚ್ಚ +10%</td><td>{{sensitivity_matrix.cost_plus_10.dscr}}</td><td>{{sensitivity_matrix.cost_plus_10.npv}}</td><td>{{sensitivity_matrix.cost_plus_10.status}}</td></tr>
+            <tr><td>ಸನ್ನಿವೇಶ B: ಕಚ್ಚಾ ಸಾಮಗ್ರಿ ವೆಚ್ಚ +20%</td><td>{{sensitivity_matrix.cost_plus_20.dscr}}</td><td>{{sensitivity_matrix.cost_plus_20.npv}}</td><td>{{sensitivity_matrix.cost_plus_20.status}}</td></tr>
+            <tr><td>ಸನ್ನಿವೇಶ C: ಮಾರಾಟ ಆದಾಯ -10%</td><td>{{sensitivity_matrix.sales_minus_10.dscr}}</td><td>{{sensitivity_matrix.sales_minus_10.npv}}</td><td>{{sensitivity_matrix.sales_minus_10.status}}</td></tr>
+            <tr><td>ಸನ್ನಿವೇಶ D: ಮಾರಾಟ ಆದಾಯ -20%</td><td>{{sensitivity_matrix.sales_minus_20.dscr}}</td><td>{{sensitivity_matrix.sales_minus_20.npv}}</td><td>{{sensitivity_matrix.sales_minus_20.status}}</td></tr>
+            {% else %}
             <tr><td>Base Case Operating Scenario</td><td>{{sensitivity_matrix.base_dscr}}</td><td>{{sensitivity_matrix.base_npv}}</td><td><strong>Bankable</strong></td></tr>
             <tr><td>Scenario A: Raw Material Cost +10%</td><td>{{sensitivity_matrix.cost_plus_10.dscr}}</td><td>{{sensitivity_matrix.cost_plus_10.npv}}</td><td>{{sensitivity_matrix.cost_plus_10.status}}</td></tr>
             <tr><td>Scenario B: Raw Material Cost +20%</td><td>{{sensitivity_matrix.cost_plus_20.dscr}}</td><td>{{sensitivity_matrix.cost_plus_20.npv}}</td><td>{{sensitivity_matrix.cost_plus_20.status}}</td></tr>
             <tr><td>Scenario C: Revenue / Sales Realization -10%</td><td>{{sensitivity_matrix.sales_minus_10.dscr}}</td><td>{{sensitivity_matrix.sales_minus_10.npv}}</td><td>{{sensitivity_matrix.sales_minus_10.status}}</td></tr>
             <tr><td>Scenario D: Revenue / Sales Realization -20%</td><td>{{sensitivity_matrix.sales_minus_20.dscr}}</td><td>{{sensitivity_matrix.sales_minus_20.npv}}</td><td>{{sensitivity_matrix.sales_minus_20.status}}</td></tr>
+            {% endif %}
+            {% else %}
+            {% if report_lang == 'kn' %}
+            <tr><td>ಮೂಲ ಕಾರ್ಯಾಚರಣೆ ಸನ್ನಿವೇಶ (Base Case)</td><td>1.95x</td><td>ಧನಾತ್ಮಕ (₹42.5 ಲಕ್ಷ)</td><td><strong>ಬ್ಯಾಂಕೇಬಲ್ ಮಾನದಂಡ</strong></td></tr>
+            <tr><td>ಸನ್ನಿವೇಶ A: ಕಚ್ಚಾ ಸಾಮಗ್ರಿ ವೆಚ್ಚ +10%</td><td>1.72x</td><td>ಧನಾತ್ಮಕ (₹34.2 ಲಕ್ಷ)</td><td>ಬ್ಯಾಂಕೇಬಲ್</td></tr>
+            <tr><td>ಸನ್ನಿವೇಶ B: ಕಚ್ಚಾ ಸಾಮಗ್ರಿ ವೆಚ್ಚ +20%</td><td>1.54x</td><td>ಧನಾತ್ಮಕ (₹26.1 ಲಕ್ಷ)</td><td>ಬ್ಯಾಂಕೇಬಲ್</td></tr>
+            <tr><td>ಸನ್ನಿವೇಶ C: ಮಾರಾಟ ಆದಾಯ -10%</td><td>1.61x</td><td>ಧನಾತ್ಮಕ (₹28.8 ಲಕ್ಷ)</td><td>ಬ್ಯಾಂಕೇಬಲ್</td></tr>
+            <tr><td>ಸನ್ನಿವೇಶ D: ಮಾರಾಟ ಆದಾಯ -20%</td><td>1.40x</td><td>ಧನಾತ್ಮಕ (₹15.4 ಲಕ್ಷ)</td><td>ಕಾರ್ಯಸಾಧ್ಯ / ಸುಸ್ಥಿರ</td></tr>
             {% else %}
             <tr><td>Base Case Operating Scenario</td><td>1.95x</td><td>Positive (₹42.5 Lakhs)</td><td><strong>Bankable Benchmark</strong></td></tr>
             <tr><td>Scenario A: Raw Material Cost +10%</td><td>1.72x</td><td>Positive (₹34.2 Lakhs)</td><td>Bankable</td></tr>
             <tr><td>Scenario B: Raw Material Cost +20%</td><td>1.54x</td><td>Positive (₹26.1 Lakhs)</td><td>Bankable</td></tr>
             <tr><td>Scenario C: Revenue / Sales Realization -10%</td><td>1.61x</td><td>Positive (₹28.8 Lakhs)</td><td>Bankable</td></tr>
             <tr><td>Scenario D: Revenue / Sales Realization -20%</td><td>1.40x</td><td>Positive (₹15.4 Lakhs)</td><td>Viable / Stress Tested</td></tr>
+            {% endif %}
             {% endif %}
         </tbody>
     </table>
@@ -1121,7 +1154,7 @@
     <h2 class="section-header">{{ report_i18n.sec25_title | default("25. SWOT ANALYSIS & COMPETITOR BENCHMARK MATRIX") }}</h2>
     <table class="dpr-table">
         <thead>
-            <tr><th style="width: 50%;">Strengths (S)</th><th style="width: 50%;">Weaknesses (W)</th></tr>
+            <tr><th style="width: 50%;">{{ report_i18n.swot_strengths | default("Strengths (S)") }}</th><th style="width: 50%;">{{ report_i18n.swot_weaknesses | default("Weaknesses (W)") }}</th></tr>
         </thead>
         <tbody>
             <tr><td>{{strengths}}</td><td>{{weaknesses}}</td></tr>
@@ -1129,7 +1162,7 @@
     </table>
     <table class="dpr-table" style="margin-top: 15px;">
         <thead>
-            <tr><th style="width: 50%;">Opportunities (O)</th><th style="width: 50%;">Threats (T)</th></tr>
+            <tr><th style="width: 50%;">{{ report_i18n.swot_opportunities | default("Opportunities (O)") }}</th><th style="width: 50%;">{{ report_i18n.swot_threats | default("Threats (T)") }}</th></tr>
         </thead>
         <tbody>
             <tr><td>{{opportunities}}</td><td>{{threats}}</td></tr>
@@ -1141,7 +1174,11 @@
 <div class="section-container">
     <h2 class="section-header">{{ report_i18n.sec26_title | default("26. APPLICABLE CENTRAL & STATE SUBSIDY SCHEMES") }}</h2>
     <div>
+        {% if report_lang == 'kn' %}
+        {{ (narratives.scheme_subsidy_narrative if (narratives is defined and narratives and narratives.scheme_subsidy_narrative) else '<p>ಪ್ರಸ್ತಾಪಿತ ಉತ್ಪಾದನಾ ಘಟಕವು ಕರ್ನಾಟಕ ಕೈಗಾರಿಕಾ ನೀತಿ 2020-2025 ಮತ್ತು ಕೇಂದ್ರ ಎಂಎಸ್‌ಎಂಇ ಅಭಿವೃದ್ಧಿ ಯೋಜನೆಗಳ (PMEGP / PMFME / CLCSS) ಅಡಿಯಲ್ಲಿ ಬಂಡವಾಳ ಹೂಡಿಕೆ ಸಬ್ಸಿಡಿಗೆ ಅರ್ಹವಾಗಿದೆ, ಇದು 25%–35% ಮಾರ್ಜಿನ್ ಹಣದ ನೆರವು ಮತ್ತು ವಿದ್ಯುತ್ ಶುಲ್ಕ ರಿಯಾಯಿತಿಗಳನ್ನು ಒದಗಿಸುತ್ತದೆ.</p>') | safe }}
+        {% else %}
         {{ (narratives.scheme_subsidy_narrative if (narratives is defined and narratives and narratives.scheme_subsidy_narrative) else '<p>The proposed manufacturing unit qualifies for capital investment subsidies under the Karnataka Industrial Policy 2020-2025 and Central MSME Development schemes (PMEGP / PMFME / CLCSS), providing up to 25%–35% margin money support and power tariff concessions.</p>') | safe }}
+        {% endif %}
     </div>
 </div>
 
@@ -1149,7 +1186,11 @@
 <div class="section-container">
     <h2 class="section-header">{{ report_i18n.sec27_title | default("27. SITE INFRASTRUCTURE, POWER GRID & UTILITIES SPECIFICATIONS") }}</h2>
     <div>
+        {% if report_lang == 'kn' %}
+        {{ (narratives.land_shed_infrastructure if (narratives is defined and narratives and narratives.land_shed_infrastructure) else '<p>ಕಾರ್ಖಾನೆಯ ಶೆಡ್ 3-ಹಂತದ ಹೈ-ಟೆನ್ಷನ್ ವಿದ್ಯುತ್ ಗ್ರಿಡ್ ಸಂಪರ್ಕ, ಮೀಸಲಾದ ಕೈಗಾರಿಕಾ ನೀರಿನ ಕೊಳವೆಗಳು, ಭಾರಿ ಯಂತ್ರೋಪಕರಣಗಳ ನೆಲಹಾಸು ಅಡಿಪಾಯ ಮತ್ತು ಧೂಳು-ಮುಕ್ತ ಎಪಾಕ್ಸಿ ಫ್ಲೋರಿಂಗ್ ಹೊಂದಿರುವ ಸುಸಜ್ಜಿತ ಕೈಗಾರಿಕಾ ಪ್ರದೇಶದಲ್ಲಿದೆ.</p>') | safe }}
+        {% else %}
         {{ (narratives.land_shed_infrastructure if (narratives is defined and narratives and narratives.land_shed_infrastructure) else '<p>The factory shed occupies a built-up industrial area equipped with 3-phase high-tension power grid feeds, dedicated industrial water pipelines, heavy machinery floor loading foundations, and anti-static epoxy shop floor finishing.</p>') | safe }}
+        {% endif %}
     </div>
 </div>
 
@@ -1157,7 +1198,11 @@
 <div class="section-container">
     <h2 class="section-header">{{ report_i18n.sec28_title | default("28. MARKETING, BRANDING & DISTRIBUTION CHANNEL STRATEGY") }}</h2>
     <div>
+        {% if report_lang == 'kn' %}
+        {{ (narratives.marketing_distribution_narrative if (narratives is defined and narratives and narratives.marketing_distribution_narrative) else '<p>ಉದ್ಯಮವು ನೇರ ಟೈರ್-1 OEM ವಾರ್ಷಿಕ ಪೂರೈಕೆ ಒಪ್ಪಂದಗಳು, ಸರ್ಕಾರಿ ಇ-ಮಾರ್ಕೆಟ್‌ಪ್ಲೇಸ್ (GeM) ಮತ್ತು ಇಂಡಿಯಾಮಾರ್ತ್ ಪೋರ್ಟಲ್‌ಗಳಲ್ಲಿ ಡಿಜಿಟಲ್ ವ್ಯಾಪಾರ ನೋಂದಣಿ, ISO-ಪ್ರಮಾಣೀಕೃತ ತಾಂತ್ರಿಕ ಮಾರಾಟ ಮತ್ತು ಸ್ಥಳೀಯ ತಾಂತ್ರಿಕ ಬೆಂಬಲವನ್ನು ಸಂಯೋಜಿಸುವ ಬಹು-ಚಾನೆಲ್ B2B ಮಾರುಕಟ್ಟೆ ಕಾರ್ಯತಂತ್ರವನ್ನು ಕಾರ್ಯಗತಗೊಳಿಸುತ್ತದೆ.</p>') | safe }}
+        {% else %}
         {{ (narratives.marketing_distribution_narrative if (narratives is defined and narratives and narratives.marketing_distribution_narrative) else '<p>The enterprise executes a multi-channel B2B marketing strategy combining direct tier-1 OEM annual supply contracts, digital trade registration on Government e-Marketplace (GeM) and IndiaMART portals, ISO-certified technical sales expos, and localized technical support.</p>') | safe }}
+        {% endif %}
     </div>
 </div>
 
@@ -1165,17 +1210,21 @@
 <div class="section-container">
     <h2 class="section-header">{{ report_i18n.sec29_title | default("29. STATUTORY COMPLIANCES, LICENSES & APPROVALS CHECKLIST") }}</h2>
     <div>
+        {% if report_lang == 'kn' %}
+        {{ (narratives.statutory_compliance_narrative if (narratives is defined and narratives and narratives.statutory_compliance_narrative) else '<p>ಉದ್ಯಮವು ರಾಷ್ಟ್ರೀಯ ಮತ್ತು ರಾಜ್ಯ ನಿಯಂತ್ರಕ ಮಂಡಳಿಗಳ ಎಲ್ಲಾ ಶಾಸನಬದ್ಧ ನಿಯಮಗಳನ್ನು ಸಂಪೂರ್ಣವಾಗಿ ಪಾಲಿಸುತ್ತದೆ. ಅಗತ್ಯ ಅನುಮತಿಗಳು, ಪರವಾನಗಿಗಳು ಮತ್ತು ನೋಂದಣಿಗಳನ್ನು ಕೆಳಗೆ ನೀಡಲಾದಂತೆ ಪಡೆಯಲಾಗಿದೆ ಅಥವಾ ಅರ್ಜಿ ಸಲ್ಲಿಸಲಾಗಿದೆ:</p>') | safe }}
+        {% else %}
         {{ (narratives.statutory_compliance_narrative if (narratives is defined and narratives and narratives.statutory_compliance_narrative) else '<p>The enterprise maintains full statutory compliance across national and state regulatory bodies. Mandatory clearances, licenses, and registrations have been secured or filed as detailed below:</p>') | safe }}
+        {% endif %}
     </div>
     <table class="dpr-table" style="margin-top: 10px;">
         <thead>
-            <tr><th>Statutory Registration / Approval</th><th>Issuing Authority</th><th>Compliance Status</th></tr>
+            <tr><th>{{ report_i18n.th_stat_reg | default("Statutory Registration / Approval") }}</th><th>{{ report_i18n.th_issuing_authority | default("Issuing Authority") }}</th><th>{{ report_i18n.th_compliance_status | default("Compliance Status") }}</th></tr>
         </thead>
         <tbody>
-            <tr><td>GST Registration</td><td>Commercial Tax Department</td><td>Registered ({{gst_no}})</td></tr>
-            <tr><td>Udyam MSME Registration</td><td>Ministry of MSME</td><td>Registered ({{udyam_no}})</td></tr>
-            <tr><td>Consent to Establish (CTE / CTO)</td><td>State Pollution Control Board</td><td>Applied / Granted</td></tr>
-            <tr><td>Trade License / Factory License</td><td>Local Municipal Corporation</td><td>In Progress / Active</td></tr>
+            <tr><td>{{ report_i18n.stat_gst | default("GST Registration") }}</td><td>{{ report_i18n.stat_tax_dept | default("Commercial Tax Department") }}</td><td>{{ report_i18n.stat_registered | default("Registered") }} ({{gst_no}})</td></tr>
+            <tr><td>{{ report_i18n.stat_udyam | default("Udyam MSME Registration") }}</td><td>{{ report_i18n.stat_msme_min | default("Ministry of MSME") }}</td><td>{{ report_i18n.stat_registered | default("Registered") }} ({{udyam_no}})</td></tr>
+            <tr><td>{{ report_i18n.stat_pcb | default("Consent to Establish (CTE / CTO)") }}</td><td>{{ report_i18n.stat_pcb_board | default("State Pollution Control Board") }}</td><td>{{ report_i18n.stat_applied | default("Applied / Granted") }}</td></tr>
+            <tr><td>{{ report_i18n.stat_trade | default("Trade License / Factory License") }}</td><td>{{ report_i18n.stat_munc | default("Local Municipal Corporation") }}</td><td>{{ report_i18n.stat_active | default("In Progress / Active") }}</td></tr>
         </tbody>
     </table>
 </div>
@@ -1184,7 +1233,11 @@
 <div class="section-container">
     <h2 class="section-header">{{ report_i18n.sec30_title | default("30. BANK LOAN RECOMMENDATION & CONCLUSION") }}</h2>
     <div>
+        {% if report_lang == 'kn' %}
+        {{ (narratives.conclusion_narrative if (narratives is defined and narratives and narratives.conclusion_narrative) else '<p>ಕೊನೆಯದಾಗಿ, ಪ್ರಸ್ತಾಪಿತ ಯೋಜನೆಯು ಅಸಾಧಾರಣ ತಾಂತ್ರಿಕ ಕಾರ್ಯಸಾಧ್ಯತೆ, ದೃಢವಾದ ಮಾರುಕಟ್ಟೆ ಬೇಡಿಕೆ, ಬಲವಾದ ಸಾಲ ಮರುಪಾವತಿ ಸಾಮರ್ಥ್ಯ ಮತ್ತು ಉನ್ನತ ಪ್ರವರ್ತಕರ ಬದ್ಧತೆಯನ್ನು ಪ್ರದರ್ಶಿಸುತ್ತದೆ. ₹' + (bank_loan | inr) + ' ಗಳ ಅವಧಿ ಸಾಲವನ್ನು ತಕ್ಷಣವೇ ಮಂಜೂರು ಮಾಡಲು ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>') | safe }}
+        {% else %}
         {{ (narratives.conclusion_narrative if (narratives is defined and narratives and narratives.conclusion_narrative) else '<p>In conclusion, the proposed project exhibits exceptional technical feasibility, robust market demand, strong debt service coverage, and high promoter commitment. Immediate term loan sanction of ₹' + (bank_loan | inr) + ' is strongly recommended.</p>') | safe }}
+        {% endif %}
     </div>
     <h3 class="subsection-header" style="margin-top: 15px;">{{ report_i18n.sched_sub_heading | default("FINANCIAL ANNEXURES & DETAILED SCHEDULE WORKSHEETS") }}</h3>
     <p>{{ report_i18n.sched_sub_desc | default("Below are the 10 bankable financial schedules supporting project appraisal, credit rating, and term loan sanction.") }}</p>
@@ -1194,16 +1247,16 @@
 <div class="section-container">
     <h3 class="subsection-header">{{ report_i18n.sched1_title | default("ANNEXURE SCHEDULE 1: DETAILED COST OF PROJECT & CAPITAL OUTLAY") }}</h3>
     <table class="dpr-table">
-        <thead><tr><th>Component</th><th class="num-col">Estimated Outlay (₹)</th><th class="num-col">% Share</th></tr></thead>
+        <thead><tr><th>{{ report_i18n.th_component | default("Component") }}</th><th class="num-col">{{ report_i18n.th_estimated_outlay | default("Estimated Outlay (₹)") }}</th><th class="num-col">{{ report_i18n.th_pct_share | default("% Share") }}</th></tr></thead>
         <tbody>
-            <tr><td>Land & Site Development</td><td class="num-col">₹{{land_cost | inr}}</td><td class="num-col">{{ (((land_cost / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
-            <tr><td>Civil Building & Factory Shed</td><td class="num-col">₹{{building_cost | inr}}</td><td class="num-col">{{ (((building_cost / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
-            <tr><td>Plant, Machinery & Equipment</td><td class="num-col">₹{{machinery_total | inr}}</td><td class="num-col">{{ (((machinery_total / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
-            <tr><td>Electrification & Power Setup</td><td class="num-col">₹{{electrification_cost | default(600000) | inr}}</td><td class="num-col">{{ ((((electrification_cost | default(600000)) / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
-            <tr><td>Furniture, Fixtures & IT Setup</td><td class="num-col">₹{{furniture_cost | default(400000) | inr}}</td><td class="num-col">{{ ((((furniture_cost | default(400000)) / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
-            <tr><td>Working Capital Margin (NWC)</td><td class="num-col">₹{{working_capital | inr}}</td><td class="num-col">{{ (((working_capital / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
-            <tr><td>Pre-operative & Contingencies</td><td class="num-col">₹{{contingency | default(other_cost or 500000) | inr}}</td><td class="num-col">{{ ((( (contingency | default(other_cost or 500000)) / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
-            <tr class="total-row"><td>TOTAL PROJECT CAPITAL OUTLAY</td><td class="num-col"><strong>₹{{total_cost | inr}}</strong></td><td class="num-col"><strong>100.0%</strong></td></tr>
+            <tr><td>{{ report_i18n.capex_land | default("Land & Site Development") }}</td><td class="num-col">₹{{land_cost | inr}}</td><td class="num-col">{{ (((land_cost / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>{{ report_i18n.capex_building | default("Civil Building & Factory Shed") }}</td><td class="num-col">₹{{building_cost | inr}}</td><td class="num-col">{{ (((building_cost / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>{{ report_i18n.capex_machinery | default("Plant, Machinery & Equipment") }}</td><td class="num-col">₹{{machinery_total | inr}}</td><td class="num-col">{{ (((machinery_total / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>{{ report_i18n.capex_electrification | default("Electrification & Power Setup") }}</td><td class="num-col">₹{{electrification_cost | default(600000) | inr}}</td><td class="num-col">{{ ((((electrification_cost | default(600000)) / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>{{ report_i18n.capex_furniture | default("Furniture, Fixtures & IT Setup") }}</td><td class="num-col">₹{{furniture_cost | default(400000) | inr}}</td><td class="num-col">{{ ((((furniture_cost | default(400000)) / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>{{ report_i18n.capex_working_capital | default("Working Capital Margin (NWC)") }}</td><td class="num-col">₹{{working_capital | inr}}</td><td class="num-col">{{ (((working_capital / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr><td>{{ report_i18n.capex_preoperative | default("Pre-operative & Contingencies") }}</td><td class="num-col">₹{{contingency | default(other_cost or 500000) | inr}}</td><td class="num-col">{{ ((( (contingency | default(other_cost or 500000)) / total_cost) * 100) | round(1)) if total_cost > 0 else 0 }}%</td></tr>
+            <tr class="total-row"><td>{{ report_i18n.sch_total_capex | default("TOTAL PROJECT CAPITAL OUTLAY") }}</td><td class="num-col"><strong>₹{{total_cost | inr}}</strong></td><td class="num-col"><strong>100.0%</strong></td></tr>
         </tbody>
     </table>
 </div>
@@ -1212,12 +1265,12 @@
 <div class="section-container">
     <h3 class="subsection-header">{{ report_i18n.sched2_title | default("ANNEXURE SCHEDULE 2: MEANS OF FINANCE & PROMOTER MARGIN") }}</h3>
     <table class="dpr-table">
-        <thead><tr><th>Funding Source</th><th class="num-col">Amount (₹)</th><th class="num-col">% Share</th></tr></thead>
+        <thead><tr><th>{{ report_i18n.th_funding_source | default("Funding Source") }}</th><th class="num-col">{{ report_i18n.th_amount | default("Amount (₹)") }}</th><th class="num-col">{{ report_i18n.th_pct_share | default("% Share") }}</th></tr></thead>
         <tbody>
-            <tr><td>Promoter Equity Capital</td><td class="num-col">₹{{promoter_contribution | inr}}</td><td class="num-col">{{ (((promoter_contribution / total_cost) * 100) | round(1)) if total_cost > 0 else 30.0 }}%</td></tr>
-            <tr><td>Term Loan / Debt Funding</td><td class="num-col">₹{{bank_loan | inr}}</td><td class="num-col">{{ (((bank_loan / total_cost) * 100) | round(1)) if total_cost > 0 else 70.0 }}%</td></tr>
-            <tr><td>Government Capital Subsidy</td><td class="num-col">₹{{subsidy | inr}}</td><td class="num-col">{{ (((subsidy / total_cost) * 100) | round(1)) if total_cost > 0 else 0.0 }}%</td></tr>
-            <tr class="total-row"><td>TOTAL MEANS OF FINANCE</td><td class="num-col"><strong>₹{{total_funds | default(total_cost) | inr}}</strong></td><td class="num-col"><strong>100.0%</strong></td></tr>
+            <tr><td>{{ report_i18n.fin_promoter_equity | default("Promoter Equity Capital") }}</td><td class="num-col">₹{{promoter_contribution | inr}}</td><td class="num-col">{{ (((promoter_contribution / total_cost) * 100) | round(1)) if total_cost > 0 else 30.0 }}%</td></tr>
+            <tr><td>{{ report_i18n.fin_term_loan | default("Term Loan / Debt Funding") }}</td><td class="num-col">₹{{bank_loan | inr}}</td><td class="num-col">{{ (((bank_loan / total_cost) * 100) | round(1)) if total_cost > 0 else 70.0 }}%</td></tr>
+            <tr><td>{{ report_i18n.fin_subsidy | default("Government Capital Subsidy") }}</td><td class="num-col">₹{{subsidy | inr}}</td><td class="num-col">{{ (((subsidy / total_cost) * 100) | round(1)) if total_cost > 0 else 0.0 }}%</td></tr>
+            <tr class="total-row"><td>{{ report_i18n.sch_total_means | default("TOTAL MEANS OF FINANCE") }}</td><td class="num-col"><strong>₹{{total_funds | default(total_cost) | inr}}</strong></td><td class="num-col"><strong>100.0%</strong></td></tr>
         </tbody>
     </table>
 </div>
@@ -1226,14 +1279,14 @@
 <div class="section-container">
     <h3 class="subsection-header">{{ report_i18n.sched3_title | default("ANNEXURE SCHEDULE 3: PLANT & MACHINERY PROCUREMENT BREAKDOWN") }}</h3>
     <table class="dpr-table">
-        <thead><tr><th>Item Description</th><th class="num-col">Qty</th><th class="num-col">Unit Rate (₹)</th><th class="num-col">Total Cost (₹)</th></tr></thead>
+        <thead><tr><th>{{ report_i18n.th_machine_desc | default("Item Description") }}</th><th class="num-col">{{ report_i18n.th_qty | default("Qty") }}</th><th class="num-col">{{ report_i18n.th_unit_price | default("Unit Rate (₹)") }}</th><th class="num-col">{{ report_i18n.th_total_cost | default("Total Cost (₹)") }}</th></tr></thead>
         <tbody>
             {% if machinery %}
             {% for item in machinery %}
             <tr><td>{{item.name}}</td><td class="num-col">{{item.quantity}}</td><td class="num-col">₹{{item.price | inr}}</td><td class="num-col">₹{{item.total | inr}}</td></tr>
             {% endfor %}
             {% endif %}
-            <tr class="total-row"><td>TOTAL MACHINERY INVESTMENT</td><td class="num-col">-</td><td class="num-col">-</td><td class="num-col"><strong>₹{{machinery_total | inr}}</strong></td></tr>
+            <tr class="total-row"><td>{{ report_i18n.sch_total_machinery | default("TOTAL MACHINERY INVESTMENT") }}</td><td class="num-col">-</td><td class="num-col">-</td><td class="num-col"><strong>₹{{machinery_total | inr}}</strong></td></tr>
         </tbody>
     </table>
 </div>
@@ -1242,13 +1295,13 @@
 <div class="section-container">
     <h3 class="subsection-header">{{ report_i18n.sched4_title | default("ANNEXURE SCHEDULE 4: ORGANIZATIONAL MANPOWER WAGES & SALARY") }}</h3>
     <table class="dpr-table">
-        <thead><tr><th>Category</th><th class="num-col">Count</th><th class="num-col">Monthly Rate (₹)</th><th class="num-col">Monthly Total (₹)</th><th class="num-col">Annual Total (₹)</th></tr></thead>
+        <thead><tr><th>{{ report_i18n.th_staff_category | default("Category") }}</th><th class="num-col">{{ report_i18n.th_no_personnel | default("Count") }}</th><th class="num-col">{{ report_i18n.th_monthly_salary_person | default("Monthly Rate (₹)") }}</th><th class="num-col">{{ report_i18n.th_monthly_total | default("Monthly Total (₹)") }}</th><th class="num-col">{{ report_i18n.th_annual_total | default("Annual Total (₹)") }}</th></tr></thead>
         <tbody>
-            <tr><td>Management</td><td class="num-col">{{mgmt_count}}</td><td class="num-col">₹{{mgmt_salary | inr}}</td><td class="num-col">₹{{hr_summary.mgmt_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.mgmt_cost * 12) | inr }}</td></tr>
-            <tr><td>Supervisors</td><td class="num-col">{{sup_count}}</td><td class="num-col">₹{{sup_salary | inr}}</td><td class="num-col">₹{{hr_summary.sup_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.sup_cost * 12) | inr }}</td></tr>
-            <tr><td>Skilled Staff</td><td class="num-col">{{skill_count}}</td><td class="num-col">₹{{skill_salary | inr}}</td><td class="num-col">₹{{hr_summary.skill_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.skill_cost * 12) | inr }}</td></tr>
-            <tr><td>Unskilled Staff</td><td class="num-col">{{unskill_count}}</td><td class="num-col">₹{{unskill_salary | inr}}</td><td class="num-col">₹{{hr_summary.unskill_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.unskill_cost * 12) | inr }}</td></tr>
-            <tr><td>Admin Staff</td><td class="num-col">{{admin_count}}</td><td class="num-col">₹{{admin_salary | inr}}</td><td class="num-col">₹{{hr_summary.admin_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.admin_cost * 12) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.mp_management | default("Management") }}</td><td class="num-col">{{mgmt_count}}</td><td class="num-col">₹{{mgmt_salary | inr}}</td><td class="num-col">₹{{hr_summary.mgmt_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.mgmt_cost * 12) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.mp_supervisors | default("Supervisors") }}</td><td class="num-col">{{sup_count}}</td><td class="num-col">₹{{sup_salary | inr}}</td><td class="num-col">₹{{hr_summary.sup_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.sup_cost * 12) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.mp_skilled | default("Skilled Staff") }}</td><td class="num-col">{{skill_count}}</td><td class="num-col">₹{{skill_salary | inr}}</td><td class="num-col">₹{{hr_summary.skill_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.skill_cost * 12) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.mp_unskilled | default("Unskilled Staff") }}</td><td class="num-col">{{unskill_count}}</td><td class="num-col">₹{{unskill_salary | inr}}</td><td class="num-col">₹{{hr_summary.unskill_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.unskill_cost * 12) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.mp_admin | default("Admin Staff") }}</td><td class="num-col">{{admin_count}}</td><td class="num-col">₹{{admin_salary | inr}}</td><td class="num-col">₹{{hr_summary.admin_cost | inr}}</td><td class="num-col">₹{{ (hr_summary.admin_cost * 12) | inr }}</td></tr>
         </tbody>
     </table>
 </div>
@@ -1257,7 +1310,7 @@
 <div class="section-container">
     <h3 class="subsection-header">{{ report_i18n.sched5_title | default("ANNEXURE SCHEDULE 5: RAW MATERIAL BOQ SCHEDULE") }}</h3>
     <table class="dpr-table">
-        <thead><tr><th>Raw Material Component</th><th>Unit</th><th class="num-col">Annual Requirement</th><th class="num-col">Unit Rate (₹)</th><th class="num-col">Total Outlay (₹)</th></tr></thead>
+        <thead><tr><th>{{ report_i18n.th_raw_item | default("Raw Material Component") }}</th><th>{{ report_i18n.th_unit | default("Unit") }}</th><th class="num-col">{{ report_i18n.th_annual_qty | default("Annual Requirement") }}</th><th class="num-col">{{ report_i18n.th_unit_rate | default("Unit Rate (₹)") }}</th><th class="num-col">{{ report_i18n.th_total_cost | default("Total Outlay (₹)") }}</th></tr></thead>
         <tbody>
             {% if boq_raw_materials %}
             {% for b in boq_raw_materials %}
@@ -1272,11 +1325,11 @@
 <div class="section-container">
     <h3 class="subsection-header">{{ report_i18n.sched6_title | default("ANNEXURE SCHEDULE 6: 10-YEAR PROJECTED PROFITABILITY STATEMENT") }}</h3>
     <table class="dpr-table">
-        <thead><tr><th>Yr</th><th class="num-col">Capacity %</th><th class="num-col">Revenue (₹)</th><th class="num-col">Opex (₹)</th><th class="num-col">PBDIT (₹)</th><th class="num-col">PAT (₹)</th></tr></thead>
+        <thead><tr><th>{{ report_i18n.th_yr | default("Yr") }}</th><th class="num-col">{{ report_i18n.cf_cap_util | default("Capacity %") }}</th><th class="num-col">{{ report_i18n.th_revenue | default("Revenue (₹)") }}</th><th class="num-col">{{ report_i18n.th_operating_costs | default("Opex (₹)") }}</th><th class="num-col">{{ report_i18n.th_pbdit | default("PBDIT (₹)") }}</th><th class="num-col">{{ report_i18n.th_pat | default("PAT (₹)") }}</th></tr></thead>
         <tbody>
             {% if projections_10yr %}
             {% for p in projections_10yr %}
-            <tr><td>Year {{p.year}}</td><td class="num-col">{{p.capacity_utilization}}%</td><td class="num-col">₹{{p.revenue | inr}}</td><td class="num-col">₹{{p.opex | inr}}</td><td class="num-col">₹{{p.pbdit | inr}}</td><td class="num-col"><strong>₹{{p.pat | inr}}</strong></td></tr>
+            <tr><td>{% if report_lang == 'kn' %}ವರ್ಷ {{p.year}}{% else %}Year {{p.year}}{% endif %}</td><td class="num-col">{{p.capacity_utilization}}%</td><td class="num-col">₹{{p.revenue | inr}}</td><td class="num-col">₹{{p.opex | inr}}</td><td class="num-col">₹{{p.pbdit | inr}}</td><td class="num-col"><strong>₹{{p.pat | inr}}</strong></td></tr>
             {% endfor %}
             {% endif %}
         </tbody>
@@ -1287,21 +1340,21 @@
 <div class="section-container">
     <h3 class="subsection-header">{{ report_i18n.sched7_title | default("ANNEXURE SCHEDULE 7: 10-YEAR PROJECTED BALANCE SHEET STATEMENT") }}</h3>
     <table class="dpr-table">
-        <thead><tr><th>Liabilities / Assets</th><th class="num-col">Year 1 (₹)</th><th class="num-col">Year 3 (₹)</th><th class="num-col">Year 5 (₹)</th><th class="num-col">Year 10 (₹)</th></tr></thead>
+        <thead><tr><th>{{ report_i18n.th_liabilities_assets | default("Liabilities / Assets") }}</th><th class="num-col">{{ report_i18n.th_y1 | default("Year 1") }} (₹)</th><th class="num-col">{{ report_i18n.th_y3 | default("Year 3") }} (₹)</th><th class="num-col">{{ report_i18n.th_y5 | default("Year 5") }} (₹)</th><th class="num-col">{% if report_lang == 'kn' %}ವರ್ಷ 10{% else %}Year 10{% endif %} (₹)</th></tr></thead>
         <tbody>
-            <tr><td>Promoter Equity Capital</td><td class="num-col">₹{{promoter_contribution | inr}}</td><td class="num-col">₹{{promoter_contribution | inr}}</td><td class="num-col">₹{{promoter_contribution | inr}}</td><td class="num-col">₹{{promoter_contribution | inr}}</td></tr>
+            <tr><td>{{ report_i18n.fin_promoter_equity | default("Promoter Equity Capital") }}</td><td class="num-col">₹{{promoter_contribution | inr}}</td><td class="num-col">₹{{promoter_contribution | inr}}</td><td class="num-col">₹{{promoter_contribution | inr}}</td><td class="num-col">₹{{promoter_contribution | inr}}</td></tr>
             {% if projections_10yr and projections_10yr|length >= 10 %}
             <tr>
-                <td>Reserves & Surplus (PAT)</td>
+                <td>{{ report_i18n.sch_reserves_surplus | default("Reserves & Surplus (PAT)") }}</td>
                 <td class="num-col">₹{{ projections_10yr[0].pat | inr }}</td>
                 <td class="num-col">₹{{ (projections_10yr[0].pat + projections_10yr[1].pat + projections_10yr[2].pat) | inr }}</td>
                 <td class="num-col">₹{{ (projections_10yr[0].pat + projections_10yr[1].pat + projections_10yr[2].pat + projections_10yr[3].pat + projections_10yr[4].pat) | inr }}</td>
                 <td class="num-col">₹{{ (projections_10yr[0].pat + projections_10yr[1].pat + projections_10yr[2].pat + projections_10yr[3].pat + projections_10yr[4].pat + projections_10yr[5].pat + projections_10yr[6].pat + projections_10yr[7].pat + projections_10yr[8].pat + projections_10yr[9].pat) | inr }}</td>
             </tr>
             {% else %}
-            <tr><td>Reserves & Surplus (PAT)</td><td class="num-col">₹{{ (total_cost * 0.14) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.45) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.90) | inr }}</td><td class="num-col">₹{{ (total_cost * 2.20) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.sch_reserves_surplus | default("Reserves & Surplus (PAT)") }}</td><td class="num-col">₹{{ (total_cost * 0.14) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.45) | inr }}</td><td class="num-col">₹{{ (total_cost * 0.90) | inr }}</td><td class="num-col">₹{{ (total_cost * 2.20) | inr }}</td></tr>
             {% endif %}
-            <tr><td>Term Loan Outstanding</td><td class="num-col">₹{{ (bank_loan * 0.80) | inr }}</td><td class="num-col">₹{{ (bank_loan * 0.40) | inr }}</td><td class="num-col">₹0</td><td class="num-col">₹0</td></tr>
+            <tr><td>{{ report_i18n.sch_term_loan_out | default("Term Loan Outstanding") }}</td><td class="num-col">₹{{ (bank_loan * 0.80) | inr }}</td><td class="num-col">₹{{ (bank_loan * 0.40) | inr }}</td><td class="num-col">₹0</td><td class="num-col">₹0</td></tr>
         </tbody>
     </table>
 </div>
@@ -1310,11 +1363,11 @@
 <div class="section-container">
     <h3 class="subsection-header">{{ report_i18n.sched8_title | default("ANNEXURE SCHEDULE 8: 36-MONTH MONTHLY CASH FLOW WORKSHEET") }}</h3>
     <table class="dpr-table" style="font-size: 8pt;">
-        <thead><tr><th>Month</th><th class="num-col">Revenue (₹)</th><th class="num-col">Opex (₹)</th><th class="num-col">Interest (₹)</th><th class="num-col">Principal (₹)</th><th class="num-col">Net Cash (₹)</th></tr></thead>
+        <thead><tr><th>{{ report_i18n.th_mth | default("Month") }}</th><th class="num-col">{{ report_i18n.th_revenue | default("Revenue (₹)") }}</th><th class="num-col">{{ report_i18n.th_operating_costs | default("Opex (₹)") }}</th><th class="num-col">{{ report_i18n.th_interest | default("Interest (₹)") }}</th><th class="num-col">{{ report_i18n.th_principal | default("Principal (₹)") }}</th><th class="num-col">{{ report_i18n.th_net_cash | default("Net Cash (₹)") }}</th></tr></thead>
         <tbody>
             {% if monthly_cashflow_36m %}
             {% for m in monthly_cashflow_36m %}
-            <tr><td>Month {{m.month}}</td><td class="num-col">₹{{m.revenue | inr}}</td><td class="num-col">₹{{m.opex | inr}}</td><td class="num-col">₹{{m.interest | inr}}</td><td class="num-col">₹{{m.principal | inr}}</td><td class="num-col"><strong>₹{{m.net_cash_flow | inr}}</strong></td></tr>
+            <tr><td>{% if report_lang == 'kn' %}ತಿಂಗಳು {{m.month}}{% else %}Month {{m.month}}{% endif %}</td><td class="num-col">₹{{m.revenue | inr}}</td><td class="num-col">₹{{m.opex | inr}}</td><td class="num-col">₹{{m.interest | inr}}</td><td class="num-col">₹{{m.principal | inr}}</td><td class="num-col"><strong>₹{{m.net_cash_flow | inr}}</strong></td></tr>
             {% endfor %}
             {% endif %}
         </tbody>
@@ -1325,11 +1378,11 @@
 <div class="section-container">
     <h3 class="subsection-header">{{ report_i18n.sched9_title | default("ANNEXURE SCHEDULE 9: DEBT SERVICE COVERAGE RATIO (DSCR) WORKSHEET") }}</h3>
     <table class="dpr-table">
-        <thead><tr><th>Year</th><th class="num-col">PAT (₹)</th><th class="num-col">Interest (₹)</th><th class="num-col">Depreciation (₹)</th><th class="num-col">Debt Service (₹)</th><th class="num-col">DSCR</th></tr></thead>
+        <thead><tr><th>{{ report_i18n.th_year | default("Year") }}</th><th class="num-col">{{ report_i18n.th_pat | default("PAT (₹)") }}</th><th class="num-col">{{ report_i18n.th_interest | default("Interest (₹)") }}</th><th class="num-col">{{ report_i18n.th_depr | default("Depreciation (₹)") }}</th><th class="num-col">{{ report_i18n.th_debt_service | default("Debt Service (₹)") }}</th><th class="num-col">{{ report_i18n.th_dscr | default("DSCR") }}</th></tr></thead>
         <tbody>
             {% if projections %}
             {% for p in projections %}
-            <tr><td>Year {{p.year}}</td><td class="num-col">₹{{p.pat | inr}}</td><td class="num-col">₹{{p.interest | inr}}</td><td class="num-col">₹{{p.depreciation | inr}}</td><td class="num-col">₹{{ (p.interest + (bank_loan / 5.0)) | inr }}</td><td class="num-col"><strong>{{p.dscr}}x</strong></td></tr>
+            <tr><td>{% if report_lang == 'kn' %}ವರ್ಷ {{p.year}}{% else %}Year {{p.year}}{% endif %}</td><td class="num-col">₹{{p.pat | inr}}</td><td class="num-col">₹{{p.interest | inr}}</td><td class="num-col">₹{{p.depreciation | inr}}</td><td class="num-col">₹{{ (p.interest + (bank_loan / 5.0)) | inr }}</td><td class="num-col"><strong>{{p.dscr}}x</strong></td></tr>
             {% endfor %}
             {% endif %}
         </tbody>
@@ -1340,10 +1393,10 @@
 <div class="section-container">
     <h3 class="subsection-header">{{ report_i18n.sched10_title | default("ANNEXURE SCHEDULE 10: INCOME TAX ACT DEPRECIATION WORKSHEET") }}</h3>
     <table class="dpr-table">
-        <thead><tr><th>Asset Block</th><th class="num-col">Rate</th><th class="num-col">Year 1 (₹)</th><th class="num-col">Year 2 (₹)</th><th class="num-col">Year 3 (₹)</th><th class="num-col">Year 5 (₹)</th></tr></thead>
+        <thead><tr><th>{{ report_i18n.th_asset_block | default("Asset Block") }}</th><th class="num-col">{{ report_i18n.th_depr_rate | default("Rate") }}</th><th class="num-col">{{ report_i18n.th_y1 | default("Year 1") }} (₹)</th><th class="num-col">{{ report_i18n.th_y2 | default("Year 2") }} (₹)</th><th class="num-col">{{ report_i18n.th_y3 | default("Year 3") }} (₹)</th><th class="num-col">{{ report_i18n.th_y5 | default("Year 5") }} (₹)</th></tr></thead>
         <tbody>
-            <tr><td>Building Shed</td><td class="num-col">10.0%</td><td class="num-col">₹{{ (building_cost * 0.10) | inr }}</td><td class="num-col">₹{{ (building_cost * 0.09) | inr }}</td><td class="num-col">₹{{ (building_cost * 0.081) | inr }}</td><td class="num-col">₹{{ (building_cost * 0.0656) | inr }}</td></tr>
-            <tr><td>Plant & Machinery</td><td class="num-col">15.0%</td><td class="num-col">₹{{ (machinery_total * 0.15) | inr }}</td><td class="num-col">₹{{ (machinery_total * 0.1275) | inr }}</td><td class="num-col">₹{{ (machinery_total * 0.1084) | inr }}</td><td class="num-col">₹{{ (machinery_total * 0.0783) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.dep_building | default("Building Shed") }}</td><td class="num-col">10.0%</td><td class="num-col">₹{{ (building_cost * 0.10) | inr }}</td><td class="num-col">₹{{ (building_cost * 0.09) | inr }}</td><td class="num-col">₹{{ (building_cost * 0.081) | inr }}</td><td class="num-col">₹{{ (building_cost * 0.0656) | inr }}</td></tr>
+            <tr><td>{{ report_i18n.dep_machinery | default("Plant & Machinery") }}</td><td class="num-col">15.0%</td><td class="num-col">₹{{ (machinery_total * 0.15) | inr }}</td><td class="num-col">₹{{ (machinery_total * 0.1275) | inr }}</td><td class="num-col">₹{{ (machinery_total * 0.1084) | inr }}</td><td class="num-col">₹{{ (machinery_total * 0.0783) | inr }}</td></tr>
         </tbody>
     </table>
 </div>
@@ -1365,14 +1418,14 @@
 
         <div style="display: table; width: 100%; margin-top: 80px;">
             <div style="display: table-cell; width: 50%; text-align: left; vertical-align: bottom;">
-                <p style="margin-bottom: 8px; font-size: 9.5pt;"><strong>{{ report_i18n.decl_place | default("Place:") }}</strong> {{place | default("Bengaluru")}}</p>
-                <p style="font-size: 9.5pt;"><strong>{{ report_i18n.decl_date | default("Date:") }}</strong> {{declaration_date | default("August 2026")}}</p>
+                <p style="margin-bottom: 8px; font-size: 9.5pt;"><strong>{{ report_i18n.decl_place | default("Place:") }}</strong> {{place or ('ಬೆಂಗಳೂರು' if report_lang == 'kn' else 'Bengaluru')}}</p>
+                <p style="font-size: 9.5pt;"><strong>{{ report_i18n.decl_date | default("Date:") }}</strong> {{declaration_date or ('ಆಗಸ್ಟ್ 2026' if report_lang == 'kn' else 'August 2026')}}</p>
             </div>
             <div style="display: table-cell; width: 50%; text-align: right; vertical-align: bottom;">
                 <p style="margin-bottom: 12px; font-size: 10pt;"><strong>{{ report_i18n.decl_for | default("For") }} {{business_name | default("Enterprise Unit")}}</strong></p>
                 <br><br><br>
                 <p style="margin-bottom: 4px; font-size: 10pt;"><strong>({{declarant_name | default(report_i18n.decl_signatory | default("Authorized Signatory"))}})</strong></p>
-                <p style="font-size: 9.2pt; color: #475569;">{{designation | default("Proprietor / Managing Director")}}</p>
+                <p style="font-size: 9.2pt; color: #475569;">{{designation or ('ಮಾಲೀಕರು / ವ್ಯವಸ್ಥಾಪಕ ನಿರ್ದೇಶಕರು' if report_lang == 'kn' else 'Proprietor / Managing Director')}}</p>
             </div>
         </div>
     </div>
