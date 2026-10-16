@@ -4,6 +4,7 @@ Implements 5-Layer Rule Engine parameters and versioned guidelines for Vision Ka
 """
 
 from typing import Dict, Any, List, Tuple, Optional
+from dpr_engine.utils.currency import format_inr
 
 # Versioning metadata
 MUDRA_SCHEME_VERSION = "2026.1"
@@ -107,7 +108,7 @@ class MudraRulesEngine:
                 "depth": "commercial",
                 "page_count_guideline": "Commercial Bank DPR",
                 "eligible": False,
-                "error": f"Requested loan ₹{loan_amount:,.2f} exceeds MUDRA maximum ceiling of ₹20 Lakhs. Alternate commercial term loan required."
+                "error": f"Requested loan ₹{format_inr(loan_amount)} exceeds MUDRA maximum ceiling of ₹20 Lakhs. Alternate commercial term loan required."
             }
 
     @staticmethod
@@ -142,5 +143,5 @@ class MudraRulesEngine:
             "project_cost": project_cost,
             "total_sources": total_sources,
             "difference": diff,
-            "message": "Project cost reconciles perfectly with means of finance." if is_balanced else f"Project cost (₹{project_cost:,.2f}) does not match Total Sources of Funds (₹{total_sources:,.2f}). Difference: ₹{diff:,.2f}."
+            "message": "Project cost reconciles perfectly with means of finance." if is_balanced else f"Project cost (₹{format_inr(project_cost)}) does not match Total Sources of Funds (₹{format_inr(total_sources)}). Difference: ₹{format_inr(diff)}."
         }

@@ -1,5 +1,6 @@
 from typing import Dict, Any
 from dpr_engine.data_model import DPRDocumentModel
+from dpr_engine.utils.currency import format_inr
 
 def safe_float(v, default: float = 0.0) -> float:
     if v is None:
@@ -62,19 +63,19 @@ class ManufacturingNarrative:
                 f"conforming to international quality benchmarks (ISO 9001:2015). The project addresses critical supply chain "
                 f"gaps in the regional industrial manufacturing ecosystem by delivering high-precision components with zero-defect tolerances.</p>"
                 f"<p><strong>1.2 Investment Summary & Capital Outlay Rationale:</strong><br>"
-                f"The total capital outlay for establishing the project is estimated at <strong>₹{total_cost:,.2f}</strong>. "
-                f"This investment encompasses land & site development (₹{land_cost:,.2f}), industrial building shed construction (₹{building_cost:,.2f}), "
-                f"plant & machinery procurement (₹{m_total:,.2f}), electrification & high-voltage transformer utilities (₹{electrification_cost:,.2f}), "
-                f"office furniture & fixtures (₹{furniture_cost:,.2f}), pre-operative contingencies (₹{other_cost:,.2f}), "
-                f"and working capital margin requirement (₹{working_capital:,.2f}).</p>"
+                f"The total capital outlay for establishing the project is estimated at <strong>₹{format_inr(total_cost)}</strong>. "
+                f"This investment encompasses land & site development (₹{format_inr(land_cost)}), industrial building shed construction (₹{format_inr(building_cost)}), "
+                f"plant & machinery procurement (₹{format_inr(m_total)}), electrification & high-voltage transformer utilities (₹{format_inr(electrification_cost)}), "
+                f"office furniture & fixtures (₹{format_inr(furniture_cost)}), pre-operative contingencies (₹{format_inr(other_cost)}), "
+                f"and working capital margin requirement (₹{format_inr(working_capital)}).</p>"
                 f"<p><strong>1.3 Means of Finance & Debt Structuring:</strong><br>"
-                f"The means of finance comprises promoter equity contribution of <strong>₹{promoter_contribution:,.2f}</strong> ({promoter_pct:.1f}%), "
-                f"bank term loan facility of <strong>₹{bank_loan:,.2f}</strong> ({bank_pct:.1f}%), and government capital subsidy claim of "
-                f"<strong>₹{subsidy:,.2f}</strong>. The promoter equity is fully injected through private capital reserves, demonstrating strong promoter commitment.</p>"
+                f"The means of finance comprises promoter equity contribution of <strong>₹{format_inr(promoter_contribution)}</strong> ({promoter_pct:.1f}%), "
+                f"bank term loan facility of <strong>₹{format_inr(bank_loan)}</strong> ({bank_pct:.1f}%), and government capital subsidy claim of "
+                f"<strong>₹{format_inr(subsidy)}</strong>. The promoter equity is fully injected through private capital reserves, demonstrating strong promoter commitment.</p>"
                 f"<p><strong>1.4 Financial Viability & Bank Sanction Rationale:</strong><br>"
                 f"Financial modeling demonstrates robust cash flow generation. The project achieves an average 5-year Debt Service Coverage Ratio (DSCR) of "
                 f"<strong>{avg_dscr:.2f}</strong> (substantially higher than the banking benchmark of 1.50x), a Break-Even Point (BEP) of "
-                f"<strong>{bep_percent:.1f}%</strong>, a Net Present Value (NPV) of <strong>₹{corporate_npv:,.2f}</strong>, and an Internal Rate of Return (IRR) of "
+                f"<strong>{bep_percent:.1f}%</strong>, a Net Present Value (NPV) of <strong>₹{format_inr(corporate_npv)}</strong>, and an Internal Rate of Return (IRR) of "
                 f"<strong>{corporate_project_irr:.1f}%</strong>. The payback period for total capital invested is estimated at <strong>{corporate_payback_years:.1f} years</strong>. "
                 f"The proposal is strongly recommended for immediate term loan sanction.</p>"
             ),
@@ -112,7 +113,7 @@ class ManufacturingNarrative:
                 f"The production flow follows a rigorous multi-stage quality protocol: (1) Raw Material Chemical & Tensile Inspection, (2) Automated CNC Precision Machining, "
                 f"(3) Heat Treatment & Stress Relieving, (4) Surface Coating & Washing, and (5) 3D Coordinate Measuring Machine (CMM) Dimensional Audit before Final Packaging.</p>"
                 f"<p><strong>4.3 Installed Daily Capacity & Utilization Profile:</strong><br>"
-                f"The facility is designed for an installed daily capacity of <strong>{daily_capacity:,.0f} {doc.capacity_unit} per day</strong>, operating {doc.working_days} days per year in double shifts. "
+                f"The facility is designed for an installed daily capacity of <strong>{format_inr(daily_capacity)} {doc.capacity_unit} per day</strong>, operating {doc.working_days} days per year in double shifts. "
                 f"Capacity utilization is modeled conservatively at 60% in Year 1, ramping to 75% in Year 2, 85% in Year 3, and 90-95% in Years 4 and 5.</p>"
                 f"<p><strong>4.4 Value Proposition & Competitive Edge:</strong><br>"
                 f"The key competitive advantages of {b_name} include lower unit production costs via automated machinery, zero-defect quality assurance, customizable batch sizing, and direct local technical support.</p>"
@@ -140,13 +141,13 @@ class ManufacturingNarrative:
                 f"The production floor features CNC turning centers, vertical machining centers (VMC), automated surface grinders, digital tool setters, and 3D metrology equipment. "
                 f"Machinery is procured from reputed OEM builders ({doc.supplier_name or 'Ace Micromatic / Haas India'}) with comprehensive 3-year warranty and AMC support.</p>"
                 f"<p><strong>6.2 Factory Site Layout & Workspace Specifications:</strong><br>"
-                f"The plant occupies a built-up area of <strong>{builtup_area:,.0f} sq.ft.</strong> on a clear-height industrial shed ({doc.workspace or 'Leased / Owned Facility'}). "
+                f"The plant occupies a built-up area of <strong>{format_inr(builtup_area)} sq.ft.</strong> on a clear-height industrial shed ({doc.workspace or 'Leased / Owned Facility'}). "
                 f"The layout is optimized according to lean manufacturing principles, ensuring linear raw material inflow, central processing, and finished goods storage.</p>"
                 f"<p><strong>6.3 Power Grid & Auxillary DG Backup:</strong><br>"
-                f"The sanctioned commercial power load is <strong>{power_required:,.0f} HP/kW</strong> supplied by BESCOM/KPTCL with a dedicated 3-phase industrial transformer. "
+                f"The sanctioned commercial power load is <strong>{format_inr(power_required)} HP/kW</strong> supplied by BESCOM/KPTCL with a dedicated 3-phase industrial transformer. "
                 f"A 100% DG auto-synchronization generator set is installed to eliminate production downtime during grid outages.</p>"
                 f"<p><strong>6.4 Water Supply & Zero Liquid Discharge (ZLD) Setup:</strong><br>"
-                f"Industrial process water requirement is <strong>{water_required:,.0f} LPD</strong> sourced via municipal industrial pipelines. "
+                f"Industrial process water requirement is <strong>{format_inr(water_required)} LPD</strong> sourced via municipal industrial pipelines. "
                 f"An effluent treatment plant (ETP) with zero liquid discharge (ZLD) recycling ensures 100% water recovery and full environmental compliance.</p>"
                 f"<p><strong>6.5 Safety, Fire Fighting & Occupational Health Systems:</strong><br>"
                 f"The facility is equipped with automated fire smoke detectors, overhead sprinkler networks, CO2 fire extinguishers, emergency assembly zones, and mandatory personal protective equipment (PPE) for all plant technicians.</p>"
@@ -172,12 +173,12 @@ class ManufacturingNarrative:
             ),
             "cost_and_means": (
                 f"<p><strong>9.1 Detailed Project Cost Rationale:</strong><br>"
-                f"The capital outlay of ₹{total_cost:,.2f} is rigorously budgeted across civil works (₹{building_cost:,.2f}), plant machinery (₹{m_total:,.2f}), "
-                f"electrification (₹{electrification_cost:,.2f}), office equipment (₹{furniture_cost:,.2f}), pre-operative expenses (₹{other_cost:,.2f}), and working capital margin (₹{working_capital:,.2f}).</p>"
+                f"The capital outlay of ₹{format_inr(total_cost)} is rigorously budgeted across civil works (₹{format_inr(building_cost)}), plant machinery (₹{format_inr(m_total)}), "
+                f"electrification (₹{format_inr(electrification_cost)}), office equipment (₹{format_inr(furniture_cost)}), pre-operative expenses (₹{format_inr(other_cost)}), and working capital margin (₹{format_inr(working_capital)}).</p>"
                 f"<p><strong>9.2 Means of Finance Structuring:</strong><br>"
-                f"The funding plan maintains a healthy debt-to-equity ratio of {debt_equity_val:.2f}x. Promoter equity of ₹{promoter_contribution:,.2f} covers {promoter_pct:.1f}% of total project cost, ensuring strong promoter skin in the game.</p>"
+                f"The funding plan maintains a healthy debt-to-equity ratio of {debt_equity_val:.2f}x. Promoter equity of ₹{format_inr(promoter_contribution)} covers {promoter_pct:.1f}% of total project cost, ensuring strong promoter skin in the game.</p>"
                 f"<p><strong>9.3 Contingency & Price Escalation Provision:</strong><br>"
-                f"A contingency buffer of ₹{other_cost:,.2f} is built into the capital outlay to absorb unforeseen inflation in equipment freight, customs clearance, or installation costs.</p>"
+                f"A contingency buffer of ₹{format_inr(other_cost)} is built into the capital outlay to absorb unforeseen inflation in equipment freight, customs clearance, or installation costs.</p>"
             ),
             "land_shed_infrastructure": (
                 f"<p><strong>10.1 Factory Premises & Site Suitability:</strong><br>"
@@ -205,7 +206,7 @@ class ManufacturingNarrative:
             ),
             "financial_viability": (
                 f"<p><strong>13.1 Profitability & Cash Flow Generation:</strong><br>"
-                f"The unit generates robust operating cash flows. Gross revenue scales from ₹{(total_cost * 1.2):,.2f} in Year 1 to ₹{(total_cost * 2.2):,.2f} by Year 5 with an average EBITDA margin of 22.5%.</p>"
+                f"The unit generates robust operating cash flows. Gross revenue scales from ₹{format_inr((total_cost * 1.2))} in Year 1 to ₹{format_inr((total_cost * 2.2))} by Year 5 with an average EBITDA margin of 22.5%.</p>"
                 f"<p><strong>13.2 Debt Service Coverage Ratio (DSCR) Analysis:</strong><br>"
                 f"The projected DSCR values are Year 1: 1.55x, Year 2: 1.72x, Year 3: 1.88x, Year 4: 2.05x, and Year 5: 2.20x, yielding an average 5-year DSCR of <strong>{avg_dscr:.2f}x</strong>. This guarantees smooth loan repayment with a comfortable safety cushion.</p>"
                 f"<p><strong>13.3 Break-Even Point (BEP) & Financial Safety Margin:</strong><br>"
@@ -215,7 +216,7 @@ class ManufacturingNarrative:
             ),
             "tandon_working_capital": (
                 f"<p><strong>14.1 Working Capital Assessment (Tandon Committee MPBF):</strong><br>"
-                f"Working capital requirements are assessed per Tandon Committee Norms (Method I & Method II MPBF). Total current assets are modeled at ₹{(total_cost * 0.45):,.2f} against current liabilities of ₹{(total_cost * 0.12):,.2f}, securing a healthy net working capital gap.</p>"
+                f"Working capital requirements are assessed per Tandon Committee Norms (Method I & Method II MPBF). Total current assets are modeled at ₹{format_inr((total_cost * 0.45))} against current liabilities of ₹{format_inr((total_cost * 0.12))}, securing a healthy net working capital gap.</p>"
                 f"<p><strong>14.2 Operating Cycle & Inventory Turnovers:</strong><br>"
                 f"The operating cycle is structured at 75 days: Raw Material Holding (30 days), Work-in-Process (15 days), Finished Goods Holding (15 days), and Receivables Realization (15 days). Creditors credit period of 30 days provides substantial operational liquidity.</p>"
             ),
@@ -269,7 +270,7 @@ class ManufacturingNarrative:
             ),
             "site_utilities_narrative": (
                 f"<p><strong>23.1 Infrastructure & Utility Readiness:</strong><br>"
-                f"Power grid connection ({power_required:,.0f} HP/kW), water supply ({water_required:,.0f} LPD), industrial internet connectivity, and heavy vehicle transport access are fully operational at the factory site.</p>"
+                f"Power grid connection ({format_inr(power_required)} HP/kW), water supply ({format_inr(water_required)} LPD), industrial internet connectivity, and heavy vehicle transport access are fully operational at the factory site.</p>"
                 f"<p><strong>23.2 Freight Logistics & Transport Accessibility:</strong><br>"
                 f"Located along a major 4-lane industrial corridor in {district}, the plant offers easy container truck access, loading docks, and 24/7 logistics transportation availability.</p>"
             ),
@@ -288,8 +289,8 @@ class ManufacturingNarrative:
             "conclusion": (
                 f"<p><strong>26.1 Final Appraisal & Bank Term Loan Recommendation:</strong><br>"
                 f"The proposed manufacturing unit of {b_name} is technically feasible, commercially lucrative, environmentally sustainable, and financially sound. "
-                f"With a robust 5-year average DSCR of <strong>{avg_dscr:.2f}x</strong>, positive NPV of <strong>₹{corporate_npv:,.2f}</strong>, and an IRR of "
-                f"<strong>{corporate_project_irr:.1f}%</strong>, the term loan request of <strong>₹{bank_loan:,.2f}</strong> is strongly recommended for immediate administrative and financial sanction.</p>"
+                f"With a robust 5-year average DSCR of <strong>{avg_dscr:.2f}x</strong>, positive NPV of <strong>₹{format_inr(corporate_npv)}</strong>, and an IRR of "
+                f"<strong>{corporate_project_irr:.1f}%</strong>, the term loan request of <strong>₹{format_inr(bank_loan)}</strong> is strongly recommended for immediate administrative and financial sanction.</p>"
                 f"<p><strong>26.2 Summary of Economic & Social Impact:</strong><br>"
                 f"Beyond financial viability, the venture generates {int(doc.local_employment or 15)} direct jobs, empowers local youth and female technicians, fosters industrial cluster development in {district}, and contributes directly to the state's manufacturing growth mandate.</p>"
             )
@@ -304,19 +305,19 @@ class ManufacturingNarrative:
                 f"ಈ ಉದ್ಯಮವು ಅಂತರರಾಷ್ಟ್ರೀಯ ಗುಣಮಟ್ಟದ ಮಾನದಂಡಗಳಿಗೆ (ISO 9001:2015) ಅನುಗುಣವಾಗಿ ಪ್ರೀಮಿಯಂ {product} "
                 f"ನ ಸ್ವಯಂಚಾಲಿತ, ದೊಡ್ಡ ಪ್ರಮಾಣದ ಉತ್ಪಾದನೆಯ ಮೇಲೆ ಕೇಂದ್ರೀಕರಿಸುತ್ತದೆ. ಪ್ರಾದೇಶಿಕ ಕೈಗಾರಿಕಾ ಪರಿಸರ ವ್ಯವಸ್ಥೆಯಲ್ಲಿ ನಿಖರವಾದ ಕಾಂಪೊನೆಂಟ್‌ಗಳನ್ನು ದೋಷರಹಿತವಾಗಿ ಪೂರೈಸುವ ಮೂಲಕ ನಿರ್ಣಾಯಕ ಕೊರತೆಯನ್ನು ನೀಗಿಸುತ್ತದೆ.</p>"
                 f"<p><strong>1.2 ಹೂಡಿಕೆ ಸಾರಾಂಶ ಮತ್ತು ಬಂಡವಾಳ ವೆಚ್ಚದ ಸಮರ್ಥನೆ:</strong><br>"
-                f"ಯೋಜನೆಯನ್ನು ಸ್ಥಾಪಿಸಲು ಒಟ್ಟು ಬಂಡವಾಳ ವೆಚ್ಚವು <strong>₹{total_cost:,.2f}</strong> ಎಂದು ಅಂದಾಜಿಸಲಾಗಿದೆ. "
-                f"ಈ ಹೂಡಿಕೆಯು ಭೂಮಿ ಮತ್ತು ನಿವೇಶನ ಅಭಿವೃದ್ಧಿ (₹{land_cost:,.2f}), ಕೈಗಾರಿಕಾ ಕಟ್ಟಡ ಶೆಡ್ ನಿರ್ಮಾಣ (₹{building_cost:,.2f}), "
-                f"ಸ್ಥಾವರ ಮತ್ತು ಯಂತ್ರೋಪಕರಣಗಳ ಖರೀದಿ (₹{m_total:,.2f}), ವಿದ್ಯುದೀಕರಣ ಮತ್ತು ಯುಟಿಲಿಟಿಗಳು (₹{electrification_cost:,.2f}), "
-                f"ಕಚೇರಿ ಪೀಠೋಪಕರಣಗಳು ಮತ್ತು ಫಿಕ್ಚರ್‌ಗಳು (₹{furniture_cost:,.2f}), ಪ್ರಾಥಮಿಕ ಮತ್ತು ಅನಿಶ್ಚಿತ ವೆಚ್ಚಗಳು (₹{other_cost:,.2f}), "
-                f"ಮತ್ತು ದುಡಿಯುವ ಬಂಡವಾಳ ಮಾರ್ಜಿನ್ (₹{working_capital:,.2f}) ಒಳಗೊಂಡಿದೆ.</p>"
+                f"ಯೋಜನೆಯನ್ನು ಸ್ಥಾಪಿಸಲು ಒಟ್ಟು ಬಂಡವಾಳ ವೆಚ್ಚವು <strong>₹{format_inr(total_cost)}</strong> ಎಂದು ಅಂದಾಜಿಸಲಾಗಿದೆ. "
+                f"ಈ ಹೂಡಿಕೆಯು ಭೂಮಿ ಮತ್ತು ನಿವೇಶನ ಅಭಿವೃದ್ಧಿ (₹{format_inr(land_cost)}), ಕೈಗಾರಿಕಾ ಕಟ್ಟಡ ಶೆಡ್ ನಿರ್ಮಾಣ (₹{format_inr(building_cost)}), "
+                f"ಸ್ಥಾವರ ಮತ್ತು ಯಂತ್ರೋಪಕರಣಗಳ ಖರೀದಿ (₹{format_inr(m_total)}), ವಿದ್ಯುದೀಕರಣ ಮತ್ತು ಯುಟಿಲಿಟಿಗಳು (₹{format_inr(electrification_cost)}), "
+                f"ಕಚೇರಿ ಪೀಠೋಪಕರಣಗಳು ಮತ್ತು ಫಿಕ್ಚರ್‌ಗಳು (₹{format_inr(furniture_cost)}), ಪ್ರಾಥಮಿಕ ಮತ್ತು ಅನಿಶ್ಚಿತ ವೆಚ್ಚಗಳು (₹{format_inr(other_cost)}), "
+                f"ಮತ್ತು ದುಡಿಯುವ ಬಂಡವಾಳ ಮಾರ್ಜಿನ್ (₹{format_inr(working_capital)}) ಒಳಗೊಂಡಿದೆ.</p>"
                 f"<p><strong>1.3 ಹಣಕಾಸು ಮೂಲಗಳು ಮತ್ತು ಸಾಲ ರಚನೆ:</strong><br>"
-                f"ಹಣಕಾಸಿನ ವಿಧಾನಗಳಲ್ಲಿ ಪ್ರವರ್ತಕರ ಇಕ್ವಿಟಿ ಬಂಡವಾಳ <strong>₹{promoter_contribution:,.2f}</strong> ({promoter_pct:.1f}%), "
-                f"ಬ್ಯಾಂಕ್ ಅವಧಿ ಸಾಲ <strong>₹{bank_loan:,.2f}</strong> ({bank_pct:.1f}%), ಮತ್ತು ಸರ್ಕಾರಿ ಸಬ್ಸಿಡಿ ಮೊತ್ತ "
-                f"<strong>₹{subsidy:,.2f}</strong> ಸೇರಿವೆ. ಪ್ರವರ್ತಕರ ಬಂಡವಾಳವು ಖಾಸಗಿ ಮೀಸಲುಗಳ ಮೂಲಕ ಸಂಪೂರ್ಣವಾಗಿ ಹೂಡಿಕೆಯಾಗಿದ್ದು, ಪ್ರವರ್ತಕರ ಬದ್ಧತೆಯನ್ನು ತೋರಿಸುತ್ತದೆ.</p>"
+                f"ಹಣಕಾಸಿನ ವಿಧಾನಗಳಲ್ಲಿ ಪ್ರವರ್ತಕರ ಇಕ್ವಿಟಿ ಬಂಡವಾಳ <strong>₹{format_inr(promoter_contribution)}</strong> ({promoter_pct:.1f}%), "
+                f"ಬ್ಯಾಂಕ್ ಅವಧಿ ಸಾಲ <strong>₹{format_inr(bank_loan)}</strong> ({bank_pct:.1f}%), ಮತ್ತು ಸರ್ಕಾರಿ ಸಬ್ಸಿಡಿ ಮೊತ್ತ "
+                f"<strong>₹{format_inr(subsidy)}</strong> ಸೇರಿವೆ. ಪ್ರವರ್ತಕರ ಬಂಡವಾಳವು ಖಾಸಗಿ ಮೀಸಲುಗಳ ಮೂಲಕ ಸಂಪೂರ್ಣವಾಗಿ ಹೂಡಿಕೆಯಾಗಿದ್ದು, ಪ್ರವರ್ತಕರ ಬದ್ಧತೆಯನ್ನು ತೋರಿಸುತ್ತದೆ.</p>"
                 f"<p><strong>1.4 ಹಣಕಾಸಿನ ಕಾರ್ಯಸಾಧ್ಯತೆ ಮತ್ತು ಸಾಲ ಮಂಜೂರಾತಿ ಸಮರ್ಥನೆ:</strong><br>"
                 f"ಹಣಕಾಸು ಮಾದರಿಯು ಬಲವಾದ ನಗದು ಹರಿವನ್ನು ದೃಢಪಡಿಸುತ್ತದೆ. ಯೋಜನೆಯು 5-ವರ್ಷಗಳ ಸರಾಸರಿ ಸಾಲ ಸೇವಾ ವ್ಯಾಪ್ತಿ ಅನುಪಾತ (DSCR) "
                 f"<strong>{avg_dscr:.2f}</strong> (ಬ್ಯಾಂಕಿಂಗ್ ಮಾನದಂಡವಾದ 1.50x ಗಿಂತ ಗಮನಾರ್ಹವಾಗಿ ಹೆಚ್ಚು), ಬ್ರೇಕ್-ಈವನ್ ಪಾಯಿಂಟ್ (BEP) "
-                f"<strong>{bep_percent:.1f}%</strong>, ನಿವ್ವಳ ಪ್ರಸ್ತುತ ಮೌಲ್ಯ (NPV) <strong>₹{corporate_npv:,.2f}</strong>, ಮತ್ತು ಆಂತರಿಕ ಆದಾಯ ದರ (IRR) "
+                f"<strong>{bep_percent:.1f}%</strong>, ನಿವ್ವಳ ಪ್ರಸ್ತುತ ಮೌಲ್ಯ (NPV) <strong>₹{format_inr(corporate_npv)}</strong>, ಮತ್ತು ಆಂತರಿಕ ಆದಾಯ ದರ (IRR) "
                 f"<strong>{corporate_project_irr:.1f}%</strong> ಸಾಧಿಸುತ್ತದೆ. ಹೂಡಿಕೆಯ ಮರುಪಾವತಿ ಅವಧಿಯು <strong>{corporate_payback_years:.1f} ವರ್ಷಗಳು</strong> ಎಂದು ಅಂದಾಜಿಸಲಾಗಿದೆ. "
                 f"ಈ ಪ್ರಸ್ತಾವನೆಯನ್ನು ತಕ್ಷಣದ ಅವಧಿ ಸಾಲ ಮಂಜೂರಾತಿಗಾಗಿ ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
             ),
@@ -347,7 +348,7 @@ class ManufacturingNarrative:
                 f"<p><strong>4.2 ಉತ್ಪಾದನಾ ಹರಿವು ಮತ್ತು ಗುಣಮಟ್ಟ ಪರಿಶೀಲನೆ:</strong><br>"
                 f"ಕಚ್ಚಾ ಸಾಮಗ್ರಿಗಳ ಪರೀಕ್ಷೆ, CNC ಮ್ಯಾಚಿನ್, ಶಾಖ ಸಂಸ್ಕರಣೆ, ಮೇಲ್ಮೈ ಲೇಪನ ಮತ್ತು 3D CMM ಅಳತೆಯ ಮೂಲಕ ಗುಣಮಟ್ಟವನ್ನು ಖಾತರಿಪಡಿಸಲಾಗುತ್ತದೆ.</p>"
                 f"<p><strong>4.3 ಸ್ಥಾಪಿತ ದೈನಂದಿನ ಸಾಮರ್ಥ್ಯ:</strong><br>"
-                f"ದಿನಕ್ಕೆ <strong>{daily_capacity:,.0f} {doc.capacity_unit}</strong> ಸ್ಥಾಪಿತ ಸಾಮರ್ಥ್ಯವಿದ್ದು, ವರ್ಷಕ್ಕೆ {doc.working_days} ದಿನಗಳು ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ.</p>"
+                f"ದಿನಕ್ಕೆ <strong>{format_inr(daily_capacity)} {doc.capacity_unit}</strong> ಸ್ಥಾಪಿತ ಸಾಮರ್ಥ್ಯವಿದ್ದು, ವರ್ಷಕ್ಕೆ {doc.working_days} ದಿನಗಳು ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ.</p>"
                 f"<p><strong>4.4 ಮೌಲ್ಯ ಪ್ರತಿಪಾದನೆ ಮತ್ತು ಸ್ಪರ್ಧಾತ್ಮಕ ಪ್ರಯೋಜನ:</strong><br>"
                 f"ಸ್ವಯಂಚಾಲಿತ ಯಂತ್ರಗಳ ಮೂಲಕ ಕಡಿಮೆ ಉತ್ಪಾದನಾ ವೆಚ್ಚ, ಶೂನ್ಯ-ದೋಷ ಭರವಸೆ ಮತ್ತು ಸ್ಥಳೀಯ ತಾಂತ್ರಿಕ ಬೆಂಬಲ {b_name} ನ ಪ್ರಮುಖ ಶಕ್ತಿಗಳಾಗಿವೆ.</p>"
                 f"<p><strong>4.5 ಪ್ಯಾಕೇಜಿಂಗ್ ಮತ್ತು ಸಂಗ್ರಹಣೆ:</strong><br>"
@@ -365,11 +366,11 @@ class ManufacturingNarrative:
                 f"<p><strong>6.1 ಸ್ಥಾವರ ಯಂತ್ರೋಪಕರಣ ಮತ್ತು ತಂತ್ರಜ್ಞಾನ:</strong><br>"
                 f"ಉತ್ಪಾದನಾ ಘಟಕವು CNC ಟರ್ನಿಂಗ್ ಸೆಂಟರ್, VMC ಮ್ಯಾಚಿನ್ ಮತ್ತು ಡಿಜಿಟಲ್ ಮೆಟ್ರಾಲಜಿ ಉಪಕರಣಗಳನ್ನು ಒಳಗೊಂಡಿದೆ ({doc.supplier_name or 'ಪ್ರಮುಖ ಪೂರೈಕೆದಾರರು'}).</p>"
                 f"<p><strong>6.2 ಕಾರ್ಖಾನೆ ವಿನ್ಯಾಸ ಮತ್ತು ಸ್ಥಳಾವಕಾಶ:</strong><br>"
-                f"ಒಟ್ಟು <strong>{builtup_area:,.0f} ಚದರ ಅಡಿ</strong> ವಿಸ್ತೀರ್ಣದಲ್ಲಿ ಲೀನ್ ಮ್ಯಾನುಫ್ಯಾಕ್ಚರಿಂಗ್ ತತ್ವಗಳ ಆಧಾರದ ಮೇಲೆ ವಿನ್ಯಾಸಗೊಳಿಸಲಾಗಿದೆ.</p>"
+                f"ಒಟ್ಟು <strong>{format_inr(builtup_area)} ಚದರ ಅಡಿ</strong> ವಿಸ್ತೀರ್ಣದಲ್ಲಿ ಲೀನ್ ಮ್ಯಾನುಫ್ಯಾಕ್ಚರಿಂಗ್ ತತ್ವಗಳ ಆಧಾರದ ಮೇಲೆ ವಿನ್ಯಾಸಗೊಳಿಸಲಾಗಿದೆ.</p>"
                 f"<p><strong>6.3 ವಿದ್ಯುತ್ ಗ್ರಿಡ್ ಮತ್ತು ಬ್ಯಾಕಪ್:</strong><br>"
-                f"ಮಂಜೂರಾದ ವಾಣಿಜ್ಯ ವಿದ್ಯುತ್ ಲೋಡ್ <strong>{power_required:,.0f} HP/kW</strong> ಮತ್ತು 100% DG ಜನರೇಟರ್ ಬ್ಯಾಕಪ್ ಲಭ್ಯವಿದೆ.</p>"
+                f"ಮಂಜೂರಾದ ವಾಣಿಜ್ಯ ವಿದ್ಯುತ್ ಲೋಡ್ <strong>{format_inr(power_required)} HP/kW</strong> ಮತ್ತು 100% DG ಜನರೇಟರ್ ಬ್ಯಾಕಪ್ ಲಭ್ಯವಿದೆ.</p>"
                 f"<p><strong>6.4 ನೀರು ಸರಬರಾಜು ಮತ್ತು ಪರಿಸರ ಸಂರಕ್ಷಣೆ:</strong><br>"
-                f"ಕೈಗಾರಿಕಾ ಪ್ರಕ್ರಿಯೆಗೆ ದಿನಕ್ಕೆ <strong>{water_required:,.0f} LPD</strong> ನೀರು ಅಗತ್ಯವಿದ್ದು, ETP / ZLD ಮೂಲಕ ಮರುಬಳಕೆ ಮಾಡಲಾಗುತ್ತದೆ.</p>"
+                f"ಕೈಗಾರಿಕಾ ಪ್ರಕ್ರಿಯೆಗೆ ದಿನಕ್ಕೆ <strong>{format_inr(water_required)} LPD</strong> ನೀರು ಅಗತ್ಯವಿದ್ದು, ETP / ZLD ಮೂಲಕ ಮರುಬಳಕೆ ಮಾಡಲಾಗುತ್ತದೆ.</p>"
             ),
             "risk_analysis": (
                 f"<p><strong>7.1 ಕಾರ್ಯಾಚರಣೆಯ ಮತ್ತು ಯಂತ್ರ ಡೌನ್‌ಟೈಮ್ ಅಪಾಯ:</strong><br>"
@@ -388,9 +389,9 @@ class ManufacturingNarrative:
             ),
             "cost_and_means": (
                 f"<p><strong>9.1 ಯೋಜನಾ ವೆಚ್ಚದ ಸಮರ್ಥನೆ:</strong><br>"
-                f"ಒಟ್ಟು ಬಂಡವಾಳ ವೆಚ್ಚ ₹{total_cost:,.2f} ಅನ್ನು ಕಟ್ಟಡ (₹{building_cost:,.2f}), ಯಂತ್ರೋಪಕರಣ (₹{m_total:,.2f}), ವಿದ್ಯುದೀಕರಣ (₹{electrification_cost:,.2f}), ಮತ್ತು ದುಡಿಯುವ ಬಂಡವಾಳ (₹{working_capital:,.2f}) ಗಳಲ್ಲಿ ಹಂಚಿಕೆ ಮಾಡಲಾಗಿದೆ.</p>"
+                f"ಒಟ್ಟು ಬಂಡವಾಳ ವೆಚ್ಚ ₹{format_inr(total_cost)} ಅನ್ನು ಕಟ್ಟಡ (₹{format_inr(building_cost)}), ಯಂತ್ರೋಪಕರಣ (₹{format_inr(m_total)}), ವಿದ್ಯುದೀಕರಣ (₹{format_inr(electrification_cost)}), ಮತ್ತು ದುಡಿಯುವ ಬಂಡವಾಳ (₹{format_inr(working_capital)}) ಗಳಲ್ಲಿ ಹಂಚಿಕೆ ಮಾಡಲಾಗಿದೆ.</p>"
                 f"<p><strong>9.2 ಹಣಕಾಸು ಮೂಲಗಳ ಸಂಯೋಜನೆ:</strong><br>"
-                f"ಪ್ರವರ್ತಕರ ಇಕ್ವಿಟಿ ₹{promoter_contribution:,.2f} ({promoter_pct:.1f}%) ಮತ್ತು ಬ್ಯಾಂಕ್ ಸಾಲ ₹{bank_loan:,.2f} ({bank_pct:.1f}%), ಸಾಲ-ಇಕ್ವಿಟಿ ಅನುಪಾತ {debt_equity_val:.2f}x ನಲ್ಲಿದೆ.</p>"
+                f"ಪ್ರವರ್ತಕರ ಇಕ್ವಿಟಿ ₹{format_inr(promoter_contribution)} ({promoter_pct:.1f}%) ಮತ್ತು ಬ್ಯಾಂಕ್ ಸಾಲ ₹{format_inr(bank_loan)} ({bank_pct:.1f}%), ಸಾಲ-ಇಕ್ವಿಟಿ ಅನುಪಾತ {debt_equity_val:.2f}x ನಲ್ಲಿದೆ.</p>"
             ),
             "land_shed_infrastructure": (
                 f"<p><strong>10.1 ಆವರಣ ಮತ್ತು ನಿವೇಶನದ ಸೂಕ್ತತೆ:</strong><br>"
@@ -458,7 +459,7 @@ class ManufacturingNarrative:
             ),
             "site_utilities_narrative": (
                 f"<p><strong>23.1 ಮೂಲಸೌಕರ್ಯ ಮತ್ತು ಸೌಲಭ್ಯಗಳ ಸನ್ನದ್ಧತೆ:</strong><br>"
-                f"{power_required:,.0f} HP/kW ವಿದ್ಯುತ್ ಮತ್ತು {water_required:,.0f} LPD ನೀರು ಸರಬರಾಜು ಸಂಪರ್ಕಗಳು ಪೂರ್ಣಗೊಂಡಿವೆ.</p>"
+                f"{format_inr(power_required)} HP/kW ವಿದ್ಯುತ್ ಮತ್ತು {format_inr(water_required)} LPD ನೀರು ಸರಬರಾಜು ಸಂಪರ್ಕಗಳು ಪೂರ್ಣಗೊಂಡಿವೆ.</p>"
             ),
             "marketing_distribution_narrative": (
                 f"<p><strong>24.1 ಮಾರಾಟ ಸಂಪರ್ಕ ಮತ್ತು B2B ವಿತರಣೆ:</strong><br>"
@@ -471,8 +472,8 @@ class ManufacturingNarrative:
             "conclusion": (
                 f"<p><strong>26.1 ಅಂತಿಮ ಮೌಲ್ಯಮಾಪನ ಮತ್ತು ಬ್ಯಾಂಕ್ ಅವಧಿ ಸಾಲ ಶಿಫಾರಸು:</strong><br>"
                 f"{b_name} ನ ಉದ್ದೇಶಿತ ಉತ್ಪಾದನಾ ಘಟಕವು ತಾಂತ್ರಿಕವಾಗಿ ಕಾರ್ಯಸಾಧ್ಯ, ಆರ್ಥಿಕವಾಗಿ ಲಾಭದಾಯಕ ಮತ್ತು ಪರಿಸರ ಸುಸ್ಥಿರವಾಗಿದೆ. "
-                f"ಸರಾಸರಿ DSCR <strong>{avg_dscr:.2f}x</strong>, ಧನಾತ್ಮಕ NPV <strong>₹{corporate_npv:,.2f}</strong>, ಮತ್ತು IRR "
-                f"<strong>{corporate_project_irr:.1f}%</strong> ನೊಂದಿಗೆ, <strong>₹{bank_loan:,.2f}</strong> ಅವಧಿ ಸಾಲವನ್ನು ತಕ್ಷಣವೇ ಮಂಜೂರು ಮಾಡಲು ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
+                f"ಸರಾಸರಿ DSCR <strong>{avg_dscr:.2f}x</strong>, ಧನಾತ್ಮಕ NPV <strong>₹{format_inr(corporate_npv)}</strong>, ಮತ್ತು IRR "
+                f"<strong>{corporate_project_irr:.1f}%</strong> ನೊಂದಿಗೆ, <strong>₹{format_inr(bank_loan)}</strong> ಅವಧಿ ಸಾಲವನ್ನು ತಕ್ಷಣವೇ ಮಂಜೂರು ಮಾಡಲು ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
                 f"<p><strong>26.2 ಆರ್ಥಿಕ ಮತ್ತು ಸಾಮಾಜಿಕ ಪರಿಣಾಮಗಳ ಸಾರಾಂಶ:</strong><br>"
                 f"ಯೋಜನೆಯು {int(doc.local_employment or 15)} ನೇರ ಉದ್ಯೋಗಗಳನ್ನು ಸೃಷ್ಟಿಸುತ್ತದೆ ಮತ್ತು {district} ದಲ್ಲಿ ಸ್ಥಳೀಯ ಆರ್ಥಿಕತೆಗೆ ಕೊಡುಗೆ ನೀಡುತ್ತದೆ.</p>"
             )
@@ -487,19 +488,19 @@ class ManufacturingNarrative:
                 f"यह उद्यम अंतरराष्ट्रीय गुणवत्ता मानकों (ISO 9001:2015) के अनुरूप प्रीमियम {product} "
                 f"के स्वचालित, बड़े पैमाने पर उत्पादन पर केंद्रित है। यह परियोजना शून्य-दोष घटकों की आपूर्ति करके क्षेत्रीय औद्योगिक पारिस्थितिकी तंत्र में महत्वपूर्ण आपूर्ति अंतर को पूरा करती है।</p>"
                 f"<p><strong>1.2 निवेश सारांश एवं पूंजीगत परिव्यय:</strong><br>"
-                f"परियोजना स्थापित करने के लिए कुल पूंजीगत परिव्यय <strong>₹{total_cost:,.2f}</strong> अनुमानित है। "
-                f"इस निवेश में भूमि विकास (₹{land_cost:,.2f}), औद्योगिक शेड निर्माण (₹{building_cost:,.2f}), "
-                f"संयंत्र एवं मशीनरी खरीद (₹{m_total:,.2f}), विद्युतीकरण एवं ट्रांसफार्मर (₹{electrification_cost:,.2f}), "
-                f"कार्यालय फर्नीचर (₹{furniture_cost:,.2f}), प्रारंभिक आकस्मिक व्यय (₹{other_cost:,.2f}), "
-                f"और कार्यशील पूंजी मार्जिन आवश्यकता (₹{working_capital:,.2f}) शामिल है।</p>"
+                f"परियोजना स्थापित करने के लिए कुल पूंजीगत परिव्यय <strong>₹{format_inr(total_cost)}</strong> अनुमानित है। "
+                f"इस निवेश में भूमि विकास (₹{format_inr(land_cost)}), औद्योगिक शेड निर्माण (₹{format_inr(building_cost)}), "
+                f"संयंत्र एवं मशीनरी खरीद (₹{format_inr(m_total)}), विद्युतीकरण एवं ट्रांसफार्मर (₹{format_inr(electrification_cost)}), "
+                f"कार्यालय फर्नीचर (₹{format_inr(furniture_cost)}), प्रारंभिक आकस्मिक व्यय (₹{format_inr(other_cost)}), "
+                f"और कार्यशील पूंजी मार्जिन आवश्यकता (₹{format_inr(working_capital)}) शामिल है।</p>"
                 f"<p><strong>1.3 वित्तपोषण के साधन एवं ऋण संरचना:</strong><br>"
-                f"वित्तपोषण के साधनों में प्रवर्तक इक्विटी अंशदान <strong>₹{promoter_contribution:,.2f}</strong> ({promoter_pct:.1f}%), "
-                f"बैंक सावधि ऋण सुविधा <strong>₹{bank_loan:,.2f}</strong> ({bank_pct:.1f}%), और सरकारी पूंजीगत सब्सिडी "
-                f"<strong>₹{subsidy:,.2f}</strong> शामिल है। प्रवर्तक इक्विटी पूरी तरह से निजी पूंजीगत स्रोतों से लगाई गई है, जो मजबूत प्रतिबद्धता दर्शाती है।</p>"
+                f"वित्तपोषण के साधनों में प्रवर्तक इक्विटी अंशदान <strong>₹{format_inr(promoter_contribution)}</strong> ({promoter_pct:.1f}%), "
+                f"बैंक सावधि ऋण सुविधा <strong>₹{format_inr(bank_loan)}</strong> ({bank_pct:.1f}%), और सरकारी पूंजीगत सब्सिडी "
+                f"<strong>₹{format_inr(subsidy)}</strong> शामिल है। प्रवर्तक इक्विटी पूरी तरह से निजी पूंजीगत स्रोतों से लगाई गई है, जो मजबूत प्रतिबद्धता दर्शाती है।</p>"
                 f"<p><strong>1.4 वित्तीय साध्यता एवं बैंक स्वीकृति औचित्य:</strong><br>"
                 f"वित्तीय मॉडलिंग मजबूत नकदी प्रवाह उत्पादन प्रदर्शित करती है। परियोजना 5-वर्षीय औसत ऋण सेवा कवरेज अनुपात (DSCR) "
                 f"<strong>{avg_dscr:.2f}</strong> (बैंकिंग बेंचमार्क 1.50x से काफी अधिक), ब्रेक-ईवन पॉइंट (BEP) "
-                f"<strong>{bep_percent:.1f}%</strong>, शुद्ध वर्तमान मूल्य (NPV) <strong>₹{corporate_npv:,.2f}</strong>, और आंतरिक प्रतिफल दर (IRR) "
+                f"<strong>{bep_percent:.1f}%</strong>, शुद्ध वर्तमान मूल्य (NPV) <strong>₹{format_inr(corporate_npv)}</strong>, और आंतरिक प्रतिफल दर (IRR) "
                 f"<strong>{corporate_project_irr:.1f}%</strong> प्राप्त करती है। कुल पूंजी की पेबैक अवधि <strong>{corporate_payback_years:.1f} वर्ष</strong> अनुमानित है। "
                 f"इस प्रस्ताव को तत्काल सावधि ऋण स्वीकृति हेतु दृढ़ता से अनुशंसित किया जाता है।</p>"
             ),
@@ -530,7 +531,7 @@ class ManufacturingNarrative:
                 f"<p><strong>4.2 विनिर्माण कार्यप्रवाह एवं गुणवत्ता निरीक्षण:</strong><br>"
                 f"उत्पादन प्रवाह सख्त बहु-स्तरीय गुणवत्ता प्रोटोकॉल का पालन करता है: कच्चा माल परीक्षण, सीएनसी मशीनिंग, हीट ट्रीटमेंट, और 3D सीएमएम आयाम ऑडिट।</p>"
                 f"<p><strong>4.3 स्थापित दैनिक क्षमता:</strong><br>"
-                f"सुविधा की स्थापित दैनिक क्षमता <strong>{daily_capacity:,.0f} {doc.capacity_unit} प्रति दिन</strong> है, जो वर्ष में {doc.working_days} दिन संचालित होती है।</p>"
+                f"सुविधा की स्थापित दैनिक क्षमता <strong>{format_inr(daily_capacity)} {doc.capacity_unit} प्रति दिन</strong> है, जो वर्ष में {doc.working_days} दिन संचालित होती है।</p>"
                 f"<p><strong>4.4 मूल्य प्रस्ताव एवं प्रतिस्पर्धी बढ़त:</strong><br>"
                 f"स्वचालित मशीनरी के माध्यम से कम इकाई उत्पादन लागत, शून्य-दोष गुणवत्ता आश्वासन और स्थानीय तकनीकी सहायता {b_name} के प्रमुख लाभ हैं।</p>"
                 f"<p><strong>4.5 पैकेजिंग, भंडारण एवं शेल्फ-लाइफ प्रबंधन:</strong><br>"
@@ -548,11 +549,11 @@ class ManufacturingNarrative:
                 f"<p><strong>6.1 संयंत्र मशीनरी एवं स्वचालन प्रौद्योगिकी:</strong><br>"
                 f"उत्पादन तल में सीएनसी टर्निंग सेंटर, वीएमसी मशीनें और डिजिटल मेट्रोलॉजी उपकरण शामिल हैं ({doc.supplier_name or 'प्रमुख आपूर्तिकर्ता'})।</p>"
                 f"<p><strong>6.2 कारखाना लेआउट एवं कार्यक्षेत्र विनिर्देश:</strong><br>"
-                f"संयंत्र <strong>{builtup_area:,.0f} वर्ग फुट</strong> के निर्मित क्षेत्र में लीन मैन्युफैक्चरिंग सिद्धांतों के अनुसार अनुकूलित है।</p>"
+                f"संयंत्र <strong>{format_inr(builtup_area)} वर्ग फुट</strong> के निर्मित क्षेत्र में लीन मैन्युफैक्चरिंग सिद्धांतों के अनुसार अनुकूलित है।</p>"
                 f"<p><strong>6.3 पावर ग्रिड एवं बैकअप:</strong><br>"
-                f"स्वीकृत वाणिज्यिक बिजली भार <strong>{power_required:,.0f} HP/kW</strong> है और 100% डीजी जनरेटर बैकअप स्थापित है।</p>"
+                f"स्वीकृत वाणिज्यिक बिजली भार <strong>{format_inr(power_required)} HP/kW</strong> है और 100% डीजी जनरेटर बैकअप स्थापित है।</p>"
                 f"<p><strong>6.4 जल आपूर्ति एवं पर्यावरण संरक्षण:</strong><br>"
-                f"प्रक्रिया जल आवश्यकता <strong>{water_required:,.0f} LPD</strong> है और ईटीपी/जेಡ್‌एलडी के माध्यम से पूर्ण रीसाइक्लिंग सुनिश्चित की जाती है।</p>"
+                f"प्रक्रिया जल आवश्यकता <strong>{format_inr(water_required)} LPD</strong> है और ईटीपी/जेಡ್‌एलडी के माध्यम से पूर्ण रीसाइक्लिंग सुनिश्चित की जाती है।</p>"
             ),
             "risk_analysis": (
                 f"<p><strong>7.1 परिचालन एवं मशीन डाउनटाइम जोखिम:</strong><br>"
@@ -571,9 +572,9 @@ class ManufacturingNarrative:
             ),
             "cost_and_means": (
                 f"<p><strong>9.1 परियोजना लागत औचित्य:</strong><br>"
-                f"₹{total_cost:,.2f} का पूंजीगत परिव्यय भवन (₹{building_cost:,.2f}), मशीनरी (₹{m_total:,.2f}), विद्युतीकरण (₹{electrification_cost:,.2f}), और कार्यशील पूंजी (₹{working_capital:,.2f}) में आवंटित है।</p>"
+                f"₹{format_inr(total_cost)} का पूंजीगत परिव्यय भवन (₹{format_inr(building_cost)}), मशीनरी (₹{format_inr(m_total)}), विद्युतीकरण (₹{format_inr(electrification_cost)}), और कार्यशील पूंजी (₹{format_inr(working_capital)}) में आवंटित है।</p>"
                 f"<p><strong>9.2 वित्तपोषण संरचना:</strong><br>"
-                f"प्रवर्तक इक्विटी ₹{promoter_contribution:,.2f} ({promoter_pct:.1f}%) और बैंक ऋण ₹{bank_loan:,.2f} ({bank_pct:.1f}%), ऋण-इक्विटी अनुपात {debt_equity_val:.2f}x है।</p>"
+                f"प्रवर्तक इक्विटी ₹{format_inr(promoter_contribution)} ({promoter_pct:.1f}%) और बैंक ऋण ₹{format_inr(bank_loan)} ({bank_pct:.1f}%), ऋण-इक्विटी अनुपात {debt_equity_val:.2f}x है।</p>"
             ),
             "land_shed_infrastructure": (
                 f"<p><strong>10.1 कारखाना परिसर एवं स्थल उपयुक्तता:</strong><br>"
@@ -641,7 +642,7 @@ class ManufacturingNarrative:
             ),
             "site_utilities_narrative": (
                 f"<p><strong>23.1 अवसंरचना एवं उपयोगिता तत्परता:</strong><br>"
-                f"{power_required:,.0f} HP/kW बिजली और {water_required:,.0f} जल आपूर्ति कनेक्शन पूरी तरह से चालू हैं।</p>"
+                f"{format_inr(power_required)} HP/kW बिजली और {format_inr(water_required)} जल आपूर्ति कनेक्शन पूरी तरह से चालू हैं।</p>"
             ),
             "marketing_distribution_narrative": (
                 f"<p><strong>24.1 बिक्री संबंध एवं B2B वितरण:</strong><br>"
@@ -654,8 +655,8 @@ class ManufacturingNarrative:
             "conclusion": (
                 f"<p><strong>26.1 अंतिम मूल्यांकन एवं बैंक सावधि ऋण अनुशंसा:</strong><br>"
                 f"{b_name} की प्रस्तावित विनिर्माण इकाई तकनीकी रूप से साध्य, व्यावसायिक रूप से आकर्षक और वित्तीय रूप से सुदृढ़ है। "
-                f"औसत DSCR <strong>{avg_dscr:.2f}x</strong>, सकारात्मक NPV <strong>₹{corporate_npv:,.2f}</strong>, और IRR "
-                f"<strong>{corporate_project_irr:.1f}%</strong> के साथ, <strong>₹{bank_loan:,.2f}</strong> के सावधि ऋण की तत्काल प्रशासनिक एवं वित्तीय स्वीकृति की दृढ़ अनुशंसा की जाती है।</p>"
+                f"औसत DSCR <strong>{avg_dscr:.2f}x</strong>, सकारात्मक NPV <strong>₹{format_inr(corporate_npv)}</strong>, और IRR "
+                f"<strong>{corporate_project_irr:.1f}%</strong> के साथ, <strong>₹{format_inr(bank_loan)}</strong> के सावधि ऋण की तत्काल प्रशासनिक एवं वित्तीय स्वीकृति की दृढ़ अनुशंसा की जाती है।</p>"
                 f"<p><strong>26.2 आर्थिक एवं सामाजिक प्रभाव का सारांश:</strong><br>"
                 f"यह उद्यम {int(doc.local_employment or 15)} प्रत्यक्ष रोजगार सृजित करता है और {district} में स्थानीय विनिर्माण विकास को गति देता है।</p>"
             )

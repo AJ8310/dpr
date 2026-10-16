@@ -1,4 +1,5 @@
 from typing import Dict, List, Any, Tuple
+from dpr_engine.utils.currency import format_inr
 from decimal import Decimal
 import math
 
@@ -199,7 +200,7 @@ class FinancialIntelligenceEngine:
             logs.append({
                 "severity": "WARNING",
                 "code": "RECONCILIATION_MISMATCH",
-                "message": f"Project Cost (₹{cost:,.2f}) does not match Total Means of Finance (₹{funds:,.2f}). Difference: ₹{diff:,.2f}"
+                "message": f"Project Cost (₹{format_inr(cost)}) does not match Total Means of Finance (₹{format_inr(funds)}). Difference: ₹{format_inr(diff)}"
             })
         else:
             logs.append({

@@ -50,12 +50,14 @@ app.add_middleware(RequestTracingMiddleware)
 app.add_middleware(HTTPSecurityHeadersMiddleware)
 
 # Phase 1A Security Hardening: Strict CORS Origins Whitelist
-allowed_origins = settings.CORS_ORIGINS if hasattr(settings, "CORS_ORIGINS") else [
+allowed_origins = list(set((settings.CORS_ORIGINS if hasattr(settings, "CORS_ORIGINS") and settings.CORS_ORIGINS else []) + [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://localhost:3005",
+    "http://127.0.0.1:3005",
     "http://localhost:5000",
     "http://127.0.0.1:5000"
-]
+]))
 
 app.add_middleware(
     CORSMiddleware,

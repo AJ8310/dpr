@@ -1,5 +1,6 @@
 import re
 from typing import Dict, Any, List, Optional
+from dpr_engine.utils.currency import format_inr
 from sqlalchemy.orm import Session
 from dpr_engine.agents.agent_tools import ProjectDataTool, FinancialDataTool
 
@@ -36,7 +37,7 @@ class FinancialContentValidator:
                 cost_breakdown = canonical.get("project_cost", {})
                 valid_costs = [cost_breakdown.get("land", 0), cost_breakdown.get("building", 0), cost_breakdown.get("machinery", 0), cost_breakdown.get("working_capital", 0)]
                 if not any(abs(val_clean - vc) < 1.0 for vc in valid_costs):
-                    warnings.append(f"Referenced financial value ₹{val_clean:,.2f} does not match canonical CapEx breakdown.")
+                    warnings.append(f"Referenced financial value ₹{format_inr(val_clean)} does not match canonical CapEx breakdown.")
 
         return {
             "is_valid": len(errors) == 0,

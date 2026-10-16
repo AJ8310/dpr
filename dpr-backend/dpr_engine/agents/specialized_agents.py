@@ -4,6 +4,7 @@ Implements Privacy, Market, Financial, Scheme, Risk, Credit Scoring, and Content
 """
 
 from typing import Dict, Any, List, Optional
+from dpr_engine.utils.currency import format_inr
 from sqlalchemy.orm import Session
 
 from dpr_engine.agents.llm_provider import get_llm_provider, PromptSanitizer
@@ -195,7 +196,7 @@ class GovernmentSchemeAgent(BaseAgent):
             "matched_schemes": [
                 {
                     "name": f"PMMY — {mudra_eval['label']}",
-                    "benefit": f"Collateral-free bank loan up to ₹{requested_loan:,.2f}",
+                    "benefit": f"Collateral-free bank loan up to ₹{format_inr(requested_loan)}",
                     "status": "APPLICABLE" if is_agri_eligible else "EXCLUDED"
                 },
                 {

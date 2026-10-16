@@ -1,5 +1,6 @@
 from typing import Dict, Any, List
 from dpr_engine.data_model import DPRDocumentModel, IndustryCategoryEnum
+from dpr_engine.utils.currency import format_inr
 
 class DeterministicDiagramEngine:
 
@@ -76,11 +77,11 @@ class DeterministicDiagramEngine:
         # 2. Funding Distribution Tree (Standard Corporate Styling)
         funding_tree_html = (
             '<div style="border: 1px solid #CBD5E1; background: #F8FAFC; padding: 12px; border-radius: 8px; margin: 15px 0; text-align: center;">'
-            f'<div style="font-weight: bold; color: #0F172A; font-size: 10.5pt; margin-bottom: 8px;">TOTAL CAPITAL PROJECT COST: ₹{doc.total_cost:,.2f}</div>'
+            f'<div style="font-weight: bold; color: #0F172A; font-size: 10.5pt; margin-bottom: 8px;">TOTAL CAPITAL PROJECT COST: ₹{format_inr(doc.total_cost)}</div>'
             '<div style="display: flex; justify-content: space-around; gap: 10px; font-size: 8.5pt;">'
-            f'<div style="background: white; border: 1px solid #0F172A; color: #0F172A; padding: 6px 12px; border-radius: 6px;">Promoter Equity: <strong>₹{doc.promoter_contribution:,.2f}</strong></div>'
-            f'<div style="background: white; border: 1px solid #1E3A8A; color: #1E3A8A; padding: 6px 12px; border-radius: 6px;">Bank Term Loan: <strong>₹{doc.bank_loan:,.2f}</strong></div>'
-            f'<div style="background: white; border: 1px solid #2563EB; color: #2563EB; padding: 6px 12px; border-radius: 6px;">Subsidy Claim: <strong>₹{doc.subsidy:,.2f}</strong></div>'
+            f'<div style="background: white; border: 1px solid #0F172A; color: #0F172A; padding: 6px 12px; border-radius: 6px;">Promoter Equity: <strong>₹{format_inr(doc.promoter_contribution)}</strong></div>'
+            f'<div style="background: white; border: 1px solid #1E3A8A; color: #1E3A8A; padding: 6px 12px; border-radius: 6px;">Bank Term Loan: <strong>₹{format_inr(doc.bank_loan)}</strong></div>'
+            f'<div style="background: white; border: 1px solid #2563EB; color: #2563EB; padding: 6px 12px; border-radius: 6px;">Subsidy Claim: <strong>₹{format_inr(doc.subsidy)}</strong></div>'
             '</div>'
             '</div>'
         )

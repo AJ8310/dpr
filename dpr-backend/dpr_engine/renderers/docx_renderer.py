@@ -8,6 +8,7 @@ from docx.oxml.ns import nsdecls, qn
 
 from dpr_engine.data_model import DPRDocumentModel
 from dpr_engine.structures.structure_engine import DPRStructureEngine
+from dpr_engine.utils.currency import format_inr
 
 DOCX_I18N = {
     "en": {
@@ -17,7 +18,7 @@ DOCX_I18N = {
         "depth_prefix": "Depth",
         "location_prefix": "Location",
         "ch1_heading": "1.0 Executive Summary & Project Highlights",
-        "ch1_text": "{business_name} is a commercial enterprise located in {district}, {state}. The total project cost is estimated at ₹{total_cost:,.2f}, funded by promoter contribution of ₹{promoter_contrib:,.2f} and bank loan of ₹{bank_loan:,.2f}. The project features an average 5-year DSCR of {avg_dscr} and break-even point of {bep_percent}%.",
+        "ch1_text": "{business_name} is a commercial enterprise located in {district}, {state}. The total project cost is estimated at {total_cost}, funded by promoter contribution of {promoter_contrib} and bank loan of {bank_loan}. The project features an average 5-year DSCR of {avg_dscr} and break-even point of {bep_percent}%.",
         "m_total_cost": "Total Project Cost",
         "m_promoter": "Promoter Equity Contribution",
         "m_loan": "Proposed Bank Loan",
@@ -45,7 +46,7 @@ DOCX_I18N = {
         "depth_prefix": "ವರದಿಯ ಆಳ",
         "location_prefix": "ಸ್ಥಳ",
         "ch1_heading": "1.0 ಕಾರ್ಯಕಾರಿ ಸಾರಾಂಶ ಮತ್ತು ಯೋಜನೆಯ ಮುಖ್ಯಾಂಶಗಳು",
-        "ch1_text": "{business_name} ಸಂಸ್ಥೆಯು {district}, {state} ನಲ್ಲಿ ಸ್ಥಾಪಿಸಲಾಗುವ ವಾಣಿಜ್ಯ ಉದ್ಯಮವಾಗಿದೆ. ಯೋಜನೆಯ ಒಟ್ಟು ಅಂದಾಜು ವೆಚ್ಚ ₹{total_cost:,.2f} ಆಗಿದ್ದು, ಪ್ರವರ್ತಕರ ಇಕ್ವಿಟಿ ₹{promoter_contrib:,.2f} ಮತ್ತು ಬ್ಯಾಂಕ್ ಸಾಲ ₹{bank_loan:,.2f} ಮೂಲಕ ಹಣಕಾಸು ಒದಗಿಸಲಾಗಿದೆ. ಯೋಜನೆಯ ಸರಾಸರಿ 5-ವರ್ಷದ ಸಾಲ ಮರುಪಾವತಿ ಅನುಪಾತ (DSCR) {avg_dscr} ಮತ್ತು ಬ್ರೇಕ್-ಈವನ್ ಪಾಯಿಂಟ್ {bep_percent}% ಆಗಿದೆ.",
+        "ch1_text": "{business_name} ಸಂಸ್ಥೆಯು {district}, {state} ನಲ್ಲಿ ಸ್ಥಾಪಿಸಲಾಗುವ ವಾಣಿಜ್ಯ ಉದ್ಯಮವಾಗಿದೆ. ಯೋಜನೆಯ ಒಟ್ಟು ಅಂದಾಜು ವೆಚ್ಚ {total_cost} ಆಗಿದ್ದು, ಪ್ರವರ್ತಕರ ಇಕ್ವಿಟಿ {promoter_contrib} ಮತ್ತು ಬ್ಯಾಂಕ್ ಸಾಲ {bank_loan} ಮೂಲಕ ಹಣಕಾಸು ಒದಗಿಸಲಾಗಿದೆ. ಯೋಜನೆಯ ಸರಾಸರಿ 5-ವರ್ಷದ ಸಾಲ ಮರುಪಾವತಿ ಅನುಪಾತ (DSCR) {avg_dscr} ಮತ್ತು ಬ್ರೇಕ್-ಈವನ್ ಪಾಯಿಂಟ್ {bep_percent}% ಆಗಿದೆ.",
         "m_total_cost": "ಒಟ್ಟು ಯೋಜನಾ ವೆಚ್ಚ",
         "m_promoter": "ಪ್ರವರ್ತಕರ ಇಕ್ವಿಟಿ ಬಂಡವಾಳ",
         "m_loan": "ಪ್ರಸ್ತಾವಿತ ಬ್ಯಾಂಕ್ ಸಾಲ",
@@ -73,7 +74,7 @@ DOCX_I18N = {
         "depth_prefix": "रिपोर्ट गहराई",
         "location_prefix": "स्थान",
         "ch1_heading": "1.0 कार्यकारी सारांश एवं परियोजना मुख्य विशेषताएं",
-        "ch1_text": "{business_name} एक वाणिज्यिक उद्यम है जो {district}, {state} में स्थापित है। परियोजना की कुल अनुमानित लागत ₹{total_cost:,.2f} है, जिसे प्रवर्तक अंशदान ₹{promoter_contrib:,.2f} एवं बैंक ऋण ₹{bank_loan:,.2f} द्वारा वित्तपोषित किया गया है। परियोजना का औसत 5-वर्षीय ऋण सेवा कवरेज अनुपात (DSCR) {avg_dscr} तथा ब्रेक-इवन बिंदु {bep_percent}% है।",
+        "ch1_text": "{business_name} एक वाणिज्यिक उद्यम है जो {district}, {state} में स्थापित है। परियोजना की कुल अनुमानित लागत {total_cost} है, जिसे प्रवर्तक अंशदान {promoter_contrib} एवं बैंक ऋण {bank_loan} द्वारा वित्तपोषित किया गया है। परियोजना का औसत 5-वर्षीय ऋण सेवा कवरेज अनुपात (DSCR) {avg_dscr} तथा ब्रेक-इवन बिंदु {bep_percent}% है।",
         "m_total_cost": "कुल परियोजना लागत",
         "m_promoter": "प्रवर्तक इक्विटी अंशदान",
         "m_loan": "प्रस्तावित बैंक ऋण",
@@ -102,7 +103,7 @@ class DOCXDocumentRenderer:
     def render_docx(cls, doc: DPRDocumentModel, output_docx_path: str) -> str:
         document = Document()
         lang = getattr(doc, 'language', 'en') or 'en'
-        i18n = DOCXI18N.get(lang, DOCXI18N['en'])
+        i18n = DOCX_I18N.get(lang, DOCX_I18N['en'])
 
         # Page Setup Margins & Page Borders
         for section in document.sections:
@@ -145,9 +146,9 @@ class DOCXDocumentRenderer:
             business_name=doc.business_name,
             district=doc.district,
             state=doc.state,
-            total_cost=doc.total_cost,
-            promoter_contrib=doc.promoter_contribution,
-            bank_loan=doc.bank_loan,
+            total_cost=f"₹{format_inr(doc.total_cost)}",
+            promoter_contrib=f"₹{format_inr(doc.promoter_contribution)}",
+            bank_loan=f"₹{format_inr(doc.bank_loan)}",
             avg_dscr=doc.avg_dscr,
             bep_percent=doc.bep_percent
         )
@@ -159,10 +160,10 @@ class DOCXDocumentRenderer:
         table.style = 'Table Grid'
 
         metrics = [
-            (i18n["m_total_cost"], f"₹{doc.total_cost:,.2f}"),
-            (i18n["m_promoter"], f"₹{doc.promoter_contribution:,.2f}"),
-            (i18n["m_loan"], f"₹{doc.bank_loan:,.2f}"),
-            (i18n["m_subsidy"], f"₹{doc.subsidy:,.2f}"),
+            (i18n["m_total_cost"], f"₹{format_inr(doc.total_cost)}"),
+            (i18n["m_promoter"], f"₹{format_inr(doc.promoter_contribution)}"),
+            (i18n["m_loan"], f"₹{format_inr(doc.bank_loan)}"),
+            (i18n["m_subsidy"], f"₹{format_inr(doc.subsidy)}"),
             (i18n["m_dscr"], f"{doc.avg_dscr}"),
         ]
 
@@ -174,11 +175,11 @@ class DOCXDocumentRenderer:
         document.add_heading(i18n["ch2_heading"], level=1)
         p_fin = document.add_paragraph()
         p_fin.add_run(
-            f"{i18n['ch2_land']}: ₹{doc.land_cost:,.2f}\n"
-            f"{i18n['ch2_building']}: ₹{doc.building_cost:,.2f}\n"
-            f"{i18n['ch2_furniture']}: ₹{doc.furniture_cost:,.2f}\n"
-            f"{i18n['ch2_wc']}: ₹{doc.working_capital:,.2f}\n"
-            f"{i18n['ch2_total']}: ₹{doc.total_cost:,.2f}"
+            f"{i18n['ch2_land']}: ₹{format_inr(doc.land_cost)}\n"
+            f"{i18n['ch2_building']}: ₹{format_inr(doc.building_cost)}\n"
+            f"{i18n['ch2_furniture']}: ₹{format_inr(doc.furniture_cost)}\n"
+            f"{i18n['ch2_wc']}: ₹{format_inr(doc.working_capital)}\n"
+            f"{i18n['ch2_total']}: ₹{format_inr(doc.total_cost)}"
         )
 
         # 5-Year Financial Projections Table
@@ -193,9 +194,9 @@ class DOCXDocumentRenderer:
 
             metrics_rows = [
                 (i18n["pnl_cap"], [f"{p.capacity_utilization}%" for p in doc.projections]),
-                (i18n["pnl_rev"], [f"₹{p.revenue:,.0f}" for p in doc.projections]),
-                (i18n["pnl_opex"], [f"₹{p.total_opex:,.0f}" for p in doc.projections]),
-                (i18n["pnl_pat"], [f"₹{p.pat:,.0f}" for p in doc.projections]),
+                (i18n["pnl_rev"], [f"₹{format_inr(p.revenue)}" for p in doc.projections]),
+                (i18n["pnl_opex"], [f"₹{format_inr(p.total_opex)}" for p in doc.projections]),
+                (i18n["pnl_pat"], [f"₹{format_inr(p.pat)}" for p in doc.projections]),
                 (i18n["pnl_dscr"], [f"{p.dscr}" for p in doc.projections]),
             ]
 

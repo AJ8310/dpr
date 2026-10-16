@@ -1,5 +1,6 @@
 from typing import List, Dict, Any
 from dpr_engine.data_model import DPRDocumentModel
+from dpr_engine.utils.currency import format_inr
 
 class QualityValidationEngine:
 
@@ -39,7 +40,7 @@ class QualityValidationEngine:
         if abs(doc.total_cost - doc.total_funds) > 1000.0:
             checks["financial_reconciliation"] = False
             warnings.append(
-                f"Financial Mismatch: Total Project Cost (₹{doc.total_cost:,.2f}) does not equal Total Means of Finance (₹{doc.total_funds:,.2f})."
+                f"Financial Mismatch: Total Project Cost (₹{format_inr(doc.total_cost)}) does not equal Total Means of Finance (₹{format_inr(doc.total_funds)})."
             )
 
         # 4. Bank Loan Repayment Check

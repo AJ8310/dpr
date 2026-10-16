@@ -9,44 +9,8 @@ from dpr_engine.visuals.diagram_engine import DeterministicDiagramEngine
 from dpr_engine.visuals.image_engine import ImageManagementEngine
 
 from dpr_engine.document.renderers.chart_renderer import ChartRenderer
+from dpr_engine.utils.currency import format_inr, format_indian_words
 
-def format_inr(val):
-    if val is None or val == "":
-        return "0"
-    try:
-        val = float(val)
-    except (ValueError, TypeError):
-        return str(val)
-    
-    is_int = (val % 1 == 0)
-    s = f"{val:.2f}" if not is_int else f"{int(val)}"
-    parts = s.split('.')
-    integer_part = parts[0]
-    
-    negative = integer_part.startswith('-')
-    if negative:
-        integer_part = integer_part[1:]
-    
-    if len(integer_part) > 3:
-        last3 = integer_part[-3:]
-        rest = integer_part[:-3]
-        groups = []
-        while len(rest) > 2:
-            groups.insert(0, rest[-2:])
-            rest = rest[:-2]
-        if rest:
-            groups.insert(0, rest)
-        formatted = ",".join(groups) + "," + last3
-    else:
-        formatted = integer_part
-        
-    if negative:
-        formatted = "-" + formatted
-        
-    if not is_int and len(parts) > 1 and int(parts[1]) > 0:
-        formatted += "." + parts[1]
-        
-    return formatted
 
 REPORT_I18N: Dict[str, Dict[str, str]] = {
     "en": {
@@ -828,6 +792,7 @@ class DPRTemplateCompositionEngine:
         env = Environment(loader=FileSystemLoader(templates_dir))
         env.filters['inr'] = format_inr
         env.filters['indian_num'] = format_inr
+        env.filters['indian_words'] = format_indian_words
         template = env.get_template("dpr_template.html")
 
         # Determine language

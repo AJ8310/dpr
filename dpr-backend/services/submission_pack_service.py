@@ -4,6 +4,7 @@ Assembles complete bank-ready application bundles as structured JSON / PDF recor
 """
 
 from typing import Dict, Any, List
+from dpr_engine.utils.currency import format_inr
 from datetime import datetime
 from services.validation_service import DPRValidationService
 
@@ -34,13 +35,13 @@ To,
 The Branch Manager,
 {bank_name}, {branch_name} Branch.
 
-Subject: Credit Application for {requested_loan:,.2f} under Pradhan Mantri MUDRA Yojana ({mudra_category})
+Subject: Credit Application for {format_inr(requested_loan)} under Pradhan Mantri MUDRA Yojana ({mudra_category})
 
 Respected Sir/Madam,
 
 We submit herewith the Detailed Project Report (DPR) and credit appraisal pack for '{business_name}', promoted by {promoter_name}. 
 
-The unit proposes to establish/expand business operations with a Total Project Cost of ₹{submission_data.get('project_cost', requested_loan*1.25):,.2f}, requesting a bank loan facility of ₹{requested_loan:,.2f} under the PMMY ({mudra_category}) framework.
+The unit proposes to establish/expand business operations with a Total Project Cost of ₹{format_inr(submission_data.get('project_cost', requested_loan*1.25))}, requesting a bank loan facility of ₹{format_inr(requested_loan)} under the PMMY ({mudra_category}) framework.
 
 The attached DPR incorporates detailed technical feasibility, operational workflows, 5-year financial projections (P&L, Cash Flow, Balance Sheet, DSCR), asset schedules, and compliance registrations verified through the Vision Karnataka Foundation (VKF) DPR Engine.
 

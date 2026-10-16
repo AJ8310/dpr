@@ -1,4 +1,5 @@
 from typing import Dict, Any, List
+from dpr_engine.utils.currency import format_inr
 from sqlalchemy.orm import Session
 from models.database_models import DPRSchemeRuleDB
 from dpr_engine.intelligence.mudra_rules import MudraRulesEngine
@@ -45,7 +46,7 @@ class SchemeKnowledgeEngine:
                 "category_code": category_info["category"],
                 "depth_level": category_info["depth"],
                 "page_guideline": category_info["page_count_guideline"],
-                "estimated_benefit": f"Collateral-free credit up to ₹{loan_amount:,.2f} under {category_info['label']} category.",
+                "estimated_benefit": f"Collateral-free credit up to ₹{format_inr(loan_amount)} under {category_info['label']} category.",
                 "rationale": category_info["description"],
                 "required_documents": ["UDYAM Registration Certificate", "Applicant PAN & Aadhaar", "Proforma Invoices / Vendor Quotations", "Bank Account Statement (6 Months)"],
                 "source_url": "https://www.mudra.org.in",
@@ -72,8 +73,8 @@ class SchemeKnowledgeEngine:
                 "authority": "KVIC / Ministry of MSME",
                 "version": "1.0.0",
                 "status": "POTENTIALLY_APPLICABLE",
-                "estimated_benefit": f"{subsidy_pct}% Capital Subsidy (Est. ₹{max_subsidy:,.2f})",
-                "rationale": f"Project cost (₹{cost:,.2f}) is within PMEGP threshold of ₹50 Lakhs for {sector_id.title()} units.",
+                "estimated_benefit": f"{subsidy_pct}% Capital Subsidy (Est. ₹{format_inr(max_subsidy)})",
+                "rationale": f"Project cost (₹{format_inr(cost)}) is within PMEGP threshold of ₹50 Lakhs for {sector_id.title()} units.",
                 "required_documents": ["UDYAM Certificate", "Promoter Caste/Category Certificate", "EDI Training Certificate"],
                 "source_url": "https://www.kviconline.gov.in/pmegpeportal",
                 "last_verified_at": "2026-08-25"
@@ -85,7 +86,7 @@ class SchemeKnowledgeEngine:
                 "authority": "KVIC / Ministry of MSME",
                 "version": "1.0.0",
                 "status": "NOT_APPLICABLE",
-                "rationale": f"Project cost (₹{cost:,.2f}) exceeds PMEGP ceiling limit of ₹50 Lakhs.",
+                "rationale": f"Project cost (₹{format_inr(cost)}) exceeds PMEGP ceiling limit of ₹50 Lakhs.",
                 "source_url": "https://www.kviconline.gov.in/pmegpeportal"
             })
 

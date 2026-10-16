@@ -114,7 +114,7 @@ class AmortizationScheduleItem(BaseModel):
     principal_repayment: float = 0.0
     closing_balance: float = 0.0
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 class DPRDocumentModel(BaseModel):
     # Metadata
@@ -126,6 +126,22 @@ class DPRDocumentModel(BaseModel):
     dpr_depth: DPRDepthEnum = DPRDepthEnum.CORE
     industry: IndustryCategoryEnum = IndustryCategoryEnum.MANUFACTURING
     associated_with_vkf: bool = False
+
+    @model_validator(mode='before')
+    @classmethod
+    def populate_aliases(cls, data: Any):
+        if isinstance(data, dict):
+            if not data.get('business_name'):
+                data['business_name'] = data.get('company_name') or data.get('enterprise_name') or "Enterprise"
+            if not data.get('term_loan') and data.get('bank_loan'):
+                data['term_loan'] = data.get('bank_loan')
+            if not data.get('bank_loan') and data.get('term_loan'):
+                data['bank_loan'] = data.get('term_loan')
+            if not data.get('subsidy_amount') and data.get('subsidy'):
+                data['subsidy_amount'] = data.get('subsidy')
+            if not data.get('subsidy') and data.get('subsidy_amount'):
+                data['subsidy'] = data.get('subsidy_amount')
+        return data
 
     @field_validator('dpr_type', mode='before')
     @classmethod

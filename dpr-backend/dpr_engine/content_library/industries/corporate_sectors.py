@@ -1,5 +1,6 @@
 from typing import Dict, Any
 from dpr_engine.data_model import DPRDocumentModel
+from dpr_engine.utils.currency import format_inr
 
 def safe_float(v, default: float = 0.0) -> float:
     if v is None:
@@ -33,8 +34,8 @@ class CorporateSectorsNarrative:
                     f"{b_name} ಒಂದು ಉನ್ನತ ಇಳುವರಿಯ ಗ್ರಿಡ್-ಸಂಪರ್ಕಿತ ಸೌರ ದ್ಯುತಿವಿದ್ಯುಜ್ಜನಕ (PV) ನವೀಕರಿಸಬಹುದಾದ ವಿದ್ಯುತ್ ಉತ್ಪಾದನಾ ಯೋಜನೆಯಾಗಿದ್ದು, {doc.district}, {doc.state} ನಲ್ಲಿ ನೆಲೆಗೊಂಡಿದೆ. "
                     f"ರಾಜ್ಯ ವಿದ್ಯುತ್ ಸರಬರಾಜು ಕಂಪನಿಗಳೊಂದಿಗೆ (ESCOMs) ಮತ್ತು ಕೈಗಾರಿಕಾ ಗ್ರಾಹಕರೊಂದಿಗೆ 25-ವರ್ಷಗಳ ವಿದ್ಯುತ್ ಖರೀದಿ ಒಪ್ಪಂದದ (PPA) ಅಡಿಯಲ್ಲಿ ಸ್ವಚ್ಛ ವಿದ್ಯುತ್ ಶಕ್ತಿಯನ್ನು ಉತ್ಪಾದಿಸಲು ಈ ಘಟಕವನ್ನು ವಿನ್ಯಾಸಗೊಳಿಸಲಾಗಿದೆ.</p>"
                     f"<p><strong>1.2 ಆರ್ಥಿಕ ವೆಚ್ಚ ಮತ್ತು ಮೌಲ್ಯಮಾಪನ ಸಾರಾಂಶ:</strong><br>"
-                    f"ಒಟ್ಟು ಯೋಜನಾ ಬಂಡವಾಳ ವೆಚ್ಚ: <strong>₹{total_cost:,.2f}</strong>, ಪ್ರವರ್ತಕರ ಇಕ್ವಿಟಿ <strong>₹{promoter_contribution:,.2f}</strong> ಮತ್ತು ಬ್ಯಾಂಕ್ ಸಾಲ <strong>₹{bank_loan:,.2f}</strong> ಬೆಂಬಲದೊಂದಿಗೆ. "
-                    f"ಕಾರ್ಪೊರೇಟ್ ಮೌಲ್ಯಮಾಪನ ಮಾನದಂಡಗಳು ಉನ್ನತ ಆದಾಯವನ್ನು ಖಚಿತಪಡಿಸುತ್ತವೆ: WACC <strong>{corporate_wacc:.1f}%</strong> ನಲ್ಲಿ ರಿಯಾಯಿತಿ ನಗದು ಹರಿವಿನ ನಿವ್ವಳ ಪ್ರಸ್ತುತ ಮೌಲ್ಯ (NPV) <strong>₹{corporate_npv:,.2f}</strong>, "
+                    f"ಒಟ್ಟು ಯೋಜನಾ ಬಂಡವಾಳ ವೆಚ್ಚ: <strong>₹{format_inr(total_cost)}</strong>, ಪ್ರವರ್ತಕರ ಇಕ್ವಿಟಿ <strong>₹{format_inr(promoter_contribution)}</strong> ಮತ್ತು ಬ್ಯಾಂಕ್ ಸಾಲ <strong>₹{format_inr(bank_loan)}</strong> ಬೆಂಬಲದೊಂದಿಗೆ. "
+                    f"ಕಾರ್ಪೊರೇಟ್ ಮೌಲ್ಯಮಾಪನ ಮಾನದಂಡಗಳು ಉನ್ನತ ಆದಾಯವನ್ನು ಖಚಿತಪಡಿಸುತ್ತವೆ: WACC <strong>{corporate_wacc:.1f}%</strong> ನಲ್ಲಿ ರಿಯಾಯಿತಿ ನಗದು ಹರಿವಿನ ನಿವ್ವಳ ಪ್ರಸ್ತುತ ಮೌಲ್ಯ (NPV) <strong>₹{format_inr(corporate_npv)}</strong>, "
                     f"ಯೋಜನಾ IRR <strong>{corporate_project_irr:.1f}%</strong>, ಮತ್ತು ಇಕ್ವಿಟಿ IRR <strong>{corporate_equity_irr:.1f}%</strong>.</p>"
                 ),
                 "business_overview": (
@@ -71,7 +72,7 @@ class CorporateSectorsNarrative:
                 ),
                 "conclusion": (
                     f"<p><strong>9.1 ಅಂತಿಮ ಶಿಫಾರಸು:</strong><br>"
-                    f"ಧನಾತ್ಮಕ NPV ₹{doc.corporate_npv:,.2f} ಮತ್ತು ಯೋಜನಾ IRR {doc.corporate_project_irr:.1f}% ನೊಂದಿಗೆ, ₹{doc.bank_loan:,.2f} ಗಳ ಬ್ಯಾಂಕ್ ಅವಧಿ ಸಾಲವನ್ನು ಮಂಜೂರು ಮಾಡಲು ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
+                    f"ಧನಾತ್ಮಕ NPV ₹{format_inr(doc.corporate_npv)} ಮತ್ತು ಯೋಜನಾ IRR {doc.corporate_project_irr:.1f}% ನೊಂದಿಗೆ, ₹{format_inr(doc.bank_loan)} ಗಳ ಬ್ಯಾಂಕ್ ಅವಧಿ ಸಾಲವನ್ನು ಮಂಜೂರು ಮಾಡಲು ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
                 )
             }
 
@@ -82,8 +83,8 @@ class CorporateSectorsNarrative:
                 f"The facility is designed to generate clean electric power under a 25-year Power Purchase Agreement (PPA) with state electricity distribution utility companies (ESCOMs) "
                 f"and corporate third-party open-access industrial off-takers.</p>"
                 f"<p><strong>1.2 Financial Outlay & Valuation Summary:</strong><br>"
-                f"Total project capital expenditure: <strong>₹{total_cost:,.2f}</strong>, backed by promoter equity of <strong>₹{promoter_contribution:,.2f}</strong> and debt financing of <strong>₹{bank_loan:,.2f}</strong>. "
-                f"Corporate valuation metrics confirm high financial returns: Discounted Cash Flow Net Present Value (NPV) of <strong>₹{corporate_npv:,.2f}</strong> at a WACC of <strong>{corporate_wacc:.1f}%</strong>, "
+                f"Total project capital expenditure: <strong>₹{format_inr(total_cost)}</strong>, backed by promoter equity of <strong>₹{format_inr(promoter_contribution)}</strong> and debt financing of <strong>₹{format_inr(bank_loan)}</strong>. "
+                f"Corporate valuation metrics confirm high financial returns: Discounted Cash Flow Net Present Value (NPV) of <strong>₹{format_inr(corporate_npv)}</strong> at a WACC of <strong>{corporate_wacc:.1f}%</strong>, "
                 f"Project IRR of <strong>{corporate_project_irr:.1f}%</strong>, and Equity IRR of <strong>{corporate_equity_irr:.1f}%</strong>.</p>"
             ),
             "business_overview": (
@@ -120,7 +121,7 @@ class CorporateSectorsNarrative:
             ),
             "conclusion": (
                 f"<p><strong>9.1 Recommendation:</strong><br>"
-                f"With positive NPV of ₹{doc.corporate_npv:,.2f} and Project IRR of {doc.corporate_project_irr:.1f}%, the term loan request of ₹{doc.bank_loan:,.2f} is strongly recommended for financial approval.</p>"
+                f"With positive NPV of ₹{format_inr(doc.corporate_npv)} and Project IRR of {doc.corporate_project_irr:.1f}%, the term loan request of ₹{format_inr(doc.bank_loan)} is strongly recommended for financial approval.</p>"
             )
         }
 
@@ -134,7 +135,7 @@ class CorporateSectorsNarrative:
                     f"<p><strong>1.1 ಮುಂದುವರಿದ ಎಲೆಕ್ಟ್ರಿಕ್ ವೆಹಿಕಲ್ ಇಂಧನ ಶೇಖರಣಾ ಯೋಜನೆ:</strong><br>"
                     f"{b_name} {doc.district}, {doc.state} ನಲ್ಲಿ ಸ್ಥಾಪಿಸಲಾದ ಸುಧಾರಿತ ಲಿಥಿಯಂ-ಐಯಾನ್ ಬ್ಯಾಟರಿ ಪ್ಯಾಕ್ ಮತ್ತು ಶಕ್ತಿ ಶೇಖರಣಾ ವ್ಯವಸ್ಥೆ (ESS) ಉತ್ಪಾದನಾ ಘಟಕವಾಗಿದೆ. "
                     f"ಸುಧಾರಿತ ರಸಾಯನಶಾಸ್ತ್ರ ಕೋಶ (ACC) ಬ್ಯಾಟರಿ ಶೇಖರಣೆಗಾಗಿ PLI (ಉತ್ಪಾದನೆ-ಸಂಯೋಜಿತ ಪ್ರೋತ್ಸಾಹ) ಯೋಜನೆ ನಿಯಮಗಳಿಗೆ ಅನುಗುಣವಾಗಿದೆ. "
-                    f"ಒಟ್ಟು ಬಂಡವಾಳ ವೆಚ್ಚ: <strong>₹{doc.total_cost:,.2f}</strong>, ಯೋಜನಾ IRR: <strong>{doc.corporate_project_irr:.1f}%</strong>, NPV: <strong>₹{doc.corporate_npv:,.2f}</strong>.</p>"
+                    f"ಒಟ್ಟು ಬಂಡವಾಳ ವೆಚ್ಚ: <strong>₹{format_inr(doc.total_cost)}</strong>, ಯೋಜನಾ IRR: <strong>{doc.corporate_project_irr:.1f}%</strong>, NPV: <strong>₹{format_inr(doc.corporate_npv)}</strong>.</p>"
                 ),
                 "technical_feasibility": (
                     f"<p><strong>6.1 ಗಿಗಾ-ಫ್ಯಾಕ್ಟರಿ ಸ್ವಯಂಚಾಲಿತ ಅಸೆಂಬ್ಲಿ ಲೈನ್:</strong><br>"
@@ -148,14 +149,14 @@ class CorporateSectorsNarrative:
                     f"<p><strong>8.4 ಸವಾಲುಗಳು:</strong> ತಂತ್ರಜ್ಞಾನದಲ್ಲಿ ಕ್ಷಿಪ್ರ ಬದಲಾವಣೆಗಳು ಮತ್ತು ಕಚ್ಚಾ ವಸ್ತುಗಳ ಬೆಲೆ ಏರಿಳಿತ.</p>"
                 ),
                 "conclusion": (
-                    f"<p><strong>9.1 ಶಿಫಾರಸು:</strong> ₹{doc.bank_loan:,.2f} ಗಳ ಬ್ಯಾಂಕ್ ಅವಧಿ ಸಾಲವನ್ನು ಮಂಜೂರು ಮಾಡಲು ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
+                    f"<p><strong>9.1 ಶಿಫಾರಸು:</strong> ₹{format_inr(doc.bank_loan)} ಗಳ ಬ್ಯಾಂಕ್ ಅವಧಿ ಸಾಲವನ್ನು ಮಂಜೂರು ಮಾಡಲು ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
                 )
             }
         return {
             "exec_summary": (
                 f"<p><strong>1.1 Advanced Electric Vehicle Energy Storage Mandate:</strong><br>"
                 f"{b_name} is an advanced Lithium-ion Battery Pack and Energy Storage System (ESS) manufacturing facility in {doc.district}, {doc.state}. "
-                f"Conforms to PLI (Production Linked Incentive) scheme norms for Advanced Chemistry Cell (ACC) battery storage. Total CAPEX: <strong>₹{doc.total_cost:,.2f}</strong>, Project IRR: <strong>{doc.corporate_project_irr:.1f}%</strong>, NPV: <strong>₹{doc.corporate_npv:,.2f}</strong>.</p>"
+                f"Conforms to PLI (Production Linked Incentive) scheme norms for Advanced Chemistry Cell (ACC) battery storage. Total CAPEX: <strong>₹{format_inr(doc.total_cost)}</strong>, Project IRR: <strong>{doc.corporate_project_irr:.1f}%</strong>, NPV: <strong>₹{format_inr(doc.corporate_npv)}</strong>.</p>"
             ),
             "technical_feasibility": (
                 f"<p><strong>6.1 Giga-Factory Automated Assembly Line:</strong><br>"
@@ -169,7 +170,7 @@ class CorporateSectorsNarrative:
                 f"<p><strong>8.4 Threats:</strong> Cell chemistry technological shifts.</p>"
             ),
             "conclusion": (
-                f"<p><strong>9.1 Recommendation:</strong> The project request for bank term loan facility of ₹{doc.bank_loan:,.2f} is strongly recommended for financial sanction.</p>"
+                f"<p><strong>9.1 Recommendation:</strong> The project request for bank term loan facility of ₹{format_inr(doc.bank_loan)} is strongly recommended for financial sanction.</p>"
             )
         }
 
@@ -182,7 +183,7 @@ class CorporateSectorsNarrative:
                 "exec_summary": (
                     f"<p><strong>1.1 WHO-GMP ಪ್ರಮಾಣೀಕೃತ ಔಷಧ ಸೂತ್ರೀಕರಣ ಘಟಕ:</strong><br>"
                     f"{b_name} {doc.district}, {doc.state} ನಲ್ಲಿ WHO-GMP ಮತ್ತು US-FDA ಕಂಪ್ಲೈಂಟ್ ಔಷಧೀಯ ಸೂತ್ರೀಕರಣ ಮತ್ತು ಸಕ್ರಿಯ ಔಷಧೀಯ ಪದಾರ್ಥಗಳ (API) ಉತ್ಪಾದನಾ ಸೌಲಭ್ಯವಾಗಿದೆ. "
-                    f"ಒಟ್ಟು ಬಂಡವಾಳ ವೆಚ್ಚ: <strong>₹{doc.total_cost:,.2f}</strong>, ಯೋಜನಾ IRR: <strong>{doc.corporate_project_irr:.1f}%</strong>, NPV: <strong>₹{doc.corporate_npv:,.2f}</strong>.</p>"
+                    f"ಒಟ್ಟು ಬಂಡವಾಳ ವೆಚ್ಚ: <strong>₹{format_inr(doc.total_cost)}</strong>, ಯೋಜನಾ IRR: <strong>{doc.corporate_project_irr:.1f}%</strong>, NPV: <strong>₹{format_inr(doc.corporate_npv)}</strong>.</p>"
                 ),
                 "technical_feasibility": (
                     f"<p><strong>6.1 ಸ್ಟೆರೈಲ್ ರಿಯಾಕ್ಷನ್ ಮತ್ತು ಲೈಯೋಫಿಲೈಸೇಶನ್ ಸೌಲಭ್ಯ:</strong><br>"
@@ -196,14 +197,14 @@ class CorporateSectorsNarrative:
                     f"<p><strong>8.4 ಸವಾಲುಗಳು:</strong> ಕಠಿಣ ನಿಯಂತ್ರಕ ತಪಾಸಣೆಗಳು ಮತ್ತು ಕಚ್ಚಾ ಸಾಮಗ್ರಿಗಳ ಬೆಲೆ ಏರಿಕೆ.</p>"
                 ),
                 "conclusion": (
-                    f"<p><strong>9.1 ಶಿಫಾರಸು:</strong> ₹{doc.bank_loan:,.2f} ಗಳ ಬ್ಯಾಂಕ್ ಹಣಕಾಸು ಸಾಲವನ್ನು ಮಂಜೂರು ಮಾಡಲು ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
+                    f"<p><strong>9.1 ಶಿಫಾರಸು:</strong> ₹{format_inr(doc.bank_loan)} ಗಳ ಬ್ಯಾಂಕ್ ಹಣಕಾಸು ಸಾಲವನ್ನು ಮಂಜೂರು ಮಾಡಲು ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
                 )
             }
         return {
             "exec_summary": (
                 f"<p><strong>1.1 WHO-GMP Compliant Formulations Mandate:</strong><br>"
                 f"{b_name} is a WHO-GMP and US-FDA compliant pharmaceutical formulation and Active Pharmaceutical Ingredient (API) facility in {doc.district}, {doc.state}. "
-                f"Total CAPEX: <strong>₹{doc.total_cost:,.2f}</strong>, Project IRR: <strong>{doc.corporate_project_irr:.1f}%</strong>, NPV: <strong>₹{doc.corporate_npv:,.2f}</strong>.</p>"
+                f"Total CAPEX: <strong>₹{format_inr(doc.total_cost)}</strong>, Project IRR: <strong>{doc.corporate_project_irr:.1f}%</strong>, NPV: <strong>₹{format_inr(doc.corporate_npv)}</strong>.</p>"
             ),
             "technical_feasibility": (
                 f"<p><strong>6.1 Sterile Reaction & Lyophilization Setup:</strong><br>"
@@ -217,7 +218,7 @@ class CorporateSectorsNarrative:
                 f"<p><strong>8.4 Threats:</strong> Strict US-FDA audit inspections and API raw material cost spikes.</p>"
             ),
             "conclusion": (
-                f"<p><strong>9.1 Recommendation:</strong> Financial loan request of ₹{doc.bank_loan:,.2f} is strongly recommended for approval.</p>"
+                f"<p><strong>9.1 Recommendation:</strong> Financial loan request of ₹{format_inr(doc.bank_loan)} is strongly recommended for approval.</p>"
             )
         }
 
@@ -230,7 +231,7 @@ class CorporateSectorsNarrative:
                 "exec_summary": (
                     f"<p><strong>1.1 ಶ್ರೇಣಿ-IV ಹೈಪರ್‌ಸ್ಕೇಲ್ ಡೇಟಾ ಸೆಂಟರ್ ಯೋಜನೆ:</strong><br>"
                     f"{b_name} {doc.district}, {doc.state} ನಲ್ಲಿ ಟೈರ್-IV ಹೈಪರ್‌ಸ್ಕೇಲ್ ಡೇಟಾ ಸೆಂಟರ್ ಮತ್ತು ಎಂಟರ್‌ಪ್ರೈಸ್ ಕ್ಲೌಡ್ ಮೂಲಸೌಕರ್ಯ ಸೌಲಭ್ಯವಾಗಿದೆ. "
-                    f"ಒಟ್ಟು ಬಂಡವಾಳ ವೆಚ್ಚ: <strong>₹{doc.total_cost:,.2f}</strong>, ಯೋಜನಾ IRR: <strong>{doc.corporate_project_irr:.1f}%</strong>, NPV: <strong>₹{doc.corporate_npv:,.2f}</strong>.</p>"
+                    f"ಒಟ್ಟು ಬಂಡವಾಳ ವೆಚ್ಚ: <strong>₹{format_inr(doc.total_cost)}</strong>, ಯೋಜನಾ IRR: <strong>{doc.corporate_project_irr:.1f}%</strong>, NPV: <strong>₹{format_inr(doc.corporate_npv)}</strong>.</p>"
                 ),
                 "technical_feasibility": (
                     f"<p><strong>6.1 ಹೈಪರ್‌ಸ್ಕೇಲ್ ಕೂಲಿಂಗ್ ಮತ್ತು ಹೆಚ್ಚುವರಿ ಬ್ಯಾಕಪ್ ವ್ಯವಸ್ಥೆ:</strong><br>"
@@ -244,14 +245,14 @@ class CorporateSectorsNarrative:
                     f"<p><strong>8.4 ಸವಾಲುಗಳು:</strong> ವಿದ್ಯುತ್ ದರ ಹೆಚ್ಚಳ ಮತ್ತು ಸೈಬರ್ ಭದ್ರತಾ ಬೆದರಿಕೆಗಳು.</p>"
                 ),
                 "conclusion": (
-                    f"<p><strong>9.1 ಶಿಫಾರಸು:</strong> ₹{doc.bank_loan:,.2f} ಗಳ ಬ್ಯಾಂಕ್ ಸಾಲ ಸೌಲಭ್ಯವನ್ನು ಮಂಜೂರು ಮಾಡಲು ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
+                    f"<p><strong>9.1 ಶಿಫಾರಸು:</strong> ₹{format_inr(doc.bank_loan)} ಗಳ ಬ್ಯಾಂಕ್ ಸಾಲ ಸೌಲಭ್ಯವನ್ನು ಮಂಜೂರು ಮಾಡಲು ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
                 )
             }
         return {
             "exec_summary": (
                 f"<p><strong>1.1 Tier-IV Hyperscale Data Center Mandate:</strong><br>"
                 f"{b_name} is a Tier-IV Hyperscale Data Center and Enterprise Cloud Infrastructure facility in {doc.district}, {doc.state}. "
-                f"Total CAPEX: <strong>₹{doc.total_cost:,.2f}</strong>, Project IRR: <strong>{doc.corporate_project_irr:.1f}%</strong>, NPV: <strong>₹{doc.corporate_npv:,.2f}</strong>.</p>"
+                f"Total CAPEX: <strong>₹{format_inr(doc.total_cost)}</strong>, Project IRR: <strong>{doc.corporate_project_irr:.1f}%</strong>, NPV: <strong>₹{format_inr(doc.corporate_npv)}</strong>.</p>"
             ),
             "technical_feasibility": (
                 f"<p><strong>6.1 Hyperscale Cooling & Redundant Infrastructure:</strong><br>"
@@ -265,6 +266,6 @@ class CorporateSectorsNarrative:
                 f"<p><strong>8.4 Threats:</strong> Power tariff hikes and cyber security threats.</p>"
             ),
             "conclusion": (
-                f"<p><strong>9.1 Recommendation:</strong> Bank loan request of ₹{doc.bank_loan:,.2f} is strongly recommended for sanction.</p>"
+                f"<p><strong>9.1 Recommendation:</strong> Bank loan request of ₹{format_inr(doc.bank_loan)} is strongly recommended for sanction.</p>"
             )
         }

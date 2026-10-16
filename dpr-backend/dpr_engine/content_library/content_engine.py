@@ -2,6 +2,7 @@ import os
 import json
 from typing import Dict, Any
 from dpr_engine.data_model import DPRDocumentModel, IndustryCategoryEnum
+from dpr_engine.utils.currency import format_inr
 from dpr_engine.content_library.industries.manufacturing import ManufacturingNarrative
 from dpr_engine.content_library.industries.food_processing import FoodProcessingNarrative
 from dpr_engine.content_library.industries.corporate_sectors import CorporateSectorsNarrative
@@ -134,10 +135,10 @@ Client Project Details:
 - Product / Service: {doc.primary_product}
 - Sector / Activity: {doc.industry} / {getattr(doc, 'activity', 'manufacturing')}
 - Location: {doc.district}, {doc.state}
-- Total Cost: ₹{doc.total_cost:,.2f}
-- Bank Loan Requested: ₹{doc.bank_loan:,.2f}
-- Promoter Equity: ₹{doc.promoter_contribution:,.2f}
-- Subsidy Claim: ₹{getattr(doc, 'subsidy', 0):,.2f}
+- Total Cost: ₹{format_inr(doc.total_cost)}
+- Bank Loan Requested: ₹{format_inr(doc.bank_loan)}
+- Promoter Equity: ₹{format_inr(doc.promoter_contribution)}
+- Subsidy Claim: ₹{format_inr(getattr(doc, 'subsidy', 0))}
 - Business Description: {doc.business_desc or 'High-precision manufacturing facility.'}
 - Key Value Proposition / USP: {doc.usp or 'Sub-micron precision tolerance, automated cell loading.'}
 - Key Machinery: {', '.join(m_names[:5])}

@@ -564,6 +564,36 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
     return interval;
   };
 
+  const formatINR = (val: number | string | undefined | null): string => {
+    if (val === undefined || val === null || val === '') return '0';
+    const num = typeof val === 'number' ? val : parseFloat(String(val).replace(/[^0-9.-]/g, ''));
+    if (isNaN(num)) return String(val);
+    return num.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+  };
+
+  const formatIndianWords = (val: number | string | undefined | null, lang: string = 'en'): string => {
+    if (val === undefined || val === null || val === '') return '₹0';
+    const num = typeof val === 'number' ? val : parseFloat(String(val).replace(/[^0-9.-]/g, ''));
+    if (isNaN(num)) return String(val);
+
+    const absNum = Math.abs(num);
+    const sign = num < 0 ? '-' : '';
+
+    if (absNum >= 10000000) {
+      const cr = (absNum / 10000000).toFixed(2);
+      if (lang === 'kn') return `${sign}₹${cr} ಕೋಟಿ`;
+      if (lang === 'hi') return `${sign}₹${cr} करोड़`;
+      return `${sign}₹${cr} Crores`;
+    } else if (absNum >= 100000) {
+      const lakh = (absNum / 100000).toFixed(2);
+      if (lang === 'kn') return `${sign}₹${lakh} ಲಕ್ಷ`;
+      if (lang === 'hi') return `${sign}₹${lakh} लाख`;
+      return `${sign}₹${lakh} Lakhs`;
+    } else {
+      return `${sign}₹${absNum.toLocaleString('en-IN')}`;
+    }
+  };
+
   const downloadClientReport = async (data: DPRFormData, fmt: 'pdf' | 'docx') => {
     setGenerating(true);
     const progressInterval = startProgressSimulation();
@@ -603,7 +633,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         thMachineryItem: 'Machinery / Equipment Item',
         thQty: 'Qty',
         thUnitPrice: 'Unit Price (₹)',
-        thTotalCost: 'Total Cost (₹ Lakhs)',
+        thTotalCost: 'Total Cost (₹)',
         mainMachinery: 'Main Production Line Machinery',
         auxMachinery: 'Auxiliary Power & Utilities',
         totalMachineryCost: 'Total Plant & Machinery Cost',
@@ -613,7 +643,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         ch5Desc: 'The sector is experiencing robust growth driven by rising domestic consumption, export incentives, and government infrastructure thrust. The CAGR for the sub-sector is projected at <strong>11.5% annually</strong> over the next 5 years.',
         ch6Title: 'CHAPTER 6: DETAILED COST OF PROJECT',
         thParticulars: 'Particulars',
-        thOutlay: 'Estimated Outlay (₹ Lakhs)',
+        thOutlay: 'Estimated Outlay (₹)',
         thPctOutlay: '% of Total Outlay',
         landCost: 'Land & Site Development',
         buildingCost: 'Civil Building & Factory Shed',
@@ -623,12 +653,12 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         totalProjectCost: 'Total Project Cost',
         ch7Title: 'CHAPTER 7: MEANS OF FINANCE BREAKDOWN',
         thSourceOfFunds: 'Source of Funds',
-        thAmount: 'Amount (₹ Lakhs)',
+        thAmount: 'Amount (₹)',
         thShare: '% Share',
         bankTermLoan: 'Bank Term Loan / Credit Facility',
         govtSubsidy: 'Government Subsidy / Capital Grant',
         totalMeansFinance: 'Total Means of Finance',
-        ch8Title: 'CHAPTER 8: 5-YEAR PROJECTED PROFIT & LOSS STATEMENT (₹ Lakhs)',
+        ch8Title: 'CHAPTER 8: 5-YEAR PROJECTED PROFIT & LOSS STATEMENT (₹)',
         thYear1: 'Year 1',
         thYear2: 'Year 2',
         thYear3: 'Year 3',
@@ -642,13 +672,13 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         interestDebt: 'Interest on Term Loan & CC',
         depreciation: 'Depreciation',
         pat: 'Profit After Tax (PAT)',
-        ch9Title: 'CHAPTER 9: 5-YEAR PROJECTED BALANCE SHEET (₹ Lakhs)',
+        ch9Title: 'CHAPTER 9: 5-YEAR PROJECTED BALANCE SHEET (₹)',
         thLiabilitiesEquity: 'Liabilities & Equity',
         promoterCapital: 'Promoter Equity Capital',
         reservesSurplus: 'Reserves & Surplus (Accumulated PAT)',
         termLoanOutstanding: 'Term Loan Outstanding',
         totalLiabilities: 'Total Liabilities',
-        ch10Title: 'CHAPTER 10: 5-YEAR CASH FLOW STATEMENT (₹ Lakhs)',
+        ch10Title: 'CHAPTER 10: 5-YEAR CASH FLOW STATEMENT (₹)',
         ch10Desc: 'The projected cash flow demonstrates positive net cash inflows across all 5 operating years with robust liquidity to service term loan debt obligations smoothly.',
         ch11Title: 'CHAPTER 11: FINANCIAL RATIO & BANKABILITY ANALYSIS',
         bankabilityIndicators: 'Key Bankability Indicators',
@@ -714,7 +744,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         thMachineryItem: 'ಯಂತ್ರೋಪಕರಣ / ಉಪಕರಣದ ವಿವರ',
         thQty: 'ಪ್ರಮಾಣ',
         thUnitPrice: 'ಘಟಕ ದರ (₹)',
-        thTotalCost: 'ಒಟ್ಟು ವೆಚ್ಚ (₹ ಲಕ್ಷ)',
+        thTotalCost: 'ಒಟ್ಟು ವೆಚ್ಚ (₹)',
         mainMachinery: 'ಮುಖ್ಯ ಉತ್ಪಾದನಾ ಮಾರ್ಗ ಯಂತ್ರೋಪಕರಣ',
         auxMachinery: 'ಸಹಾಯಕ ವಿದ್ಯುತ್ ಮತ್ತು ಉಪಯುಕ್ತತೆಗಳು',
         totalMachineryCost: 'ಒಟ್ಟು ಸ್ಥಾವರ ಮತ್ತು ಯಂತ್ರೋಪಕರಣ ವೆಚ್ಚ',
@@ -724,7 +754,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         ch5Desc: 'ಹೆಚ್ಚುತ್ತಿರುವ ದೇಶೀಯ ಬಳಕೆ, ರಫ್ತು ಪ್ರೋತ್ಸಾಹಕಗಳು ಮತ್ತು ಸರ್ಕಾರದ ಮೂಲಸೌಕರ್ಯ ಬೆಂಬಲದಿಂದ ಈ ವಲಯವು ಗಣನೀಯ ಬೆಳವಣಿಗೆಯನ್ನು ಕಾಣುತ್ತಿದೆ. ಮುಂಬರುವ 5 ವರ್ಷಗಳಲ್ಲಿ ಈ ವಲಯದ ವಾರ್ಷಿಕ ಬೆಳವಣಿಗೆ ದರ (CAGR) <strong>11.5%</strong> ಎಂದು ಅಂದಾಜಿಸಲಾಗಿದೆ.',
         ch6Title: 'ಅಧ್ಯಾಯ 6: ಯೋಜನೆಯ ವಿವರವಾದ ವೆಚ್ಚ',
         thParticulars: 'ವಿವರಗಳು',
-        thOutlay: 'ಅಂದಾಜು ವೆಚ್ಚ (₹ ಲಕ್ಷ)',
+        thOutlay: 'ಅಂದಾಜು ವೆಚ್ಚ (₹)',
         thPctOutlay: 'ಒಟ್ಟು ವೆಚ್ಚದ % ಪಾಲು',
         landCost: 'ಜಮೀನು ಮತ್ತು ನಿವೇಶನ ಅಭಿವೃದ್ಧಿ',
         buildingCost: 'ಕಟ್ಟಡ ನಿರ್ಮಾಣ ಮತ್ತು ಫ್ಯಾಕ್ಟರಿ ಶೆಡ್',
@@ -734,12 +764,12 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         totalProjectCost: 'ಒಟ್ಟು ಯೋಜನಾ ವೆಚ್ಚ',
         ch7Title: 'ಅಧ್ಯಾಯ 7: ಹಣಕಾಸಿನ ಮೂಲಗಳ ವಿವರ (Means of Finance)',
         thSourceOfFunds: 'ಹಣಕಾಸಿನ ಮೂಲ',
-        thAmount: 'ಮೊತ್ತ (₹ ಲಕ್ಷ)',
+        thAmount: 'ಮೊತ್ತ (₹)',
         thShare: '% ಪಾಲು',
         bankTermLoan: 'ಬ್ಯಾಂಕ್ ಅವಧಿ ಸಾಲ / ಕ್ರೆಡಿಟ್ ಸೌಲಭ್ಯ',
         govtSubsidy: 'ಸರ್ಕಾರಿ ಸಬ್ಸಿಡಿ / ಬಂಡವಾಳ ಅನುದಾನ',
         totalMeansFinance: 'ಒಟ್ಟು ಹಣಕಾಸಿನ ಮೂಲಗಳು',
-        ch8Title: 'ಅಧ್ಯಾಯ 8: 5-ವರ್ಷಗಳ ಅಂದಾಜು ಆದಾಯ ಮತ್ತು ನಷ್ಟ ವಿವರ (P&L) (₹ ಲಕ್ಷ)',
+        ch8Title: 'ಅಧ್ಯಾಯ 8: 5-ವರ್ಷಗಳ ಅಂದಾಜು ಆದಾಯ ಮತ್ತು ನಷ್ಟ ವಿವರ (P&L) (₹)',
         thYear1: 'ವರ್ಷ 1',
         thYear2: 'ವರ್ಷ 2',
         thYear3: 'ವರ್ಷ 3',
@@ -753,13 +783,13 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         interestDebt: 'ಸಾಲ ಮತ್ತು CC ಮೇಲಿನ ಬಡ್ಡಿ',
         depreciation: 'ಸವಕಳಿ (Depreciation)',
         pat: 'ತೆರಿಗೆ ನಂತರದ ನಿವ್ವಳ ಲಾಭ (PAT)',
-        ch9Title: 'ಅಧ್ಯಾಯ 9: 5-ವರ್ಷಗಳ ಅಂದಾಜು ಆಸ್ತಿ-ಹೊಣೆಗಾರಿಕೆ ಪಟ್ಟಿ (Balance Sheet) (₹ ಲಕ್ಷ)',
+        ch9Title: 'ಅಧ್ಯಾಯ 9: 5-ವರ್ಷಗಳ ಅಂದಾಜು ಆಸ್ತಿ-ಹೊಣೆಗಾರಿಕೆ ಪಟ್ಟಿ (Balance Sheet) (₹)',
         thLiabilitiesEquity: 'ಹೊಣೆಗಾರಿಕೆಗಳು ಮತ್ತು ಇಕ್ವಿಟಿ',
         promoterCapital: 'ಪ್ರವರ್ತಕರ ಇಕ್ವಿಟಿ ಬಂಡವಾಳ',
         reservesSurplus: 'ಮೀಸಲು ಮತ್ತು ಉಳಿಕೆ ಲಾಭ (Accumulated PAT)',
         termLoanOutstanding: 'ಬಾಕಿ ಇರುವ ಅವಧಿ ಸಾಲ',
         totalLiabilities: 'ಒಟ್ಟು ಹೊಣೆಗಾರಿಕೆಗಳು',
-        ch10Title: 'ಅಧ್ಯಾಯ 10: 5-ವರ್ಷಗಳ ನಗದು ಹರಿವಿನ ಹೇಳಿಕೆ (Cash Flow) (₹ ಲಕ್ಷ)',
+        ch10Title: 'ಅಧ್ಯಾಯ 10: 5-ವರ್ಷಗಳ ನಗದು ಹರಿವಿನ ಹೇಳಿಕೆ (Cash Flow) (₹)',
         ch10Desc: 'ಅಂದಾಜು ನಗದು ಹರಿವು ಎಲ್ಲಾ 5 ಕಾರ್ಯಾಚರಣೆಯ ವರ್ಷಗಳಲ್ಲಿ ಧನಾತ್ಮಕ ನಿವ್ವಳ ನಗದು ಒಳಹರಿವನ್ನು ಪ್ರದರ್ಶಿಸುತ್ತದೆ ಮತ್ತು ಅವಧಿ ಸಾಲದ ಕಂತುಗಳನ್ನು ಸುಲಭವಾಗಿ ಮರುಪಾವತಿಸಲು ಸದೃಢ ಲಿಕ್ವಿಡಿಟಿಯನ್ನು ಹೊಂದಿದೆ.',
         ch11Title: 'ಅಧ್ಯಾಯ 11: ಹಣಕಾಸು ಅನುಪಾತ ಮತ್ತು ಬ್ಯಾಂಕಿಂಗ್ ಅರ್ಹತೆ ವಿಶ್ಲೇಷಣೆ',
         bankabilityIndicators: 'ಪ್ರಮುಖ ಬ್ಯಾಂಕ್ ಅರ್ಹತಾ ಸೂಚಕಗಳು',
@@ -825,7 +855,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         thMachineryItem: 'मशीनरी / उपकरण विवरण',
         thQty: 'मात्रा',
         thUnitPrice: 'इकाई मूल्य (₹)',
-        thTotalCost: 'कुल लागत (₹ लाख)',
+        thTotalCost: 'कुल लागत (₹)',
         mainMachinery: 'मुख्य उत्पादन लाइन मशीनरी',
         auxMachinery: 'सहायक विद्युत एवं उपयोगिताएं',
         totalMachineryCost: 'कुल संयंत्र एवं मशीनरी लागत',
@@ -835,7 +865,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         ch5Desc: 'बढ़ती घरेलू मांग, निर्यात प्रोत्साहन और सरकारी अवसंरचना समर्थन से यह क्षेत्र तीव्र गति से बढ़ रहा है। अगले 5 वर्षों में इस क्षेत्र की वार्षिक चक्रवृद्धि वृद्धि दर (CAGR) <strong>11.5%</strong> रहने का अनुमान है।',
         ch6Title: 'अध्याय 6: परियोजना की विस्तृत लागत',
         thParticulars: 'विवरण',
-        thOutlay: 'अनुमानित व्यय (₹ लाख)',
+        thOutlay: 'अनुमानित व्यय (₹)',
         thPctOutlay: 'कुल व्यय का % हिस्सा',
         landCost: 'भूमि एवं स्थल विकास',
         buildingCost: 'भवन निर्माण एवं फैक्ट्री शेड',
@@ -845,12 +875,12 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         totalProjectCost: 'कुल परियोजना लागत',
         ch7Title: 'अध्याय 7: वित्तपोषण के साधन (Means of Finance)',
         thSourceOfFunds: 'धन का स्रोत',
-        thAmount: 'राशि (₹ लाख)',
+        thAmount: 'राशि (₹)',
         thShare: '% हिस्सा',
         bankTermLoan: 'बैंक सावधि ऋण / क्रेडिट सुविधा',
         govtSubsidy: 'सरकारी सब्सिडी / पूंजीगत अनुदान',
         totalMeansFinance: 'कुल वित्तपोषण साधन',
-        ch8Title: 'अध्याय 8: 5-वर्षीय अनुमानित लाभ एवं हानि विवरण (P&L) (₹ लाख)',
+        ch8Title: 'अध्याय 8: 5-वर्षीय अनुमानित लाभ एवं हानि विवरण (P&L) (₹)',
         thYear1: 'वर्ष 1',
         thYear2: 'वर्ष 2',
         thYear3: 'वर्ष 3',
@@ -864,13 +894,13 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         interestDebt: 'ऋण एवं CC पर ब्याज',
         depreciation: 'मूल्यह्रास (Depreciation)',
         pat: 'कर पश्चात शुद्ध लाभ (PAT)',
-        ch9Title: 'अध्याय 9: 5-वर्षीय अनुमानित बैलेंस शीट (₹ लाख)',
+        ch9Title: 'अध्याय 9: 5-वर्षीय अनुमानित बैलेंस शीट (₹)',
         thLiabilitiesEquity: 'देनदारियां एवं इक्विटी',
         promoterCapital: 'प्रवर्तक इक्विटी पूंजी',
         reservesSurplus: 'आरक्षित निधि एवं संचित लाभ (PAT)',
         termLoanOutstanding: 'बकाया सावधि ऋण',
         totalLiabilities: 'कुल देनदारियां',
-        ch10Title: 'अध्याय 10: 5-वर्षीय नकदी प्रवाह विवरण (Cash Flow) (₹ लाख)',
+        ch10Title: 'अध्याय 10: 5-वर्षीय नकदी प्रवाह विवरण (Cash Flow) (₹)',
         ch10Desc: 'अनुमानित नकदी प्रवाह सभी 5 वर्षों में सकारात्मक शुद्ध नकदी प्रवाह प्रदर्शित करता है तथा ऋण किश्तों के सुचारू भुगतान हेतु पर्याप्त तरलता उपलब्ध है।',
         ch11Title: 'अध्याय 11: वित्तीय अनुपात एवं बैंक स्वीकृति विश्लेषण',
         bankabilityIndicators: 'प्रमुख बैंकिंग संकेतक',
@@ -965,9 +995,9 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         
         <div class="highlight-card">
           <h3 style="margin-top:0; color:#008C95;">${tR.financialSnapshot}</h3>
-          <p>• <strong>${tR.totalOutlay}</strong> ₹${totalOutlay.toFixed(2)} Lakhs</p>
-          <p>• <strong>${tR.promoterEquity}</strong> ₹${equityAmt.toFixed(2)} Lakhs (${((equityAmt/totalOutlay)*100).toFixed(1)}%)</p>
-          <p>• <strong>${tR.termLoan}</strong> ₹${debtAmt.toFixed(2)} Lakhs (${((debtAmt/totalOutlay)*100).toFixed(1)}%)</p>
+          <p>• <strong>${tR.totalOutlay}</strong> ₹${formatINR(totalOutlay)} (${formatIndianWords(totalOutlay, activeLang)})</p>
+          <p>• <strong>${tR.promoterEquity}</strong> ₹${formatINR(equityAmt)} (${totalOutlay > 0 ? ((equityAmt/totalOutlay)*100).toFixed(1) : '25.0'}%)</p>
+          <p>• <strong>${tR.termLoan}</strong> ₹${formatINR(debtAmt)} (${totalOutlay > 0 ? ((debtAmt/totalOutlay)*100).toFixed(1) : '75.0'}%)</p>
           <p>• <strong>${tR.avgDscr}</strong> 1.65x ${tR.minBankDscr}</p>
           <p>• <strong>${tR.bep}</strong> 42.5% ${tR.bepCap}</p>
         </div>
@@ -989,12 +1019,12 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         <table class="meta-table">
           <tr><th>${tR.thMachineryItem}</th><th>${tR.thQty}</th><th>${tR.thUnitPrice}</th><th>${tR.thTotalCost}</th></tr>
           ${(data.machinery || []).length > 0 ? (data.machinery || []).map((m: any) => `
-            <tr><td>${m.name || 'Machinery Item'}</td><td>${m.quantity || 1}</td><td>₹${m.price || 0}</td><td>₹${((m.total || 0)/100000).toFixed(2)} Lakhs</td></tr>
+            <tr><td>${m.name || 'Machinery Item'}</td><td>${m.quantity || 1}</td><td>₹${formatINR(m.price || 0)}</td><td>₹${formatINR(m.total || 0)}</td></tr>
           `).join('') : `
-            <tr><td>${tR.mainMachinery}</td><td>1 ${activeLang === 'kn' ? 'ಸೆಟ್' : activeLang === 'hi' ? 'सेट' : 'Set'}</td><td>₹${(((data as any).plant_cost || 50)*100000).toFixed(0)}</td><td>₹${((data as any).plant_cost || 50).toFixed(2)} Lakhs</td></tr>
-            <tr><td>${tR.auxMachinery}</td><td>1 ${activeLang === 'kn' ? 'ಸೆಟ್' : activeLang === 'hi' ? 'सेट' : 'Set'}</td><td>₹500,000</td><td>₹5.00 Lakhs</td></tr>
+            <tr><td>${tR.mainMachinery}</td><td>1 ${activeLang === 'kn' ? 'ಸೆಟ್' : activeLang === 'hi' ? 'सेट' : 'Set'}</td><td>₹${formatINR(((data as any).plant_cost || 5000000))}</td><td>₹${formatINR((data as any).plant_cost || 5000000)}</td></tr>
+            <tr><td>${tR.auxMachinery}</td><td>1 ${activeLang === 'kn' ? 'ಸೆಟ್' : activeLang === 'hi' ? 'सेट' : 'Set'}</td><td>₹5,00,000</td><td>₹5,00,000</td></tr>
           `}
-          <tr><th colspan="3">${tR.totalMachineryCost}</th><th>₹${((data as any).plant_cost || 55).toFixed(2)} Lakhs</th></tr>
+          <tr><th colspan="3">${tR.totalMachineryCost}</th><th>₹${formatINR((data as any).plant_cost || (data.machinery || []).reduce((acc: number, item: any) => acc + (item.total || 0), 5500000))}</th></tr>
         </table>
 
         <!-- CHAPTER 4: LOCATION & INFRASTRUCTURE -->
@@ -1010,22 +1040,22 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         <h1>${tR.ch6Title}</h1>
         <table class="meta-table">
           <tr><th>${tR.thParticulars}</th><th>${tR.thOutlay}</th><th>${tR.thPctOutlay}</th></tr>
-          <tr><td>${tR.landCost}</td><td>₹${(data.land_cost || 0).toFixed(2)} Lakhs</td><td>${(((data.land_cost || 0)/totalOutlay)*100).toFixed(1)}%</td></tr>
-          <tr><td>${tR.buildingCost}</td><td>₹${(data.building_cost || 0).toFixed(2)} Lakhs</td><td>${(((data.building_cost || 0)/totalOutlay)*100).toFixed(1)}%</td></tr>
-          <tr><td>${tR.plantCost}</td><td>₹${(((data as any).plant_cost || 0)).toFixed(2)} Lakhs</td><td>${((((data as any).plant_cost || 0)/totalOutlay)*100).toFixed(1)}%</td></tr>
-          <tr><td>${tR.workingCapMargin}</td><td>₹${(data.working_capital || 0).toFixed(2)} Lakhs</td><td>${(((data.working_capital || 0)/totalOutlay)*100).toFixed(1)}%</td></tr>
-          <tr><td>${tR.contingencyCost}</td><td>₹${(((data as any).contingency || 0)).toFixed(2)} Lakhs</td><td>${((((data as any).contingency || 0)/totalOutlay)*100).toFixed(1)}%</td></tr>
-          <tr><th>${tR.totalProjectCost}</th><th>₹${totalOutlay.toFixed(2)} Lakhs</th><th>100.0%</th></tr>
+          <tr><td>${tR.landCost}</td><td>₹${formatINR(data.land_cost || 0)}</td><td>${totalOutlay > 0 ? (((data.land_cost || 0)/totalOutlay)*100).toFixed(1) : '0.0'}%</td></tr>
+          <tr><td>${tR.buildingCost}</td><td>₹${formatINR(data.building_cost || 0)}</td><td>${totalOutlay > 0 ? (((data.building_cost || 0)/totalOutlay)*100).toFixed(1) : '0.0'}%</td></tr>
+          <tr><td>${tR.plantCost}</td><td>₹${formatINR((data as any).plant_cost || 0)}</td><td>${totalOutlay > 0 ? ((((data as any).plant_cost || 0)/totalOutlay)*100).toFixed(1) : '0.0'}%</td></tr>
+          <tr><td>${tR.workingCapMargin}</td><td>₹${formatINR(data.working_capital || 0)}</td><td>${totalOutlay > 0 ? (((data.working_capital || 0)/totalOutlay)*100).toFixed(1) : '0.0'}%</td></tr>
+          <tr><td>${tR.contingencyCost}</td><td>₹${formatINR((data as any).contingency || 0)}</td><td>${totalOutlay > 0 ? ((((data as any).contingency || 0)/totalOutlay)*100).toFixed(1) : '0.0'}%</td></tr>
+          <tr><th>${tR.totalProjectCost}</th><th>₹${formatINR(totalOutlay)}</th><th>100.0%</th></tr>
         </table>
 
         <!-- CHAPTER 7: MEANS OF FINANCE -->
         <h1>${tR.ch7Title}</h1>
         <table class="meta-table">
           <tr><th>${tR.thSourceOfFunds}</th><th>${tR.thAmount}</th><th>${tR.thShare}</th></tr>
-          <tr><td>${tR.promoterEquity}</td><td>₹${equityAmt.toFixed(2)} Lakhs</td><td>${((equityAmt/totalOutlay)*100).toFixed(1)}%</td></tr>
-          <tr><td>${tR.bankTermLoan}</td><td>₹${debtAmt.toFixed(2)} Lakhs</td><td>${((debtAmt/totalOutlay)*100).toFixed(1)}%</td></tr>
-          ${subsidyAmt > 0 ? `<tr><td>${tR.govtSubsidy}</td><td>₹${subsidyAmt.toFixed(2)} Lakhs</td><td>-</td></tr>` : ''}
-          <tr><th>${tR.totalMeansFinance}</th><th>₹${totalOutlay.toFixed(2)} Lakhs</th><th>100.0%</th></tr>
+          <tr><td>${tR.promoterEquity}</td><td>₹${formatINR(equityAmt)}</td><td>${totalOutlay > 0 ? (((equityAmt)/totalOutlay)*100).toFixed(1) : '0.0'}%</td></tr>
+          <tr><td>${tR.bankTermLoan}</td><td>₹${formatINR(debtAmt)}</td><td>${totalOutlay > 0 ? (((debtAmt)/totalOutlay)*100).toFixed(1) : '0.0'}%</td></tr>
+          ${subsidyAmt > 0 ? `<tr><td>${tR.govtSubsidy}</td><td>₹${formatINR(subsidyAmt)}</td><td>-</td></tr>` : ''}
+          <tr><th>${tR.totalMeansFinance}</th><th>₹${formatINR(totalOutlay)}</th><th>100.0%</th></tr>
         </table>
 
         <!-- CHAPTER 8: 5-YEAR PROJECTED PROFITABILITY (P&L) -->
@@ -1033,13 +1063,13 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         <table class="meta-table">
           <tr><th>${tR.thParticulars}</th><th>${tR.thYear1}</th><th>${tR.thYear2}</th><th>${tR.thYear3}</th><th>${tR.thYear4}</th><th>${tR.thYear5}</th></tr>
           <tr><td>${tR.capUtilization}</td><td>60%</td><td>70%</td><td>80%</td><td>85%</td><td>90%</td></tr>
-          <tr><td>${tR.grossRevenue}</td><td>₹${revenueY1.toFixed(2)}</td><td>₹${(revenueY1*1.2).toFixed(2)}</td><td>₹${(revenueY1*1.4).toFixed(2)}</td><td>₹${(revenueY1*1.55).toFixed(2)}</td><td>₹${(revenueY1*1.7).toFixed(2)}</td></tr>
-          <tr><td>${tR.rawMaterialCost}</td><td>₹${(revenueY1*0.55).toFixed(2)}</td><td>₹${(revenueY1*1.2*0.54).toFixed(2)}</td><td>₹${(revenueY1*1.4*0.53).toFixed(2)}</td><td>₹${(revenueY1*1.55*0.52).toFixed(2)}</td><td>₹${(revenueY1*1.7*0.52).toFixed(2)}</td></tr>
-          <tr><td>${tR.powerFuel}</td><td>₹${(revenueY1*0.06).toFixed(2)}</td><td>₹${(revenueY1*1.2*0.06).toFixed(2)}</td><td>₹${(revenueY1*1.4*0.06).toFixed(2)}</td><td>₹${(revenueY1*1.55*0.06).toFixed(2)}</td><td>₹${(revenueY1*1.7*0.06).toFixed(2)}</td></tr>
-          <tr><td>${tR.salaries}</td><td>₹${(revenueY1*0.12).toFixed(2)}</td><td>₹${(revenueY1*1.2*0.11).toFixed(2)}</td><td>₹${(revenueY1*1.4*0.10).toFixed(2)}</td><td>₹${(revenueY1*1.55*0.10).toFixed(2)}</td><td>₹${(revenueY1*1.7*0.09).toFixed(2)}</td></tr>
-          <tr><td>${tR.interestDebt}</td><td>₹${(debtAmt*0.10).toFixed(2)}</td><td>₹${(debtAmt*0.08).toFixed(2)}</td><td>₹${(debtAmt*0.06).toFixed(2)}</td><td>₹${(debtAmt*0.04).toFixed(2)}</td><td>₹${(debtAmt*0.02).toFixed(2)}</td></tr>
-          <tr><td>${tR.depreciation}</td><td>₹${(((data as any).plant_cost || 50)*0.15 || 7.5).toFixed(2)}</td><td>₹${(((data as any).plant_cost || 50)*0.135 || 6.4).toFixed(2)}</td><td>₹${(((data as any).plant_cost || 50)*0.11 || 5.2).toFixed(2)}</td><td>₹${(((data as any).plant_cost || 50)*0.09 || 4.1).toFixed(2)}</td><td>₹${(((data as any).plant_cost || 50)*0.08 || 3.5).toFixed(2)}</td></tr>
-          <tr><th>${tR.pat}</th><th>₹${patY1.toFixed(2)}</th><th>₹${(patY1*1.25).toFixed(2)}</th><th>₹${(patY1*1.55).toFixed(2)}</th><th>₹${(patY1*1.85).toFixed(2)}</th><th>₹${(patY1*2.1).toFixed(2)}</th></tr>
+          <tr><td>${tR.grossRevenue}</td><td>₹${formatINR(revenueY1)}</td><td>₹${formatINR(revenueY1*1.2)}</td><td>₹${formatINR(revenueY1*1.4)}</td><td>₹${formatINR(revenueY1*1.55)}</td><td>₹${formatINR(revenueY1*1.7)}</td></tr>
+          <tr><td>${tR.rawMaterialCost}</td><td>₹${formatINR(revenueY1*0.55)}</td><td>₹${formatINR(revenueY1*1.2*0.54)}</td><td>₹${formatINR(revenueY1*1.4*0.53)}</td><td>₹${formatINR(revenueY1*1.55*0.52)}</td><td>₹${formatINR(revenueY1*1.7*0.52)}</td></tr>
+          <tr><td>${tR.powerFuel}</td><td>₹${formatINR(revenueY1*0.06)}</td><td>₹${formatINR(revenueY1*1.2*0.06)}</td><td>₹${formatINR(revenueY1*1.4*0.06)}</td><td>₹${formatINR(revenueY1*1.55*0.06)}</td><td>₹${formatINR(revenueY1*1.7*0.06)}</td></tr>
+          <tr><td>${tR.salaries}</td><td>₹${formatINR(revenueY1*0.12)}</td><td>₹${formatINR(revenueY1*1.2*0.11)}</td><td>₹${formatINR(revenueY1*1.4*0.10)}</td><td>₹${formatINR(revenueY1*1.55*0.10)}</td><td>₹${formatINR(revenueY1*1.7*0.09)}</td></tr>
+          <tr><td>${tR.interestDebt}</td><td>₹${formatINR(debtAmt*0.10)}</td><td>₹${formatINR(debtAmt*0.08)}</td><td>₹${formatINR(debtAmt*0.06)}</td><td>₹${formatINR(debtAmt*0.04)}</td><td>₹${formatINR(debtAmt*0.02)}</td></tr>
+          <tr><td>${tR.depreciation}</td><td>₹${formatINR(((data as any).plant_cost || 5000000)*0.15)}</td><td>₹${formatINR(((data as any).plant_cost || 5000000)*0.135)}</td><td>₹${formatINR(((data as any).plant_cost || 5000000)*0.11)}</td><td>₹${formatINR(((data as any).plant_cost || 5000000)*0.09)}</td><td>₹${formatINR(((data as any).plant_cost || 5000000)*0.08)}</td></tr>
+          <tr><th>${tR.pat}</th><th>₹${formatINR(patY1)}</th><th>₹${formatINR(patY1*1.25)}</th><th>₹${formatINR(patY1*1.55)}</th><th>₹${formatINR(patY1*1.85)}</th><th>₹${formatINR(patY1*2.1)}</th></tr>
         </table>
 
         <!-- CHAPTER 9: 5-YEAR BALANCE SHEET -->
@@ -1047,10 +1077,10 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         <h1>${tR.ch9Title}</h1>
         <table class="meta-table">
           <tr><th>${tR.thLiabilitiesEquity}</th><th>${tR.thYear1}</th><th>${tR.thYear2}</th><th>${tR.thYear3}</th><th>${tR.thYear4}</th><th>${tR.thYear5}</th></tr>
-          <tr><td>${tR.promoterCapital}</td><td>₹${equityAmt.toFixed(2)}</td><td>₹${equityAmt.toFixed(2)}</td><td>₹${equityAmt.toFixed(2)}</td><td>₹${equityAmt.toFixed(2)}</td><td>₹${equityAmt.toFixed(2)}</td></tr>
-          <tr><td>${tR.reservesSurplus}</td><td>₹${patY1.toFixed(2)}</td><td>₹${(patY1*2.25).toFixed(2)}</td><td>₹${(patY1*3.8).toFixed(2)}</td><td>₹${(patY1*5.65).toFixed(2)}</td><td>₹${(patY1*7.75).toFixed(2)}</td></tr>
-          <tr><td>${tR.termLoanOutstanding}</td><td>₹${(debtAmt*0.8).toFixed(2)}</td><td>₹${(debtAmt*0.6).toFixed(2)}</td><td>₹${(debtAmt*0.4).toFixed(2)}</td><td>₹${(debtAmt*0.2).toFixed(2)}</td><td>₹0.00</td></tr>
-          <tr><th>${tR.totalLiabilities}</th><th>₹${(totalOutlay + patY1).toFixed(2)}</th><th>₹${(totalOutlay + patY1*2.25).toFixed(2)}</th><th>₹${(totalOutlay + patY1*3.8).toFixed(2)}</th><th>₹${(totalOutlay + patY1*5.65).toFixed(2)}</th><th>₹${(totalOutlay + patY1*7.75).toFixed(2)}</th></tr>
+          <tr><td>${tR.promoterCapital}</td><td>₹${formatINR(equityAmt)}</td><td>₹${formatINR(equityAmt)}</td><td>₹${formatINR(equityAmt)}</td><td>₹${formatINR(equityAmt)}</td><td>₹${formatINR(equityAmt)}</td></tr>
+          <tr><td>${tR.reservesSurplus}</td><td>₹${formatINR(patY1)}</td><td>₹${formatINR(patY1*2.25)}</td><td>₹${formatINR(patY1*3.8)}</td><td>₹${formatINR(patY1*5.65)}</td><td>₹${formatINR(patY1*7.75)}</td></tr>
+          <tr><td>${tR.termLoanOutstanding}</td><td>₹${formatINR(debtAmt*0.8)}</td><td>₹${formatINR(debtAmt*0.6)}</td><td>₹${formatINR(debtAmt*0.4)}</td><td>₹${formatINR(debtAmt*0.2)}</td><td>₹0.00</td></tr>
+          <tr><th>${tR.totalLiabilities}</th><th>₹${formatINR(totalOutlay + patY1)}</th><th>₹${formatINR(totalOutlay + patY1*2.25)}</th><th>₹${formatINR(totalOutlay + patY1*3.8)}</th><th>₹${formatINR(totalOutlay + patY1*5.65)}</th><th>₹${formatINR(totalOutlay + patY1*7.75)}</th></tr>
         </table>
 
         <!-- CHAPTER 10: CASH FLOW STATEMENT -->
@@ -2415,7 +2445,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                           <td>{tW.labels?.total || 'TOTAL'}</td>
                           <td>{totalStaffCount} {tW.labels?.persons || 'Persons'}</td>
                           <td></td>
-                          <td>₹{totalMonthlySalary.toLocaleString()} {tW.labels?.perMonth || '/ month'}</td>
+                          <td>₹{totalMonthlySalary.toLocaleString('en-IN')} {tW.labels?.perMonth || '/ month'}</td>
                         </tr>
                       </tfoot>
                     </table>
@@ -2473,9 +2503,9 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                         <input type="number" name="other_cost" className="input-modern" value={formData.other_cost} onChange={handleChange} />
                       </div>
                     </div>
-                    <div style={{ background: '#F1F5F9', padding: '0.75rem 1rem', borderRadius: '0.65rem', fontWeight: 800, color: '#0A192F', display: 'flex', justifyContent: 'space-between' }}>
+                    <div style={{ background: '#F1F5F9', padding: '0.75rem 1rem', borderRadius: '0.65rem', fontWeight: 800, color: '#0A192F', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span>{tW.labels?.totalProjectCost || 'TOTAL PROJECT COST'}</span>
-                      <span>₹{totalProjectCost.toLocaleString()}</span>
+                      <span>₹{totalProjectCost.toLocaleString('en-IN')} <span style={{ fontSize: '0.85rem', color: '#008C95', fontWeight: 700 }}>({formatIndianWords(totalProjectCost, language)})</span></span>
                     </div>
                   </div>
                 ),

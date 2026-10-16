@@ -1,5 +1,6 @@
 from typing import Dict, Any
 from dpr_engine.data_model import DPRDocumentModel
+from dpr_engine.utils.currency import format_inr
 
 def safe_float(v, default: float = 0.0) -> float:
     if v is None:
@@ -46,11 +47,11 @@ class FoodProcessingNarrative:
                 f"conforming to strict FSSAI Grade 1 food safety norms. The project bridges agricultural supply chain gaps by purchasing raw farm produce "
                 f"directly from local Farmer Producer Organizations (FPOs), eliminating intermediary markups and enhancing farmer realization.</p>"
                 f"<p><strong>1.2 Financial Outlay & Capital Allocation:</strong><br>"
-                f"The project entails a total capital expenditure of <strong>₹{total_cost:,.2f}</strong>. "
-                f"Capital allocation comprises land site preparation (₹{land_cost:,.2f}), food-grade sanitary processing shed construction (₹{building_cost:,.2f}), "
-                f"SS304 stainless steel food machinery (₹{m_total:,.2f}), cold room storage infrastructure (₹{electrification_cost:,.2f}), "
-                f"and initial operational working capital (₹{working_capital:,.2f}). Financing is structured via promoter equity contribution of "
-                f"<strong>₹{promoter_contribution:,.2f}</strong>, bank debt facility of <strong>₹{bank_loan:,.2f}</strong>, and government PMFME capital subsidy claim of <strong>₹{subsidy:,.2f}</strong>.</p>"
+                f"The project entails a total capital expenditure of <strong>₹{format_inr(total_cost)}</strong>. "
+                f"Capital allocation comprises land site preparation (₹{format_inr(land_cost)}), food-grade sanitary processing shed construction (₹{format_inr(building_cost)}), "
+                f"SS304 stainless steel food machinery (₹{format_inr(m_total)}), cold room storage infrastructure (₹{format_inr(electrification_cost)}), "
+                f"and initial operational working capital (₹{format_inr(working_capital)}). Financing is structured via promoter equity contribution of "
+                f"<strong>₹{format_inr(promoter_contribution)}</strong>, bank debt facility of <strong>₹{format_inr(bank_loan)}</strong>, and government PMFME capital subsidy claim of <strong>₹{format_inr(subsidy)}</strong>.</p>"
                 f"<p><strong>1.3 Financial Feasibility & Debt Security:</strong><br>"
                 f"Financial projections reflect strong operating cash flows with a 5-year average Debt Service Coverage Ratio (DSCR) of "
                 f"<strong>{avg_dscr:.2f}</strong>, a low break-even operating threshold of <strong>{bep_percent:.1f}%</strong>, and a projected Internal Rate of Return (IRR) of "
@@ -77,7 +78,7 @@ class FoodProcessingNarrative:
                 f"The primary flagship product is <strong>{product}</strong> (HSN Code: <strong>{doc.hsn_code or '1102'}</strong>). "
                 f"Products are processed without artificial colors or preservatives and packaged in high-barrier eco-friendly pouch packaging.</p>"
                 f"<p><strong>4.2 Production Capacity & Operational Blueprint:</strong><br>"
-                f"Installed processing capacity: <strong>{doc.daily_capacity:,.0f} {doc.capacity_unit} per day</strong> over <strong>{doc.working_days} working days annually</strong>. "
+                f"Installed processing capacity: <strong>{format_inr(doc.daily_capacity)} {doc.capacity_unit} per day</strong> over <strong>{doc.working_days} working days annually</strong>. "
                 f"Key Competitive USP: {doc.usp or '100% organic cold-milled traditional processing with nitrogen flush freshness seal.'}</p>"
             ),
             "market_analysis": (
@@ -115,7 +116,7 @@ class FoodProcessingNarrative:
                 f"The project of {b_name} generates high socio-economic value by establishing <strong>{doc.local_employment} direct local jobs</strong> "
                 f"(including <strong>{doc.women_employment} women micro-entrepreneurs</strong>) and offering fair pricing to 200+ local farming families. "
                 f"With strong cash flows, an average DSCR of <strong>{doc.avg_dscr:.2f}</strong>, and full credit guarantee coverage, the proposed bank loan request of "
-                f"<strong>₹{doc.bank_loan:,.2f}</strong> is strongly recommended for financial sanction.</p>"
+                f"<strong>₹{format_inr(doc.bank_loan)}</strong> is strongly recommended for financial sanction.</p>"
             )
         }
 
@@ -129,11 +130,11 @@ class FoodProcessingNarrative:
                 f"ನ ನೈರ್ಮಲ್ಯ ಸಂಸ್ಕರಣೆ, ಕೋಲ್ಡ್-ಮಿಲ್ಲಿಂಗ್ ಮತ್ತು ವ್ಯಾಕ್ಯೂಮ್ ಪ್ಯಾಕೇಜಿಂಗ್‌ಗೆ ಸಮರ್ಪಿತವಾಗಿದೆ. ಸ್ಥಳೀಯ ರೈತ ಉತ್ಪಾದಕ ಸಂಸ್ಥೆಗಳಿಂದ (FPO) ನೇರವಾಗಿ ಕೃಷಿ ಉತ್ಪನ್ನಗಳನ್ನು ಖರೀದಿಸುವ ಮೂಲಕ "
                 f"ಮಧ್ಯವರ್ತಿಗಳನ್ನು ನಿವಾರಿಸಿ ರೈತರಿಗೆ ಲಾಭದಾಯಕ ಬೆಲೆಯನ್ನು ಒದಗಿಸುತ್ತದೆ.</p>"
                 f"<p><strong>1.2 ಬಂಡವಾಳ ಹೂಡಿಕೆ ಮತ್ತು ವೆಚ್ಚ ಹಂಚಿಕೆ:</strong><br>"
-                f"ಯೋಜನೆಯ ಒಟ್ಟು ಬಂಡವಾಳ ವೆಚ್ಚವು <strong>₹{total_cost:,.2f}</strong> ಆಗಿದೆ. "
-                f"ಇದು ಭೂಮಿ ನಿವೇಶನ ಸಿದ್ಧತೆ (₹{land_cost:,.2f}), ನೈರ್ಮಲ್ಯ ಸಂಸ್ಕರಣಾ ಶೆಡ್ ನಿರ್ಮಾಣ (₹{building_cost:,.2f}), "
-                f"SS304 ಸ್ಟೇನ್‌ಲೆಸ್ ಸ್ಟೀಲ್ ಆಹಾರ ಯಂತ್ರೋಪಕರಣಗಳು (₹{m_total:,.2f}), ಶೀತಲ ಸಂಗ್ರಹಾಗಾರ ಮೂಲಸೌಕರ್ಯ (₹{electrification_cost:,.2f}), "
-                f"ಮತ್ತು ಆರಂಭಿಕ ದುಡಿಯುವ ಬಂಡವಾಳ (₹{working_capital:,.2f}) ಒಳಗೊಂಡಿದೆ. ಹಣಕಾಸು ರಚನೆಯು ಪ್ರವರ್ತಕರ ಇಕ್ವಿಟಿ ಬಂಡವಾಳ "
-                f"<strong>₹{promoter_contribution:,.2f}</strong>, ಬ್ಯಾಂಕ್ ಸಾಲ <strong>₹{bank_loan:,.2f}</strong>, ಮತ್ತು PMFME ಬಂಡವಾಳ ಸಬ್ಸಿಡಿ ಮೊತ್ತ <strong>₹{subsidy:,.2f}</strong> ಒಳಗೊಂಡಿದೆ.</p>"
+                f"ಯೋಜನೆಯ ಒಟ್ಟು ಬಂಡವಾಳ ವೆಚ್ಚವು <strong>₹{format_inr(total_cost)}</strong> ಆಗಿದೆ. "
+                f"ಇದು ಭೂಮಿ ನಿವೇಶನ ಸಿದ್ಧತೆ (₹{format_inr(land_cost)}), ನೈರ್ಮಲ್ಯ ಸಂಸ್ಕರಣಾ ಶೆಡ್ ನಿರ್ಮಾಣ (₹{format_inr(building_cost)}), "
+                f"SS304 ಸ್ಟೇನ್‌ಲೆಸ್ ಸ್ಟೀಲ್ ಆಹಾರ ಯಂತ್ರೋಪಕರಣಗಳು (₹{format_inr(m_total)}), ಶೀತಲ ಸಂಗ್ರಹಾಗಾರ ಮೂಲಸೌಕರ್ಯ (₹{format_inr(electrification_cost)}), "
+                f"ಮತ್ತು ಆರಂಭಿಕ ದುಡಿಯುವ ಬಂಡವಾಳ (₹{format_inr(working_capital)}) ಒಳಗೊಂಡಿದೆ. ಹಣಕಾಸು ರಚನೆಯು ಪ್ರವರ್ತಕರ ಇಕ್ವಿಟಿ ಬಂಡವಾಳ "
+                f"<strong>₹{format_inr(promoter_contribution)}</strong>, ಬ್ಯಾಂಕ್ ಸಾಲ <strong>₹{format_inr(bank_loan)}</strong>, ಮತ್ತು PMFME ಬಂಡವಾಳ ಸಬ್ಸಿಡಿ ಮೊತ್ತ <strong>₹{format_inr(subsidy)}</strong> ಒಳಗೊಂಡಿದೆ.</p>"
                 f"<p><strong>1.3 ಹಣಕಾಸಿನ ಕಾರ್ಯಸಾಧ್ಯತೆ ಮತ್ತು ಸಾಲ ಸುರಕ್ಷತೆ:</strong><br>"
                 f"ಹಣಕಾಸು ಮುನ್ನೋಟಗಳು ಬಲವಾದ ನಗದು ಹರಿವನ್ನು ದೃಢಪಡಿಸುತ್ತವೆ. ಯೋಜನೆಯು 5-ವರ್ಷಗಳ ಸರಾಸರಿ ಸಾಲ ಸೇವಾ ವ್ಯಾಪ್ತಿ ಅನುಪಾತ (DSCR) "
                 f"<strong>{avg_dscr:.2f}</strong>, ಬ್ರೇಕ್-ಈವನ್ ಪಾಯಿಂಟ್ <strong>{bep_percent:.1f}%</strong>, ಮತ್ತು ಯೋಜನಾ IRR "
@@ -160,7 +161,7 @@ class FoodProcessingNarrative:
                 f"ಮುಖ್ಯ ಉತ್ಪನ್ನವು <strong>{product}</strong> (HSN ಕೋಡ್: <strong>{doc.hsn_code or '1102'}</strong>) ಆಗಿದೆ. "
                 f"ಪರಿಸರಸ್ನೇಹಿ ಉನ್ನತ ತಡೆಗೋಡೆ ಪೌಚ್‌ಗಳಲ್ಲಿ ನೈಟ್ರೋಜನ್ ಫ್ಲಶ್‌ನೊಂದಿಗೆ ಪ್ಯಾಕ್ ಮಾಡಲಾಗುತ್ತದೆ.</p>"
                 f"<p><strong>4.2 ಉತ್ಪಾದನಾ ಸಾಮರ್ಥ್ಯ ಮತ್ತು ಕಾರ್ಯಾಚರಣೆ:</strong><br>"
-                f"ಸ್ಥಾಪಿತ ಸಂಸ್ಕರಣಾ ಸಾಮರ್ಥ್ಯ: <strong>ದಿನಕ್ಕೆ {doc.daily_capacity:,.0f} {doc.capacity_unit}</strong>, ವರ್ಷಕ್ಕೆ <strong>{doc.working_days} ಕೆಲಸದ ದಿನಗಳು</strong>. "
+                f"ಸ್ಥಾಪಿತ ಸಂಸ್ಕರಣಾ ಸಾಮರ್ಥ್ಯ: <strong>ದಿನಕ್ಕೆ {format_inr(doc.daily_capacity)} {doc.capacity_unit}</strong>, ವರ್ಷಕ್ಕೆ <strong>{doc.working_days} ಕೆಲಸದ ದಿನಗಳು</strong>. "
                 f"ಪ್ರಮುಖ ಯುಎಸ್‌ಪಿ: {doc.usp or '100% ಶುದ್ಧ ಸಾಂಪ್ರದಾಯಿಕ ಸಂಸ್ಕರಣೆ ಮತ್ತು ತಾಜಾತನ ರಕ್ಷಣೆ.'}</p>"
             ),
             "market_analysis": (
@@ -198,6 +199,6 @@ class FoodProcessingNarrative:
                 f"{b_name} ಯೋಜನೆಯು <strong>{doc.local_employment} ಸ್ಥಳೀಯ ನೇರ ಉದ್ಯೋಗಗಳನ್ನು</strong> "
                 f"(ಇದರಲ್ಲಿ <strong>{doc.women_employment} ಮಹಿಳಾ ಉದ್ಯೋಗಿಗಳು</strong> ಸೇರಿದ್ದಾರೆ) ಸೃಷ್ಟಿಸುತ್ತದೆ ಮತ್ತು 200 ಕ್ಕೂ ಹೆಚ್ಚು ಸ್ಥಳೀಯ ರೈತ ಕುಟುಂಬಗಳಿಗೆ ನ್ಯಾಯಯುತ ಬೆಲೆ ಒದಗಿಸುತ್ತದೆ. "
                 f"ಬಲವಾದ ನಗದು ಹರಿವು, ಸರಾಸರಿ DSCR <strong>{doc.avg_dscr:.2f}</strong> ನೊಂದಿಗೆ ಬ್ಯಾಂಕ್ ಸಾಲ ಮೊತ್ತ "
-                f"<strong>₹{doc.bank_loan:,.2f}</strong> ಅನ್ನು ತಕ್ಷಣದ ಆರ್ಥಿಕ ಮಂಜೂರಾತಿಗಾಗಿ ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
+                f"<strong>₹{format_inr(doc.bank_loan)}</strong> ಅನ್ನು ತಕ್ಷಣದ ಆರ್ಥಿಕ ಮಂಜೂರಾತಿಗಾಗಿ ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
             )
         }

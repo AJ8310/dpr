@@ -1,10 +1,17 @@
 import math
 from typing import Dict, Any
+from dpr_engine.utils.currency import format_inr, format_indian_words
 
 class CalculationService:
 
     @staticmethod
-    def calculate_all(data: Dict[str, Any]) -> Dict[str, Any]:
+    def calculate_all(data: Any) -> Dict[str, Any]:
+        if hasattr(data, "model_dump"):
+            data = data.model_dump()
+        elif hasattr(data, "dict"):
+            data = data.dict()
+        elif not isinstance(data, dict):
+            data = getattr(data, "__dict__", {})
         result = dict(data)  # Preserve all user input fields
 
         # 1. Machinery Total Calculation
@@ -26,24 +33,48 @@ class CalculationService:
         other_cost = float(data.get("other_cost", 0) or 0)
         electrification_cost = float(data.get("electrification_cost", machinery_total * 0.08) or machinery_total * 0.08)
 
-        total_cost = land_cost + building_cost + machinery_total + electrification_cost + furniture_cost + working_capital + other_cost
+        calc_cost = land_cost + building_cost + machinery_total + electrification_cost + furniture_cost + working_capital + other_cost
+        passed_total = float(data.get("total_cost", 0) or 0)
+        if passed_total > 0 and (land_cost + building_cost + machinery_total + furniture_cost + other_cost) == 0:
+            total_cost = passed_total
+        else:
+            total_cost = calc_cost
         result["electrification_cost"] = electrification_cost
         result["total_cost"] = total_cost
 
         # 3. Means of Finance Calculation
         promoter_contrib = float(data.get("promoter_contribution", 0) or 0)
-        bank_loan = float(data.get("bank_loan", 0) or 0)
-        subsidy = float(data.get("subsidy", 0) or 0)
+        bank_loan = float(data.get("bank_loan", 0) or data.get("term_loan", 0) or 0)
+        subsidy = float(data.get("subsidy", 0) or data.get("subsidy_amount", 0) or 0)
 
-        if promoter_contrib == 0 and bank_loan == 0 and total_cost > 0:
-            promoter_contrib = round(total_cost * 0.25, 2)
-            bank_loan = round(total_cost * 0.75, 2)
+        if total_cost > 0:
+            if promoter_contrib == 0 and bank_loan == 0:
+                promoter_contrib = round(total_cost * 0.25, 2)
+                bank_loan = round(total_cost - promoter_contrib - subsidy, 2)
+            elif bank_loan == 0 and promoter_contrib > 0:
+                bank_loan = max(0.0, round(total_cost - promoter_contrib - subsidy, 2))
+            elif promoter_contrib == 0 and bank_loan > 0:
+                promoter_contrib = max(0.0, round(total_cost - bank_loan - subsidy, 2))
+            elif abs((promoter_contrib + bank_loan + subsidy) - total_cost) > 1.0:
+                diff = total_cost - (promoter_contrib + bank_loan + subsidy)
+                if bank_loan > 0:
+                    bank_loan = max(0.0, round(bank_loan + diff, 2))
+                else:
+                    promoter_contrib = max(0.0, round(promoter_contrib + diff, 2))
 
         total_funds = promoter_contrib + bank_loan + subsidy
         result["promoter_contribution"] = promoter_contrib
         result["bank_loan"] = bank_loan
+        result["term_loan"] = bank_loan
         result["subsidy"] = subsidy
         result["total_funds"] = total_funds
+        result["means_of_finance"] = {
+            "promoter_contribution": promoter_contrib,
+            "bank_loan": bank_loan,
+            "term_loan": bank_loan,
+            "subsidy": subsidy,
+            "total": total_funds
+        }
 
         if total_funds > 0:
             result["promoter_percent"] = f"{round((promoter_contrib / total_funds) * 100, 1)}%"
@@ -175,7 +206,7 @@ class CalculationService:
         result["working_days"] = work_days
         result["input_cost_per_unit"] = float(data.get("input_cost_per_unit", 50) or 50)
         result["capacity_unit"] = str(data.get("capacity_unit", "Units") or "Units")
-        result["business_name"] = str(data.get("business_name", "Enterprise DPR") or "Enterprise DPR")
+        result["business_name"] = str(data.get("business_name") or data.get("company_name") or data.get("enterprise_name") or "Enterprise DPR")
 
         # Load User Uploaded Logo or Fallback to Default Organization Logo
         import os
@@ -261,9 +292,13 @@ class CalculationService:
         result["threats"] = str(data.get("threats", "Market competition, sudden tariff policy shifts") or "Market competition, sudden tariff policy shifts")
         result["debt_equity_ratio"] = round(bank_loan / promoter_contrib, 2) if promoter_contrib > 0 else 2.5
 
+        lang = str(data.get("language") or result.get("language") or "en").lower().strip()
+        result["language"] = lang
+
         result["corporate_equity_irr"] = "24.5%"
-        result["corporate_npv"] = f"₹{round(total_cost * 0.35, 2)} Lakhs"
-        result["corporate_payback_years"] = "3.2 Years"
+        npv_raw = round(total_cost * 0.35, 2)
+        result["corporate_npv"] = format_indian_words(npv_raw, lang)
+        result["corporate_payback_years"] = "3.2 ವರ್ಷಗಳು" if 'kn' in lang else ("3.2 वर्ष" if 'hi' in lang else "3.2 Years")
         result["corporate_project_irr"] = "22.4%"
         result["corporate_wacc"] = "10.5%"
 
@@ -388,24 +423,30 @@ class CalculationService:
             print("Chart generation exception:", err)
 
         result["charts_b64"] = charts
-        result["esg_scorecard"] = result.get("esg_scorecard", {
-            "environmental": "A+",
-            "social": "A",
-            "governance": "A+",
-            "esg_overall_rating": "Compliant"
-        })
-        result["tcrm_rating"] = result.get("tcrm_rating", {
-            "tcrm_score": "8.5 / 10",
-            "trl_level": "TRL 9 (Commercial Ready)"
-        })
-        result["sensitivity_matrix"] = result.get("sensitivity_matrix", {
-            "base_dscr": f"{avg_dscr}x",
-            "base_npv": f"₹{round(total_cost * 0.35, 2)} Lakhs",
-            "cost_plus_10": {"dscr": f"{round(avg_dscr * 0.9, 2)}x", "npv": "Positive", "status": "Bankable"},
-            "cost_plus_20": {"dscr": f"{round(avg_dscr * 0.8, 2)}x", "npv": "Positive", "status": "Bankable"},
-            "sales_minus_10": {"dscr": f"{round(avg_dscr * 0.88, 2)}x", "npv": "Positive", "status": "Bankable"},
-            "sales_minus_20": {"dscr": f"{round(avg_dscr * 0.75, 2)}x", "npv": "Positive", "status": "Bankable"}
-        })
+        if not result.get("esg_scorecard"):
+            result["esg_scorecard"] = {
+                "environmental_rating": "Green (Zero Liquid Discharge / Solar Compliant)",
+                "social_rating": "High (Local Employment Generation)",
+                "governance_rating": "Statutory Audited & Compliant",
+                "esg_overall_rating": "Compliant"
+            }
+        if not result.get("tcrm_rating"):
+            result["tcrm_rating"] = {
+                "tcrm_score": "8.5 / 10",
+                "trl_level": "TRL 9 (Commercial Ready)"
+            }
+        npv_formatted = format_indian_words(npv_raw, lang)
+        npv_status_label = "ಧನಾತ್ಮಕ" if 'kn' in lang else ("सकारात्मक" if 'hi' in lang else "Positive")
+        bankable_label = "ಬ್ಯಾಂಕ್ ಸ್ವೀಕಾರಾರ್ಹ" if 'kn' in lang else ("बैंक स्वीकार्य" if 'hi' in lang else "Bankable")
+        if not result.get("sensitivity_matrix"):
+            result["sensitivity_matrix"] = {
+                "base_dscr": f"{avg_dscr}x",
+                "base_npv": npv_formatted,
+                "cost_plus_10": {"dscr": f"{round(avg_dscr * 0.9, 2)}x", "npv": npv_status_label, "status": bankable_label},
+                "cost_plus_20": {"dscr": f"{round(avg_dscr * 0.8, 2)}x", "npv": npv_status_label, "status": bankable_label},
+                "sales_minus_10": {"dscr": f"{round(avg_dscr * 0.88, 2)}x", "npv": npv_status_label, "status": bankable_label},
+                "sales_minus_20": {"dscr": f"{round(avg_dscr * 0.75, 2)}x", "npv": npv_status_label, "status": bankable_label}
+            }
 
         # 6. Generate Rich Industrial Sector Narratives via DPRContentEngine
         narratives = result.get("narratives")
@@ -417,9 +458,6 @@ class CalculationService:
         prod_name = str(result.get("primary_product") or "Industrial Finished Product").title()
         dist_name = str(result.get("district") or "Bengaluru")
         state_name = str(result.get("state") or "Karnataka")
-
-        lang = str(data.get("language") or result.get("language") or "en").lower().strip()
-        result["language"] = lang
 
         try:
             from dpr_engine.data_model import DPRDocumentModel
@@ -575,6 +613,13 @@ class CalculationService:
                 {"item": "ಸಹಾಯಕ ಪ್ರಕ್ರಿಯೆ ರಾಸಾಯನಿಕಗಳು ಮತ್ತು ಸಂಸ್ಕರಣಾ ಮಿಶ್ರಣಗಳು", "unit": "ಲೀಟರ್‌ಗಳು", "annual_qty": "450", "rate": "₹320/ಘಟಕ", "total_cost": round(max_annual_revenue * 0.08, 2)},
                 {"item": "ಪ್ಯಾಕೇಜಿಂಗ್ ಬಾಕ್ಸ್‌ಗಳು, ಕಂಟೈನರ್‌ಗಳು ಮತ್ತು ಲೇಬಲ್‌ಗಳು", "unit": "ಘಟಕಗಳು", "annual_qty": "25,000", "rate": "₹18/ಘಟಕ", "total_cost": round(max_annual_revenue * 0.05, 2)},
                 {"item": "ಯಂತ್ರ ಬಿಡಿಭಾಗಗಳು ಮತ್ತು ನಿರ್ವಹಣಾ ಸಾಮಗ್ರಿಗಳು", "unit": "ಸೆಟ್‌ಗಳು", "annual_qty": "12", "rate": "₹25,000/ಸೆಟ್", "total_cost": round(max_annual_revenue * 0.04, 2)}
+            ]
+        elif 'hi' in lang:
+            result["boq_raw_materials"] = [
+                {"item": f"{raw_mat_name} (ग्रेड ए)", "unit": "टन / किग्रा", "annual_qty": "1,200", "rate": "₹150/इकाई", "total_cost": round(max_annual_revenue * 0.35, 2)},
+                {"item": "सहायक प्रक्रिया रसायन और प्रसंस्करण एडिटिव्स", "unit": "लीटर", "annual_qty": "450", "rate": "₹320/इकाई", "total_cost": round(max_annual_revenue * 0.08, 2)},
+                {"item": "पैकेजिंग बॉक्स, कंटेनर और लेबल", "unit": "इकाइयां", "annual_qty": "25,000", "rate": "₹18/इकाई", "total_cost": round(max_annual_revenue * 0.05, 2)},
+                {"item": "मशीन स्पेयर पार्ट्स और उपभोग्य वस्तुएं", "unit": "सेट", "annual_qty": "12", "rate": "₹25,000/सेट", "total_cost": round(max_annual_revenue * 0.04, 2)}
             ]
         else:
             result["boq_raw_materials"] = [

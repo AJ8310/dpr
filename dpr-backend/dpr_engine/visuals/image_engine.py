@@ -3,7 +3,8 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from typing import Dict, Any, Optional
-from dpr_engine.data_model import DPRDocumentModel, IndustryCategoryEnum
+from dpr_engine.data_model import DPRDocumentModel
+from dpr_engine.utils.currency import format_inr
 
 class ImageManagementEngine:
 
@@ -65,7 +66,7 @@ class ImageManagementEngine:
             f"Product Name: {prod_name}",
             f"HSN / ITC Classification Code: {doc.hsn_code or '84799090'}",
             f"Design Installed Capacity: {doc.daily_capacity or 200} {doc.capacity_unit or 'units'}/day",
-            f"Target Commercial Selling Price: ₹{doc.selling_price or 850:,.2f} / unit",
+            f"Target Commercial Selling Price: ₹{format_inr(doc.selling_price or 850)} / unit",
             f"Competitive USP: {doc.usp or 'High quality precision specification standards.'}"
         ]
         p_card_path = os.path.join(visuals_dir, f"prod_card_{job_prefix}.png")

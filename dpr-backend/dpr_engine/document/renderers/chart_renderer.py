@@ -1,4 +1,5 @@
 from typing import Dict, Any, List
+from dpr_engine.utils.currency import format_inr
 
 class ChartRenderer:
     """
@@ -109,17 +110,17 @@ class ChartRenderer:
             '<rect x="0" y="0" width="350" height="42" fill="#F0FDFA" rx="6" stroke="#CCFBF1"/>',
             '<rect x="12" y="13" width="16" height="16" fill="#008C95" rx="3"/>',
             '<text x="38" y="25" font-size="9.5" font-weight="800" fill="#0F172A">Promoter Margin Equity Contribution</text>',
-            f'<text x="38" y="36" font-size="8.5" fill="#64748B">₹{promoter_contribution:,.0f} ({promoter_pct}%)</text>',
+            f'<text x="38" y="36" font-size="8.5" fill="#64748B">₹{format_inr(promoter_contribution)} ({promoter_pct}%)</text>',
 
             '<rect x="0" y="50" width="350" height="42" fill="#FFF7ED" rx="6" stroke="#FFEDD5"/>',
             '<rect x="12" y="63" width="16" height="16" fill="#FF7A00" rx="3"/>',
             '<text x="38" y="75" font-size="9.5" font-weight="800" fill="#0F172A">Bank Debt / Term Loan Sanction</text>',
-            f'<text x="38" y="86" font-size="8.5" fill="#64748B">₹{bank_loan:,.0f} ({loan_pct}%)</text>',
+            f'<text x="38" y="86" font-size="8.5" fill="#64748B">₹{format_inr(bank_loan)} ({loan_pct}%)</text>',
 
             '<rect x="0" y="100" width="350" height="42" fill="#EFF6FF" rx="6" stroke="#DBEAFE"/>',
             '<rect x="12" y="113" width="16" height="16" fill="#2563EB" rx="3"/>',
             '<text x="38" y="125" font-size="9.5" font-weight="800" fill="#0F172A">Government Scheme Capital Subsidy</text>',
-            f'<text x="38" y="136" font-size="8.5" fill="#64748B">₹{subsidy:,.0f} ({subsidy_pct}%)</text>',
+            f'<text x="38" y="136" font-size="8.5" fill="#64748B">₹{format_inr(subsidy)} ({subsidy_pct}%)</text>',
             '</g>',
 
             '</svg></div>'

@@ -1,5 +1,6 @@
 import datetime
 from typing import Dict, Any, List, Optional
+from dpr_engine.utils.currency import format_inr
 from sqlalchemy.orm import Session
 
 from models.database_models import DPRProjectDB, DPRContentPackageDB, DPRContentSectionDB
@@ -109,7 +110,7 @@ class DPRContentGenerator:
             t1 = ContentBlockBuilder.create_structured_table(
                 "tbl_cost", "Project Cost & Means of Finance Summary",
                 ["Component", "Amount (₹)", "Percentage (%)"],
-                [["Total Capital Expenditure", f"{cost:,.2f}", "100.0%"], ["Promoter Equity Contribution", f"{equity:,.2f}", "25.0%"], ["Bank Term Loan", f"{loan:,.2f}", "75.0%"]]
+                [["Total Capital Expenditure", f"{format_inr(cost)}", "100.0%"], ["Promoter Equity Contribution", f"{format_inr(equity)}", "25.0%"], ["Bank Term Loan", f"{format_inr(loan)}", "75.0%"]]
             )
             tables.append(t1)
             charts.append(ContentBlockBuilder.create_chart_reference("chart_rev", "5-Year Revenue Trend", "revenue_chart"))
