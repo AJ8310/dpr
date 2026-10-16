@@ -1,24 +1,190 @@
 'use client';
 
 import React from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface DPRGenerationModalProps {
   isOpen: boolean;
   progressPercent: number;
   stepName: string;
+  language?: string;
 }
 
-export default function DPRGenerationModal({ isOpen, progressPercent, stepName }: DPRGenerationModalProps) {
+const modalI18n = {
+  en: {
+    alertTitle: 'Please stay with us — this may take a few moments.',
+    alertDesc: 'No action is required from you.',
+    mainTitle: 'We’re turning your project details into a structured, professional DPR.',
+    subTitle: 'Processing document compilation. Please wait...',
+    inputBadges: [
+      { label: 'Project Details', icon: 'fa-file-alt', color: '#2563EB', delay: '0s' },
+      { label: 'Financial Inputs', icon: 'fa-coins', color: '#F59E0B', delay: '0.4s' },
+      { label: 'Market Data', icon: 'fa-chart-line', color: '#10B981', delay: '0.8s' },
+      { label: 'Scheme Info', icon: 'fa-landmark', color: '#1E3A8A', delay: '1.2s' },
+      { label: 'Business Plan', icon: 'fa-clipboard-list', color: '#008C95', delay: '1.6s' },
+    ],
+    aiCore: 'AI Engine Core',
+    financialEngine: 'Financial Engine',
+    visualEngine: 'Visual Engine',
+    dprReport: 'DPR Report',
+    detailedProjectReport: 'Detailed Project Report',
+    visionKarnataka: 'Vision Karnataka',
+    currentAction: 'Current Action:',
+    defaultStep: 'Processing Report Generation...',
+    stages: [
+      { label: 'Gathering Data', desc: 'Project inputs received', threshold: 10, icon: 'fa-database' },
+      { label: 'Analyzing', desc: 'Understanding your project', threshold: 25, icon: 'fa-brain' },
+      { label: 'Calculating', desc: 'Running financial models', threshold: 45, icon: 'fa-calculator' },
+      { label: 'Creating Charts', desc: 'Visualizing insights', threshold: 65, icon: 'fa-chart-pie' },
+      { label: 'Structuring', desc: 'Building your report', threshold: 85, icon: 'fa-file-alt' },
+      { label: 'Finalizing', desc: 'Preparing PDF & DOCX', threshold: 98, icon: 'fa-check-circle' },
+    ],
+  },
+  kn: {
+    alertTitle: 'ದಯವಿಟ್ಟು ನಿರೀಕ್ಷಿಸಿ — ಇದು ಕೆಲವು ಕ್ಷಣಗಳನ್ನು ತೆಗೆದುಕೊಳ್ಳಬಹುದು.',
+    alertDesc: 'ನಿಮ್ಮ ಕಡೆಯಿಂದ ಯಾವುದೇ ಕ್ರಮದ ಅಗತ್ಯವಿಲ್ಲ.',
+    mainTitle: 'ನಿಮ್ಮ ಯೋಜನಾ ವಿವರಗಳನ್ನು ವೃತ್ತಿಪರ ಹಾಗೂ ಸುಸಂಘಟಿತ DPR ಆಗಿ ಪರಿವರ್ತಿಸಲಾಗುತ್ತಿದೆ.',
+    subTitle: 'ದಾಖಲೆ ಸಂಕಲನ ಪ್ರಕ್ರಿಯೆ ಪ್ರಗತಿಯಲ್ಲಿದೆ. ದಯವಿಟ್ಟು ಕಾಯಿರಿ...',
+    inputBadges: [
+      { label: 'ಯೋಜನಾ ವಿವರಗಳು', icon: 'fa-file-alt', color: '#2563EB', delay: '0s' },
+      { label: 'ಹಣಕಾಸು ಮಾಹಿತಿ', icon: 'fa-coins', color: '#F59E0B', delay: '0.4s' },
+      { label: 'ಮಾರುಕಟ್ಟೆ ಡೇಟಾ', icon: 'fa-chart-line', color: '#10B981', delay: '0.8s' },
+      { label: 'ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು', icon: 'fa-landmark', color: '#1E3A8A', delay: '1.2s' },
+      { label: 'ವ್ಯಾಪಾರ ಯೋಜನೆ', icon: 'fa-clipboard-list', color: '#008C95', delay: '1.6s' },
+    ],
+    aiCore: 'ಎಐ ಎಂಜಿನ್ ಕೋರ್',
+    financialEngine: 'ಹಣಕಾಸು ಎಂಜಿನ್',
+    visualEngine: 'ವಿಷುಯಲ್ ಎಂಜಿನ್',
+    dprReport: 'DPR ವರದಿ',
+    detailedProjectReport: 'ವಿವರವಾದ ಯೋಜನಾ ವರದಿ',
+    visionKarnataka: 'ವಿಷನ್ ಕರ್ನಾಟಕ',
+    currentAction: 'ಪ್ರಸ್ತುತ ಪ್ರಕ್ರಿಯೆ:',
+    defaultStep: 'ವರದಿ ರಚನೆ ಪ್ರಕ್ರಿಯೆಯಲ್ಲಿದೆ...',
+    stages: [
+      { label: 'ಡೇಟಾ ಸಂಗ್ರಹಣೆ', desc: 'ಯೋಜನಾ ವಿವರಗಳು ಸ್ವೀಕರಿಸಲಾಗಿದೆ', threshold: 10, icon: 'fa-database' },
+      { label: 'ವಿಶ್ಲೇಷಣೆ', desc: 'ಯೋಜನೆಯ ಆಳವಾದ ವಿಶ್ಲೇಷಣೆ', threshold: 25, icon: 'fa-brain' },
+      { label: 'ಹಣಕಾಸು ಲೆಕ್ಕಾಚಾರ', desc: 'ಹಣಕಾಸು ಮಾದರಿಗಳ ರಚನೆ', threshold: 45, icon: 'fa-calculator' },
+      { label: 'ನಕ್ಷೆಗಳ ರಚನೆ', desc: 'ಹಣಕಾಸಿನ ಗ್ರಾಫ್‌ಗಳು ಸಿದ್ಧ', threshold: 65, icon: 'fa-chart-pie' },
+      { label: 'ರಚನೆ ಜೋಡಣೆ', desc: 'ವರದಿಯ ವಿಭಾಗಗಳ ಜೋಡಣೆ', threshold: 85, icon: 'fa-file-alt' },
+      { label: 'ಅಂತಿಮಗೊಳಿಸುವಿಕೆ', desc: 'PDF & DOCX ಸಿದ್ಧತೆ', threshold: 98, icon: 'fa-check-circle' },
+    ],
+  },
+  hi: {
+    alertTitle: 'कृपया प्रतीक्षा करें — इसमें कुछ ही क्षण लग सकते हैं।',
+    alertDesc: 'आपकी ओर से किसी कार्रवाई की आवश्यकता नहीं है।',
+    mainTitle: 'हम आपके प्रोजेक्ट विवरण को एक संरचित, पेशेवर डीपीआर में बदल रहे हैं।',
+    subTitle: 'दस्तावेज़ संकलन प्रगति पर है। कृपया प्रतीक्षा करें...',
+    inputBadges: [
+      { label: 'परियोजना विवरण', icon: 'fa-file-alt', color: '#2563EB', delay: '0s' },
+      { label: 'वित्तीय इनपुट', icon: 'fa-coins', color: '#F59E0B', delay: '0.4s' },
+      { label: 'बाजार डेटा', icon: 'fa-chart-line', color: '#10B981', delay: '0.8s' },
+      { label: 'योजना जानकारी', icon: 'fa-landmark', color: '#1E3A8A', delay: '1.2s' },
+      { label: 'व्यापार योजना', icon: 'fa-clipboard-list', color: '#008C95', delay: '1.6s' },
+    ],
+    aiCore: 'एआई इंजन कोर',
+    financialEngine: 'वित्तीय इंजन',
+    visualEngine: 'विजुअल इंजन',
+    dprReport: 'डीपीआर रिपोर्ट',
+    detailedProjectReport: 'विस्तृत परियोजना रिपोर्ट',
+    visionKarnataka: 'विजन कर्नाटक',
+    currentAction: 'वर्तमान स्थिति:',
+    defaultStep: 'रिपोर्ट तैयार की जा रही है...',
+    stages: [
+      { label: 'डेटा संग्रह', desc: 'परियोजना इनपुट प्राप्त', threshold: 10, icon: 'fa-database' },
+      { label: 'विश्लेषण', desc: 'परियोजना का विश्लेषण', threshold: 25, icon: 'fa-brain' },
+      { label: 'वित्तीय गणना', desc: 'वित्तीय मॉडल तैयार करना', threshold: 45, icon: 'fa-calculator' },
+      { label: 'चार्ट निर्माण', desc: 'वित्तीय रेखाचित्र तैयार', threshold: 65, icon: 'fa-chart-pie' },
+      { label: 'संरचना', desc: 'रिपोर्ट का निर्माण', threshold: 85, icon: 'fa-file-alt' },
+      { label: 'अंतिम रूप', desc: 'PDF एवं DOCX तैयार', threshold: 98, icon: 'fa-check-circle' },
+    ],
+  },
+};
+
+const translateStep = (step: string, lang: 'en' | 'kn' | 'hi') => {
+  if (!step || lang === 'en') return step;
+
+  const stepTranslations: Record<string, { kn: string; hi: string }> = {
+    'Gathering Data: Validating inputs, legal constitution & promoters...': {
+      kn: 'ಡೇಟಾ ಸಂಗ್ರಹಣೆ: ವಿವರಗಳು, ಕಾನೂನು ಸಂಸ್ಥೆ ಮತ್ತು ಪ್ರವರ್ತಕರ ಪರಿಶೀಲನೆ...',
+      hi: 'डेटा संग्रह: इनपुट, कानूनी संविधान एवं प्रवर्तक विवरण सत्यापन...',
+    },
+    'Gathering Data: Verifying sector blueprint & machinery inputs...': {
+      kn: 'ಡೇಟಾ ಸಂಗ್ರಹಣೆ: ವಲಯ ನೀಲನಕ್ಷೆ ಮತ್ತು ಯಂತ್ರೋಪಕರಣಗಳ ಪರಿಶೀಲನೆ...',
+      hi: 'डेटा संग्रह: सेक्टर ब्लूप्रिंट एवं मशीनरी इनपुट सत्यापन...',
+    },
+    'Analyzing Project: Running AI market, risk & scheme agents...': {
+      kn: 'ಯೋಜನಾ ವಿಶ್ಲೇಷಣೆ: ಮಾರುಕಟ್ಟೆ, ಅಪಾಯ ಮತ್ತು ಸಬ್ಸಿಡಿ ಎಐ ವಿಶ್ಲೇಷಣೆ...',
+      hi: 'परियोजना विश्लेषण: बाजार, जोखिम एवं सब्सिडी एआई विश्लेषण...',
+    },
+    'Calculating Financials: Computing 10-Yr P&L, DSCR & Tandon MPBF...': {
+      kn: 'ಹಣಕಾಸು ಲೆಕ್ಕಾಚಾರ: 10-ವರ್ಷಗಳ P&L, DSCR ಮತ್ತು ಟಂಡನ್ MPBF ಮಾದರಿ...',
+      hi: 'वित्तीय गणना: 10-वर्षीय P&L, DSCR एवं टंडन MPBF की गणना...',
+    },
+    'Creating Charts: Generating Matplotlib CAPEX & Financial graphics...': {
+      kn: 'ನಕ್ಷೆಗಳ ರಚನೆ: ಬಂಡವಾಳ ಹೂಡಿಕೆ ಮತ್ತು ಹಣಕಾಸು ಚಾರ್ಟ್‌ಗಳ ರಚನೆ...',
+      hi: 'चार्ट निर्माण: पूंजीगत व्यय एवं वित्तीय रेखाचित्र निर्माण...',
+    },
+    'Structuring Report: Compiling 30 chapters & 10 annexure schedules...': {
+      kn: 'ವರದಿ ಸಂಕಲನ: 31 ಅಧ್ಯಾಯಗಳು ಮತ್ತು 10 ಹಣಕಾಸು ವೇಳಾಪಟ್ಟಿಗಳ ಸಂಯೋಜನೆ...',
+      hi: 'रिपोर्ट संरचना: 31 अध्यायों एवं 10 वित्तीय अनुसूचियों का संकलन...',
+    },
+    'Structuring Report: Compiling 31 chapters & 10 annexure schedules...': {
+      kn: 'ವರದಿ ಸಂಕಲನ: 31 ಅಧ್ಯಾಯಗಳು ಮತ್ತು 10 ಹಣಕಾಸು ವೇಳಾಪಟ್ಟಿಗಳ ಸಂಯೋಜನೆ...',
+      hi: 'रिपोर्ट संरचना: 31 अध्यायों एवं 10 वित्तीय अनुसूचियों का संकलन...',
+    },
+    'Finalizing: Preparing publication-ready document...': {
+      kn: 'ಅಂತಿಮಗೊಳಿಸುವಿಕೆ: ಪ್ರಕಟಣೆಗೆ ಸಿದ್ಧವಾದ ವರದಿಯನ್ನು ಸಿದ್ಧಪಡಿಸಲಾಗುತ್ತಿದೆ...',
+      hi: 'अंतिम रूप: प्रकाशन-योग्य दस्तावेज़ तैयार किया जा रहा है...',
+    },
+    'Finalizing: PDF Report generated successfully!': {
+      kn: 'ಅಂತಿಮಗೊಳಿಸಲಾಗುತ್ತಿದೆ: PDF ವರದಿ ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ!',
+      hi: 'अंतिम रूप दिया जा रहा है: पीडीएफ रिपोर्ट सफलतापूर्वक तैयार!',
+    },
+    'Finalizing: Editable DOCX Report compiled successfully!': {
+      kn: 'ಅಂತಿಮಗೊಳಿಸಲಾಗುತ್ತಿದೆ: ಸಂಪಾದಿಸಬಹುದಾದ DOCX ವರದಿ ಯಶಸ್ವಿಯಾಗಿ ಸಿದ್ಧಗೊಂಡಿದೆ!',
+      hi: 'अंतिम रूप: संपादन योग्य DOCX रिपोर्ट सफलतापूर्वक तैयार की गई!',
+    },
+    'Payment verified! Compiling PDF report...': {
+      kn: 'ಪಾವತಿ ದೃಢೀಕರಿಸಲಾಗಿದೆ! PDF ವರದಿ ಸಿದ್ಧಪಡಿಸಲಾಗುತ್ತಿದೆ...',
+      hi: 'भुगतान सत्यापित! पीडीएफ रिपोर्ट तैयार की जा रही है...',
+    },
+    'Processing Report Generation...': {
+      kn: 'ವರದಿ ರಚನೆ ಪ್ರಕ್ರಿಯೆಯಲ್ಲಿದೆ...',
+      hi: 'रिपोर्ट तैयार की जा रही है...',
+    },
+  };
+
+  if (stepTranslations[step] && stepTranslations[step][lang]) {
+    return stepTranslations[step][lang];
+  }
+
+  for (const [key, trans] of Object.entries(stepTranslations)) {
+    if (step.startsWith(key.slice(0, 20))) {
+      return trans[lang];
+    }
+  }
+
+  return step;
+};
+
+export default function DPRGenerationModal({ isOpen, progressPercent, stepName, language: propLang }: DPRGenerationModalProps) {
+  const { language: ctxLang } = useLanguage();
+
   if (!isOpen) return null;
 
-  const stages = [
-    { label: 'Gathering Data', desc: 'Project inputs received', threshold: 10, icon: 'fa-database' },
-    { label: 'Analyzing', desc: 'Understanding your project', threshold: 25, icon: 'fa-brain' },
-    { label: 'Calculating', desc: 'Running financial models', threshold: 45, icon: 'fa-calculator' },
-    { label: 'Creating Charts', desc: 'Visualizing insights', threshold: 65, icon: 'fa-chart-pie' },
-    { label: 'Structuring', desc: 'Building your report', threshold: 85, icon: 'fa-file-alt' },
-    { label: 'Finalizing', desc: 'Preparing PDF & DOCX', threshold: 98, icon: 'fa-check-circle' },
-  ];
+  const rawLang =
+    propLang ||
+    ctxLang ||
+    (typeof window !== 'undefined'
+      ? sessionStorage.getItem('dpr_selected_language') ||
+        localStorage.getItem('dpr_language_preference') ||
+        localStorage.getItem('dpr_selected_language')
+      : null) ||
+    'en';
+
+  const activeLang: 'en' | 'kn' | 'hi' = rawLang === 'kn' ? 'kn' : rawLang === 'hi' ? 'hi' : 'en';
+  const tM = modalI18n[activeLang] || modalI18n.en;
+  const stages = tM.stages;
 
   return (
     <div
@@ -113,10 +279,10 @@ export default function DPRGenerationModal({ isOpen, progressPercent, stepName }
           </div>
           <div>
             <span style={{ fontSize: '0.94rem', fontWeight: 800, color: '#9A3412', display: 'block' }}>
-              Please stay with us — this may take a few moments.
+              {tM.alertTitle}
             </span>
             <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#C2410C' }}>
-              No action is required from you.
+              {tM.alertDesc}
             </span>
           </div>
         </div>
@@ -132,10 +298,10 @@ export default function DPRGenerationModal({ isOpen, progressPercent, stepName }
             lineHeight: 1.35,
           }}
         >
-          We’re turning your project details into a structured, professional DPR.
+          {tM.mainTitle}
         </h2>
         <p style={{ fontSize: '1.02rem', fontWeight: 700, color: '#008C95', marginBottom: '1.6rem' }}>
-          Processing document compilation. Please wait...
+          {tM.subTitle}
         </p>
 
         {/* NATIVE LIVE 3D INTERACTIVE PIPELINE VISUAL CONTAINER */}
@@ -201,13 +367,7 @@ export default function DPRGenerationModal({ isOpen, progressPercent, stepName }
 
           {/* LAYER 1: FLOATING 3D INPUT CARDS (LEFT) */}
           <div style={{ width: '165px', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 2 }}>
-            {[
-              { label: 'Project Details', icon: 'fa-file-alt', color: '#2563EB', delay: '0s' },
-              { label: 'Financial Inputs', icon: 'fa-coins', color: '#F59E0B', delay: '0.4s' },
-              { label: 'Market Data', icon: 'fa-chart-line', color: '#10B981', delay: '0.8s' },
-              { label: 'Scheme Info', icon: 'fa-landmark', color: '#1E3A8A', delay: '1.2s' },
-              { label: 'Business Plan', icon: 'fa-clipboard-list', color: '#008C95', delay: '1.6s' },
-            ].map((item, i) => (
+            {tM.inputBadges.map((item, i) => (
               <div
                 key={i}
                 style={{
@@ -278,7 +438,7 @@ export default function DPRGenerationModal({ isOpen, progressPercent, stepName }
               </div>
             </div>
             <div style={{ marginTop: '0.6rem', fontSize: '0.76rem', fontWeight: 800, color: '#008C95', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              AI Engine Core
+              {tM.aiCore}
             </div>
           </div>
 
@@ -309,7 +469,7 @@ export default function DPRGenerationModal({ isOpen, progressPercent, stepName }
               <i className="fas fa-calculator"></i>
             </div>
             <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#475569', marginTop: '0.3rem' }}>
-              Financial Engine
+              {tM.financialEngine}
             </div>
           </div>
 
@@ -338,7 +498,7 @@ export default function DPRGenerationModal({ isOpen, progressPercent, stepName }
               <div style={{ width: '6px', height: '75%', background: '#3B82F6', borderRadius: '2px' }} />
             </div>
             <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#475569', marginTop: '0.4rem' }}>
-              Visual Engine
+              {tM.visualEngine}
             </div>
           </div>
 
@@ -363,7 +523,7 @@ export default function DPRGenerationModal({ isOpen, progressPercent, stepName }
               }}
             >
               <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#0F172A', marginBottom: '0.3rem', borderBottom: '1px solid #E2E8F0', paddingBottom: '3px' }}>
-                DPR Report
+                {tM.dprReport}
               </div>
               <div style={{ height: '4px', background: '#E2E8F0', borderRadius: '2px', marginBottom: '3px', width: '80%' }} />
               <div style={{ height: '4px', background: '#E2E8F0', borderRadius: '2px', marginBottom: '3px', width: '100%' }} />
@@ -394,10 +554,10 @@ export default function DPRGenerationModal({ isOpen, progressPercent, stepName }
           >
             <div>
               <div style={{ fontSize: '0.82rem', fontWeight: 800, color: '#0F172A', textTransform: 'uppercase', letterSpacing: '0.3px', lineHeight: 1.25 }}>
-                Detailed Project Report
+                {tM.detailedProjectReport}
               </div>
               <div style={{ fontSize: '0.62rem', fontWeight: 700, color: '#008C95', marginTop: '0.2rem' }}>
-                Vision Karnataka
+                {tM.visionKarnataka}
               </div>
             </div>
 
@@ -524,7 +684,10 @@ export default function DPRGenerationModal({ isOpen, progressPercent, stepName }
 
         {/* CURRENT LIVE STEP BADGE */}
         <div style={{ marginTop: '1.4rem', fontSize: '0.84rem', fontWeight: 700, color: '#475569' }}>
-          Current Action: <span style={{ color: '#008C95' }}>{stepName || 'Processing Report Generation...'}</span>
+          {tM.currentAction}{' '}
+          <span style={{ color: '#008C95' }}>
+            {translateStep(stepName, activeLang) || tM.defaultStep}
+          </span>
         </div>
       </div>
     </div>

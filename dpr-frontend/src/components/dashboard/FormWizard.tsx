@@ -509,17 +509,46 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
   };
 
   const startProgressSimulation = () => {
-    setProgressPercent(5);
-    setStepName('Gathering Data: Validating inputs, legal constitution & promoters...');
+    const rawLang = formData.language || language || (typeof window !== 'undefined' ? (sessionStorage.getItem('dpr_selected_language') || localStorage.getItem('dpr_language_preference') || localStorage.getItem('dpr_selected_language')) : null) || 'en';
+    const activeLang: 'en' | 'kn' | 'hi' = rawLang === 'kn' ? 'kn' : rawLang === 'hi' ? 'hi' : 'en';
 
-    const stagesList = [
-      { pct: 15, name: 'Gathering Data: Verifying sector blueprint & machinery inputs...' },
-      { pct: 30, name: 'Analyzing Project: Running AI market, risk & scheme agents...' },
-      { pct: 52, name: 'Calculating Financials: Computing 10-Yr P&L, DSCR & Tandon MPBF...' },
-      { pct: 72, name: 'Creating Charts: Generating Matplotlib CAPEX & Financial graphics...' },
-      { pct: 88, name: 'Structuring Report: Compiling 30 chapters & 10 annexure schedules...' },
-      { pct: 96, name: 'Finalizing: Preparing publication-ready document...' },
-    ];
+    const initialStep = {
+      kn: 'ಡೇಟಾ ಸಂಗ್ರಹಣೆ: ವಿವರಗಳು, ಕಾನೂನು ಸಂಸ್ಥೆ ಮತ್ತು ಪ್ರವರ್ತಕರ ಪರಿಶೀಲನೆ...',
+      hi: 'डेटा संग्रह: इनपुट, कानूनी प्रकार और प्रवर्तकों का सत्यापन...',
+      en: 'Gathering Data: Validating inputs, legal constitution & promoters...',
+    };
+
+    const stagesByLang = {
+      kn: [
+        { pct: 15, name: 'ಡೇಟಾ ಸಂಗ್ರಹಣೆ: ವಲಯ ನೀಲನಕ್ಷೆ ಮತ್ತು ಯಂತ್ರೋಪಕರಣಗಳ ಪರಿಶೀಲನೆ...' },
+        { pct: 30, name: 'ಯೋಜನಾ ವಿಶ್ಲೇಷಣೆ: ಮಾರುಕಟ್ಟೆ, ಅಪಾಯ ಮತ್ತು ಸಬ್ಸಿಡಿ ಎಐ ವಿಶ್ಲೇಷಣೆ...' },
+        { pct: 52, name: 'ಹಣಕಾಸು ಲೆಕ್ಕಾಚಾರ: 10-ವರ್ಷಗಳ P&L, DSCR ಮತ್ತು ಟಂಡನ್ MPBF ಮಾದರಿ...' },
+        { pct: 72, name: 'ನಕ್ಷೆಗಳ ರಚನೆ: ಬಂಡವಾಳ ಹೂಡಿಕೆ ಮತ್ತು ಹಣಕಾಸು ಚಾರ್ಟ್‌ಗಳ ರಚನೆ...' },
+        { pct: 88, name: 'ವರದಿ ಸಂಕಲನ: 31 ಅಧ್ಯಾಯಗಳು ಮತ್ತು 10 ಹಣಕಾಸು ವೇಳಾಪಟ್ಟಿಗಳ ಸಂಯೋಜನೆ...' },
+        { pct: 96, name: 'ಅಂತಿಮಗೊಳಿಸುವಿಕೆ: ಪ್ರಕಟಣೆಗೆ ಸಿದ್ಧವಾದ ವರದಿಯನ್ನು ಸಿದ್ಧಪಡಿಸಲಾಗುತ್ತಿದೆ...' },
+      ],
+      hi: [
+        { pct: 15, name: 'डेटा संग्रह: सेक्टर ब्लूप्रिंट एवं मशीनरी इनपुट सत्यापन...' },
+        { pct: 30, name: 'परियोजना विश्लेषण: बाजार, जोखिम एवं सब्सिडी एआई विश्लेषण...' },
+        { pct: 52, name: 'वित्तीय गणना: 10-वर्षीय P&L, DSCR एवं टंडन MPBF की गणना...' },
+        { pct: 72, name: 'चार्ट निर्माण: पूंजीगत व्यय एवं वित्तीय रेखाचित्र निर्माण...' },
+        { pct: 88, name: 'रिपोर्ट संरचना: 31 अध्यायों एवं 10 वित्तीय अनुसूचियों का संकलन...' },
+        { pct: 96, name: 'अंतिम रूप: प्रकाशन-योग्य दस्तावेज़ तैयार किया जा रहा है...' },
+      ],
+      en: [
+        { pct: 15, name: 'Gathering Data: Verifying sector blueprint & machinery inputs...' },
+        { pct: 30, name: 'Analyzing Project: Running AI market, risk & scheme agents...' },
+        { pct: 52, name: 'Calculating Financials: Computing 10-Yr P&L, DSCR & Tandon MPBF...' },
+        { pct: 72, name: 'Creating Charts: Generating Matplotlib CAPEX & Financial graphics...' },
+        { pct: 88, name: 'Structuring Report: Compiling 30 chapters & 10 annexure schedules...' },
+        { pct: 96, name: 'Finalizing: Preparing publication-ready document...' },
+      ],
+    };
+
+    setProgressPercent(5);
+    setStepName(initialStep[activeLang] || initialStep.en);
+
+    const stagesList = stagesByLang[activeLang] || stagesByLang.en;
 
     let stepIdx = 0;
     const interval = setInterval(() => {
@@ -3029,6 +3058,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         isOpen={generating}
         progressPercent={progressPercent}
         stepName={stepName}
+        language={formData.language || language}
       />
     </div>
   );
