@@ -264,25 +264,53 @@ class CalculationService:
         result["user_logo_b64"] = logo_b64_uri
         result["vkf_official_logo_b64"] = logo_b64_uri
         result["org_logo_b64"] = logo_b64_uri
-        result["promoter_name"] = str(data.get("promoter_name", "Promoter Name") or "Promoter Name")
-        result["constitution"] = str(data.get("constitution", "Private Limited / Proprietorship") or "Private Limited / Proprietorship")
-        result["district"] = str(data.get("district", "District") or "District")
-        result["state"] = str(data.get("state", "Karnataka") or "Karnataka")
-        result["place"] = str(data.get("place", "Bangalore") or "Bangalore")
-        result["builtup_area"] = str(data.get("builtup_area", "5,000 Sq.Ft") or "5,000 Sq.Ft")
-        result["power_required"] = str(data.get("power_required", "50 HP") or "50 HP")
-        result["water_required"] = str(data.get("water_required", "5,000 LPD") or "5,000 LPD")
-        result["primary_product"] = str(data.get("primary_product", "Industrial Finished Product") or "Industrial Finished Product")
-        result["account_number"] = str(data.get("account_number", "XXXXXXXX1234") or "XXXXXXXX1234")
-        result["bank_name"] = str(data.get("bank_name", "State Bank of India") or "State Bank of India")
-        result["ifsc"] = str(data.get("ifsc", "SBIN0001234") or "SBIN0001234")
-        result["cibil_score"] = int(data.get("cibil_score", 760) or 760)
-        result["gst_no"] = str(data.get("gst_no", "29AAAAA0000A1Z5") or "29AAAAA0000A1Z5")
-        result["udyam_no"] = str(data.get("udyam_no", "UDYAM-KR-03-0001234") or "UDYAM-KR-03-0001234")
-        result["declarant_name"] = str(data.get("declarant_name", result.get("promoter_name", "Promoter")) or "Promoter")
-        result["declaration_date"] = str(data.get("declaration_date", "2026-08-27") or "2026-08-27")
-        result["designation"] = str(data.get("designation", "Proprietor / Director") or "Proprietor / Director")
-        result["entity_type"] = str(data.get("entity_type", "MSME Manufacturing Enterprise") or "MSME Manufacturing Enterprise")
+
+        # Determine language first
+        raw_lang = str(data.get("language", "en") or "en").lower()
+        is_kn = 'kn' in raw_lang or 'kannada' in raw_lang
+        is_hi = 'hi' in raw_lang or 'hindi' in raw_lang
+
+        # Promoter / Contact name resolution
+        promoter_input = data.get("promoter_name") or data.get("contact_name")
+        if not promoter_input and data.get("members") and len(data.get("members")) > 0:
+            promoter_input = data["members"][0].get("name")
+        
+        default_promoter = "ಶ್ರೀ ಪ್ರವರ್ತಕರು" if is_kn else ("श्री मुख्य प्रवर्तक" if is_hi else "Lead Promoter")
+        resolved_promoter = str(promoter_input or default_promoter)
+        result["promoter_name"] = resolved_promoter
+        result["contact_name"] = resolved_promoter
+        result["declarant_name"] = str(data.get("declarant_name") or resolved_promoter)
+
+        # Entity type / Constitution resolution
+        raw_entity = str(data.get("entity_type") or data.get("constitution") or "Proprietorship")
+        result["entity_type"] = raw_entity
+        result["constitution"] = raw_entity
+
+        # District and State
+        default_district = "ಬೆಂಗಳೂರು" if is_kn else ("भोपाल" if is_hi else "Bengaluru")
+        default_state = "ಕರ್ನಾಟಕ" if is_kn else ("मध्य प्रदेश" if is_hi else "Karnataka")
+        result["district"] = str(data.get("district") or default_district)
+        result["state"] = str(data.get("state") or default_state)
+        result["place"] = str(data.get("place") or result["district"])
+
+        # Primary product
+        default_product = "ನಿಖರ ಎಂಜಿನಿಯರಿಂಗ್ ಕೈಗಾರಿಕಾ ಘಟಕಗಳು" if is_kn else ("सटीक औद्योगिक विनिर्मित कलपुर्जे" if is_hi else "Industrial Manufactured Components")
+        result["primary_product"] = str(data.get("primary_product") or default_product)
+
+        # Builtup, power, water
+        result["builtup_area"] = str(data.get("builtup_area") or "2,500 Sq.Ft")
+        result["power_required"] = str(data.get("power_required") or "35 HP")
+        result["water_required"] = str(data.get("water_required") or "2,000 LPD")
+
+        # Bank details
+        result["account_number"] = str(data.get("account_number") or "41234567890")
+        result["bank_name"] = str(data.get("bank_name") or "State Bank of India")
+        result["ifsc"] = str(data.get("ifsc") or "SBIN0001234")
+        result["cibil_score"] = int(data.get("cibil_score") or 760)
+        result["gst_no"] = str(data.get("gst_no") or "29AAAAA0000A1Z5")
+        result["udyam_no"] = str(data.get("udyam_no") or "UDYAM-KR-03-0001234")
+        result["declaration_date"] = str(data.get("declaration_date") or "2026-08-27")
+        result["designation"] = str(data.get("designation") or ("ಮಾಲೀಕರು / ವ್ಯವಸ್ಥಾಪಕ ನಿರ್ದೇಶಕರು" if is_kn else ("मालिक / प्रबंध निदेशक" if is_hi else "Proprietor / Managing Director")))
         result["group_name"] = str(data.get("group_name", "VKF Industrial Group") or "VKF Industrial Group")
         result["local_employment"] = int(data.get("local_employment", 15) or 15)
         result["women_employment"] = int(data.get("women_employment", 8) or 8)
@@ -409,7 +437,8 @@ class CalculationService:
                     ax.set_ylabel('DSCR Ratio (x)', fontsize=8, fontweight='bold')
                     ax.set_title('DEBT SERVICE COVERAGE RATIO (DSCR) TRAJECTORY', fontsize=9.5, fontweight='bold', color='#0F172A', pad=10)
                     ax.legend(fontsize=7.5, loc='lower right')
-                    ax.set_ylim(bottom=1.0, top=max(dscrs) * 1.25 if dscrs else 3.0)
+                    max_val = max(dscrs) if dscrs and max(dscrs) > 0 else 2.5
+                    ax.set_ylim(bottom=0.5, top=max(3.0, max_val * 1.3))
                     
                     buf = io.BytesIO()
                     plt.savefig(buf, format='png', bbox_inches='tight', dpi=90)
@@ -499,6 +528,16 @@ class CalculationService:
                     f"ಕಚ್ಚಾ ಸಾಮಗ್ರಿಗಳು ಕಟ್ಟುನಿಟ್ಟಾದ ಆರಂಭಿಕ ಗುಣಮಟ್ಟ ತಪಾಸಣೆಗೆ ಒಳಗಾಗುತ್ತವೆ, ನಂತರ ಸ್ವಯಂಚಾಲಿತ ನಿಖರ ಸಂಸ್ಕರಣೆ, ಶಾಖ ಚಿಕಿತ್ಸೆ, "
                     f"ಮೇಲ್ಮೈ ಫಿನಿಶಿಂಗ್ ಮತ್ತು 3D CMM ಪರೀಕ್ಷೆಯ ನಂತರ ಬ್ಯಾಚ್ ಪ್ಯಾಕಿಂಗ್ ಮತ್ತು ವಿತರಣೆಗೆ ಕಳುಹಿಸಲಾಗುತ್ತದೆ.</p>"
                 )
+            elif 'hi' in lang:
+                narratives["product_description"] = (
+                    f"<p><strong>4.1 व्यावसायिक उत्पादन एवं तकनीकी विवरण:</strong><br>"
+                    f"<strong>{b_name}</strong> इकाई <strong>{sec_name}</strong> क्षेत्र में उच्चतम गुणवत्ता वाले <strong>{prod_name}</strong> "
+                    f"के विनिर्माण एवं प्रसंस्करण में कार्यरत है। इस इकाई में आधुनिक स्वचालित मशीनरी, सीएनसी उपकरण और डिजिटल गुणवत्ता नियंत्रण प्रणालियां स्थापित हैं। "
+                    f"उत्पादन प्रक्रियाएं ISO 9001:2015 मानकों, राष्ट्रीय पर्यावरण नियमों और औद्योगिक सुरक्षा मानकों के पूर्ण अनुपालन में संचालित की जाती हैं।</p>"
+                    f"<p><strong>4.2 गुणवत्ता आश्वासन एवं विनिर्माण प्रवाह:</strong><br>"
+                    f"कच्चे माल का आगमन पर कठोर गुणवत्ता निरीक्षण किया जाता है, जिसके बाद स्वचालित परिशुद्ध प्रसंस्करण, हीट ट्रीटमेंट, "
+                    f"सतह परिष्करण और कम्प्यूटरीकृत 3D मापन परीक्षण के पश्चात बैच पैकेजिंग और प्रेषण किया जाता है।</p>"
+                )
             else:
                 narratives["product_description"] = (
                     f"<p><strong>4.1 Commercial Production & Technology Overview:</strong><br>"
@@ -519,6 +558,15 @@ class CalculationService:
                     f"<p><strong>5.2 ಗುರಿ ಮಾರುಕಟ್ಟೆ ಮತ್ತು B2B ಸರಬರಾಜು ಜಾಲ:</strong><br>"
                     f"ಗುರಿ ಗ್ರಾಹಕರು OEM ಕೈಗಾರಿಕಾ ತಯಾರಕರು, ಪ್ರಾದೇಶಿಕ ವಾಣಿಜ್ಯ ಗುತ್ತಿಗೆದಾರರು ಮತ್ತು ಸಾಂಸ್ಥಿಕ ಖರೀದಿದಾರರನ್ನು ಒಳಗೊಂಡಿದ್ದಾರೆ. "
                     f"ವಾರ್ಷಿಕ ಕಾರ್ಪೊರೇಟ್ ಪೂರೈಕೆ ಒಪ್ಪಂದಗಳು, ನೇರ B2B ಖರೀದಿ ಒಪ್ಪಂದಗಳು ಮತ್ತು ಡಿಜಿಟಲ್ ಕೈಗಾರಿಕಾ ವ್ಯಾಪಾರ ಕೇಂದ್ರಗಳ ಮೂಲಕ ಮಾರಾಟವನ್ನು ಖಾತರಿಪಡಿಸಲಾಗುತ್ತದೆ.</p>"
+                )
+            elif 'hi' in lang:
+                narratives["market_analysis"] = (
+                    f"<p><strong>5.1 उद्योग का आकार, विकास दर एवं मांग पूर्वानुमान:</strong><br>"
+                    f"{dist_name}, {state_name} और समीपवर्ती औद्योगिक क्षेत्रों में <strong>{sec_name}</strong> क्षेत्र के तहत <strong>{b_name}</strong> के उत्पादों की मांग "
+                    f"लगभग <strong>11.5%</strong> की वार्षिक चक्रवृद्धि दर (CAGR) से बढ़ रही है। अवसंरचना विकास, तीव्र औद्योगिकीकरण और केंद्र सरकार की आत्मनिर्भर भारत एमएसएमई प्रोत्साहन योजनाएं इस मांग को गति प्रदान कर रही हैं।</p>"
+                    f"<p><strong>5.2 लक्षित बाजार एवं B2B आपूर्ति नेटवर्क:</strong><br>"
+                    f"प्रमुख लक्षित ग्राहकों में ओईएम (OEM) औद्योगिक निर्माता, क्षेत्रीय वाणिज्यिक ठेकेदार और संस्थागत खरीदार शामिल हैं। "
+                    f"वार्षिक आपूर्ति अनुबंधों, प्रत्यक्ष संस्थागत आपूर्ति करारों और डिजिटल औद्योगिक व्यापार पोर्टलों के माध्यम से बिक्री सुरक्षित की गई है।</p>"
                 )
             else:
                 narratives["market_analysis"] = (

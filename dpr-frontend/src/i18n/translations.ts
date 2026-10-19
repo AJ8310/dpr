@@ -283,7 +283,7 @@ export const translations: Record<Language, Translations> = {
         { num: '02', title: 'Financial Projections', desc: 'Generate multi-year projected Profit & Loss statements, Balance Sheets, and Cash Flow models instantly.' },
         { num: '03', title: 'Funding Allocation Analysis', desc: 'Structure term loans, working capital margins, promoter contribution, and central/state subsidy allocations.' },
         { num: '04', title: 'Feasibility & Risk Audits', desc: 'Organize DSCR ratio calculations, sensitivity stress tests, and Tandon committee working capital norms.' },
-        { num: '05', title: 'Professional DPR Output', desc: 'Export fully formatted Word (.docx) reports with optional VKF co-branding, ready for immediate bank submission.' },
+        { num: '05', title: 'Professional DPR Output', desc: 'Export publication-ready official bankable PDF reports with optional VKF co-branding, ready for immediate bank submission.' },
       ],
     },
     speedBand: {
@@ -319,9 +319,9 @@ export const translations: Record<Language, Translations> = {
       items: [
         { title: 'Live Recalculations', desc: 'Update machinery or investment variables and see instant updates across P&L, Balance Sheet, and ratios.' },
         { title: 'Audit-Ready Models', desc: 'Financial calculations structured according to RBI lending guidelines and CA norms.' },
-        { title: 'Standardized Formats', desc: 'Generates clean, well-aligned DOCX reports ready for submission without manual formatting hassle.' },
+        { title: 'Standardized Formats', desc: 'Generates clean, well-aligned official PDF reports ready for submission without manual formatting hassle.' },
         { title: 'Multi-Sector Intelligence', desc: 'Pre-configured schemas for Dairy, Food Processing, Solar, Manufacturing, Textiles, and more.' },
-        { title: 'One-Click Exports', desc: 'Export fully formatted Word documents with customizable VKF co-branding or sole business logo.' },
+        { title: 'One-Click Exports', desc: 'Export publication-ready PDF documents with customizable VKF co-branding or sole business logo.' },
       ],
     },
     financialStudio: {
@@ -521,7 +521,7 @@ export const translations: Record<Language, Translations> = {
         },
         {
           q: 'What formats can I export my DPR to?',
-          a: 'You can generate fully formatted Microsoft Word (.docx) documents with option for custom enterprise co-branding.'
+          a: 'You can generate fully formatted official bankable PDF documents with option for custom enterprise co-branding.'
         }
       ]
     },
@@ -630,7 +630,7 @@ export const translations: Record<Language, Translations> = {
         { num: '02', title: 'ಹಣಕಾಸಿನ ಮುನ್ಸೂಚನೆ', desc: 'ಬಹು-ವರ್ಷಗಳ ಲಾಭ-ನಷ್ಟದ ಪಟ್ಟಿ, ಬ್ಯಾಲೆನ್ಸ್ ಶೀಟ್ ಮತ್ತು ನಗದು ಹರಿವಿನ ಮಾದರಿಯನ್ನು ತಕ್ಷಣ ಸೃಷ್ಟಿಸಿ.' },
         { num: '03', title: 'ಬಂಡವಾಳ ಹಂಚಿಕೆ & ಸಬ್ಸಿಡಿ', desc: 'ಅವಧಿ ಸಾಲ, ದುಡಿಯುವ ಬಂಡವಾಳ, ಪ್ರವರ್ತಕರ ಇಕ್ವಿಟಿ ಮತ್ತು ಸರ್ಕಾರಿ ಸಬ್ಸಿಡಿಗಳನ್ನು ನಿಖರವಾಗಿ ರಚಿಸಿ.' },
         { num: '04', title: 'ಕಾರ್ಯಸಾಧ್ಯತೆ & ರಿಸ್ಕ್ ಆಡಿಟ್', desc: 'DSCR ಅನುಪಾತ, ಸೂಕ್ಷ್ಮತೆಯ ಒತ್ತಡ ಪರೀಕ್ಷೆ ಮತ್ತು ಟಂಡನ್ ಸಮಿತಿಯ ನಿಯಮಗಳನ್ನು ಪರೀಕ್ಷಿಸಿ.' },
-        { num: '05', title: 'ಅಧಿಕೃತ ಡಿಪಿಆರ್ ಔಟ್‌ಪುಟ್', desc: 'ಬ್ಯಾಂಕ್ ಸಲ್ಲಿಕೆಗೆ ಸಿದ್ಧವಾಗಿರುವ ವರ್ಡ್ (.docx) ಮತ್ತು PDF ವರದಿಯನ್ನು ತಕ್ಷಣ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ.' },
+        { num: '05', title: 'ಅಧಿಕೃತ ಡಿಪಿಆರ್ ಔಟ್‌ಪುಟ್', desc: 'ಬ್ಯಾಂಕ್ ಸಲ್ಲಿಕೆಗೆ ಸಿದ್ಧವಾಗಿರುವ ಅತ್ಯುನ್ನತ ಗುಣಮಟ್ಟದ ಅಧಿಕೃತ ಪಿಡಿಎಫ್ (PDF) ವರದಿಯನ್ನು ತಕ್ಷಣ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ.' },
       ],
     },
     speedBand: {
@@ -668,7 +668,7 @@ export const translations: Record<Language, Translations> = {
         { title: 'ಆಡಿಟ್-ಸಿದ್ಧ ಮಾದರಿ', desc: 'ಆರ್‌ಬಿಐ ನಿಯಮಗಳು ಮತ್ತು ಸಿಎ ಮಾನದಂಡಗಳಿಗೆ ಅನುಗುಣವಾಗಿ ರಚಿಸಲಾದ ಲೆಕ್ಕಾಚಾರಗಳು.' },
         { title: 'ಪ್ರಮಾಣಿತ ವಿನ್ಯಾಸ', desc: 'ಮ್ಯಾನುಯಲ್ ಫಾರ್ಮ್ಯಾಟಿಂಗ್ ಗೊಂದಲವಿಲ್ಲದೆ ಬ್ಯಾಂಕ್‌ಗೆ ಸಲ್ಲಿಸಲು ಸಿದ್ಧವಾಗಿರುವ ವರದಿ.' },
         { title: 'ಬಹು-ವಲಯ ಬುದ್ಧಿಮತ್ತೆ', desc: 'ಡೈರಿ, ಆಹಾರ, ಸೌರಶಕ್ತಿ, ಉತ್ಪಾದನೆ, ಜವಳಿ ಇತ್ಯಾದಿಗಳಿಗೆ ಸಿದ್ಧ ಟೆಂಪ್ಲೇಟ್‌ಗಳು.' },
-        { title: 'ಏಕ-ಕ್ಲಿಕ್ ಡೌನ್‌ಲೋಡ್', desc: 'ವರ್ಡ್ (.docx) ಮತ್ತು PDF ವರದಿಗಳನ್ನು ಕಸ್ಟಮ್ ಲೋಗೋದೊಂದಿಗೆ ಸುಲಭವಾಗಿ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ.' },
+        { title: 'ಏಕ-ಕ್ಲಿಕ್ ಡೌನ್‌ಲೋಡ್', desc: 'ಸಂಪೂರ್ಣ ವಿನ್ಯಾಸದ ಅಧಿಕೃತ ಪಿಡಿಎಫ್ (PDF) ವರದಿಗಳನ್ನು ಕಸ್ಟಮ್ ಲೋಗೋದೊಂದಿಗೆ ಸುಲಭವಾಗಿ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ.' },
       ],
     },
     financialStudio: {
@@ -868,7 +868,7 @@ export const translations: Record<Language, Translations> = {
         },
         {
           q: 'ನನ್ನ ಡಿಪಿಆರ್ ಅನ್ನು ಯಾವ ಫಾರ್ಮ್ಯಾಟ್‌ಗಳಲ್ಲಿ ಡೌನ್‌ಲೋಡ್ ಮಾಡಬಹುದು?',
-          a: 'ನೀವು ಬ್ಯಾಂಕ್ ಸಲ್ಲಿಕೆಗೆ ಸಿದ್ಧವಾಗಿರುವ ಮೈಕ್ರೋಸಾಫ್ಟ್ ವರ್ಡ್ (.docx) ಮತ್ತು PDF ದಾಖಲೆಗಳನ್ನು ಕಸ್ಟಮ್ ಉದ್ಯಮ ಲೋಗೋದೊಂದಿಗೆ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿಕೊಳ್ಳಬಹುದು.'
+          a: 'ನೀವು ಬ್ಯಾಂಕ್ ಸಲ್ಲಿಕೆಗೆ ಸಿದ್ಧವಾಗಿರುವ ಅತ್ಯುನ್ನತ ಗುಣಮಟ್ಟದ ಅಧಿಕೃತ ಪಿಡಿಎಫ್ (PDF) ವರದಿಯನ್ನು ಕಸ್ಟಮ್ ಉದ್ಯಮ ಲೋಗೋದೊಂದಿಗೆ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿಕೊಳ್ಳಬಹುದು.'
         }
       ]
     },
@@ -977,7 +977,7 @@ export const translations: Record<Language, Translations> = {
         { num: '02', title: 'वित्तीय अनुमान', desc: 'बहु-वर्षीय लाभ-हानि विवरण, बैलेंस शीट और कैश फ्लो मॉडल तुरंत तैयार करें।' },
         { num: '03', title: 'फंडिंग आवंटन विश्लेषण', desc: 'सावधि ऋण, कार्यशील पूंजी मार्जिन, प्रवर्तक अंशदान और सरकारी सब्सिडी का सटीक ढांचा तैयार करें।' },
         { num: '04', title: 'व्यवहार्यता एवं जोखिम ऑडिट', desc: 'DSCR अनुपात, संवेदनशीलता तनाव परीक्षण और टंडन समिति के कार्यशील पूंजी नियमों की जांच करें।' },
-        { num: '05', title: 'आधिकारिक डीपीआर आउटपुट', desc: 'बैंक प्रस्तुति हेतु तैयार पूर्ण स्वरूपित वर्ड (.docx) और पीडीएफ रिपोर्ट तुरंत प्राप्त करें।' },
+        { num: '05', title: 'आधिकारिक डीपीआर आउटपुट', desc: 'बैंक प्रस्तुति हेतु तैयार आधिकारिक एवं प्रमाणिक उच्च गुणवत्ता पीडीएफ (PDF) रिपोर्ट तुरंत प्राप्त करें।' },
       ],
     },
     speedBand: {
@@ -1015,7 +1015,7 @@ export const translations: Record<Language, Translations> = {
         { title: 'ऑडिट-तैयार मॉडल', desc: 'आरबीआई ऋण दिशानिर्देशों और सीए मानकों के अनुसार वित्तीय गणनाएं।' },
         { title: 'मानकीकृत प्रारूप', desc: 'बिना मैन्युअल स्वरूपण झंझट के बैंक प्रस्तुति योग्य रिपोर्ट।' },
         { title: 'बहु-क्षेत्रीय बुद्धिमत्ता', desc: 'डेयरी, खाद्य प्रसंस्करण, सौर, विनिर्माण, वस्त्र आदि के लिए पूर्व-कॉन्फ़िगर मॉडल।' },
-        { title: 'एक-क्लिक डाउनलोड', desc: 'कस्टम लोगो के साथ वर्ड (.docx) और पीडीएफ रिपोर्ट तुरंत निर्यात करें।' },
+        { title: 'एक-क्लिक डाउनलोड', desc: 'कस्टम लोगो के साथ आधिकारिक पीडीएफ (PDF) रिपोर्ट तुरंत डाउनलोड करें।' },
       ],
     },
     financialStudio: {
@@ -1215,7 +1215,7 @@ export const translations: Record<Language, Translations> = {
         },
         {
           q: 'मैं अपनी डीपीआर किन प्रारूपों में डाउनलोड कर सकता हूँ?',
-          a: 'आप तुरंत बैंक प्रस्तुति हेतु तैयार माइक्रोसॉफ्ट वर्ड (.docx) और पीडीएफ दस्तावेज कस्टम लोगो के साथ डाउनलोड कर सकते हैं।'
+          a: 'आप तुरंत बैंक प्रस्तुति हेतु तैयार आधिकारिक एवं प्रमाणिक उच्च गुणवत्ता पीडीएफ (PDF) दस्तावेज कस्टम लोगो के साथ डाउनलोड कर सकते हैं।'
         }
       ]
     },

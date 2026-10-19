@@ -38,20 +38,7 @@
             margin-bottom: 0.5rem;
         }
 
-        /* Fixed Page Border Overlay - Perfectly aligned double line border around printable page box */
-        .pdf-page-border-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border: 2px solid #0F172A;
-            outline: 1px solid #1E3A8A;
-            outline-offset: -4px;
-            pointer-events: none;
-            z-index: 9999;
-            box-sizing: border-box;
-        }
+        /* Page borders handled cleanly by printable page flow */
         
         /* Cover Page Single VKF Organization Logo (Clean, Centered, Prominent) */
         .cover-logo-banner {
@@ -360,9 +347,6 @@
     </style>
 </head>
 <body>
-    <!-- Fixed page border overlay repeated on every PDF page -->
-    <div class="pdf-page-border-overlay"></div>
-
 <!-- COVER PAGE LOGO BANNER -->
 <div class="cover">
     <div class="cover-logo-banner" style="display: flex; justify-content: center; align-items: center; gap: 20px;">
@@ -389,23 +373,34 @@
         <tr><td class="label">{{ report_i18n.lbl_financial_horizon | default("Financial Horizon:") }}</td><td><strong>{{financial_horizon | default("5-Year Detailed Model")}}</strong></td></tr>
         <tr><td class="label">{{ report_i18n.lbl_legal_constitution | default("Legal Constitution:") }}</td><td>{{entity_type | default("Proprietorship")}}</td></tr>
         <tr><td class="label">{{ report_i18n.lbl_district_state | default("District & State:") }}</td><td>{{district | default("Bengaluru")}}, {{state | default("Karnataka")}}</td></tr>
-        <tr><td class="label">{{ report_i18n.lbl_total_cost | default("Total Project Cost:") }}</td><td><strong>₹{{total_cost}}</strong></td></tr>
-        <tr><td class="label">{{ report_i18n.lbl_bank_loan | default("Bank Loan Required:") }}</td><td><strong>₹{{bank_loan}}</strong></td></tr>
-        <tr><td class="label">{{ report_i18n.lbl_promoter_equity | default("Promoter Equity:") }}</td><td><strong>₹{{promoter_contribution}}</strong></td></tr>
+        <tr><td class="label">{{ report_i18n.lbl_total_cost | default("Total Project Cost:") }}</td><td><strong>₹{{total_cost | inr}}</strong> <span style="font-size: 8pt; color: #475569;">({{total_cost | indian_words(report_lang)}})</span></td></tr>
+        <tr><td class="label">{{ report_i18n.lbl_bank_loan | default("Bank Loan Required:") }}</td><td><strong>₹{{bank_loan | inr}}</strong> <span style="font-size: 8pt; color: #475569;">({{bank_loan | indian_words(report_lang)}})</span></td></tr>
+        <tr><td class="label">{{ report_i18n.lbl_promoter_equity | default("Promoter Equity:") }}</td><td><strong>₹{{promoter_contribution | inr}}</strong> <span style="font-size: 8pt; color: #475569;">({{promoter_contribution | indian_words(report_lang)}})</span></td></tr>
     </table>
+
+    <div class="cover-footer-block" style="margin-top: 36px; padding: 14px 18px; border-top: 2px solid #1E3A8A; background: #F8FAFC; border-radius: 4px; text-align: center;">
+        <div style="font-size: 9pt; font-weight: bold; color: #1E3A8A; text-transform: uppercase; letter-spacing: 0.5px;">
+            {% if report_lang == 'kn' %}
+            ಬ್ಯಾಂಕ್ ಸಾಲ ಮತ್ತು ಸಾಂಸ್ಥಿಕ ಸಾಲ ಮಂಜೂರಾತಿ ಮೌಲ್ಯಮಾಪನಕ್ಕಾಗಿ ಸಲ್ಲಿಕೆ
+            {% elif report_lang == 'hi' %}
+            बैंक सावधि ऋण एवं संस्थागत क्रेडिट मूल्यांकन हेतु प्रस्तुत
+            {% else %}
+            SUBMITTED FOR COMMERCIAL BANK LOAN APPRAISAL & CREDIT SANCTION
+            {% endif %}
+        </div>
+        <div style="font-size: 8pt; color: #64748B; margin-top: 5px;">
+            {% if report_lang == 'kn' %}
+            ವಿಷನ್ ಕರ್ನಾಟಕ ಫೌಂಡೇಶನ್ (VKF) DPR ಚೌಕಟ್ಟು | ಆರ್‌ಬಿಐ & ಎಂಎಸ್‌ಎಂಇ ಮಾನದಂಡಗಳ ಅಡಿಯಲ್ಲಿ ಸಿದ್ಧಪಡಿಸಲಾಗಿದೆ
+            {% elif report_lang == 'hi' %}
+            विजन कर्नाटक फाउंडेशन (VKF) डीपीआर फ्रेमवर्क | आरबीआई एवं एमएसएमई मानकों के तहत तैयार
+            {% else %}
+            Vision Karnataka Foundation (VKF) DPR Framework | Structured under RBI & MSME Lending Benchmarks
+            {% endif %}
+        </div>
+    </div>
 </div>
 
 <div class="page-break"></div>
-
-<!-- TOP RUNNING HEADER FOR SUBSEQUENT PAGES -->
-<div class="running-header" style="display: flex; justify-content: center; align-items: center; gap: 15px;">
-    {% if user_logo_b64 %}
-    <img src="{{user_logo_b64}}" alt="Enterprise Logo" style="max-height: 70px; max-width: 45%; object-fit: contain;">
-    {% endif %}
-    {% if associated_with_vkf and vkf_official_logo_b64 %}
-    <img src="{{vkf_official_logo_b64}}" alt="VKF Logo" style="max-height: 70px; max-width: 45%; object-fit: contain;">
-    {% endif %}
-</div>
 
 <!-- PAGE 2: TABLE OF CONTENT -->
 <h2 class="section-header" style="margin-top: 25px; margin-bottom: 16px;">{{ report_i18n.toc_title | default("TABLE OF CONTENT") }}</h2>
@@ -429,6 +424,27 @@
         <tr><td>13</td><td>{{ report_i18n.toc_sec13 | default("Financials & Amortization Schedules") }}</td><td>14–18</td></tr>
     </tbody>
 </table>
+
+<div style="margin-top: 24px; padding: 14px 18px; border: 1px solid #CBD5E1; border-left: 4px solid #1E3A8A; background: #F8FAFC; border-radius: 4px;">
+    <div style="font-size: 9.5pt; font-weight: bold; color: #1E3A8A; margin-bottom: 6px;">
+        {% if report_lang == 'kn' %}
+        ಗೌಪ್ಯ ಬ್ಯಾಂಕಿಂಗ್ ಸಾಲ ಮೌಲ್ಯಮಾಪನ ಮತ್ತು ಅನುಸರಣಾ ಸೂಚನೆ
+        {% elif report_lang == 'hi' %}
+        गोपनीय बैंकिंग मूल्यांकन एवं अनुपालन विवरण
+        {% else %}
+        CONFIDENTIAL BANKING APPRAISAL & COMPLIANCE NOTICE
+        {% endif %}
+    </div>
+    <p style="font-size: 8.5pt; color: #475569; line-height: 1.5; margin-bottom: 0;">
+        {% if report_lang == 'kn' %}
+        ಈ ವಿವರವಾದ ಯೋಜನಾ ವರದಿಯನ್ನು (DPR) ಬ್ಯಾಂಕಿಂಗ್ ಮಾನದಂಡಗಳು, ಟಂಡನ್ ಸಮಿತಿ ದುಡಿಯುವ ಬಂಡವಾಳ ನಿಯಮಗಳು ಮತ್ತು ಆರ್‌ಬಿಐ ಮಾರ್ಗಸೂಚಿಗಳಿಗೆ ಅನುಗುಣವಾಗಿ ವೃತ್ತಿಪರವಾಗಿ ರೂಪಿಸಲಾಗಿದೆ. ಇದು <strong>{{business_name}}</strong> ಉದ್ಯಮದ ಅವಧಿ ಸಾಲ ಮತ್ತು ದುಡಿಯುವ ಬಂಡವಾಳ ಸಾಲ ಸೌಲಭ್ಯಗಳ ಮಂಜೂರಾತಿಗಾಗಿ ಉದ್ದೇಶಿಸಲಾಗಿದ್ದು, ಎಲ್ಲಾ ಹಣಕಾಸು ಮುನ್ನೋಟಗಳನ್ನು ದೃಢೀಕರಿಸಲಾಗಿದೆ.
+        {% elif report_lang == 'hi' %}
+        यह विस्तृत परियोजना रिपोर्ट (DPR) वाणिज्यिक बैंकिंग मानकों, टंडन समिति कार्यशील पूंजी मानदंडों एवं आरबीआई दिशानिर्देशों के अनुरूप तैयार की गई है। यह <strong>{{business_name}}</strong> के सावधि ऋण एवं कार्यशील पूंजी सीमा स्वीकृति हेतु प्रस्तुत है, और सभी वित्तीय अनुमानों को पूर्ण रूप से मान्य किया गया है।
+        {% else %}
+        This Detailed Project Report (DPR) is prepared in strict accordance with commercial banking credit appraisal norms, Tandon Committee working capital guidelines, and RBI lending directives. Prepared for credit sanction of term loan and working capital credit facilities for <strong>{{business_name}}</strong>.
+        {% endif %}
+    </p>
+</div>
 
 <div class="page-break"></div>
 
@@ -506,10 +522,10 @@
             <tr><th style="width: 50%;">{{ report_i18n.th_parameter | default("Parameter") }}</th><th style="width: 50%;">{{ report_i18n.th_model_value | default("Model Value") }}</th></tr>
         </thead>
         <tbody>
-            <tr><td>{{ report_i18n.assump_capacity_day | default("Assumed Installed Capacity per Day") }}</td><td>{{daily_capacity}} {{capacity_unit}}/{% if report_lang == 'kn' %}ದಿನ{% else %}day{% endif %}</td></tr>
-            <tr><td>{{ report_i18n.assump_working_days | default("Working Days per Year") }}</td><td>{{working_days}} {% if report_lang == 'kn' %}ದಿನಗಳು{% else %}days{% endif %}</td></tr>
-            <tr><td>{{ report_i18n.assump_working_hours | default("Working Hours per Day") }}</td><td>8–10 {% if report_lang == 'kn' %}ಗಂಟೆಗಳು{% else %}hours{% endif %}</td></tr>
-            <tr><td>{{ report_i18n.assump_capacity_util | default("Capacity Utilization Profile") }}</td><td>{% if report_lang == 'kn' %}ವರ್ಷ 1: 60-65% | ವರ್ಷ 2: 70-75% | ವರ್ಷ 3: 80-85% | ವರ್ಷ 4-5: 90-95%{% else %}Year 1: 60-65% | Year 2: 70-75% | Year 3: 80-85% | Year 4-5: 90-95%{% endif %}</td></tr>
+            <tr><td>{{ report_i18n.assump_capacity_day | default("Assumed Installed Capacity per Day") }}</td><td>{{daily_capacity}} {{capacity_unit}}/{% if report_lang == 'kn' %}ದಿನ{% elif report_lang == 'hi' %}दिन{% else %}day{% endif %}</td></tr>
+            <tr><td>{{ report_i18n.assump_working_days | default("Working Days per Year") }}</td><td>{{working_days}} {% if report_lang == 'kn' %}ದಿನಗಳು{% elif report_lang == 'hi' %}कार्य दिवस{% else %}days{% endif %}</td></tr>
+            <tr><td>{{ report_i18n.assump_working_hours | default("Working Hours per Day") }}</td><td>8–10 {% if report_lang == 'kn' %}ಗಂಟೆಗಳು{% elif report_lang == 'hi' %}घंटे{% else %}hours{% endif %}</td></tr>
+            <tr><td>{{ report_i18n.assump_capacity_util | default("Capacity Utilization Profile") }}</td><td>{% if report_lang == 'kn' %}ವರ್ಷ 1: 60-65% | ವರ್ಷ 2: 70-75% | ವರ್ಷ 3: 80-85% | ವರ್ಷ 4-5: 90-95%{% elif report_lang == 'hi' %}वर्ष 1: 60-65% | वर्ष 2: 70-75% | वर्ष 3: 80-85% | वर्ष 4-5: 90-95%{% else %}Year 1: 60-65% | Year 2: 70-75% | Year 3: 80-85% | Year 4-5: 90-95%{% endif %}</td></tr>
             <tr><td>{{ report_i18n.assump_raw_cost | default("Average Raw Material Cost per Unit") }}</td><td>₹{{input_cost_per_unit}}</td></tr>
             <tr><td>{{ report_i18n.assump_sale_price | default("Average Sale Price per Unit") }}</td><td>₹{{selling_price}}</td></tr>
         </tbody>

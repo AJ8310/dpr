@@ -38,6 +38,8 @@ class FoodProcessingNarrative:
         lang = str(getattr(doc, 'language', 'en') or 'en').lower()
         if 'kn' in lang or 'kannada' in lang:
             return FoodProcessingNarrative._get_kannada_sections(doc, b_name, product, district, state, total_cost, land_cost, building_cost, electrification_cost, working_capital, promoter_contribution, bank_loan, subsidy, avg_dscr, bep_percent, corporate_project_irr, m_total)
+        if 'hi' in lang or 'hindi' in lang:
+            return FoodProcessingNarrative._get_hindi_sections(doc, b_name, product, district, state, total_cost, land_cost, building_cost, electrification_cost, working_capital, promoter_contribution, bank_loan, subsidy, avg_dscr, bep_percent, corporate_project_irr, m_total)
 
         return {
             "exec_summary": (
@@ -200,5 +202,76 @@ class FoodProcessingNarrative:
                 f"(ಇದರಲ್ಲಿ <strong>{doc.women_employment} ಮಹಿಳಾ ಉದ್ಯೋಗಿಗಳು</strong> ಸೇರಿದ್ದಾರೆ) ಸೃಷ್ಟಿಸುತ್ತದೆ ಮತ್ತು 200 ಕ್ಕೂ ಹೆಚ್ಚು ಸ್ಥಳೀಯ ರೈತ ಕುಟುಂಬಗಳಿಗೆ ನ್ಯಾಯಯುತ ಬೆಲೆ ಒದಗಿಸುತ್ತದೆ. "
                 f"ಬಲವಾದ ನಗದು ಹರಿವು, ಸರಾಸರಿ DSCR <strong>{doc.avg_dscr:.2f}</strong> ನೊಂದಿಗೆ ಬ್ಯಾಂಕ್ ಸಾಲ ಮೊತ್ತ "
                 f"<strong>₹{format_inr(doc.bank_loan)}</strong> ಅನ್ನು ತಕ್ಷಣದ ಆರ್ಥಿಕ ಮಂಜೂರಾತಿಗಾಗಿ ಬಲವಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</p>"
+            )
+        }
+
+    @staticmethod
+    def _get_hindi_sections(doc: DPRDocumentModel, b_name, product, district, state, total_cost, land_cost, building_cost, electrification_cost, working_capital, promoter_contribution, bank_loan, subsidy, avg_dscr, bep_percent, corporate_project_irr, m_total) -> Dict[str, str]:
+        return {
+            "exec_summary": (
+                f"<p><strong>1.1 कार्यकारी सारांश एवं कृषि-औद्योगिक औचित्य:</strong><br>"
+                f"{b_name} {district}, {state} में स्थापित एक एकीकृत कृषि-खाद्य प्रसंस्करण इकाई है। "
+                f"यह इकाई सख्त FSSAI ग्रेड 1 खाद्य सुरक्षा मानकों के अनुसार प्रीमियम <strong>{product}</strong> "
+                f"के स्वच्छ प्रसंस्करण, कोल्ड-मिलिंग एवं वैक्यूम पैकेजिंग के लिए समर्पित है। यह परियोजना स्थानीय किसान उत्पादक संगठनों (FPO) से सीधे कृषि उपज खरीदकर मध्यस्थों को समाप्त करती है और किसानों को लाभकारी मूल्य प्रदान करती है।</p>"
+                f"<p><strong>1.2 पूंजीगत व्यय एवं आवंटन:</strong><br>"
+                f"परियोजना का कुल पूंजीगत परिव्यय <strong>₹{format_inr(total_cost)}</strong> है। "
+                f"इसमें भूमि विकास (₹{format_inr(land_cost)}), स्वच्छ प्रसंस्करण शेड निर्माण (₹{format_inr(building_cost)}), "
+                f"SS304 खाद्य ग्रेड मशीनरी (₹{format_inr(m_total)}), कोल्ड स्टोरेज अवसंरचना (₹{format_inr(electrification_cost)}), "
+                f"और प्रारंभिक कार्यशील पूंजी (₹{format_inr(working_capital)}) शामिल है। वित्तपोषण संरचना में प्रवर्तक इक्विटी "
+                f"<strong>₹{format_inr(promoter_contribution)}</strong>, बैंक सावधि ऋण <strong>₹{format_inr(bank_loan)}</strong>, और PMFME पूंजीगत सब्सिडी दावा <strong>₹{format_inr(subsidy)}</strong> शामिल है।</p>"
+                f"<p><strong>1.3 वित्तीय साध्यता एवं ऋण सुरक्षा:</strong><br>"
+                f"वित्तीय अनुमान मजबूत परिचालन नकदी प्रवाह दर्शाते हैं, जिसमें 5-वर्षीय औसत ऋण सेवा कवरेज अनुपात (DSCR) "
+                f"<strong>{avg_dscr:.2f}</strong>, ब्रेक-ईवन पॉइंट <strong>{bep_percent:.1f}%</strong>, और अनुमानित आंतरिक प्रतिफल दर (IRR) "
+                f"<strong>{corporate_project_irr:.1f}%</strong> है। ऋण अदायगी CGTMSE क्रेडिट गारंटी द्वारा पूरी तरह सुरक्षित है।</p>"
+            ),
+            "business_overview": (
+                f"<p><strong>2.1 वैधानिक अनुपालन एवं प्रमाणन:</strong><br>"
+                f"{b_name} {state} में पंजीकृत उद्यम है, जिसके पास FSSAI केंद्रीय खाद्य सुरक्षा लाइसेंस ({doc.fssai_no or '11224999000999'}), "
+                f"उद्यम पंजीकरण ({doc.udyam_no or 'पंजीकृत'}), जीएसटी ({doc.gst_no or 'सक्रिय'}), और ट्रेड लाइसेंस है। सभी मशीनरी HACCP और ISO 22000 मानकों के तहत SS304/SS316 फूड-ग्रेड स्टील से निर्मित हैं।</p>"
+                f"<p><strong>2.2 किसान खरीद नेटवर्क एवं आपूर्ति सुरक्षा:</strong><br>"
+                f"प्रबंधन का {district} के आसपास के किसान उत्पादक संगठनों (FPO) और स्थानीय किसान समूहों के साथ सीधा समझौता है, जिससे स्थिर दरों पर गुणवत्तापूर्ण कच्चे माल की आपूर्ति सुनिश्चित होती है।</p>"
+            ),
+            "project_background": (
+                f"<p><strong>3.1 कृषि प्रसंस्करण क्षेत्र में बाजार अवसर:</strong><br>"
+                f"भारत दुनिया का प्रमुख कृषि उत्पादक देश होने के बावजूद प्रसंस्करण सुविधाओं की कमी से जूझ रहा है। केंद्र सरकार के खाद्य प्रसंस्करण उद्योग मंत्रालय (MoFPI) और राज्य सरकार द्वारा PMFME योजना के तहत 35% पूंजीगत सब्सिडी प्रदान की जा रही है।</p>"
+                f"<p><strong>3.2 प्राकृतिक एवं जैविक खाद्य उत्पादों की मांग:</strong><br>"
+                f"उपभोक्ताओं में स्वास्थ्य जागरूकता और प्राकृतिक खाद्य पदार्थों की मांग तेजी से बढ़ रही है। {b_name} बिना किसी कृत्रिम रंग या परिरक्षक के शुद्ध पैकेज्ड उत्पाद प्रदान करता है।</p>"
+            ),
+            "product_description": (
+                f"<p><strong>4.1 वाणिज्यिक उत्पाद पोर्टफोलियो एवं मानक:</strong><br>"
+                f"मुख्य उत्पाद <strong>{product}</strong> (HSN कोड: <strong>{doc.hsn_code or '1102'}</strong>) है। पर्यावरण के अनुकूल उच्च-अवरोधक पाउच में नाइट्रोजन फ्लशिंग के साथ पैक किया जाता है।</p>"
+                f"<p><strong>4.2 उत्पादन क्षमता एवं परिचालन:</strong><br>"
+                f"स्थापित प्रसंस्करण क्षमता: <strong>{format_inr(doc.daily_capacity)} {doc.capacity_unit} प्रति दिन</strong>, वर्ष में <strong>{doc.working_days} कार्य दिवस</strong>। मुख्य यूएसपी: {doc.usp or '100% शुद्ध पारंपरिक प्रसंस्करण एवं पोषण संरक्षण।'}</p>"
+            ),
+            "market_analysis": (
+                f"<p><strong>5.1 बाजार वृद्धि एवं जनसांख्यिकीय रुझान:</strong><br>"
+                f"भारत में पैकेज्ड खाद्य क्षेत्र <strong>{doc.market_growth:.1f}% CAGR</strong> की दर से बढ़ रहा है। सुपरमार्केट और ऑनलाइन प्लेटफॉर्म के माध्यम से निरंतर मांग बनी रहती है।</p>"
+                f"<p><strong>5.2 खुदरा एवं संस्थागत वितरण रणनीति:</strong><br>"
+                f"लक्षित ग्राहक: {doc.target_customers or 'सुपरमार्केट श्रृंखलाएं, जैविक विशेषता स्टोर, ई-कॉमर्स प्लेटफॉर्म एवं संस्थागत खरीदार'}। बिक्री क्षेत्र: {doc.sales_location or 'राज्य के प्रमुख औद्योगिक एवं शहरी केंद्र'}।</p>"
+            ),
+            "technical_feasibility": (
+                f"<p><strong>6.1 खाद्य इंजीनियरिंग एवं स्वच्छ प्रसंस्करण लाइन:</strong><br>"
+                f"प्रक्रिया में अनाज सफाई, डी-स्टोनिंग, कोल्ड पल्वराइजिंग, चुंबकीय धातु पृथक्करण और स्वचालित पाउच सीलिंग शामिल है। उपकरण आपूर्तिकर्ता: {doc.supplier_name or 'प्रमाणित स्टेनलेस फूड मशीनरी निर्माता'}।</p>"
+                f"<p><strong>6.2 उपयोगिताएं एवं पर्यावरण संरक्षण:</strong><br>"
+                f"• <strong>विद्युत:</strong> स्वीकृत वाणिज्यिक विद्युत भार {doc.power_required or 25} HP/kW और 100% DG बैकअप।<br>"
+                f"• <strong>जल एवं स्वच्छता:</strong> CIP प्रोटोकॉल के साथ RO जल शोधन संयंत्र ({doc.water_required or 2000} LPD)।<br>"
+                f"• <strong>कोल्ड स्टोरेज:</strong> तापमान नियंत्रित कोल्ड रूम।</p>"
+            ),
+            "risk_analysis": (
+                f"<p><strong>7.1 कृषि जोखिम प्रबंधन ढांचा:</strong><br>"
+                f"• <strong>मौसमी आपूर्ति उतार-चढ़ाव:</strong> बहु-जिला अनुबंध खेती और बहु-फसल प्रसंस्करण द्वारा कम किया गया।<br>"
+                f"• <strong>खराब होने का जोखिम:</strong> 4°C से 8°C तापमान नियंत्रित कोल्ड स्टोरेज द्वारा संरक्षण।<br>"
+                f"• <strong>गुणवत्ता जोखिम:</strong> इन-हाउस परीक्षण प्रयोगशाला और सख्त FSSAI नमूना परीक्षण।</p>"
+            ),
+            "swot_analysis": (
+                f"<p><strong>8.1 ताकत:</strong> {doc.strengths or 'सीधा किसान संपर्क, आधुनिक SS304 फूड-ग्रेड मशीनरी, FSSAI प्रमाणन, कोल्ड स्टोरेज बैकअप।'}</p>"
+                f"<p><strong>8.2 कमजोरियां:</strong> {doc.weaknesses or 'मौसमी फसल उपलब्धता और प्रारंभिक खुदरा नेटवर्क विस्तार।'}</p>"
+                f"<p><strong>8.3 अवसर:</strong> {doc.opportunities or 'PMFME 35% सरकारी पूंजीगत सब्सिडी, ई-कॉमर्स बिक्री विस्तार, जैविक निर्यात क्षमता।'}</p>"
+                f"<p><strong>8.4 चुनौतियां:</strong> {doc.threats or 'अनियमित मौसम परिवर्तन और कच्चे माल की कीमतों में उतार-चढ़ाव।'}</p>"
+            ),
+            "conclusion": (
+                f"<p><strong>9.1 अनुशंसा एवं सामाजिक-आर्थिक प्रभाव:</strong><br>"
+                f"{b_name} परियोजना <strong>{doc.local_employment} स्थानीय प्रत्यक्ष रोजगार</strong> (जिसमें <strong>{doc.women_employment} महिला कर्मचारी</strong> शामिल हैं) उत्पन्न करती है और 200 से अधिक स्थानीय किसान परिवारों को लाभकारी मूल्य प्रदान करती है। "
+                f"मजबूत नकदी प्रवाह, औसत DSCR <strong>{doc.avg_dscr:.2f}</strong> के साथ बैंक ऋण राशि <strong>₹{format_inr(doc.bank_loan)}</strong> को तत्काल वित्तीय स्वीकृति हेतु दृढ़ता से अनुशंसित किया जाता है।</p>"
             )
         }

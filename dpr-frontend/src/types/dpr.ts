@@ -1,11 +1,12 @@
 export interface MemberItem {
-  id: string;
+  id?: string;
   name: string;
   designation: string;
   gender: string;
   age: string;
   qualification: string;
   experience: string;
+  cibil_score?: number | string;
 }
 
 export interface MachineryItem {
@@ -17,6 +18,7 @@ export interface MachineryItem {
 }
 
 export interface DPRFormData {
+  activeStep?: number;
   dpr_type: string;
   language?: string;
   dpr_depth?: 'entry' | 'core' | 'team' | 'ent' | 'summary' | 'standard' | 'detailed' | 'comprehensive' | 'enterprise' | string;
@@ -121,6 +123,7 @@ export interface DPRFormData {
   furniture_cost: number;
   working_capital: number;
   other_cost: number;
+  total_cost?: number;
   promoter_contribution: number;
   bank_loan: number;
   subsidy: number;

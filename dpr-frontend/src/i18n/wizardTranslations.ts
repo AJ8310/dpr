@@ -28,6 +28,7 @@ export interface WizardTranslations {
     desc: string;
     resetBtn: string;
     uploadBtn: string;
+    loadSampleBtn: string;
     parsing: string;
   };
   progressive: {
@@ -135,6 +136,7 @@ export const wizardTranslations: Record<Language, WizardTranslations> = {
       desc: 'Upload GST Certificate, Udyam MSME, Quotations, Bank Statements, or Proposal PDF/Image. The engine will auto-fill your fields below!',
       resetBtn: 'Reset Form',
       uploadBtn: 'Upload Document to Auto-Fill',
+      loadSampleBtn: '⚡ Auto-Fill Sample Data (1-Click Demo)',
       parsing: 'Parsing & Auto-Filling...',
     },
     progressive: {
@@ -267,12 +269,12 @@ export const wizardTranslations: Record<Language, WizardTranslations> = {
       },
       13: {
         title: 'Sector 14: Declaration & Final Report Generation',
-        subtitle: 'Authorised signatory details, report depth selection, and PDF / DOCX compilation',
+        subtitle: 'Authorised signatory details, report depth selection, and official PDF report compilation',
         questions: {
           declaration_submission: { title: 'Authorised Signatory Declaration', desc: 'Enter declarant name, designation, and location' },
           declaration_statement: { title: 'Authorised Signatory Declaration', desc: 'Enter declarant name, designation, and location' },
           report_depth: { title: 'Target DPR Report Length & Depth', desc: 'Choose Standard (15-20 Pgs), Comprehensive (25-35 Pgs), or Enterprise (40-60 Pgs)' },
-          approve_compile: { title: 'User Approval & Report Generation', desc: 'Compile publication-ready PDF or editable Word DOCX report' },
+          approve_compile: { title: 'User Approval & Report Generation', desc: 'Compile publication-ready official bankable PDF report' },
         },
       },
     },
@@ -509,7 +511,8 @@ export const wizardTranslations: Record<Language, WizardTranslations> = {
       title: 'ಸ್ಮಾರ್ಟ್ ದಾಖಲೆ ಸ್ವಯಂ ಭರ್ತಿ',
       desc: 'ಜಿಎಸ್‌ಟಿ ಪ್ರಮಾಣಪತ್ರ, ಉದ್ಯಮ್ ಎಂಎಸ್‌ಎಂಇ, ಕೊಟೇಶನ್‌ಗಳು, ಬ್ಯಾಂಕ್ ಸ್ಟೇಟ್‌ಮೆಂಟ್‌ಗಳು ಅಥವಾ ಪ್ರಸ್ತಾವನೆ ಪಿಡಿಎಫ್/ಚಿತ್ರವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ. ಇಂಜಿನ್ ನಿಮ್ಮ ಕ್ಷೇತ್ರಗಳನ್ನು ಕೆಳಗೆ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಭರ್ತಿ ಮಾಡುತ್ತದೆ!',
       resetBtn: 'ಫಾರ್ಮ್ ಮರುಹೊಂದಿಸಿ',
-      uploadBtn: 'ಸ್ವಯಂ ಭರ್ತಿಗಾಗಿ ದಾಖಲೆ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ',
+      uploadBtn: 'ದಾಖಲೆ ಅಪ್‌ಲೋಡ್ ಮೂಲಕ ಸ್ವಯಂ ಭರ್ತಿ',
+      loadSampleBtn: '⚡ ಮಾದರಿ ಮಾಹಿತಿ ಭರ್ತಿ ಮಾಡಿ (ಪರೀಕ್ಷೆ & ಮುನ್ನೋಟ)',
       parsing: 'ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ & ಭರ್ತಿ ಮಾಡಲಾಗುತ್ತಿದೆ...',
     },
     progressive: {
@@ -642,12 +645,12 @@ export const wizardTranslations: Record<Language, WizardTranslations> = {
       },
       13: {
         title: 'ವಿಭಾಗ 14: ಶಾಸನಬದ್ಧ ಘೋಷಣೆ ಮತ್ತು ಅಂತಿಮ ವರದಿ ತಯಾರಿಕೆ',
-        subtitle: 'ಅಧಿಕೃತ ಸಹಿದಾರರ ವಿವರಗಳು, ವರದಿಯ ಗಾತ್ರದ ಆಯ್ಕೆ ಮತ್ತು PDF / DOCX ಸಂಕಲನ',
+        subtitle: 'ಅಧಿಕೃತ ಸಹಿದಾರರ ವಿವರಗಳು, ವರದಿಯ ಗಾತ್ರದ ಆಯ್ಕೆ ಮತ್ತು ಅಧಿಕೃತ ಪಿಡಿಎಫ್ (PDF) ಸಂಕಲನ',
         questions: {
           declaration_submission: { title: 'ಅಧಿಕೃತ ಸಹಿದಾರರ ಘೋಷಣೆ', desc: 'ಘೋಷಕರ ಹೆಸರು, ಹುದ್ದೆ ಮತ್ತು ಸ್ಥಳವನ್ನು ನಮೂದಿಸಿ' },
           declaration_statement: { title: 'ಅಧಿಕೃತ ಸಹಿದಾರರ ಘೋಷಣೆ', desc: 'ಘೋಷಕರ ಹೆಸರು, ಹುದ್ದೆ ಮತ್ತು ಸ್ಥಳವನ್ನು ನಮೂದಿಸಿ' },
           report_depth: { title: 'ಉದ್ದೇಶಿತ DPR ವರದಿಯ ಪುಟಗಳ ಸಂಖ್ಯೆ ಮತ್ತು ಆಳ', desc: 'ಸ್ಟ್ಯಾಂಡರ್ಡ್ (15-20 ಪುಟಗಳು), ಸಮಗ್ರ (25-35 ಪುಟಗಳು), ಅಥವಾ ಎಂಟರ್‌ಪ್ರೈಸ್ (40-60 ಪುಟಗಳು) ಆಯ್ಕೆಮಾಡಿ' },
-          approve_compile: { title: 'ಬಳಕೆದಾರರ ಅನುಮೋದನೆ ಮತ್ತು ವರದಿ ತಯಾರಿಕೆ', desc: 'ಪ್ರಕಟಣೆಗೆ ಸಿದ್ಧವಾಗಿರುವ PDF ಅಥವಾ ಸಂಪಾದಿಸಬಹುದಾದ Word DOCX ವರದಿಯನ್ನು ರಚಿಸಿ' },
+          approve_compile: { title: 'ಬಳಕೆದಾರರ ಅನುಮೋದನೆ ಮತ್ತು ವರದಿ ತಯಾರಿಕೆ', desc: 'ಪ್ರಕಟಣೆಗೆ ಸಿದ್ಧವಾಗಿರುವ ಬ್ಯಾಂಕಿಂಗ್ ಗುಣಮಟ್ಟದ ಅಧಿಕೃತ ಪಿಡಿಎಫ್ (PDF) ವರದಿಯನ್ನು ರಚಿಸಿ' },
         },
       },
     },
@@ -885,6 +888,7 @@ export const wizardTranslations: Record<Language, WizardTranslations> = {
       desc: 'जीएसटी प्रमाणपत्र, उद्यम एमएसएमई, कोटेशन, बैंक विवरण या प्रस्ताव पीडीएफ/छवि अपलोड करें। इंजन नीचे आपके फ़ील्ड को स्वचालित रूप से भर देगा!',
       resetBtn: 'फ़ॉर्म रीसेट करें',
       uploadBtn: 'ऑटो-फ़िल के लिए दस्तावेज़ अपलोड करें',
+      loadSampleBtn: '⚡ नमूना डेटा भरें (परीक्षण एवं पूर्वावलोकन)',
       parsing: 'विश्लेषण एवं ऑटो-फ़िल जारी है...',
     },
     progressive: {
@@ -1017,12 +1021,12 @@ export const wizardTranslations: Record<Language, WizardTranslations> = {
       },
       13: {
         title: 'भाग 14: वैधानिक घोषणा और अंतिम रिपोर्ट उत्पादन',
-        subtitle: 'अधिकृत हस्ताक्षरकर्ता विवरण, रिपोर्ट गहराई का चयन और PDF / DOCX संकलन',
+        subtitle: 'अधिकृत हस्ताक्षरकर्ता विवरण, रिपोर्ट प्रारूप का चयन और आधिकारिक पीडीएफ (PDF) संकलन',
         questions: {
           declaration_submission: { title: 'अधिकृत हस्ताक्षरकर्ता घोषणा', desc: 'घोषक का नाम, पद और स्थान दर्ज करें' },
           declaration_statement: { title: 'अधिकृत हस्ताक्षरकर्ता घोषणा', desc: 'घोषक का नाम, पद और स्थान दर्ज करें' },
           report_depth: { title: 'लक्षित DPR रिपोर्ट की लंबाई और विस्तार', desc: 'मानक (15-20 पृष्ठ), व्यापक (25-35 पृष्ठ), या उद्यम (40-60 पृष्ठ) चुनें' },
-          approve_compile: { title: 'उपयोगकर्ता अनुमोदन एवं रिपोर्ट उत्पादन', desc: 'प्रकाशन हेतु तैयार PDF या संपादन योग्य Word DOCX रिपोर्ट तैयार करें' },
+          approve_compile: { title: 'उपयोगकर्ता अनुमोदन एवं रिपोर्ट उत्पादन', desc: 'प्रकाशन हेतु तैयार आधिकारिक एवं प्रमाणिक पीडीएफ (PDF) रिपोर्ट तैयार करें' },
         },
       },
     },

@@ -200,48 +200,30 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       }
     }
 
-    const isSampleData = (d: any) => {
-      if (!d) return false;
-      const b = String(d.business_name || '').toLowerCase();
-      return b.includes('ಕಾವೇರಿ') || b.includes('speed') || b.includes('warmrun') || b.includes('sridurga') || b.includes('demo') || b.includes('sample');
-    };
-
     // Auto-restore user's saved draft from backend database (or local backup fallback)
     getLatestDraft()
       .then((res) => {
         if (res && res.has_draft && res.data) {
-          if (isSampleData(res.data)) {
-            clearDraft().catch(() => {});
-            if (typeof window !== 'undefined') {
-              localStorage.removeItem('dpr_draft_backup');
-              sessionStorage.removeItem('dpr_draft_backup');
-            }
-          } else {
-            setFormData((prev) => ({
-              ...prev,
-              ...res.data,
-            }));
-            if (typeof res.data.activeStep === 'number' && res.data.activeStep >= 0 && res.data.activeStep <= 13) {
-              setActiveStep(res.data.activeStep);
-            }
-            const busName = res.business_name || res.data.business_name || 'your project';
-            setRestoredNotice(`Restored your saved progress for "${busName}". You can resume filling from where you left off.`);
+          setFormData((prev) => ({
+            ...prev,
+            ...res.data,
+          }));
+          if (typeof res.data.activeStep === 'number' && res.data.activeStep >= 0 && res.data.activeStep <= 13) {
+            setActiveStep(res.data.activeStep);
           }
+          const busName = res.business_name || res.data.business_name || 'your project';
+          setRestoredNotice(`Restored your saved progress for "${busName}". You can resume filling from where you left off.`);
         } else if (typeof window !== 'undefined') {
           const localBackup = localStorage.getItem('dpr_draft_backup');
           if (localBackup) {
             try {
               const parsed = JSON.parse(localBackup);
               if (parsed) {
-                if (isSampleData(parsed)) {
-                  localStorage.removeItem('dpr_draft_backup');
-                } else {
-                  setFormData((prev) => ({ ...prev, ...parsed }));
-                  if (typeof parsed.activeStep === 'number' && parsed.activeStep >= 0 && parsed.activeStep <= 13) {
-                    setActiveStep(parsed.activeStep);
-                  }
-                  setRestoredNotice('Restored your saved draft progress from local backup.');
+                setFormData((prev) => ({ ...prev, ...parsed }));
+                if (typeof parsed.activeStep === 'number' && parsed.activeStep >= 0 && parsed.activeStep <= 13) {
+                  setActiveStep(parsed.activeStep);
                 }
+                setRestoredNotice('Restored your saved draft progress from local backup.');
               }
             } catch (e) {}
           }
@@ -255,15 +237,11 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
             try {
               const parsed = JSON.parse(localBackup);
               if (parsed) {
-                if (isSampleData(parsed)) {
-                  localStorage.removeItem('dpr_draft_backup');
-                } else {
-                  setFormData((prev) => ({ ...prev, ...parsed }));
-                  if (typeof parsed.activeStep === 'number' && parsed.activeStep >= 0 && parsed.activeStep <= 13) {
-                    setActiveStep(parsed.activeStep);
-                  }
-                  setRestoredNotice('Restored your saved draft progress from local backup.');
+                setFormData((prev) => ({ ...prev, ...parsed }));
+                if (typeof parsed.activeStep === 'number' && parsed.activeStep >= 0 && parsed.activeStep <= 13) {
+                  setActiveStep(parsed.activeStep);
                 }
+                setRestoredNotice('Restored your saved draft progress from local backup.');
               }
             } catch (e) {}
           }
@@ -1302,92 +1280,409 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
     }
   };
 
-  const handlePayAndGenerateDocx = async () => {
-    const dataWithLang = {
-      ...formData,
-      language: formData.language || language || (typeof window !== 'undefined' ? (sessionStorage.getItem('dpr_selected_language') || localStorage.getItem('dpr_language_preference') || localStorage.getItem('dpr_selected_language')) : null) || 'en'
-    };
-    if (paymentUnlocked) {
-      await downloadClientReport(dataWithLang, 'docx');
-      return;
+  const handleLoadSampleData = async () => {
+    let sample: Partial<DPRFormData>;
+
+    if (language === 'kn') {
+      sample = {
+        dpr_type: 'Bank Loan DPR',
+        sector_id: 'manufacturing',
+        activity_id: 'cnc_machining',
+        project_type_id: 'new_project',
+        project_scale: 'medium',
+        business_name: 'ಶ್ರೀ ಲಕ್ಷ್ಮೀ ಪ್ರಿಸಿಷನ್ ಇಂಜಿನಿಯರಿಂಗ್ ವರ್ಕ್ಸ್',
+        group_name: 'ರಾಜೇಶ್ ಗೌಡ ಎಂಟರ್‌ಪ್ರೈಸಸ್',
+        business_desc: 'ಅಂತರರಾಷ್ಟ್ರೀಯ ಐಎಸ್‌ಒ 9001:2015 ಗುಣಮಟ್ಟಕ್ಕೆ ಅನುಗುಣವಾಗಿ ಆಟೋಮೊಬೈಲ್ ಮತ್ತು ಏರೋಸ್ಪೇಸ್ ಕ್ಷೇತ್ರಗಳಿಗೆ ಅಗತ್ಯವಿರುವ ಹೈ-ಪ್ರಿಸಿಷನ್ ಸಿಎನ್‌ಸಿ ಮ್ಯಾಚಿನ್ ಕಾಂಪೊನೆಂಟ್‌ಗಳನ್ನು ತಯಾರಿಸುವ ಅತ್ಯಾಧುನಿಕ ಕೈಗಾರಿಕಾ ಘಟಕ.',
+        entity_type: 'Proprietorship',
+        cin: 'U29253KA2024PTC184920',
+        gst_no: '29ABCDE1234F1Z5',
+        pan_no: 'ABCDE1234F',
+        udyam_no: 'UDYAM-KR-03-0048291',
+        fssai_no: '',
+        village: 'ಪೀಣ್ಯ 2ನೇ ಹಂತ, ಕೈಗಾರಿಕಾ ಪ್ರದೇಶ',
+        block: 'ಬೆಂಗಳೂರು ಉತ್ತರ',
+        district: 'ಬೆಂಗಳೂರು ನಗರ',
+        state: 'ಕರ್ನಾಟಕ',
+        contact_name: 'ರಾಜೇಶ್ ಗೌಡ',
+        contact_number: '9845012345',
+        email: 'rajesh@lakshmiprecision.in',
+        bank_name: 'ಸ್ಟೇಟ್ ಬ್ಯಾಂಕ್ ಆಫ್ ಇಂಡಿಯಾ',
+        bank_branch: 'ಪೀಣ್ಯ SME ಶಾಖೆ, ಬೆಂಗಳೂರು',
+        account_number: '38291048592',
+        ifsc: 'SBIN0001234',
+        primary_lending_bank: 'ಸ್ಟೇಟ್ ಬ್ಯಾಂಕ್ ಆಫ್ ಇಂಡಿಯಾ',
+        bank_loan_scheme_name: 'SME ವಾಣಿಜ್ಯ ಅವಧಿ ಸಾಲ ಮತ್ತು ನಗದು ಸಾಲ',
+        collateral_offered: 'CGTMSE ಸಾಲ ಖಾತರಿ ಯೋಜನೆ (ಖಾತರಿ ರಹಿತ)',
+        moratorium_period_months: 6,
+        repayment_tenure_years: 5,
+        interest_rate_percent: 10.5,
+        primary_product: 'ನಿಖರ ಸಿಎನ್‌ಸಿ ಮ್ಯಾಚಿನ್ಡ್ ಆಟೋ ಟ್ರಾನ್ಸ್‌ಮಿಷನ್ ಫ್ಲೇಂಜ್‌ಗಳು ಮತ್ತು ಶಾಫ್ಟ್‌ಗಳು',
+        hsn_code: '8483',
+        daily_capacity: 150,
+        capacity_unit: 'Units',
+        selling_price: 1250,
+        raw_materials: 'ಅಲಾಯ್ ಸ್ಟೀಲ್ ರಾಡ್‌ಗಳು (EN8D, EN19), ಸ್ಪೆಷಲ್ ಗ್ರೇಡ್ ಎರಕಹೊಯ್ದ ಲೋಹ, ಕಟಿಂಗ್ ಕೂಲಂಟ್ಸ್ ಮತ್ತು ಕಾರ್ಬೈಡ್ ಟೂಲ್ಸ್',
+        input_cost: 650,
+        working_days: 300,
+        market_growth: 14.5,
+        usp: 'ಮೈಕ್ರಾನ್ ಮಟ್ಟದ ನಿಖರತೆ (+/- 0.005mm), 3D ಸಿಎಂಎಂ ತಪಾಸಣೆ, ಶೂನ್ಯ ದೋಷ ದರ ಮತ್ತು 48 ಗಂಟೆಗಳ ಒಳಗಡೆ ಗ್ರಾಹಕರಿಗೆ ಸಕಾಲಿಕ ಡೆಲಿವರಿ.',
+        machinery: [
+          { id: 'm1', name: 'ಸಿಎನ್‌ಸಿ ಟರ್ನಿಂಗ್ ಸೆಂಟರ್ (Ace Micromatic LT-20 XL)', quantity: 2, price: 1200000, total: 2400000 },
+          { id: 'm2', name: 'ವರ್ಟಿಕಲ್ ಮ್ಯಾಚಿನಿಂಗ್ ಸೆಂಟರ್ (VMC 850 4-Axis)', quantity: 1, price: 1500000, total: 1500000 },
+          { id: 'm3', name: 'ಸ್ವಯಂಚಾಲಿತ ಸರ್ಫೇಸ್ ಗ್ರೈಂಡರ್ ಮತ್ತು ಟೂಲ್ ಸೆಟ್ಟರ್', quantity: 1, price: 350000, total: 350000 },
+        ],
+        supplier_name: 'ಏಸ್ ಮೈಕ್ರೋಮ್ಯಾಟಿಕ್ ಗ್ರೂಪ್ / ಹಾಸ್ ಇಂಡಿಯಾ',
+        supplier_location: 'ಬೆಂಗಳೂರು ಮತ್ತು ಪುಣೆ',
+        target_customers: 'ಟಿಯರ್-1 ಆಟೋಮೊಬೈಲ್ ಒಇಎಂ ತಯಾರಕರು (ಬಾಷ್, ಟಿವಿಎಸ್, ಟೊಯೋಟಾ ಕಿರ್ಲೋಸ್ಕರ್ ಪೂರೈಕೆದಾರರು), ಏರೋಸ್ಪೇಸ್ ಮತ್ತು ಹೆವಿ ಇಂಜಿನಿಯರಿಂಗ್ ಕಂಪನಿಗಳು.',
+        sales_location: 'ಕರ್ನಾಟಕ, ತಮಿಳುನಾಡು ಮತ್ತು ಮಹಾರಾಷ್ಟ್ರ ಕೈಗಾರಿಕಾ ಕಾರಿಡಾರ್‌ಗಳು',
+        competitors: 'ಸ್ಥಳೀಯ ಸಣ್ಣ ಲೇಥ್ ವರ್ಕ್‌ಶಾಪ್‌ಗಳು (ಆದರೆ ಸುಧಾರಿತ ಸಿಎನ್‌ಸಿ ನಿಖರತೆ ಮತ್ತು ಸಿಎಂಎಂ ಕ್ವಾಲಿಟಿ ಲ್ಯಾಬ್ ಇರುವುದಿಲ್ಲ)',
+        mgmt_count: 2,
+        mgmt_salary: 45000,
+        sup_count: 2,
+        sup_salary: 28000,
+        skill_count: 6,
+        skill_salary: 19000,
+        unskill_count: 4,
+        unskill_salary: 14500,
+        admin_count: 2,
+        admin_salary: 20000,
+        land_area: '10,000 ಚದರ ಅಡಿ (ಕೈಗಾರಿಕಾ ನಿವೇಶನ)',
+        land_cost: 0,
+        building_area: '4,500 ಚದರ ಅಡಿ (ಆರ್‌ಸಿಸಿ ಇಂಡಸ್ಟ್ರಿಯಲ್ ಶೆಡ್)',
+        building_cost: 500000,
+        furniture_cost: 250000,
+        working_capital: 500000,
+        other_cost: 200000,
+        promoter_contribution: 1300000,
+        bank_loan: 3900000,
+        subsidy: 0,
+        total_cost: 5200000,
+        cash_in_hand: 75000,
+        bank_balance: 450000,
+        inventory_value: 380000,
+        receivables: 280000,
+        fixed_land: 0,
+        fixed_building: 500000,
+        fixed_machinery: 4250000,
+        fixed_furniture: 250000,
+        short_term_loan: 0,
+        creditors: 180000,
+        long_term_loan: 3900000,
+        owner_capital: 1300000,
+        retained_earnings: 0,
+        cap_year1: 65,
+        cap_year2: 75,
+        cap_year3: 85,
+        cap_year4: 90,
+        cap_year5: 95,
+        workspace: 'ಆರ್‌ಸಿಸಿ ಇಂಡಸ್ಟ್ರಿಯಲ್ ಶೆಡ್ (ಲೀಸ್ ಒಪ್ಪಂದ)',
+        builtup_area: 4500,
+        power_required: 45,
+        water_required: 1500,
+        monthly_rent: 45000,
+        start_time: 3,
+        strengths: 'ಅನುಭವಿ ತಾಂತ್ರಿಕ ಪ್ರವರ್ತಕರು, ಅತ್ಯಾಧುನಿಕ ಸಿಎನ್‌ಸಿ ಯಂತ್ರೋಪಕರಣಗಳು, ಆಯಕಟ್ಟಿನ ಕೈಗಾರಿಕಾ ಪ್ರದೇಶ, ಬಾಷ್ ಮತ್ತು ಟೊಯೋಟಾ ಪೂರೈಕೆದಾರರಿಂದ ದೃಢವಾದ ಬೇಡಿಕೆ.',
+        weaknesses: 'ಪ್ರಾರಂಭಿಕ ಹಂತದಲ್ಲಿ ಕಚ್ಚಾ ಸಾಮಗ್ರಿಗಳ ಬೆಲೆ ಏರಿಳಿತದ ಮೇಲಿನ ಅವಲಂಬನೆ.',
+        opportunities: 'ಆಟೋಮೊಬೈಲ್ ಮತ್ತು ರಕ್ಷಣಾ ಕ್ಷೇತ್ರದಲ್ಲಿ ಮೇಕ್ ಇನ್ ಇಂಡಿಯಾ ಅಡಿಯಲ್ಲಿ ಸ್ಥಳೀಯ ಉತ್ಪಾದನೆಗೆ ಹೆಚ್ಚುತ್ತಿರುವ ಬೇಡಿಕೆ ಮತ್ತು ರಫ್ತು ಅವಕಾಶಗಳು.',
+        threats: 'ಕಚ್ಚಾ ಉಕ್ಕಿನ ದರ ಏರಿಕೆ ಮತ್ತು ತೀವ್ರ ವಿದ್ಯುತ್ ದರ ಹೆಚ್ಚಳ.',
+        local_employment: 16,
+        women_employment: 4,
+        youth_employment: 12,
+        eco_friendly: 'ಹೌದು, ಶೂನ್ಯ ತ್ಯಾಜ್ಯ ನೀರು ಹೊರಸೂಸುವಿಕೆ (ZLD), ಕೂಲಂಟ್ ಮರುಬಳಕೆ ಫಿಲ್ಟ್ರೇಶನ್ ಮತ್ತು 15kW ಸೌರಶಕ್ತಿ ರೂಫ್‌ಟಾಪ್ ಅಳವಡಿಕೆ.',
+        training: 'ಹೌದು, ಸಿಎನ್‌ಸಿ ಆಪರೇಟರ್ ಕೌಶಲ್ಯ ತರಬೇತಿ ಮತ್ತು ಸಿಬ್ಬಂದಿ ಸುರಕ್ಷತಾ ಪ್ರಮಾಣೀಕರಣ.',
+        eco_description: 'ಪರಿಸರ ಸ್ನೇಹಿ ತ್ಯಾಜ್ಯ ವಿಲೇವಾರಿ, ಕಟಿಂಗ್ ಆಯಿಲ್ ಮರುಬಳಕೆ ಮತ್ತು ಇಂಧನ ದಕ್ಷ ಮೋಟಾರ್‌ಗಳ ಬಳಕೆ.',
+        cibil_score: 765,
+        loan_before: 'ಇಲ್ಲ',
+        existing_loan: 0,
+        outstanding: 0,
+        default_history: 'ಯಾವುದೇ ಡಿಫಾಲ್ಟ್ ಇತಿಹಾಸವಿಲ್ಲ - ಕ್ಲೀನ್ ಬ್ಯಾಂಕಿಂಗ್ ರೆಕಾರ್ಡ್',
+        declarant_name: 'ರಾಜೇಶ್ ಗೌಡ',
+        designation: 'ಮಾಲೀಕರು (Proprietor)',
+        place: 'ಬೆಂಗಳೂರು',
+        declaration_date: new Date().toISOString().split('T')[0],
+        dpr_depth: 'core',
+        associated_with_vkf: true,
+        members: [
+          { id: 'mem1', name: 'ರಾಜೇಶ್ ಗೌಡ', designation: 'ಮುಖ್ಯ ಪ್ರವರ್ತಕರು ಮತ್ತು ತಾಂತ್ರಿಕ ನಿರ್ದೇಶಕರು', gender: 'ಪುರುಷ', age: '38', qualification: 'ಬಿ.ಇ. (ಮೆಕ್ಯಾನಿಕಲ್ ಇಂಜಿನಿಯರಿಂಗ್)', experience: '14 ವರ್ಷಗಳ ಸಿಎನ್‌ಸಿ ಮ್ಯಾನುಫ್ಯಾಕ್ಚರಿಂಗ್ ಅನುಭವ', cibil_score: 765 },
+          { id: 'mem2', name: 'ಸುರೇಶ್ ಕುಮಾರ್', designation: 'ಉತ್ಪಾದನಾ ವ್ಯವಸ್ಥಾಪಕರು (Production Manager)', gender: 'ಪುರುಷ', age: '35', qualification: 'ಡಿಪ್ಲೊಮಾ ಇನ್ ಮೆಕ್ಯಾನಿಕಲ್', experience: '10 ವರ್ಷಗಳ ಸಿಎನ್‌ಸಿ ಆಪರೇಷನ್ ಅನುಭವ', cibil_score: 740 }
+        ]
+      };
+    } else if (language === 'hi') {
+      sample = {
+        dpr_type: 'Bank Loan DPR',
+        sector_id: 'manufacturing',
+        activity_id: 'cnc_machining',
+        project_type_id: 'new_project',
+        project_scale: 'medium',
+        business_name: 'श्री महालक्ष्मी इंजीनियरिंग वर्क्स',
+        group_name: 'अजय शर्मा एंड एसोसिएट्स',
+        business_desc: 'अंतर्राष्ट्रीय आईएसओ 9001:2015 मानकों के अनुरूप ऑटोमोबाइल और इंजीनियरिंग क्षेत्रों के लिए उच्च परिशुद्धता सीएनसी मशीनिंग घटकों के निर्माण हेतु आधुनिक औद्योगिक विनिर्माण इकाई।',
+        entity_type: 'Proprietorship',
+        cin: 'U29253KA2024PTC184920',
+        gst_no: '29ABCDE1234F1Z5',
+        pan_no: 'ABCDE1234F',
+        udyam_no: 'UDYAM-KR-03-0048291',
+        fssai_no: '',
+        village: 'पीन्या औद्योगिक क्षेत्र, द्वितीय चरण',
+        block: 'बेंगलुरु उत्तर',
+        district: 'बेंगलुरु',
+        state: 'कर्नाटक',
+        contact_name: 'अजय शर्मा',
+        contact_number: '9845012345',
+        email: 'ajay@mahalakshmiengg.in',
+        bank_name: 'भारतीय स्टेट बैंक',
+        bank_branch: 'पीन्या एसएमई शाखा, बेंगलुरु',
+        account_number: '38291048592',
+        ifsc: 'SBIN0001234',
+        primary_lending_bank: 'भारतीय स्टेट बैंक',
+        bank_loan_scheme_name: 'एसएमई व्यावसायिक मियादी ऋण एवं कार्यशील पूंजी ऋण',
+        collateral_offered: 'सीजीटीएमएसई क्रेडिट गारंटी योजना (संपार्श्विक मुक्त)',
+        moratorium_period_months: 6,
+        repayment_tenure_years: 5,
+        interest_rate_percent: 10.5,
+        primary_product: 'उच्च परिशुद्धता सीएनसी मशीन्ड ऑटोमोबाइल घटक',
+        hsn_code: '8483',
+        daily_capacity: 150,
+        capacity_unit: 'इकाइयां',
+        selling_price: 1250,
+        raw_materials: 'अलॉय स्टील रॉड्स (EN8D, EN19), कास्टिंग मेटल्स, कटिंग कूलेंट्स एवं कार्बाइड टूल्स',
+        input_cost: 650,
+        working_days: 300,
+        market_growth: 14.5,
+        usp: 'माइक्रोन स्तर की सटीकता (+/- 0.005mm), 3D गुणवत्ता निरीक्षण प्रयोगशाला, शून्य दोष दर और समय पर आपूर्ति।',
+        machinery: [
+          { id: 'm1', name: 'सीएनसी टर्निंग सेंटर (Ace Micromatic LT-20 XL)', quantity: 2, price: 1200000, total: 2400000 },
+          { id: 'm2', name: 'वर्टिकल मशीनिंग सेंटर (VMC 850 4-Axis)', quantity: 1, price: 1500000, total: 1500000 },
+          { id: 'm3', name: 'स्वचालित सरफेस ग्राइंडर एवं टूल सेटर', quantity: 1, price: 350000, total: 350000 },
+        ],
+        supplier_name: 'ऐस माइक्रोमैटिक ग्रुप / हास ऑटोमेशन इंडिया',
+        supplier_location: 'बेंगलुरु एवं पुणे',
+        target_customers: 'टियर-1 ऑटोमोबाइल ओईएम निर्माता (बॉश, टीवीएस, टोयोटा किर्लोस्कर आपूर्तिकर्ता) एवं इंजीनियरिंग उद्योग।',
+        sales_location: 'कर्नाटक, तमिलनाडु एवं महाराष्ट्र औद्योगिक गलियारा',
+        competitors: 'स्थानीय छोटे खराद कार्यशालाएं (आधुनिक सीएनसी और सीएमएम लैब रहित)',
+        mgmt_count: 2,
+        mgmt_salary: 45000,
+        sup_count: 2,
+        sup_salary: 28000,
+        skill_count: 6,
+        skill_salary: 19000,
+        unskill_count: 4,
+        unskill_salary: 14500,
+        admin_count: 2,
+        admin_salary: 20000,
+        land_area: '10,000 वर्ग फुट (औद्योगिक पट्टा)',
+        land_cost: 0,
+        building_area: '4,500 वर्ग फुट (आरसीसी औद्योगिक शेड)',
+        building_cost: 500000,
+        furniture_cost: 250000,
+        working_capital: 500000,
+        other_cost: 200000,
+        promoter_contribution: 1300000,
+        bank_loan: 3900000,
+        subsidy: 0,
+        total_cost: 5200000,
+        cash_in_hand: 75000,
+        bank_balance: 450000,
+        inventory_value: 380000,
+        receivables: 280000,
+        fixed_land: 0,
+        fixed_building: 500000,
+        fixed_machinery: 4250000,
+        fixed_furniture: 250000,
+        short_term_loan: 0,
+        creditors: 180000,
+        long_term_loan: 3900000,
+        owner_capital: 1300000,
+        retained_earnings: 0,
+        cap_year1: 65,
+        cap_year2: 75,
+        cap_year3: 85,
+        cap_year4: 90,
+        cap_year5: 95,
+        workspace: 'आरसीसी औद्योगिक शेड (दीर्घकालिक पट्टा)',
+        builtup_area: 4500,
+        power_required: 45,
+        water_required: 1500,
+        monthly_rent: 45000,
+        start_time: 3,
+        strengths: 'अनुभवी तकनीकी प्रमोटर, अत्याधुनिक सीएनसी उपकरण, प्रमुख औद्योगिक क्षेत्र में अवस्थिति एवं ऑटोमोबाइल ओईएम से मजबूत मांग।',
+        weaknesses: 'प्रारंभिक चरण में कच्चे माल की मूल्य अस्थिरता।',
+        opportunities: 'मेक इन इंडिया के तहत घरेलू रक्षा एवं ऑटोमोबाइल विनिर्माण में बढ़ती मांग।',
+        threats: 'कच्चे इस्पात की कीमतों में वृद्धि।',
+        local_employment: 16,
+        women_employment: 4,
+        youth_employment: 12,
+        eco_friendly: 'हां, शून्य अपशिष्ट जल निर्वहन (ZLD), शीतलक पुनर्चक्रण और 15 किलोवाट सोलर रूफटॉप।',
+        training: 'हां, सीएनसी ऑपरेटर कौशल प्रशिक्षण और सुरक्षा प्रमाणन।',
+        eco_description: 'पर्यावरण अनुकूल अपशिष्ट निपटान, कटिंग तेल पुनर्चक्रण और ऊर्जा दक्ष मोटरों का उपयोग।',
+        cibil_score: 765,
+        loan_before: 'नहीं',
+        existing_loan: 0,
+        outstanding: 0,
+        default_history: 'कोई चूक इतिहास नहीं - स्वच्छ बैंकिंग रिकॉर्ड',
+        declarant_name: 'अजय शर्मा',
+        designation: 'प्रोपराइटर (स्वामी)',
+        place: 'बेंगलुरु',
+        declaration_date: new Date().toISOString().split('T')[0],
+        dpr_depth: 'core',
+        associated_with_vkf: true,
+        members: [
+          { id: 'mem1', name: 'अजय शर्मा', designation: 'मुख्य प्रवर्तक एवं तकनीकी निदेशक', gender: 'पुरुष', age: '38', qualification: 'बी.ई. (मैकेनिकल इंजीनियरिंग)', experience: '14 वर्ष का सीएनसी विनिर्माण अनुभव', cibil_score: 765 },
+          { id: 'mem2', name: 'सुरेश कुमार', designation: 'उत्पादन प्रबंधक', gender: 'पुरुष', age: '35', qualification: 'डिप्लोमा इन मैकेनिकल', experience: '10 वर्ष का सीएनसी परिचालन अनुभव', cibil_score: 740 }
+        ]
+      };
+    } else {
+      sample = {
+        dpr_type: 'Bank Loan DPR',
+        sector_id: 'manufacturing',
+        activity_id: 'cnc_machining',
+        project_type_id: 'new_project',
+        project_scale: 'medium',
+        business_name: 'Shree Lakshmi Precision Engineering Works',
+        group_name: 'Rajesh Gowda Enterprises',
+        business_desc: 'ISO 9001:2015 certified advanced industrial manufacturing unit for high-precision CNC machined engineering and automobile transmission components.',
+        entity_type: 'Proprietorship',
+        cin: 'U29253KA2024PTC184920',
+        gst_no: '29ABCDE1234F1Z5',
+        pan_no: 'ABCDE1234F',
+        udyam_no: 'UDYAM-KR-03-0048291',
+        fssai_no: '',
+        village: 'Peenya Industrial Area, 2nd Phase',
+        block: 'Bengaluru North',
+        district: 'Bengaluru Urban',
+        state: 'Karnataka',
+        contact_name: 'Rajesh Gowda',
+        contact_number: '9845012345',
+        email: 'rajesh@lakshmiprecision.in',
+        bank_name: 'State Bank of India',
+        bank_branch: 'Peenya SME Branch, Bengaluru',
+        account_number: '38291048592',
+        ifsc: 'SBIN0001234',
+        primary_lending_bank: 'State Bank of India',
+        bank_loan_scheme_name: 'SME Commercial Term Loan & Cash Credit Limit',
+        collateral_offered: 'CGTMSE Credit Guarantee Scheme (Collateral Free)',
+        moratorium_period_months: 6,
+        repayment_tenure_years: 5,
+        interest_rate_percent: 10.5,
+        primary_product: 'High Precision CNC Machined Auto Flanges & Shafts',
+        hsn_code: '8483',
+        daily_capacity: 150,
+        capacity_unit: 'Units',
+        selling_price: 1250,
+        raw_materials: 'Alloy Steel Rounds (EN8D, EN19), Special Grade Castings, Cutting Coolants & Carbide Tooling',
+        input_cost: 650,
+        working_days: 300,
+        market_growth: 14.5,
+        usp: 'Micron-level dimensional tolerance (+/- 0.005mm), in-house 3D CMM inspection, zero defect rate, and just-in-time delivery.',
+        machinery: [
+          { id: 'm1', name: 'CNC Turning Center (Ace Micromatic LT-20 XL)', quantity: 2, price: 1200000, total: 2400000 },
+          { id: 'm2', name: 'Vertical Machining Center (VMC 850 4-Axis)', quantity: 1, price: 1500000, total: 1500000 },
+          { id: 'm3', name: 'Automatic Surface Grinder & Tool Presetter', quantity: 1, price: 350000, total: 350000 },
+        ],
+        supplier_name: 'Ace Micromatic Group / Haas Automation India',
+        supplier_location: 'Bengaluru & Pune',
+        target_customers: 'Tier-1 Automotive OEMs (Bosch, TVS, Toyota Kirloskar vendors), aerospace, and heavy industrial machinery builders.',
+        sales_location: 'Karnataka, Tamil Nadu & Maharashtra Industrial Corridors',
+        competitors: 'Unorganized job shops without CNC 4-axis capability and calibrated CMM inspection facilities',
+        mgmt_count: 2,
+        mgmt_salary: 45000,
+        sup_count: 2,
+        sup_salary: 28000,
+        skill_count: 6,
+        skill_salary: 19000,
+        unskill_count: 4,
+        unskill_salary: 14500,
+        admin_count: 2,
+        admin_salary: 20000,
+        land_area: '10,000 sq ft (Industrial Leasehold)',
+        land_cost: 0,
+        building_area: '4,500 sq ft (RCC Industrial Shed)',
+        building_cost: 500000,
+        furniture_cost: 250000,
+        working_capital: 500000,
+        other_cost: 200000,
+        promoter_contribution: 1300000,
+        bank_loan: 3900000,
+        subsidy: 0,
+        total_cost: 5200000,
+        cash_in_hand: 75000,
+        bank_balance: 450000,
+        inventory_value: 380000,
+        receivables: 280000,
+        fixed_land: 0,
+        fixed_building: 500000,
+        fixed_machinery: 4250000,
+        fixed_furniture: 250000,
+        short_term_loan: 0,
+        creditors: 180000,
+        long_term_loan: 3900000,
+        owner_capital: 1300000,
+        retained_earnings: 0,
+        cap_year1: 65,
+        cap_year2: 75,
+        cap_year3: 85,
+        cap_year4: 90,
+        cap_year5: 95,
+        workspace: 'RCC Industrial Shed (Long-Term Registered Lease)',
+        builtup_area: 4500,
+        power_required: 45,
+        water_required: 1500,
+        monthly_rent: 45000,
+        start_time: 3,
+        strengths: 'Technically qualified promoter with 14 years industry experience, modern CNC machinery, strategic location in Peenya Industrial Area, and strong order book from automotive Tier-1 suppliers.',
+        weaknesses: 'Sensitivity to initial steel raw material market volatility.',
+        opportunities: 'Rapid growth in domestic automotive production, Make in India initiatives, and aerospace precision component supply chain localization.',
+        threats: 'Raw material alloy price increases and power tariff revisions.',
+        local_employment: 16,
+        women_employment: 4,
+        youth_employment: 12,
+        eco_friendly: 'Yes, Zero Liquid Discharge (ZLD), synthetic coolant recycling filtration unit, and 15 kW rooftop solar PV installation.',
+        training: 'Yes, CNC machine operator certification and industrial safety training.',
+        eco_description: 'Environmentally compliant waste segregation, cutting oil reclamation, and energy-efficient IE3 motors.',
+        cibil_score: 765,
+        loan_before: 'No',
+        existing_loan: 0,
+        outstanding: 0,
+        default_history: 'No adverse credit history - Clean banking repayment record',
+        declarant_name: 'Rajesh Gowda',
+        designation: 'Proprietor',
+        place: 'Bengaluru',
+        declaration_date: new Date().toISOString().split('T')[0],
+        dpr_depth: 'core',
+        associated_with_vkf: true,
+        members: [
+          { id: 'mem1', name: 'Rajesh Gowda', designation: 'Chief Promoter & Technical Director', gender: 'Male', age: '38', qualification: 'B.E. (Mechanical Engineering)', experience: '14 years in CNC Precision Manufacturing', cibil_score: 765 },
+          { id: 'mem2', name: 'Suresh Kumar', designation: 'Production Manager', gender: 'Male', age: '35', qualification: 'Diploma in Mechanical', experience: '10 years in CNC Operations', cibil_score: 740 }
+        ]
+      };
     }
-    const isLoaded = await loadRazorpayScript();
-    if (!isLoaded) {
-      alert('Failed to load Razorpay SDK. Please check your internet connection.');
-      return;
+
+    setFormData((prev) => ({
+      ...prev,
+      ...sample,
+    }));
+
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('dpr_draft_backup', JSON.stringify(sample));
+      sessionStorage.setItem('dpr_draft_backup', JSON.stringify(sample));
     }
 
     try {
-      setGenerating(true);
-      setStepName('Initializing Razorpay Order...');
-
-      const effectiveDepth = (typeof window !== 'undefined' && sessionStorage.getItem('dpr_selected_plan')) || formData.dpr_depth || 'entry';
-      const testAmount = isTestOneRupee ? 1.0 : undefined;
-      const orderData = await createRazorpayOrder(testAmount, undefined, formData.dpr_type, effectiveDepth);
-      setGenerating(false);
-
-      if (!orderData.success || !orderData.order_id) {
-        alert('Payment order creation failed: ' + (orderData.detail || 'Unknown error'));
-        return;
-      }
-      setLastOrderId(orderData.order_id);
-
-      const options = {
-        key: orderData.key_id,
-        amount: orderData.amount,
-        currency: orderData.currency || 'INR',
-        name: 'InfoPace DPR Studio',
-        description: `Unlock & Generate Word DOCX (${formData.dpr_type || 'DPR'})`,
-        order_id: orderData.order_id,
-        handler: async function (response: any) {
-          setGenerating(true);
-          setStepName(language === 'kn' ? 'ಪಾವತಿ ದೃಢೀಕರಿಸಲಾಗಿದೆ! ವರ್ಡ್ DOCX ವರದಿ ತಯಾರಿಸಲಾಗುತ್ತಿದೆ...' : language === 'hi' ? 'भुगतान सत्यापित! वर्ड DOCX रिपोर्ट तैयार की जा रही है...' : 'Payment verified! Compiling Word DOCX report...');
-          try {
-            const verification = await verifyRazorpayPayment({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-            });
-
-            if (verification.success) {
-              setPaymentUnlocked(true);
-              await downloadClientReport(dataWithLang, 'docx');
-            } else {
-              alert('Payment signature verification failed.');
-              setGenerating(false);
-            }
-          } catch (err: any) {
-            alert('Payment Verification Exception: ' + (err.detail || err.message || 'Error occurred'));
-            setGenerating(false);
-          }
-        },
-        prefill: {
-          name: formData.contact_name || formData.business_name || '',
-          email: formData.email || '',
-          contact: formData.contact_number || '',
-        },
-        notes: {
-          business_name: formData.business_name || '',
-          dpr_type: formData.dpr_type || '',
-        },
-        theme: {
-          color: '#008C95',
-        },
-        modal: {
-          ondismiss: function () {
-            setGenerating(false);
-            setStepName('');
-          },
-        },
-      };
-
-      const rzp = new (window as any).Razorpay(options);
-      rzp.open();
-    } catch (err: any) {
-      setGenerating(false);
-      const detailMsg = err?.response?.data?.detail || err?.message || err;
-      alert('Error initiating Razorpay checkout: ' + detailMsg);
+      await saveDPRData({
+        ...sample,
+        activeStep: 0,
+      } as any);
+    } catch (e) {
+      console.warn('Draft save notice:', e);
     }
+
+    const msg = language === 'kn'
+      ? 'ಕನ್ನಡ ಮಾದರಿ ಡೇಟಾವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಭರ್ತಿ ಮಾಡಲಾಗಿದೆ! ನೀವು ಈಗ ಎಲ್ಲಾ ಕ್ಷೇತ್ರಗಳನ್ನು ಪರೀಕ್ಷಿಸಬಹುದು, ಮುನ್ನೋಟ ವೀಕ್ಷಿಸಬಹುದು ಮತ್ತು ನವೀಕರಿಸಬಹುದು.'
+      : language === 'hi'
+      ? 'नमूना डेटा सफलतापूर्वक भर दिया गया है! अब आप सभी फ़ील्ड का परीक्षण, पूर्वावलोकन और संपादन कर सकते हैं।'
+      : 'Sample project data auto-filled successfully! You can now test, preview, modify fields, and compile reports.';
+
+    setAutofillSuccessMsg(msg);
   };
 
   const handleVerifyAndUnlock = async () => {
@@ -1713,6 +2008,28 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
           </div>
 
           <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              onClick={handleLoadSampleData}
+              style={{
+                background: 'linear-gradient(135deg, #FF7A00 0%, #D97706 100%)',
+                color: '#FFFFFF',
+                border: 'none',
+                padding: '0.8rem 1.4rem',
+                borderRadius: '12px',
+                fontWeight: 800,
+                fontSize: '0.9rem',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.6rem',
+                boxShadow: '0 4px 14px rgba(255, 122, 0, 0.35)',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <i className="fas fa-magic"></i> {tW.autoFill.loadSampleBtn || '⚡ Auto-Fill Sample Data (1-Click Demo)'}
+            </button>
+
             <button
               type="button"
               onClick={handleClearFormAndDraft}
@@ -3047,19 +3364,9 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                         onClick={handlePayAndGeneratePDF}
                         disabled={generating}
                         className="btn-next-spacious"
-                        style={{ padding: '1.1rem 2.2rem', fontSize: '1rem', background: paymentUnlocked ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #008C95 0%, #006F78 100%)', boxShadow: '0 8px 25px rgba(0, 140, 149, 0.35)' }}
+                        style={{ padding: '1.2rem 2.6rem', fontSize: '1.05rem', background: paymentUnlocked ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #008C95 0%, #006F78 100%)', boxShadow: '0 8px 25px rgba(0, 140, 149, 0.35)', minWidth: '320px' }}
                       >
-                        <i className={paymentUnlocked ? "fas fa-download" : "fas fa-lock-open"}></i> {generating ? (tW.labels?.compilingPdf || 'Compiling PDF Engine Report...') : paymentUnlocked ? (tW.labels?.downloadPdfUnlocked || 'DOWNLOAD FINAL PDF REPORT (UNLOCKED)') : `${tW.labels?.payPdf || 'PAY & UNLOCK FINAL PDF REPORT'} (₹${getDisplayPrice()})`}
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={handlePayAndGenerateDocx}
-                        disabled={generating}
-                        className="btn-next-spacious"
-                        style={{ padding: '1.1rem 2.2rem', fontSize: '1rem', background: 'linear-gradient(135deg, #FF7A00 0%, #EA580C 100%)', boxShadow: '0 8px 25px rgba(255, 122, 0, 0.35)' }}
-                      >
-                        <i className="fas fa-file-word"></i> {generating ? (tW.labels?.compilingDocx || 'Compiling Word DOCX...') : paymentUnlocked ? (tW.labels?.downloadDocxUnlocked || 'DOWNLOAD EDITABLE DOCX (UNLOCKED)') : `${tW.labels?.payDocx || 'PAY & UNLOCK EDITABLE DOCX'} (₹${getDisplayPrice()})`}
+                        <i className={paymentUnlocked ? "fas fa-download" : "fas fa-lock-open"} style={{ marginRight: '8px' }}></i> {generating ? (tW.labels?.compilingPdf || 'Compiling PDF Engine Report...') : paymentUnlocked ? (tW.labels?.downloadPdfUnlocked || 'DOWNLOAD OFFICIAL PDF REPORT (UNLOCKED)') : `${tW.labels?.payPdf || 'PAY & DOWNLOAD OFFICIAL PDF REPORT'} (₹${getDisplayPrice()})`}
                       </button>
                     </div>
 

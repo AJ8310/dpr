@@ -700,6 +700,116 @@ REPORT_I18N: Dict[str, Dict[str, str]] = {
         "th_pct_total": "कुल का %",
         "th_total_project_cost": "कुल परियोजना लागत",
         "th_total_manpower": "कुल जनशक्ति",
+        # General & Table Headers
+        "th_parameter": "पैरामीटर",
+        "th_model_value": "मॉडल मान",
+        "th_role_category": "पद / श्रेणी",
+        "th_personnel_count": "कार्मिक संख्या",
+        "th_monthly_salary": "मासिक वेतन (₹)",
+        "th_monthly_total": "मासिक कुल (₹)",
+        "th_annual_total": "वार्षिक कुल (₹)",
+        "th_holding_period": "धारण अवधि",
+        "th_asset_block": "परिसंपत्ति वर्ग",
+        "th_depr_rate": "मूल्यह्रास दर (%)",
+        "th_fin_year": "वित्तीय वर्ष",
+        "th_opening_balance": "प्रारंभिक शेष (₹)",
+        "th_principal_repay": "मूलधन अदायगी (₹)",
+        "th_interest_exp": "ब्याज व्यय (₹)",
+        "th_closing_balance": "अंतिम शेष (₹)",
+        "th_mth": "माह",
+        "th_yr": "वर्ष",
+        "th_revenue": "राजस्व (₹)",
+        "th_operating_costs": "परिचालन व्यय (₹)",
+        "th_pbdit": "PBDIT (₹)",
+        "th_interest": "ब्याज (₹)",
+        "th_depr": "मूल्यह्रास (₹)",
+        "th_pat": "शुद्ध लाभ PAT (₹)",
+        "th_dscr": "डीएससीआर अनुपात",
+        "th_principal": "मूलधन (₹)",
+        "th_closing_loan": "बकाया ऋण (₹)",
+        "th_net_cash": "शुद्ध नकदी (₹)",
+        "th_raw_item": "कच्चा माल / घटक",
+        "th_unit": "मात्रा इकाई",
+        "th_annual_qty": "वार्षिक आवश्यक मात्रा",
+        "th_unit_rate": "इकाई दर (₹)",
+        "th_staff_category": "कर्मचारी श्रेणी",
+        "th_no_personnel": "कर्मचारियों की संख्या",
+        "th_monthly_salary_person": "मासिक वेतन / व्यक्ति (₹)",
+        "th_component": "घटक",
+        "th_funding_source": "वित्तपोषण का स्रोत",
+        "th_pct_share": "% हिस्सा",
+        "th_estimated_outlay": "अनुमानित परिव्यय (₹)",
+        "th_liabilities_assets": "देनदारियां / संपत्तियां",
+        "th_debt_service": "ऋण सेवा दायित्व (₹)",
+        "th_pillar": "स्तंभ",
+        "th_details": "विवरण",
+        "th_stat_reg": "वैधानिक पंजीकरण / अनुमोदन",
+        "th_issuing_authority": "जारीकर्ता प्राधिकरण",
+        "th_compliance_status": "अनुपालन स्थिति",
+        "th_stress_scenario": "स्ट्रेस टेस्ट परिदृश्य",
+        "th_proj_dscr": "अनुमानित DSCR",
+        "th_npv_impact": "NPV प्रभाव (₹)",
+        "th_viability_status": "परियोजना स्वीकार्यता",
+        "th_esg_dimension": "ईएसजी एवं टीसीआरएम आयाम",
+        "th_eval_rating": "मूल्यांकन रेटिंग",
+        "th_key_measures": "प्रमुख स्थिरता उपाय",
+        "th_wc_param": "कार्यशील पूंजी पैरामीटर",
+        "th_method1": "विधि I (75% NWC अंतर)",
+        "th_method2": "विधि II (75% चालू संपत्ति)",
+        "th_corp_param": "कॉर्पोरेट वित्तीय पैरामीटर",
+        "th_calc_val": "परिकलित मान",
+        "th_benchmark": "मानक बेंचमार्क",
+        # Capex items
+        "capex_land": "भूमि एवं स्थल विकास",
+        "capex_building": "सिविल कार्य एवं भवन शेड",
+        "capex_machinery": "संयंत्र, मशीनरी एवं उपकरण",
+        "capex_electrification": "विद्युतीकरण एवं उपयोगिता व्यवस्था",
+        "capex_furniture": "फर्नीचर, कार्यालय एवं फिक्स्चर",
+        "capex_working_capital": "कार्यशील पूंजी मार्जिन मनी",
+        "capex_preoperative": "पूर्व-परिचालन व्यय एवं आकस्मिकता",
+        "fin_promoter_equity": "प्रवर्तक इक्विटी पूंजी",
+        "fin_term_loan": "बैंक सावधि ऋण",
+        "fin_subsidy": "सरकारी पूंजीगत सब्सिडी",
+        "fin_total": "वित्तपोषण के कुल साधन",
+        # Manpower items
+        "mp_management": "प्रबंधन एवं तकनीकी नेतृत्व",
+        "mp_supervisors": "पर्यवेक्षी कर्मचारी एवं इंजीनियर",
+        "mp_skilled": "कुशल ऑपरेटर एवं तकनीशियन",
+        "mp_unskilled": "अर्ध-कुशल / सहायक कर्मचारी",
+        "mp_admin": "प्रशासन, लेखा एवं विपणन कर्मचारी",
+        "lbl_total_manpower_req": "कुल आवश्यक जनशक्ति संख्या:",
+        "lbl_monthly_wages_budget": "मासिक वेतन बजट:",
+        "lbl_persons": "व्यक्ति",
+        # Assumptions
+        "assump_capacity_day": "दैनिक स्थापित क्षमता",
+        "assump_working_days": "प्रति वर्ष कार्य दिवस",
+        "assump_working_hours": "दैनिक कार्य घंटे",
+        "assump_capacity_util": "क्षमता उपयोग प्रोफ़ाइल",
+        "assump_raw_cost": "प्रति इकाई औसत कच्चा माल लागत",
+        "assump_sale_price": "प्रति इकाई औसत विक्रय मूल्य",
+        "assump_supplier": "आपूर्तिकर्ता विवरण:",
+        "assump_location": "स्थान:",
+        "assump_plant_mach_cost": "संयंत्र एवं मशीनरी लागत:",
+        "assump_plant_mach_inc": "(स्वचालित मशीनरी एवं उपकरण शामिल हैं)।",
+        # SWOT
+        "swot_strengths": "शक्तियां (Strengths)",
+        "swot_weaknesses": "कमजोरियां (Weaknesses)",
+        "swot_opportunities": "अवसर (Opportunities)",
+        "swot_threats": "चुनौतियां (Threats)",
+        "swot_strengths_default": "अत्याधुनिक स्वचालित मशीनरी, अनुभवी प्रवर्तक, क्षेत्रीय बाजार में उच्च मांग।",
+        "swot_weaknesses_default": "प्रारंभिक चरण में पूंजी निवेश और वितरण नेटवर्क के विस्तार की आवश्यकता।",
+        "swot_opportunities_default": "बढ़ती औद्योगिक मांग, सरकारी PMEGP/PMFME सब्सिडी प्रोत्साहन, उत्पाद विविधीकरण।",
+        "swot_threats_default": "कच्चे माल के बाजार मूल्य में उतार-चढ़ाव और स्थानीय प्रतिस्पर्धा।",
+        "soft_desc": "सूक्ष्म उद्यमों को व्यावसायिक रूप से व्यवहार्य औद्योगिक इकाइयों में बदलने के लिए क्षमता निर्माण महत्वपूर्ण भूमिका निभाता है। वीकेएफ ढांचे के तहत, सेडॉक (CEDOK) और आरयूडीएसईटीआई (RUDSETI) जैसे क्षेत्रीय संस्थानों के सहयोग से संरचित कौशल उन्नयन एवं प्रबंधन प्रशिक्षण प्रदान किया जाता है।",
+        # Schedules
+        "sch_total_capex": "कुल परियोजना पूंजीगत व्यय",
+        "sch_total_means": "वित्तपोषण के कुल साधन",
+        "sch_total_machinery": "कुल मशीनरी निवेश",
+        "sch_reserves_surplus": "आरक्षित निधि एवं अधिशेष (संचित PAT)",
+        "sch_term_loan_out": "बकाया सावधि ऋण",
+        "lbl_image_product": "उत्पाद विवरण चित्र",
+        "lbl_image_facility": "संयंत्र एवं मशीनरी लेआउट",
+        "lbl_image_team": "गुणवत्ता आश्वासन एवं कार्यबल विवरण",
     }
 }
 
@@ -859,7 +969,55 @@ class DPRTemplateCompositionEngine:
             tier_code = "ENTERPRISE"
 
         context = doc.model_dump()
-        context["dpr_type"] = doc.dpr_type.value if hasattr(doc.dpr_type, "value") else str(doc.dpr_type)
+        raw_dpr_type = doc.dpr_type.value if hasattr(doc.dpr_type, "value") else str(doc.dpr_type)
+        raw_entity_type = str(doc.entity_type or "Proprietorship")
+
+        if lang_code == 'kn':
+            if 'gov' in raw_dpr_type.lower() or 'subsidy' in raw_dpr_type.lower():
+                dpr_type_label = "ಸರ್ಕಾರಿ ಸಬ್ಸಿಡಿ ಮತ್ತು ಅನುದಾನ DPR (PMEGP/PMFME)"
+            elif 'invest' in raw_dpr_type.lower() or 'pitch' in raw_dpr_type.lower():
+                dpr_type_label = "ಹೂಡಿಕೆದಾರರ ಬಿಸಿನೆಸ್ ಪಿಚ್ DPR"
+            elif 'corp' in raw_dpr_type.lower():
+                dpr_type_label = "ಸಾಂಸ್ಥಿಕ ಕಾರ್ಪೊರೇಟ್ DPR"
+            else:
+                dpr_type_label = "ಬ್ಯಾಂಕ್ ಸಾಲ ಮತ್ತು ಸಬ್ಸಿಡಿ DPR"
+
+            if 'proprietor' in raw_entity_type.lower():
+                entity_label = "ಏಕಮಾಲೀಕತ್ವ ಸಂಸ್ಥೆ (Proprietorship)"
+            elif 'partner' in raw_entity_type.lower():
+                entity_label = "ಪಾಲುದಾರಿಕೆ ಸಂಸ್ಥೆ (Partnership)"
+            elif 'pvt' in raw_entity_type.lower() or 'private' in raw_entity_type.lower():
+                entity_label = "ಖಾಸಗಿ ನಿಯಮಿತ ಕಂಪನಿ (Private Limited)"
+            elif 'llp' in raw_entity_type.lower():
+                entity_label = "ಸೀಮಿತ ಹೊಣೆಗಾರಿಕೆ ಪಾಲುದಾರಿಕೆ (LLP)"
+            else:
+                entity_label = raw_entity_type
+        elif lang_code == 'hi':
+            if 'gov' in raw_dpr_type.lower() or 'subsidy' in raw_dpr_type.lower():
+                dpr_type_label = "सरकारी सब्सिडी एवं अनुदान डीपीआर (PMEGP/PMFME)"
+            elif 'invest' in raw_dpr_type.lower() or 'pitch' in raw_dpr_type.lower():
+                dpr_type_label = "निवेशक एवं बिजनेस पिच डीपीआर"
+            elif 'corp' in raw_dpr_type.lower():
+                dpr_type_label = "कॉर्पोरेट उद्यम डीपीआर"
+            else:
+                dpr_type_label = "बैंक ऋण एवं सब्सिडी डीपीआर"
+
+            if 'proprietor' in raw_entity_type.lower():
+                entity_label = "एकल स्वामित्व फर्म (Proprietorship)"
+            elif 'partner' in raw_entity_type.lower():
+                entity_label = "साझेदारी फर्म (Partnership)"
+            elif 'pvt' in raw_entity_type.lower() or 'private' in raw_entity_type.lower():
+                entity_label = "प्राइवेट लिमिटेड कंपनी (Private Limited)"
+            elif 'llp' in raw_entity_type.lower():
+                entity_label = "सीमित दायित्व भागीदारी (LLP)"
+            else:
+                entity_label = raw_entity_type
+        else:
+            dpr_type_label = raw_dpr_type
+            entity_label = raw_entity_type
+
+        context["dpr_type"] = dpr_type_label
+        context["entity_type"] = entity_label
         context["report_i18n"] = report_i18n
         context["report_lang"] = lang_code
         context["plan_quality_tier"] = plan_quality_tier

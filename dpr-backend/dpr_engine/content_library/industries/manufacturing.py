@@ -17,11 +17,20 @@ class ManufacturingNarrative:
 
     @staticmethod
     def get_sections(doc: DPRDocumentModel) -> Dict[str, str]:
-        b_name = doc.business_name or "the Enterprise"
-        promoter = getattr(doc, 'promoter_name', getattr(doc, 'contact_name', 'Lead Promoter'))
-        product = doc.primary_product or "precision manufactured components"
-        district = doc.district or "Bengaluru"
-        state = doc.state or "Karnataka"
+        lang = str(getattr(doc, 'language', 'en') or 'en').lower()
+        is_kn = 'kn' in lang or 'kannada' in lang
+        is_hi = 'hi' in lang or 'hindi' in lang
+
+        b_name = doc.business_name or ("ಉದ್ಯಮ" if is_kn else ("उद्यम" if is_hi else "the Enterprise"))
+        
+        default_promoter = "ಮುಖ್ಯ ಪ್ರವರ್ತಕರು" if is_kn else ("मुख्य प्रवर्तक" if is_hi else "Lead Promoter")
+        promoter = (getattr(doc, 'promoter_name', None) or getattr(doc, 'contact_name', None) or default_promoter)
+
+        default_product = "ನಿಖರ ಎಂಜಿನಿಯರಿಂಗ್ ಕೈಗಾರಿಕಾ ಘಟಕಗಳು" if is_kn else ("सटीक औद्योगिक विनिर्मित घटक" if is_hi else "precision manufactured components")
+        product = doc.primary_product or default_product
+        
+        district = doc.district or ("ಬೆಂಗಳೂರು" if is_kn else ("बेंगलुरु" if is_hi else "Bengaluru"))
+        state = doc.state or ("ಕರ್ನಾಟಕ" if is_kn else ("कर्नाटक" if is_hi else "Karnataka"))
 
         total_cost = safe_float(doc.total_cost, 25000000.0)
         land_cost = safe_float(doc.land_cost, 2500000.0)
@@ -35,7 +44,7 @@ class ManufacturingNarrative:
         subsidy = safe_float(doc.subsidy, 0.0)
         avg_dscr = safe_float(doc.avg_dscr, 1.85)
         bep_percent = safe_float(doc.bep_percent, 48.5)
-        corporate_npv = safe_float(doc.corporate_npv, 7042000.0)
+        corporate_npv = safe_float(doc.corporate_npv, total_cost * 0.28)
         corporate_project_irr = safe_float(doc.corporate_project_irr, 22.4)
         corporate_payback_years = safe_float(doc.corporate_payback_years, 3.2)
         daily_capacity = safe_float(doc.daily_capacity, 100.0)
@@ -49,10 +58,9 @@ class ManufacturingNarrative:
         bank_pct = (bank_loan / total_cost * 100) if total_cost > 0 else 75.0
         debt_equity_val = (bank_loan / promoter_contribution) if promoter_contribution > 0 else 2.5
 
-        lang = str(getattr(doc, 'language', 'en') or 'en').lower()
-        if 'kn' in lang or 'kannada' in lang:
+        if is_kn:
             return ManufacturingNarrative._get_kannada_sections(doc, b_name, promoter, product, district, state, total_cost, land_cost, building_cost, furniture_cost, other_cost, electrification_cost, working_capital, promoter_contribution, bank_loan, subsidy, avg_dscr, bep_percent, corporate_npv, corporate_project_irr, corporate_payback_years, daily_capacity, market_growth, builtup_area, power_required, water_required, m_total, promoter_pct, bank_pct, debt_equity_val)
-        if 'hi' in lang or 'hindi' in lang:
+        if is_hi:
             return ManufacturingNarrative._get_hindi_sections(doc, b_name, promoter, product, district, state, total_cost, land_cost, building_cost, furniture_cost, other_cost, electrification_cost, working_capital, promoter_contribution, bank_loan, subsidy, avg_dscr, bep_percent, corporate_npv, corporate_project_irr, corporate_payback_years, daily_capacity, market_growth, builtup_area, power_required, water_required, m_total, promoter_pct, bank_pct, debt_equity_val)
 
         return {
@@ -298,6 +306,16 @@ class ManufacturingNarrative:
 
     @staticmethod
     def _get_kannada_sections(doc, b_name, promoter, product, district, state, total_cost, land_cost, building_cost, furniture_cost, other_cost, electrification_cost, working_capital, promoter_contribution, bank_loan, subsidy, avg_dscr, bep_percent, corporate_npv, corporate_project_irr, corporate_payback_years, daily_capacity, market_growth, builtup_area, power_required, water_required, m_total, promoter_pct, bank_pct, debt_equity_val) -> Dict[str, str]:
+        raw_entity = str(doc.entity_type or "Proprietorship").lower()
+        if "partner" in raw_entity:
+            entity_label = "ಪಾಲುದಾರಿಕೆ ಸಂಸ್ಥೆ (Partnership)"
+        elif "pvt" in raw_entity or "private" in raw_entity:
+            entity_label = "ಖಾಸಗಿ ನಿಯಮಿತ ಕಂಪನಿ (Private Limited)"
+        elif "llp" in raw_entity:
+            entity_label = "ಸೀಮಿತ ಹೊಣೆಗಾರಿಕೆ ಪಾಲುದಾರಿಕೆ (LLP)"
+        else:
+            entity_label = "ಏಕಮಾಲೀಕತ್ವ ಸಂಸ್ಥೆ (Proprietorship)"
+
         return {
             "exec_summary": (
                 f"<p><strong>1.1 ಕಾರ್ಯತಂತ್ರದ ಸಮರ್ಥನೆ ಮತ್ತು ಕಾರ್ಯಾಂಗ ಸಾರಾಂಶ:</strong><br>"
@@ -323,7 +341,7 @@ class ManufacturingNarrative:
             ),
             "business_overview": (
                 f"<p><strong>2.1 ಸಾಂಸ್ಥಿಕ ಸಂವಿಧಾನ ಮತ್ತು ಶಾಸನಬದ್ಧ ವಿವರ:</strong><br>"
-                f"{b_name} ಎಂಬುದು {state} ದಲ್ಲಿ ಪ್ರಧಾನ ಕಚೇರಿ ಹೊಂದಿರುವ {doc.entity_type} ಘಟಕವಾಗಿ ನೋಂದಾಯಿಸಲ್ಪಟ್ಟಿದೆ. ಉದ್ಯಮವು ರಾಷ್ಟ್ರೀಯ MSME ನಿಯಮಾವಳಿಗಳ ಸಂಪೂರ್ಣ ಅನುಸರಣೆಯೊಂದಿಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತಿದ್ದು, "
+                f"{b_name} ಎಂಬುದು {state} ದಲ್ಲಿ ಪ್ರಧಾನ ಕಚೇರಿ ಹೊಂದಿರುವ {entity_label} ಘಟಕವಾಗಿ ನೋಂದಾಯಿಸಲ್ಪಟ್ಟಿದೆ. ಉದ್ಯಮವು ರಾಷ್ಟ್ರೀಯ MSME ನಿಯಮಾವಳಿಗಳ ಸಂಪೂರ್ಣ ಅನುಸರಣೆಯೊಂದಿಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತಿದ್ದು, "
                 f"ಸಕ್ರಿಯ ಉದ್ಯಮ್ ನೋಂದಣಿ ({doc.udyam_no or 'ನೋಂದಾಯಿಸಲಾಗಿದೆ'}), GSTIN ({doc.gst_no or 'ಸಕ್ರಿಯ ನೋಂದಣಿ'}), ಪ್ಯಾನ್ ({doc.pan_no or 'ಸಕ್ರಿಯ'}), "
                 f"ಮತ್ತು ಕಾರ್ಪೊರೇಟ್ ಗುರುತಿನ ಸಂಖ್ಯೆ (CIN: {doc.cin or 'ಲಭ್ಯವಿಲ್ಲ'}) ಹೊಂದಿದೆ.</p>"
                 f"<p><strong>2.2 ಪ್ರವರ್ತಕರ ಹಿನ್ನೆಲೆ ಮತ್ತು ನಿರ್ವಹಣಾ ಸಾಮರ್ಥ್ಯ:</strong><br>"
@@ -481,6 +499,16 @@ class ManufacturingNarrative:
 
     @staticmethod
     def _get_hindi_sections(doc, b_name, promoter, product, district, state, total_cost, land_cost, building_cost, furniture_cost, other_cost, electrification_cost, working_capital, promoter_contribution, bank_loan, subsidy, avg_dscr, bep_percent, corporate_npv, corporate_project_irr, corporate_payback_years, daily_capacity, market_growth, builtup_area, power_required, water_required, m_total, promoter_pct, bank_pct, debt_equity_val) -> Dict[str, str]:
+        raw_entity = str(doc.entity_type or "Proprietorship").lower()
+        if "partner" in raw_entity:
+            entity_label = "साझेदारी फर्म (Partnership)"
+        elif "pvt" in raw_entity or "private" in raw_entity:
+            entity_label = "प्राइवेट लिमिटेड कंपनी (Private Limited)"
+        elif "llp" in raw_entity:
+            entity_label = "सीमित देयता भागीदारी (LLP)"
+        else:
+            entity_label = "एकल स्वामित्व फर्म (Proprietorship)"
+
         return {
             "exec_summary": (
                 f"<p><strong>1.1 रणनीतिक औचित्य एवं कार्यकारी सारांश:</strong><br>"
@@ -506,7 +534,7 @@ class ManufacturingNarrative:
             ),
             "business_overview": (
                 f"<p><strong>2.1 कॉर्पोरेट गठन एवं वैधानिक प्रोफ़ाइल:</strong><br>"
-                f"{b_name} {state} में मुख्यालय वाली एक {doc.entity_type} इकाई के रूप में निगमित है। व्यवसाय राष्ट्रीय एमएसएमई नियमों का पूर्ण अनुपालन करता है, "
+                f"{b_name} {state} में मुख्यालय वाली एक {entity_label} इकाई के रूप में निगमित है। व्यवसाय राष्ट्रीय एमएसएमई नियमों का पूर्ण अनुपालन करता है, "
                 f"जिसके पास सक्रिय उद्यम पंजीकरण ({doc.udyam_no or 'पंजीकृत'}), GSTIN ({doc.gst_no or 'सक्रिय पंजीकृत'}), पैन ({doc.pan_no or 'सक्रिय'}), "
                 f"और कॉर्पोरेट पहचान संख्या (CIN: {doc.cin or 'लागू नहीं'}) है।</p>"
                 f"<p><strong>2.2 प्रवर्तक पृष्ठभूमि एवं प्रबंधन क्षमता:</strong><br>"
