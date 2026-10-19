@@ -8,7 +8,8 @@ import LanguageSelectModal from '@/components/common/LanguageSelectModal';
 import LanguageDropdown from '@/components/common/LanguageDropdown';
 import { useLanguage } from '@/context/LanguageContext';
 import { UserSession } from '@/types/dpr';
-import { Zap, Video, FileText, Sparkles, Clock, BarChart3, Users, AlertTriangle, Mail, Landmark, Briefcase, TrendingUp, Percent, Banknote, SlidersHorizontal } from 'lucide-react';
+import { createRazorpayOrder, verifyRazorpayPayment } from '@/lib/api';
+import { Zap, Video, FileText, Sparkles, Clock, BarChart3, Users, AlertTriangle, Mail, Landmark, Briefcase, TrendingUp, Percent, Banknote, SlidersHorizontal, Lock } from 'lucide-react';
 
 interface LandingPageProps {
   onLoginSuccess: (session: UserSession) => void;
@@ -79,6 +80,99 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
     sessionStorage.setItem('dpr_selected_service', canonicalService);
     if (planId) {
       sessionStorage.setItem('dpr_selected_plan', planId);
+    }
+  };
+
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (typeof window !== 'undefined' && (window as any).Razorpay) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleInstantCheckout = async (routeKey: string, planId: string, planPrice?: number) => {
+    try {
+      const isLoaded = await loadRazorpayScript();
+      if (!isLoaded) {
+        alert('Failed to load Razorpay SDK. Please check your internet connection.');
+        return;
+      }
+      const serviceMap: Record<string, string> = {
+        govt: 'Govt Subsidy DPR',
+        bank: 'Bank Loan DPR',
+        inv: 'Investor / Business Pitch DPR'
+      };
+      const canonicalService = serviceMap[routeKey] || 'Bank Loan DPR';
+      const orderData = await createRazorpayOrder(planPrice, undefined, canonicalService, planId);
+      if (!orderData.success || !orderData.order_id) {
+        alert('Order creation failed: ' + (orderData.detail || 'Could not initiate checkout.'));
+        return;
+      }
+      const planNameMap: Record<string, string> = {
+        entry: 'Entry Plan',
+        core: 'Core Plan',
+        team: 'Team Plan (Advanced)',
+        ent: 'Enterprise Bankable',
+        enterprise: 'Enterprise Bankable'
+      };
+      const planTitle = planNameMap[planId] || 'DPR Plan';
+
+      const options = {
+        key: orderData.key_id,
+        amount: orderData.amount,
+        currency: orderData.currency || 'INR',
+        name: 'Vision Karnataka Foundation (VKF) DPR',
+        description: `${planTitle} — ${canonicalService} (₹${(orderData.amount_inr || planPrice || 3999).toLocaleString('en-IN')})`,
+        order_id: orderData.order_id,
+        handler: async function (response: any) {
+          try {
+            const verification = await verifyRazorpayPayment({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+
+            if (verification.success) {
+              if (typeof window !== 'undefined') {
+                sessionStorage.setItem('dpr_selected_service', canonicalService);
+                sessionStorage.setItem('dpr_selected_plan', planId);
+                sessionStorage.setItem('dpr_payment_unlocked', 'true');
+                sessionStorage.setItem('dpr_paid_order_id', response.razorpay_order_id);
+                sessionStorage.setItem('dpr_paid_payment_id', response.razorpay_payment_id);
+              }
+              setIsPlansModalOpen(false);
+              const activeSess = pendingSession || (typeof window !== 'undefined' && sessionStorage.getItem('dpr_session') ? JSON.parse(sessionStorage.getItem('dpr_session')!) : {
+                user: { id: 'paid_user', email: 'user@dpr.vkf', full_name: 'Authorized Entrepreneur' },
+                token: 'paid_guest_token'
+              });
+              onLoginSuccess(activeSess);
+            } else {
+              alert('Payment signature verification failed.');
+            }
+          } catch (e: any) {
+            alert('Verification Error: ' + (e?.message || 'Unknown error'));
+          }
+        },
+        prefill: {
+          name: contactName || '',
+          email: contactEmail || '',
+          contact: contactPhone || '',
+        },
+        theme: {
+          color: '#008C95',
+        },
+      };
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+    } catch (err: any) {
+      alert('Checkout error: ' + (err?.response?.data?.detail || err?.message || 'Failed to start payment.'));
     }
   };
 
@@ -1928,13 +2022,39 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                           fontWeight: 800,
                           fontSize: '0.86rem',
                           cursor: 'pointer',
-                          marginBottom: '16px',
+                          marginBottom: plan.contact ? '16px' : '8px',
                           boxShadow: !plan.contact && isFeatured ? `0 6px 18px ${accentColor}35` : 'none',
                           transition: 'all 0.2s ease',
                         }}
                       >
                         {(t.pricing.plans as any)?.[plan.id]?.cta || plan.cta}
                       </button>
+
+                      {!plan.contact && (
+                        <button
+                          type="button"
+                          onClick={() => handleInstantCheckout(selectedRouteKey, plan.id, planPrice)}
+                          style={{
+                            width: '100%',
+                            background: '#F8FAFC',
+                            border: `1.5px solid ${borderSoft}`,
+                            color: accentColor,
+                            borderRadius: '12px',
+                            padding: '0.62rem 1rem',
+                            fontWeight: 800,
+                            fontSize: '0.82rem',
+                            cursor: 'pointer',
+                            marginBottom: '16px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '6px',
+                            transition: 'all 0.2s ease',
+                          }}
+                        >
+                          <Lock size={13} /> {language === 'kn' ? 'ತ್ವರಿತ ಚೆಕ್‌ಔಟ್' : language === 'hi' ? 'त्वरित चेकआउट' : 'Instant Checkout'} (₹{planPrice?.toLocaleString('en-IN')})
+                        </button>
+                      )}
                     </div>
 
                     {/* Includes List */}

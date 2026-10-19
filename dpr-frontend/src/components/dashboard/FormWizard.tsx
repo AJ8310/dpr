@@ -1172,27 +1172,28 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
     });
   };
 
+  const getPlanPrice = (planId?: string): number => {
+    const dt = (formData.dpr_type || '').toLowerCase();
+    const isInv = dt.includes('inv') || dt.includes('pitch') || dt.includes('equity');
+    const depth = (planId || formData.dpr_depth || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_selected_plan') : null) || 'entry').toLowerCase().trim();
+    if (depth === 'core' || depth === 'standard') {
+      return isInv ? 9999 : 7999;
+    }
+    if (depth === 'team' || depth === 'advanced' || depth === 'detailed' || depth === 'comprehensive') {
+      return isInv ? 19999 : 14999;
+    }
+    if (depth === 'ent' || depth === 'enterprise' || depth === 'premium') {
+      return isInv ? 29999 : 24999;
+    }
+    return isInv ? 4999 : 3999;
+  };
+
   const getDisplayPrice = (): string => {
     if (isTestOneRupee) {
       return '1';
     }
-    const selectedPlan = (typeof window !== 'undefined' && sessionStorage.getItem('dpr_selected_plan')) || formData.dpr_depth || 'entry';
-    const dt = (formData.dpr_type || '').toLowerCase();
-    const isInv = dt.includes('inv') || dt.includes('pitch') || dt.includes('equity');
-    const depth = (selectedPlan || '').toLowerCase().trim();
-
-    let amount = isInv ? 4999 : 3999;
-    if (depth === 'core' || depth === 'standard') {
-      amount = isInv ? 9999 : 7999;
-    } else if (depth === 'team' || depth === 'advanced' || depth === 'detailed' || depth === 'comprehensive') {
-      amount = isInv ? 19999 : 14999;
-    } else if (depth === 'ent' || depth === 'enterprise' || depth === 'premium') {
-      amount = isInv ? 29999 : 24999;
-    } else if (depth === 'entry' || depth === 'basic' || depth === 'summary') {
-      amount = isInv ? 4999 : 3999;
-    }
-
-    return amount.toLocaleString('en-IN');
+    const currentDepth = formData.dpr_depth || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_selected_plan') : null) || 'entry';
+    return getPlanPrice(currentDepth).toLocaleString('en-IN');
   };
 
   const handlePayAndGeneratePDF = async () => {
@@ -1210,7 +1211,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       setGenerating(true);
       setStepName('Initializing Razorpay Order...');
 
-      const effectiveDepth = (typeof window !== 'undefined' && sessionStorage.getItem('dpr_selected_plan')) || formData.dpr_depth || 'entry';
+      const effectiveDepth = formData.dpr_depth || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_selected_plan') : null) || 'entry';
       const testAmount = isTestOneRupee ? 1.0 : undefined;
       const orderData = await createRazorpayOrder(testAmount, undefined, formData.dpr_type, effectiveDepth);
       setGenerating(false);
@@ -1221,12 +1222,23 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       }
       setLastOrderId(orderData.order_id);
 
+      const planNameMap: Record<string, string> = {
+        entry: tW.labels?.entryPlanName || 'Entry Plan',
+        core: tW.labels?.corePlanName || 'Core Plan',
+        standard: tW.labels?.corePlanName || 'Core Plan',
+        team: tW.labels?.teamPlanName || 'Team Plan',
+        comprehensive: tW.labels?.teamPlanName || 'Team Plan',
+        ent: tW.labels?.enterprisePlanName || 'Enterprise Bankable',
+        enterprise: tW.labels?.enterprisePlanName || 'Enterprise Bankable',
+      };
+      const planTitle = planNameMap[effectiveDepth.toLowerCase()] || 'DPR Plan';
+
       const options = {
         key: orderData.key_id,
         amount: orderData.amount,
         currency: orderData.currency || 'INR',
-        name: 'InfoPace DPR Studio',
-        description: `Unlock & Generate ${formData.dpr_type || 'Detailed Project Report'}`,
+        name: 'Vision Karnataka Foundation (VKF) DPR',
+        description: `${planTitle} — ${formData.dpr_type || 'Detailed Project Report'} (₹${isTestOneRupee ? 1 : (orderData.amount_inr ? orderData.amount_inr.toLocaleString('en-IN') : getDisplayPrice())})`,
         order_id: orderData.order_id,
         handler: async function (response: any) {
           setGenerating(true);
@@ -1240,7 +1252,13 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
 
             if (verification.success) {
               setPaymentUnlocked(true);
-              setStepName('Payment verified! Compiling PDF report...');
+              if (typeof window !== 'undefined') {
+                sessionStorage.setItem('dpr_payment_unlocked', 'true');
+                sessionStorage.setItem('dpr_paid_order_id', response.razorpay_order_id);
+                sessionStorage.setItem('dpr_paid_payment_id', response.razorpay_payment_id);
+                localStorage.setItem(`dpr_paid_${formData.business_name || 'session'}`, 'true');
+              }
+              setStepName('Payment verified! Compiling official PDF report...');
               await handleGeneratePDF();
             } else {
               alert('Payment signature verification failed.');
@@ -3266,124 +3284,277 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
               {
                 id: 'report_depth',
                 title: tW.sectors[13]?.questions?.report_depth?.title || 'Target DPR Report Length & Depth',
-                description: tW.sectors[13]?.questions?.report_depth?.desc || 'Choose Standard (15-20 Pgs), Comprehensive (25-35 Pgs), or Enterprise (40-60 Pgs)',
-                content: (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
-                    <div
-                      onClick={() => setFormData((prev) => ({ ...prev, dpr_depth: 'standard' }))}
-                      style={{
-                        border: formData.dpr_depth === 'standard' ? '2.5px solid #008C95' : '1.5px solid #CBD5E1',
-                        background: formData.dpr_depth === 'standard' ? '#CCFBF1' : '#FFFFFF',
-                        padding: '1rem',
-                        borderRadius: '0.8rem',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      <div style={{ fontWeight: 800, color: '#0F172A', fontSize: '0.98rem' }}>{tW.labels?.standardDpr || 'Standard DPR'}</div>
-                      <div style={{ fontSize: '0.82rem', color: '#008C95', fontWeight: 700, margin: '4px 0' }}>{tW.labels?.standardPages || '15 – 20 Pages'}</div>
-                      <div style={{ fontSize: '0.78rem', color: '#64748B' }}>{tW.labels?.standardDesc || '16 Core Chapters, 5-Yr Financials, DSCR Analysis.'}</div>
-                    </div>
+                description: tW.sectors[13]?.questions?.report_depth?.desc || 'Choose Entry (15-20 Pgs), Core (25-35 Pgs), Team (35-45 Pgs), or Enterprise (45-60 Pgs)',
+                content: (() => {
+                  const currentPlanKey = (formData.dpr_depth || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_selected_plan') : null) || 'entry').toLowerCase().trim();
+                  const normalizedDepth = (currentPlanKey === 'core' || currentPlanKey === 'standard') ? 'core' : (currentPlanKey === 'team' || currentPlanKey === 'advanced' || currentPlanKey === 'detailed' || currentPlanKey === 'comprehensive') ? 'team' : (currentPlanKey === 'enterprise' || currentPlanKey === 'ent' || currentPlanKey === 'premium') ? 'enterprise' : 'entry';
 
-                    <div
-                      onClick={() => setFormData((prev) => ({ ...prev, dpr_depth: 'comprehensive' }))}
-                      style={{
-                        border: formData.dpr_depth === 'comprehensive' ? '2.5px solid #008C95' : '1.5px solid #CBD5E1',
-                        background: formData.dpr_depth === 'comprehensive' ? '#CCFBF1' : '#FFFFFF',
-                        padding: '1rem',
-                        borderRadius: '0.8rem',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      <div style={{ fontWeight: 800, color: '#0F172A', fontSize: '0.98rem' }}>{tW.labels?.comprehensiveMsme || 'Comprehensive MSME'}</div>
-                      <div style={{ fontSize: '0.82rem', color: '#008C95', fontWeight: 700, margin: '4px 0' }}>{tW.labels?.comprehensivePages || '25 – 35 Pages'}</div>
-                      <div style={{ fontSize: '0.78rem', color: '#64748B' }}>{tW.labels?.comprehensiveDesc || '22 Chapters, 36-Mo Cash Flow, Tandon Assessment, Risk Matrix.'}</div>
-                    </div>
+                  const plans = [
+                    {
+                      id: 'entry',
+                      name: tW.labels?.entryPlanName || 'Entry Plan',
+                      pages: tW.labels?.entryPages || '15 – 20 Pages',
+                      projects: tW.labels?.entryProjects || 'Projects ₹5L – ₹25L',
+                      price: getPlanPrice('entry'),
+                      desc: tW.labels?.entryDesc || '16 Core Chapters, 5-Yr Financials, DSCR Analysis, Standard Bankable PDF.',
+                      accent: '#008C95',
+                      bgSoft: '#F0FDFA',
+                      borderSoft: '#CCFBF1'
+                    },
+                    {
+                      id: 'core',
+                      name: tW.labels?.corePlanName || 'Core Plan',
+                      pages: tW.labels?.corePages || '25 – 35 Pages',
+                      projects: tW.labels?.coreProjects || 'Projects ₹25L – ₹1Cr',
+                      price: getPlanPrice('core'),
+                      desc: tW.labels?.coreDesc || '22 Chapters, 36-Mo Cash Flow, Tandon Assessment, Risk Matrix, Credit Appraisal Norms.',
+                      accent: '#0071E3',
+                      bgSoft: '#F0F7FF',
+                      borderSoft: '#D0E3FF'
+                    },
+                    {
+                      id: 'team',
+                      name: tW.labels?.teamPlanName || 'Team Plan (Advanced)',
+                      pages: tW.labels?.teamPages || '35 – 45 Pages',
+                      projects: tW.labels?.teamProjects || 'Projects ₹1Cr – ₹5Cr',
+                      price: getPlanPrice('team'),
+                      desc: tW.labels?.teamDesc || 'Advanced DPR with sensitivity stress tests, milestone roadmap, and subsidy claims.',
+                      badge: tW.labels?.mostUsedBadge || 'MOST USED',
+                      accent: '#FF7A00',
+                      bgSoft: '#FFF7ED',
+                      borderSoft: '#FFEDD5'
+                    },
+                    {
+                      id: 'enterprise',
+                      name: tW.labels?.enterprisePlanName || 'Enterprise Bankable',
+                      pages: tW.labels?.enterprisePages || '45 – 60 Pages',
+                      projects: tW.labels?.enterpriseProjects || 'Projects ₹5Cr – ₹25Cr+',
+                      price: getPlanPrice('enterprise'),
+                      desc: tW.labels?.enterpriseDesc || '30 Chapters + 10 Annexure Schedules, 10-Yr Extended Modeling, Raw Material BOQ, ESG.',
+                      badge: tW.labels?.enterpriseBadge || 'ENTERPRISE GRADE',
+                      accent: '#7C3AED',
+                      bgSoft: '#F5F3FF',
+                      borderSoft: '#DDD6FE'
+                    }
+                  ];
 
-                    <div
-                      onClick={() => setFormData((prev) => ({ ...prev, dpr_depth: 'enterprise' }))}
-                      style={{
-                        border: formData.dpr_depth === 'enterprise' ? '2.5px solid #008C95' : '1.5px solid #CBD5E1',
-                        background: formData.dpr_depth === 'enterprise' ? '#CCFBF1' : '#FFFFFF',
-                        padding: '1rem',
-                        borderRadius: '0.8rem',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      <div style={{ fontWeight: 800, color: '#0F172A', fontSize: '0.98rem' }}>{tW.labels?.enterpriseBankable || 'Enterprise Bankable'}</div>
-                      <div style={{ fontSize: '0.82rem', color: '#008C95', fontWeight: 700, margin: '4px 0' }}>{tW.labels?.enterprisePages || '40 – 60 Pages'} <Star size={13} strokeWidth={1.75} style={{ display: 'inline', verticalAlign: '-2px' }} /></div>
-                      <div style={{ fontSize: '0.78rem', color: '#64748B' }}>{tW.labels?.enterpriseDesc || '30 Chapters + 10 Annexure Schedules, 10-Yr Projections, BOQ, ESG.'}</div>
+                  return (
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: '1rem' }}>
+                      {plans.map((p) => {
+                        const isSelected = normalizedDepth === p.id;
+                        return (
+                          <div
+                            key={p.id}
+                            onClick={() => {
+                              setFormData((prev) => ({ ...prev, dpr_depth: p.id }));
+                              if (typeof window !== 'undefined') {
+                                sessionStorage.setItem('dpr_selected_plan', p.id);
+                              }
+                            }}
+                            style={{
+                              border: isSelected ? `2.5px solid ${p.accent}` : '1.5px solid #CBD5E1',
+                              background: isSelected ? p.bgSoft : '#FFFFFF',
+                              padding: '1.2rem 1.1rem',
+                              borderRadius: '1rem',
+                              cursor: 'pointer',
+                              position: 'relative',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              justifyContent: 'space-between',
+                              boxShadow: isSelected ? `0 8px 24px ${p.accent}25` : '0 2px 8px rgba(0,0,0,0.02)',
+                              transition: 'all 0.2s ease'
+                            }}
+                          >
+                            {p.badge && (
+                              <div
+                                style={{
+                                  position: 'absolute',
+                                  top: '-11px',
+                                  right: '14px',
+                                  background: p.accent,
+                                  color: '#FFFFFF',
+                                  padding: '2px 10px',
+                                  borderRadius: '9999px',
+                                  fontSize: '0.64rem',
+                                  fontWeight: 800,
+                                  letterSpacing: '0.05em'
+                                }}
+                              >
+                                {p.badge}
+                              </div>
+                            )}
+
+                            <div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
+                                <span style={{ fontWeight: 800, color: '#0F172A', fontSize: '1rem' }}>{p.name}</span>
+                                <span style={{ fontWeight: 900, color: p.accent, fontSize: '1.15rem' }}>₹{p.price.toLocaleString('en-IN')}</span>
+                              </div>
+                              <div style={{ fontSize: '0.8rem', color: p.accent, fontWeight: 700, margin: '2px 0 6px 0' }}>
+                                {p.pages} • <span style={{ color: '#64748B', fontWeight: 600 }}>{p.projects}</span>
+                              </div>
+                              <div style={{ fontSize: '0.78rem', color: '#64748B', lineHeight: 1.45 }}>
+                                {p.desc}
+                              </div>
+                            </div>
+
+                            <div style={{ marginTop: '12px', paddingTop: '8px', borderTop: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                              <span style={{ fontSize: '0.74rem', color: isSelected ? p.accent : '#94A3B8', fontWeight: 700 }}>
+                                {isSelected ? '✓ ' + (language === 'kn' ? 'ಆಯ್ಕೆಮಾಡಲಾಗಿದೆ' : language === 'hi' ? 'चयनित' : 'SELECTED') : (language === 'kn' ? 'ಆಯ್ಕೆಮಾಡಲು ಕ್ಲಿಕ್ ಮಾಡಿ' : language === 'hi' ? 'चुनने के लिए क्लिक करें' : 'Click to select')}
+                              </span>
+                              <div style={{ width: '18px', height: '18px', borderRadius: '50%', border: isSelected ? `5px solid ${p.accent}` : '1.5px solid #CBD5E1', background: '#FFFFFF' }} />
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                  </div>
-                ),
+                  );
+                })(),
               },
               {
                 id: 'approve_compile',
                 title: tW.sectors[13]?.questions?.approve_compile?.title || 'User Approval & Report Generation',
-                description: tW.sectors[13]?.questions?.approve_compile?.desc || 'Compile publication-ready PDF or editable Word DOCX report',
-                content: (
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.2rem', paddingTop: '0.8rem' }}>
-                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-                      <div style={{ background: '#F8FAFC', border: '1.5px solid #CBD5E1', padding: '0.8rem 1.4rem', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', userSelect: 'none' }}>
-                        <input
-                          type="checkbox"
-                          id="associated_with_vkf"
-                          name="associated_with_vkf"
-                          checked={!!formData.associated_with_vkf}
-                          onChange={(e) => setFormData((prev) => ({ ...prev, associated_with_vkf: e.target.checked }))}
-                          style={{ width: '18px', height: '18px', accentColor: '#008C95', cursor: 'pointer' }}
-                        />
-                        <label htmlFor="associated_with_vkf" style={{ fontSize: '0.92rem', fontWeight: 700, color: '#0F172A', cursor: 'pointer', margin: 0 }}>
-                          {tW.labels?.associatedVkf || 'Associated / Partnered with VKF'}
-                        </label>
+                description: tW.sectors[13]?.questions?.approve_compile?.desc || 'Compile publication-ready official bankable PDF report',
+                content: (() => {
+                  const currentPlanKey = (formData.dpr_depth || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_selected_plan') : null) || 'entry').toLowerCase().trim();
+                  const normalizedDepth = (currentPlanKey === 'core' || currentPlanKey === 'standard') ? 'core' : (currentPlanKey === 'team' || currentPlanKey === 'advanced' || currentPlanKey === 'detailed' || currentPlanKey === 'comprehensive') ? 'team' : (currentPlanKey === 'enterprise' || currentPlanKey === 'ent' || currentPlanKey === 'premium') ? 'enterprise' : 'entry';
+
+                  const planNameMap: Record<string, { name: string; pages: string; projects: string }> = {
+                    entry: {
+                      name: tW.labels?.entryPlanName || 'Entry Plan',
+                      pages: tW.labels?.entryPages || '15 – 20 Pages',
+                      projects: tW.labels?.entryProjects || 'Projects ₹5L – ₹25L'
+                    },
+                    core: {
+                      name: tW.labels?.corePlanName || 'Core Plan',
+                      pages: tW.labels?.corePages || '25 – 35 Pages',
+                      projects: tW.labels?.coreProjects || 'Projects ₹25L – ₹1Cr'
+                    },
+                    team: {
+                      name: tW.labels?.teamPlanName || 'Team Plan (Advanced)',
+                      pages: tW.labels?.teamPages || '35 – 45 Pages',
+                      projects: tW.labels?.teamProjects || 'Projects ₹1Cr – ₹5Cr'
+                    },
+                    enterprise: {
+                      name: tW.labels?.enterprisePlanName || 'Enterprise Bankable',
+                      pages: tW.labels?.enterprisePages || '45 – 60 Pages',
+                      projects: tW.labels?.enterpriseProjects || 'Projects ₹5Cr – ₹25Cr+'
+                    }
+                  };
+                  const activePlanMeta = planNameMap[normalizedDepth] || planNameMap.entry;
+
+                  return (
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.4rem', paddingTop: '0.8rem', width: '100%' }}>
+                      {/* LIVE PAYMENT ORDER SUMMARY CARD */}
+                      <div style={{
+                        width: '100%',
+                        maxWidth: '680px',
+                        background: '#FFFFFF',
+                        border: '2px solid #CCFBF1',
+                        borderRadius: '1.2rem',
+                        padding: '1.4rem 1.6rem',
+                        boxShadow: '0 10px 25px -5px rgba(0, 140, 149, 0.08)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '0.8rem'
+                      }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1.5px solid #F1F5F9', paddingBottom: '0.75rem' }}>
+                          <span style={{ fontSize: '1.02rem', fontWeight: 800, color: '#123B4A', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <i className="fas fa-file-invoice-dollar" style={{ color: '#008C95' }} />
+                            {tW.labels?.orderSummaryTitle || 'Payment Order Summary'}
+                          </span>
+                          <span style={{ fontSize: '0.74rem', fontWeight: 800, color: paymentUnlocked ? '#059669' : '#008C95', background: paymentUnlocked ? '#ECFDF5' : '#F0FDFA', padding: '3px 12px', borderRadius: '9999px', border: paymentUnlocked ? '1px solid #A7F3D0' : '1px solid #CCFBF1' }}>
+                            {paymentUnlocked ? (tW.labels?.paymentVerified || 'PAID & UNLOCKED') : 'RAZORPAY SECURE GATEWAY'}
+                          </span>
+                        </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '0.6rem', fontSize: '0.86rem' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0' }}>
+                            <span style={{ color: '#64748B' }}>{tW.labels?.selectedServiceLabel || 'Selected DPR Service:'}</span>
+                            <strong style={{ color: '#0F172A' }}>{formData.dpr_type || 'Bank Loan DPR'}</strong>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0' }}>
+                            <span style={{ color: '#64748B' }}>{tW.labels?.selectedPlanLabel || 'Selected Pricing Plan:'}</span>
+                            <strong style={{ color: '#008C95' }}>{activePlanMeta.name}</strong>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0' }}>
+                            <span style={{ color: '#64748B' }}>{tW.labels?.reportScopeLabel || 'Report Scope:'}</span>
+                            <span style={{ color: '#334155', fontWeight: 600 }}>{activePlanMeta.pages} ({activePlanMeta.projects})</span>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderTop: '1px dashed #E2E8F0', marginTop: '4px', paddingTop: '8px' }}>
+                            <span style={{ color: '#0F172A', fontWeight: 700, fontSize: '0.95rem' }}>{tW.labels?.totalPayableLabel || 'Total Amount Payable:'}</span>
+                            <strong style={{ fontSize: '1.25rem', color: '#008C95' }}>₹{getDisplayPrice()}</strong>
+                          </div>
+                        </div>
+
+                        <div style={{ fontSize: '0.76rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '8px', background: '#F8FAFC', padding: '8px 12px', borderRadius: '8px', border: '1px solid #E2E8F0', marginTop: '2px' }}>
+                          <i className="fas fa-shield-alt" style={{ color: '#10B981', fontSize: '0.9rem' }} />
+                          <span>{tW.labels?.secureGatewayNote || 'Secured by Razorpay — Supports UPI (Google Pay, PhonePe, Paytm), All Debit/Credit Cards & NetBanking'}</span>
+                        </div>
                       </div>
 
-                      <div style={{ background: '#FFF7ED', border: '1.5px solid #FFEDD5', padding: '0.8rem 1.4rem', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', userSelect: 'none' }}>
-                        <input
-                          type="checkbox"
-                          id="test_one_rupee_mode"
-                          checked={isTestOneRupee}
-                          onChange={(e) => setIsTestOneRupee(e.target.checked)}
-                          style={{ width: '18px', height: '18px', accentColor: '#EA580C', cursor: 'pointer' }}
-                        />
-                        <label htmlFor="test_one_rupee_mode" style={{ fontSize: '0.92rem', fontWeight: 700, color: '#C2410C', cursor: 'pointer', margin: 0 }}>
-                          <FlaskConical size={16} strokeWidth={1.75} style={{ display: 'inline', verticalAlign: '-3px', marginRight: 6 }} />{tW.labels?.testRupeeMode || 'Test ₹1 Payment Mode (Live Razorpay Receipt Test)'}
-                        </label>
+                      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                        <div style={{ background: '#F8FAFC', border: '1.5px solid #CBD5E1', padding: '0.8rem 1.4rem', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', userSelect: 'none' }}>
+                          <input
+                            type="checkbox"
+                            id="associated_with_vkf"
+                            name="associated_with_vkf"
+                            checked={!!formData.associated_with_vkf}
+                            onChange={(e) => setFormData((prev) => ({ ...prev, associated_with_vkf: e.target.checked }))}
+                            style={{ width: '18px', height: '18px', accentColor: '#008C95', cursor: 'pointer' }}
+                          />
+                          <label htmlFor="associated_with_vkf" style={{ fontSize: '0.92rem', fontWeight: 700, color: '#0F172A', cursor: 'pointer', margin: 0 }}>
+                            {tW.labels?.associatedVkf || 'Associated / Partnered with VKF'}
+                          </label>
+                        </div>
+
+                        <div style={{ background: '#FFF7ED', border: '1.5px solid #FFEDD5', padding: '0.8rem 1.4rem', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', userSelect: 'none' }}>
+                          <input
+                            type="checkbox"
+                            id="test_one_rupee_mode"
+                            checked={isTestOneRupee}
+                            onChange={(e) => setIsTestOneRupee(e.target.checked)}
+                            style={{ width: '18px', height: '18px', accentColor: '#EA580C', cursor: 'pointer' }}
+                          />
+                          <label htmlFor="test_one_rupee_mode" style={{ fontSize: '0.92rem', fontWeight: 700, color: '#C2410C', cursor: 'pointer', margin: 0 }}>
+                            <FlaskConical size={16} strokeWidth={1.75} style={{ display: 'inline', verticalAlign: '-3px', marginRight: 6 }} />{tW.labels?.testRupeeMode || 'Test ₹1 Payment Mode (Live Razorpay Receipt Test)'}
+                          </label>
+                        </div>
                       </div>
-                    </div>
 
-                    {paymentUnlocked && (
-                      <div style={{ padding: '0.8rem 1.6rem', background: '#F0FDFA', border: '1.5px solid #008C95', borderRadius: '0.75rem', color: '#008C95', fontWeight: 800, fontSize: '0.98rem', textAlign: 'center' }}>
-                        <i className="fas fa-check-circle" style={{ marginRight: '8px' }}></i>
-                        {tW.labels?.paymentVerified || 'PAYMENT VERIFIED! YOUR REPORT IS FULLY UNLOCKED'}
-                      </div>
-                    )}
+                      {paymentUnlocked && (
+                        <div style={{ padding: '0.8rem 1.6rem', background: '#F0FDFA', border: '1.5px solid #008C95', borderRadius: '0.75rem', color: '#008C95', fontWeight: 800, fontSize: '0.98rem', textAlign: 'center' }}>
+                          <i className="fas fa-check-circle" style={{ marginRight: '8px' }}></i>
+                          {tW.labels?.paymentVerified || 'PAYMENT VERIFIED! YOUR REPORT IS FULLY UNLOCKED'}
+                        </div>
+                      )}
 
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '1.2rem', flexWrap: 'wrap', width: '100%' }}>
-                      <button
-                        type="button"
-                        onClick={handlePayAndGeneratePDF}
-                        disabled={generating}
-                        className="btn-next-spacious"
-                        style={{ padding: '1.2rem 2.6rem', fontSize: '1.05rem', background: paymentUnlocked ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #008C95 0%, #006F78 100%)', boxShadow: '0 8px 25px rgba(0, 140, 149, 0.35)', minWidth: '320px' }}
-                      >
-                        <i className={paymentUnlocked ? "fas fa-download" : "fas fa-lock-open"} style={{ marginRight: '8px' }}></i> {generating ? (tW.labels?.compilingPdf || 'Compiling PDF Engine Report...') : paymentUnlocked ? (tW.labels?.downloadPdfUnlocked || 'DOWNLOAD OFFICIAL PDF REPORT (UNLOCKED)') : `${tW.labels?.payPdf || 'PAY & DOWNLOAD OFFICIAL PDF REPORT'} (₹${getDisplayPrice()})`}
-                      </button>
-                    </div>
-
-                    {!paymentUnlocked && (
-                      <div style={{ textAlign: 'center', marginTop: '0.2rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'center', gap: '1.2rem', flexWrap: 'wrap', width: '100%' }}>
                         <button
                           type="button"
-                          onClick={handleVerifyAndUnlock}
-                          disabled={checkingPayment}
-                          style={{ background: 'none', border: 'none', color: '#008C95', textDecoration: 'underline', fontSize: '0.86rem', cursor: 'pointer', fontWeight: 700 }}
+                          onClick={handlePayAndGeneratePDF}
+                          disabled={generating}
+                          className="btn-next-spacious"
+                          style={{ padding: '1.2rem 2.6rem', fontSize: '1.05rem', background: paymentUnlocked ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #008C95 0%, #006F78 100%)', boxShadow: '0 8px 25px rgba(0, 140, 149, 0.35)', minWidth: '320px' }}
                         >
-                          {checkingPayment ? (tW.labels?.checkingPayment || 'Checking Live Razorpay Payment Status...') : (tW.labels?.verifyUpi || 'Already completed payment on UPI / QR? Click here to verify & unlock report →')}
+                          <i className={paymentUnlocked ? "fas fa-download" : "fas fa-lock-open"} style={{ marginRight: '8px' }}></i> {generating ? (tW.labels?.compilingPdf || 'Compiling PDF Engine Report...') : paymentUnlocked ? (tW.labels?.downloadPdfUnlocked || 'DOWNLOAD OFFICIAL PDF REPORT (UNLOCKED)') : `${tW.labels?.payPdf || 'PAY & DOWNLOAD OFFICIAL PDF REPORT'} (₹${getDisplayPrice()})`}
                         </button>
                       </div>
-                    )}
-                  </div>
-                ),
+
+                      {!paymentUnlocked && (
+                        <div style={{ textAlign: 'center', marginTop: '0.2rem' }}>
+                          <button
+                            type="button"
+                            onClick={handleVerifyAndUnlock}
+                            disabled={checkingPayment}
+                            style={{ background: 'none', border: 'none', color: '#008C95', textDecoration: 'underline', fontSize: '0.86rem', cursor: 'pointer', fontWeight: 700 }}
+                          >
+                            {checkingPayment ? (tW.labels?.checkingPayment || 'Checking Live Razorpay Payment Status...') : (tW.labels?.verifyUpi || 'Already completed payment on UPI / QR? Click here to verify & unlock report →')}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })(),
               },
             ]}
           />
