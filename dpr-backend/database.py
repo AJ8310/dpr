@@ -29,7 +29,9 @@ if not db_url:
         db_url = f"postgresql://postgres:{db_pass}@db.{project_ref}.supabase.co:5432/postgres"
 
 if not db_url:
-    db_url = "sqlite:///./dpr.db"
+    backend_dir = os.path.dirname(os.path.abspath(__file__))
+    sqlite_path = os.path.join(backend_dir, "dpr.db").replace("\\", "/")
+    db_url = f"sqlite:///{sqlite_path}"
 
 if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql+psycopg2://", 1)

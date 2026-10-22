@@ -37,7 +37,8 @@ export default function LoginCard({ onLoginSuccess, onSwitchToRegister }: LoginC
     setLoading(true);
 
     try {
-      const data = await loginUser(email, password);
+      const cleanEmail = email.trim().toLowerCase();
+      const data = await loginUser(cleanEmail, password);
       if (data.access_token && data.user) {
         const session: UserSession = {
           ...data.user,
@@ -56,9 +57,32 @@ export default function LoginCard({ onLoginSuccess, onSwitchToRegister }: LoginC
         setError(msg || 'Invalid email or password.');
       } else if (typeof detail === 'string') {
         setError(detail);
+      } else if (err.code === 'ERR_NETWORK' || (err.message && err.message.includes('Network Error'))) {
+        setError('Cannot connect to backend server. Please verify your internet or ensure the API server is running.');
       } else {
-        setError('Invalid email or password. Please check your credentials.');
+        setError(err.message || 'Invalid email or password. Please check your credentials.');
       }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDemoLogin = async () => {
+    setError('');
+    setLoading(true);
+    try {
+      const data = await loginUser('demo@dpr.com', 'Password123');
+      if (data.access_token && data.user) {
+        const session: UserSession = {
+          ...data.user,
+          token: data.access_token,
+        };
+        sessionStorage.setItem('dpr_session', JSON.stringify(session));
+        onLoginSuccess(session);
+      }
+    } catch (err: any) {
+      const detail = err.response?.data?.detail;
+      setError(typeof detail === 'string' ? detail : 'Quick demo login failed. Please ensure the backend server is active.');
     } finally {
       setLoading(false);
     }
@@ -226,6 +250,33 @@ export default function LoginCard({ onLoginSuccess, onSwitchToRegister }: LoginC
           }}
         >
           {loading ? (language === 'kn' ? 'ಲಾಗಿನ್ ಆಗುತ್ತಿದೆ...' : language === 'hi' ? 'साइन इन हो रहा है...' : 'Signing In...') : (t.common.signIn + ' →')}
+        </button>
+
+        {/* 1-Click Quick Demo Login */}
+        <button
+          type="button"
+          disabled={loading}
+          onClick={handleDemoLogin}
+          style={{
+            width: '100%',
+            marginTop: '0.75rem',
+            background: '#F0FDF4',
+            color: '#166534',
+            border: '1.5px dashed #86EFAC',
+            padding: '0.75rem',
+            borderRadius: '12px',
+            fontWeight: 700,
+            fontSize: '0.86rem',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            transition: 'all 0.2s ease',
+          }}
+        >
+          <i className="fas fa-bolt" style={{ color: '#16A34A' }} />
+          {language === 'kn' ? 'ಡೆಮೊ ಪ್ರೊಮೋಟರ್ ಲಾಗಿನ್ (1-ಕ್ಲಿಕ್)' : language === 'hi' ? 'डेमो प्रमोटर लॉगिन (1-क्लिक)' : '⚡ 1-Click Quick Demo Login (Instant Access)'}
         </button>
 
         {/* Divider */}

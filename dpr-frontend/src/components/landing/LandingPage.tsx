@@ -2197,7 +2197,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                   sessionStorage.setItem('dpr_session', JSON.stringify(sess));
                   setPendingSession(sess);
                   setIsAuthModalOpen(false);
-                  setIsPlansModalOpen(true);
+                  onLoginSuccess(sess);
                 }}
                 onSwitchToRegister={() => setPopupAuthMode('register')}
               />
@@ -2208,7 +2208,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                   sessionStorage.setItem('dpr_session', JSON.stringify(sess));
                   setPendingSession(sess);
                   setIsAuthModalOpen(false);
-                  setIsPlansModalOpen(true);
+                  onLoginSuccess(sess);
                 }}
                 onSwitchToLogin={() => setPopupAuthMode('login')}
               />
