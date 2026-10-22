@@ -480,8 +480,8 @@ export default function LandingPage({ onLoginSuccess, initialShowPlans = false }
             <button onClick={() => scrollToSection('funding-needs')} className="apple-nav-link">{t.common.fundingNeeds}</button>
             <button onClick={() => scrollToSection('supported-sectors')} className="apple-nav-link">{t.common.sectors}</button>
             <button onClick={() => scrollToSection('why-digital')} className="apple-nav-link">{t.common.financialStudio}</button>
-            <button onClick={() => { setSelectedRouteKey('bank'); setIsPlansModalOpen(true); }} className="apple-nav-link" style={{ fontWeight: 800, color: '#008C95' }}>
-              <i className="fas fa-tags" style={{ marginRight: '5px' }} />{t.common.pricing} (₹399 - ₹999)
+            <button onClick={() => { setSelectedRouteKey('bank'); setIsPlansModalOpen(true); }} className="apple-nav-link">
+              {t.common.pricing}
             </button>
             <button onClick={() => scrollToSection('faq')} className="apple-nav-link">{t.common.faq}</button>
           </nav>
