@@ -63,7 +63,7 @@ steps:
       - "NEXT_PUBLIC_API_BASE_URL=https://ajay-dpr-779289230442.asia-south1.run.app"
 
   - id: frontend-deploy
-    name: node:20
+    name: node:22
     dir: dpr-frontend
     entrypoint: npx
     args:
@@ -75,6 +75,7 @@ steps:
       - --project
       - ${_FIREBASE_PROJECT}
       - --non-interactive
+      - --debug
 
 options:
   logging: CLOUD_LOGGING_ONLY
