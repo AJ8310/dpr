@@ -37,7 +37,7 @@ const modalI18n = {
       { label: 'Calculating', desc: 'Running financial models', threshold: 45, icon: 'fa-calculator' },
       { label: 'Creating Charts', desc: 'Visualizing insights', threshold: 65, icon: 'fa-chart-pie' },
       { label: 'Structuring', desc: 'Building your report', threshold: 85, icon: 'fa-file-alt' },
-      { label: 'Finalizing', desc: 'Preparing PDF & DOCX', threshold: 98, icon: 'fa-check-circle' },
+      { label: 'Finalizing', desc: 'Preparing Official DPR PDF', threshold: 98, icon: 'fa-check-circle' },
     ],
   },
   kn: {
@@ -66,7 +66,7 @@ const modalI18n = {
       { label: 'ಹಣಕಾಸು ಲೆಕ್ಕಾಚಾರ', desc: 'ಹಣಕಾಸು ಮಾದರಿಗಳ ರಚನೆ', threshold: 45, icon: 'fa-calculator' },
       { label: 'ನಕ್ಷೆಗಳ ರಚನೆ', desc: 'ಹಣಕಾಸಿನ ಗ್ರಾಫ್‌ಗಳು ಸಿದ್ಧ', threshold: 65, icon: 'fa-chart-pie' },
       { label: 'ರಚನೆ ಜೋಡಣೆ', desc: 'ವರದಿಯ ವಿಭಾಗಗಳ ಜೋಡಣೆ', threshold: 85, icon: 'fa-file-alt' },
-      { label: 'ಅಂತಿಮಗೊಳಿಸುವಿಕೆ', desc: 'PDF & DOCX ಸಿದ್ಧತೆ', threshold: 98, icon: 'fa-check-circle' },
+      { label: 'ಅಂತಿಮಗೊಳಿಸುವಿಕೆ', desc: 'ಅಧಿಕೃತ PDF ಸಿದ್ಧತೆ', threshold: 98, icon: 'fa-check-circle' },
     ],
   },
   hi: {
@@ -95,7 +95,7 @@ const modalI18n = {
       { label: 'वित्तीय गणना', desc: 'वित्तीय मॉडल तैयार करना', threshold: 45, icon: 'fa-calculator' },
       { label: 'चार्ट निर्माण', desc: 'वित्तीय रेखाचित्र तैयार', threshold: 65, icon: 'fa-chart-pie' },
       { label: 'संरचना', desc: 'रिपोर्ट का निर्माण', threshold: 85, icon: 'fa-file-alt' },
-      { label: 'अंतिम रूप', desc: 'PDF एवं DOCX तैयार', threshold: 98, icon: 'fa-check-circle' },
+      { label: 'अंतिम रूप', desc: 'आधिकारिक PDF तैयार', threshold: 98, icon: 'fa-check-circle' },
     ],
   },
 };
@@ -139,10 +139,6 @@ const translateStep = (step: string, lang: 'en' | 'kn' | 'hi') => {
     'Finalizing: PDF Report generated successfully!': {
       kn: 'ಅಂತಿಮಗೊಳಿಸಲಾಗುತ್ತಿದೆ: PDF ವರದಿ ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ!',
       hi: 'अंतिम रूप दिया जा रहा है: पीडीएफ रिपोर्ट सफलतापूर्वक तैयार!',
-    },
-    'Finalizing: Editable DOCX Report compiled successfully!': {
-      kn: 'ಅಂತಿಮಗೊಳಿಸಲಾಗುತ್ತಿದೆ: ಸಂಪಾದಿಸಬಹುದಾದ DOCX ವರದಿ ಯಶಸ್ವಿಯಾಗಿ ಸಿದ್ಧಗೊಂಡಿದೆ!',
-      hi: 'अंतिम रूप: संपादन योग्य DOCX रिपोर्ट सफलतापूर्वक तैयार की गई!',
     },
     'Payment verified! Compiling PDF report...': {
       kn: 'ಪಾವತಿ ದೃಢೀಕರಿಸಲಾಗಿದೆ! PDF ವರದಿ ಸಿದ್ಧಪಡಿಸಲಾಗುತ್ತಿದೆ...',

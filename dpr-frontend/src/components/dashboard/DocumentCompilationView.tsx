@@ -18,7 +18,7 @@ interface CompiledDoc {
 export default function DocumentCompilationView({ projectId, snapshotId }: { projectId: string; snapshotId?: string }) {
   const [documents, setDocuments] = useState<CompiledDoc[]>([]);
   const [compiling, setCompiling] = useState(false);
-  const [selectedFormat, setSelectedFormat] = useState<"PDF" | "DOCX" | "HTML">("PDF");
+  const [selectedFormat, setSelectedFormat] = useState<"PDF" | "HTML">("PDF");
   const [message, setMessage] = useState<string | null>(null);
 
   const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://ajay-dpr-779289230442.asia-south1.run.app';
@@ -80,7 +80,7 @@ export default function DocumentCompilationView({ projectId, snapshotId }: { pro
         <div>
           <h2 className="text-xl font-bold text-slate-800">Phase 8 Document Compiler Studio</h2>
           <p className="text-sm text-slate-500">
-            Compiles read-only DPRContentSnapshot into A4 PDF, native DOCX & HTML reports
+            Compiles read-only DPRContentSnapshot into official A4 PDF & HTML reports
           </p>
         </div>
         <div className="flex items-center space-x-3">
@@ -89,8 +89,7 @@ export default function DocumentCompilationView({ projectId, snapshotId }: { pro
             onChange={(e) => setSelectedFormat(e.target.value as any)}
             className="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white font-medium"
           >
-            <option value="PDF">PDF Report (Playwright A4)</option>
-            <option value="DOCX">Microsoft Word (.docx)</option>
+            <option value="PDF">PDF Report (Official A4)</option>
             <option value="HTML">Web Preview (.html)</option>
           </select>
 

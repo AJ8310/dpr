@@ -67,7 +67,7 @@ export default function FloatingChatbotWidget({
         ...prev,
         {
           sender: 'bot',
-          text: '<strong>DPR Assistant Note:</strong><br>To download your PDF/DOCX report or edit entries, navigate to <strong>Step 14 (Summary & Export)</strong> or click any step number in the top header bar!',
+          text: '<strong>DPR Assistant Note:</strong><br>To download your official DPR PDF report or edit entries, navigate to <strong>Step 14 (Summary & Export)</strong> or click any step number in the top header bar!',
         },
       ]);
     } finally {
@@ -119,7 +119,7 @@ export default function FloatingChatbotWidget({
     if (sec.includes('working capital')) {
       return ['Working Capital Cycle', 'Nayak Committee Norms', 'Inventory Days limit'];
     }
-    return ['PMEGP & PMFME Subsidies', 'Bank Loan Interest Rates', 'Promoter Equity & DSCR', 'Types of DPR Reports', 'Karnataka State Subsidies', 'How to Download PDF/DOCX', 'How to Edit Form Data'];
+    return ['PMEGP & PMFME Subsidies', 'Bank Loan Interest Rates', 'Promoter Equity & DSCR', 'Types of DPR Reports', 'Karnataka State Subsidies', 'How to Download DPR PDF', 'How to Edit Form Data'];
   };
 
   const suggestions = getContextualSuggestions();
