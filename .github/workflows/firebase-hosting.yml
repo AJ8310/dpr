@@ -1,0 +1,36 @@
+name: Deploy frontend to Firebase Hosting
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dpr-frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: dpr-frontend/package-lock.json
+
+      - run: npm ci
+      - run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: https://ajay-dpr-779289230442.asia-south1.run.app
+          NEXT_PUBLIC_API_BASE_URL: https://ajay-dpr-779289230442.asia-south1.run.app
+
+      - name: Deploy to live channel
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DPR_FRONTEND_BADCF }}
+          projectId: dpr-frontend-badcf
+          channelId: live
+          entryPoint: dpr-frontend
