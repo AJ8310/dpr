@@ -28,7 +28,11 @@ export default function RegisterCard({ onRegisterSuccess, onSwitchToLogin }: Reg
     setLoading(true);
 
     try {
-      const data = await registerUser({ name, email, password, company, phone });
+      const cleanEmail = email.trim().toLowerCase();
+      const cleanName = name.trim();
+      const cleanCompany = company.trim();
+      const cleanPhone = phone.trim();
+      const data = await registerUser({ name: cleanName, email: cleanEmail, password, company: cleanCompany, phone: cleanPhone });
       if (data.access_token && data.user) {
         setSuccessMsg('Profile successfully saved to database.');
         const session: UserSession = {
@@ -45,8 +49,10 @@ export default function RegisterCard({ onRegisterSuccess, onSwitchToLogin }: Reg
         setError(msg || 'Registration failed. Please check inputs.');
       } else if (typeof detail === 'string') {
         setError(detail);
+      } else if (err.code === 'ERR_NETWORK' || (err.message && err.message.includes('Network Error'))) {
+        setError('Network error: Unable to connect to server. Please check your internet or retry in a moment.');
       } else {
-        setError('Registration failed. Please check your inputs.');
+        setError(err.message || 'Registration failed. Please check your inputs.');
       }
     } finally {
       setLoading(false);

@@ -26,12 +26,17 @@ class Settings(BaseSettings):
     CORS_ORIGINS: list[str] = [
         o.strip().strip("[]\"'") for o in os.getenv(
             "CORS_ORIGINS",
+            "https://dpr.vkfoundations.org,"
+            "https://vkfoundations.org,"
+            "http://dpr.vkfoundations.org,"
+            "http://vkfoundations.org,"
             "https://dpr-frontend-badcf.web.app,"
             "https://dpr-frontend-badcf.firebaseapp.com,"
             "https://dpr.vkfoundations.org,"
             "https://www.dpr.vkfoundations.org,"
             "http://localhost:3000,http://127.0.0.1:3000,"
             "http://localhost:3005,http://127.0.0.1:3005,"
+            "http://localhost:5000,http://127.0.0.1:5000,"
             "http://localhost:5500,http://127.0.0.1:5500",
         ).split(",") if o.strip()
     ]

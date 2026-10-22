@@ -49,22 +49,31 @@ async def global_exception_handler(request: Request, exc: Exception):
 app.add_middleware(RequestTracingMiddleware)
 app.add_middleware(HTTPSecurityHeadersMiddleware)
 
-# Phase 1A Security Hardening: Strict CORS Origins Whitelist
-allowed_origins = list(set((settings.CORS_ORIGINS if hasattr(settings, "CORS_ORIGINS") and settings.CORS_ORIGINS else []) + [
+# Phase 1A Security Hardening: Strict CORS Origins Whitelist & Regex
+default_cors_origins = [
+    "https://dpr.vkfoundations.org",
+    "https://vkfoundations.org",
+    "http://dpr.vkfoundations.org",
+    "http://vkfoundations.org",
+    "https://dpr-frontend-badcf.web.app",
+    "https://dpr-frontend-badcf.firebaseapp.com",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:3005",
     "http://127.0.0.1:3005",
     "http://localhost:5000",
     "http://127.0.0.1:5000"
-]))
+]
+allowed_origins = list(set((settings.CORS_ORIGINS if hasattr(settings, "CORS_ORIGINS") and settings.CORS_ORIGINS else []) + default_cors_origins))
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
+    allow_origin_regex=r"https?://([a-zA-Z0-9-]+\.)*vkfoundations\.org|https?://([a-zA-Z0-9-]+\.)*web\.app|https?://([a-zA-Z0-9-]+\.)*firebaseapp\.com",
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 # Mount Static Files Directory for Uploads
