@@ -10,14 +10,18 @@ import ProgressHeader from '@/components/dashboard/ProgressHeader';
 import FormWizard from '@/components/dashboard/FormWizard';
 import FloatingChatbotWidget from '@/components/chatbot/FloatingChatbotWidget';
 import BackgroundWaves from '@/components/common/BackgroundWaves';
+import PricingPlansModal from '@/components/pricing/PricingPlansModal';
 import { UserSession } from '@/types/dpr';
 
 export default function Home() {
   const [authView, setAuthView] = useState<'login' | 'register'>('login');
   const [session, setSession] = useState<UserSession | null>(null);
   const [selectedService, setSelectedService] = useState<string | null>(null);
+  const [currentPlanId, setCurrentPlanId] = useState<string>('core');
   const [activeStepIndex, setActiveStepIndex] = useState<number>(0);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [isPlanModalOpen, setIsPlanModalOpen] = useState<boolean>(false);
+  const [justLoggedOut, setJustLoggedOut] = useState<boolean>(false);
 
   useEffect(() => {
     // Clear any legacy demo keys from browser storage
@@ -40,7 +44,9 @@ export default function Home() {
         } else {
           setSession(parsed);
           const storedService = sessionStorage.getItem('dpr_selected_service') || 'Bank Loan DPR';
+          const storedPlan = sessionStorage.getItem('dpr_selected_plan') || 'core';
           setSelectedService(storedService);
+          setCurrentPlanId(storedPlan);
         }
       } catch (e) {
         sessionStorage.removeItem('dpr_session');
@@ -55,6 +61,7 @@ export default function Home() {
     setSession(null);
     setSelectedService(null);
     setActiveStepIndex(0);
+    setJustLoggedOut(true);
   };
 
   const handleSelectService = (serviceName: string) => {
@@ -65,13 +72,17 @@ export default function Home() {
 
   const handleLoginSuccess = (sess: UserSession) => {
     const storedService = sessionStorage.getItem('dpr_selected_service') || 'Bank Loan DPR';
+    const storedPlan = sessionStorage.getItem('dpr_selected_plan') || 'core';
     setSelectedService(storedService);
+    setCurrentPlanId(storedPlan);
     setSession(sess);
+    setJustLoggedOut(false);
+    setIsPlanModalOpen(true);
   };
 
   // 1. Unauthenticated View (Interactive Landing Page with Login / Register)
   if (!session) {
-    return <LandingPage onLoginSuccess={handleLoginSuccess} />;
+    return <LandingPage onLoginSuccess={handleLoginSuccess} initialShowPlans={justLoggedOut} />;
   }
 
   // 2. Fallback Service Selection View (Only if user explicitly cleared service inside dashboard)
@@ -112,6 +123,8 @@ export default function Home() {
         onLogout={handleLogout}
         isMobileOpen={isMobileSidebarOpen}
         onCloseMobile={() => setIsMobileSidebarOpen(false)}
+        onOpenPricing={() => setIsPlanModalOpen(true)}
+        currentPlanId={currentPlanId}
       />
 
       {/* Main Content Area */}
@@ -172,6 +185,8 @@ export default function Home() {
           totalSteps={14}
           selectedService={selectedService || 'Bank Loan DPR'}
           onChangeService={(service) => setSelectedService(service)}
+          onOpenPricing={() => setIsPlanModalOpen(true)}
+          currentPlanId={currentPlanId}
         />
 
         <FormWizard
@@ -181,6 +196,35 @@ export default function Home() {
           onNextStep={() => setActiveStepIndex((prev) => Math.min(prev + 1, 13))}
         />
       </main>
+
+      {/* Pricing Plans Modal for Dashboard (Auto-displayed on login & available anytime) */}
+      <PricingPlansModal
+        isOpen={isPlanModalOpen}
+        onClose={() => setIsPlanModalOpen(false)}
+        initialRouteKey={
+          selectedService?.includes('Govt')
+            ? 'govt'
+            : selectedService?.includes('Investor')
+            ? 'inv'
+            : 'bank'
+        }
+        initialPlanId={currentPlanId}
+        isDashboardUser={true}
+        onSelectPlan={(routeKey, planId) => {
+          const map: Record<string, string> = {
+            govt: 'Govt Subsidy DPR',
+            bank: 'Bank Loan DPR',
+            inv: 'Investor / Business Pitch DPR',
+          };
+          const svc = map[routeKey] || 'Bank Loan DPR';
+          setSelectedService(svc);
+          setCurrentPlanId(planId);
+          if (typeof window !== 'undefined') {
+            sessionStorage.setItem('dpr_selected_service', svc);
+            sessionStorage.setItem('dpr_selected_plan', planId);
+          }
+        }}
+      />
 
       {/* Interactive Bottom-Right Floating Chatbot Widget (Section-Aware) */}
       <FloatingChatbotWidget

@@ -11,6 +11,8 @@ interface FixedSidebarProps {
   onLogout: () => void;
   isMobileOpen?: boolean;
   onCloseMobile?: () => void;
+  onOpenPricing?: () => void;
+  currentPlanId?: string;
 }
 
 const SECTION_NAV_ITEMS_I18N = {
@@ -89,6 +91,8 @@ export default function FixedSidebar({
   onLogout,
   isMobileOpen = false,
   onCloseMobile,
+  onOpenPricing,
+  currentPlanId = 'core',
 }: FixedSidebarProps) {
   const { language, t } = useLanguage();
   const stepLabels = SECTION_NAV_ITEMS_I18N[language] || SECTION_NAV_ITEMS_I18N.en;
@@ -248,6 +252,50 @@ export default function FixedSidebar({
           <i className="fas fa-user-circle" style={{ color: '#2DD4BF', fontSize: '1.1rem', transition: 'all 0.2s ease' }}></i>
           <span style={{ fontWeight: 700, color: '#FFFFFF' }}>{userName || 'User'}</span>
         </div>
+
+        {/* Pricing Plan Selector Option */}
+        {onOpenPricing && (
+          <div
+            onClick={() => {
+              onOpenPricing();
+              if (onCloseMobile) onCloseMobile();
+            }}
+            className="sidebar-plan-pill"
+            style={{
+              background: 'rgba(255, 122, 0, 0.15)',
+              borderRadius: '0.75rem',
+              padding: '0.5rem 0.85rem',
+              margin: '0.4rem 0.2rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              border: '1px solid rgba(255, 122, 0, 0.4)',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <i className="fas fa-tags" style={{ color: '#FF7A00', fontSize: '0.9rem' }} />
+              <div>
+                <div style={{ fontSize: '0.62rem', color: '#CBD5E1', textTransform: 'uppercase', fontWeight: 700 }}>
+                  {language === 'kn' ? 'ಡಿಪಿಆರ್ ಯೋಜನೆ' : language === 'hi' ? 'डीपीआर प्लान' : 'DPR Plan'}
+                </div>
+                <div style={{ fontSize: '0.82rem', color: '#FFFFFF', fontWeight: 800 }}>
+                  {currentPlanId === 'entry'
+                    ? 'Entry (₹399)'
+                    : currentPlanId === 'team'
+                    ? 'Team (₹999)'
+                    : currentPlanId === 'enterprise' || currentPlanId === 'custom'
+                    ? 'Custom Plan'
+                    : 'Core (₹799)'}
+                </div>
+              </div>
+            </div>
+            <span style={{ fontSize: '0.68rem', color: '#FF7A00', fontWeight: 800, background: 'rgba(255, 255, 255, 0.12)', padding: '2px 8px', borderRadius: '9999px' }}>
+              {language === 'kn' ? 'ಬದಲಿಸಿ' : language === 'hi' ? 'बदलें' : 'Plans'}
+            </span>
+          </div>
+        )}
 
         {/* Action Buttons */}
         <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.6rem' }}>

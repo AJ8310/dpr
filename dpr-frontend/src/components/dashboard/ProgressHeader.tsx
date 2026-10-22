@@ -12,6 +12,8 @@ interface ProgressHeaderProps {
   selectedDepth?: string;
   onChangeService?: (service: string) => void;
   onChangeDepth?: (depth: 'summary' | 'standard' | 'detailed') => void;
+  onOpenPricing?: () => void;
+  currentPlanId?: string;
 }
 
 export default function ProgressHeader({
@@ -21,6 +23,8 @@ export default function ProgressHeader({
   selectedDepth = 'standard',
   onChangeService,
   onChangeDepth,
+  onOpenPricing,
+  currentPlanId = 'core',
 }: ProgressHeaderProps) {
   const { language } = useLanguage();
   const tW = wizardTranslations[language] || wizardTranslations.en;
@@ -152,6 +156,38 @@ export default function ProgressHeader({
             <option value="detailed">{tW.header.depths.detailed}</option>
           </select>
         </div>
+
+        {/* Pricing Plan Selector Button */}
+        {onOpenPricing && (
+          <button
+            type="button"
+            onClick={onOpenPricing}
+            className="plan-dropdown-pill"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.45rem',
+              background: '#FFF7ED',
+              padding: '0.35rem 0.85rem',
+              borderRadius: '2rem',
+              border: '1px solid #FFEDD5',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <i className="fas fa-tags" style={{ color: '#FF7A00', fontSize: '0.85rem' }} />
+            <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#C2410C' }}>Plan:</span>
+            <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#EA580C' }}>
+              {currentPlanId === 'entry'
+                ? 'Entry (₹399)'
+                : currentPlanId === 'team'
+                ? 'Team (₹999)'
+                : currentPlanId === 'enterprise' || currentPlanId === 'custom'
+                ? 'Custom'
+                : 'Core (₹799)'}
+            </span>
+          </button>
+        )}
       </div>
     </div>
   );

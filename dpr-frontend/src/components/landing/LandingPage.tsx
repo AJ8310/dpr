@@ -13,9 +13,10 @@ import { Zap, Video, FileText, Sparkles, Clock, BarChart3, Users, AlertTriangle,
 
 interface LandingPageProps {
   onLoginSuccess: (session: UserSession) => void;
+  initialShowPlans?: boolean;
 }
 
-export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
+export default function LandingPage({ onLoginSuccess, initialShowPlans = false }: LandingPageProps) {
   const { t, language } = useLanguage();
   const [authView, setAuthView] = useState<'inquiry' | 'login' | 'register'>('inquiry');
   const [activeDashTab, setActiveDashTab] = useState<'projections' | 'ratios' | 'repayments' | 'sensitivities'>('projections');
@@ -41,8 +42,20 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
   };
 
   // Funding Routes & Project-Size Plans Dialog State
-  const [isPlansModalOpen, setIsPlansModalOpen] = useState(false);
+  const [isPlansModalOpen, setIsPlansModalOpen] = useState(initialShowPlans);
   const [selectedRouteKey, setSelectedRouteKey] = useState<'govt' | 'bank' | 'inv'>('bank');
+
+  React.useEffect(() => {
+    if (initialShowPlans) {
+      setIsPlansModalOpen(true);
+      setTimeout(() => {
+        const pricingEl = document.getElementById('pricing');
+        if (pricingEl) {
+          pricingEl.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  }, [initialShowPlans]);
 
   // Supported Business Sectors Rolling Banner State & Effect
   const sectorTrackRef = React.useRef<HTMLDivElement>(null);
@@ -467,7 +480,9 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
             <button onClick={() => scrollToSection('funding-needs')} className="apple-nav-link">{t.common.fundingNeeds}</button>
             <button onClick={() => scrollToSection('supported-sectors')} className="apple-nav-link">{t.common.sectors}</button>
             <button onClick={() => scrollToSection('why-digital')} className="apple-nav-link">{t.common.financialStudio}</button>
-            <button onClick={() => scrollToSection('pricing')} className="apple-nav-link">{t.common.pricing}</button>
+            <button onClick={() => { setSelectedRouteKey('bank'); setIsPlansModalOpen(true); }} className="apple-nav-link" style={{ fontWeight: 800, color: '#008C95' }}>
+              <i className="fas fa-tags" style={{ marginRight: '5px' }} />{t.common.pricing} (₹399 - ₹999)
+            </button>
             <button onClick={() => scrollToSection('faq')} className="apple-nav-link">{t.common.faq}</button>
           </nav>
 
@@ -1525,11 +1540,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                       onClick={() => {
                         sessionStorage.setItem('dpr_selected_sector', sec.id);
                         saveSelection(selectedRouteKey);
-                        if (isLeadCaptured()) {
-                          setIsPlansModalOpen(true);
-                        } else {
-                          setIsAuthModalOpen(true);
-                        }
+                        setIsPlansModalOpen(true);
                       }}
                       className="apple-btn-secondary"
                       style={{ width: '100%', justifyContent: 'center', padding: '0.75rem', fontSize: '0.88rem', borderRadius: '12px' }}
@@ -1686,11 +1697,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                     onClick={() => {
                       setSelectedRouteKey(route.id);
                       saveSelection(route.id);
-                      if (isLeadCaptured()) {
-                        setIsPlansModalOpen(true);
-                      } else {
-                        setIsAuthModalOpen(true);
-                      }
+                      setIsPlansModalOpen(true);
                     }}
                     style={{
                       width: '100%',
