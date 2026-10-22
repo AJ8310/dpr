@@ -159,7 +159,6 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
 
   const [generating, setGenerating] = useState(false);
   const [paymentUnlocked, setPaymentUnlocked] = useState(false);
-  const [isTestOneRupee, setIsTestOneRupee] = useState(true);
   const [lastOrderId, setLastOrderId] = useState<string>('');
   const [checkingPayment, setCheckingPayment] = useState(false);
   const [allowTrackChange, setAllowTrackChange] = useState(false);
@@ -1189,10 +1188,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
   };
 
   const getDisplayPrice = (): string => {
-    if (isTestOneRupee) {
-      return '1';
-    }
-    const currentDepth = formData.dpr_depth || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_selected_plan') : null) || 'entry';
+    const currentDepth = formData.dpr_depth || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_selected_plan') : null) || 'core';
     return getPlanPrice(currentDepth).toLocaleString('en-IN');
   };
 
@@ -1211,9 +1207,9 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       setGenerating(true);
       setStepName('Initializing Razorpay Order...');
 
-      const effectiveDepth = formData.dpr_depth || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_selected_plan') : null) || 'entry';
-      const testAmount = isTestOneRupee ? 1.0 : undefined;
-      const orderData = await createRazorpayOrder(testAmount, undefined, formData.dpr_type, effectiveDepth);
+      const effectiveDepth = formData.dpr_depth || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_selected_plan') : null) || 'core';
+      const planPrice = getPlanPrice(effectiveDepth);
+      const orderData = await createRazorpayOrder(planPrice, undefined, formData.dpr_type, effectiveDepth);
       setGenerating(false);
 
       if (!orderData.success || !orderData.order_id) {
@@ -1238,7 +1234,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         amount: orderData.amount,
         currency: orderData.currency || 'INR',
         name: 'Vision Karnataka Foundation (VKF) DPR',
-        description: `${planTitle} — ${formData.dpr_type || 'Detailed Project Report'} (₹${isTestOneRupee ? 1 : (orderData.amount_inr ? orderData.amount_inr.toLocaleString('en-IN') : getDisplayPrice())})`,
+        description: `${planTitle} — ${formData.dpr_type || 'Detailed Project Report'} (₹${(orderData.amount_inr || planPrice).toLocaleString('en-IN')})`,
         order_id: orderData.order_id,
         handler: async function (response: any) {
           setGenerating(true);
@@ -3504,19 +3500,6 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                           />
                           <label htmlFor="associated_with_vkf" style={{ fontSize: '0.92rem', fontWeight: 700, color: '#0F172A', cursor: 'pointer', margin: 0 }}>
                             {tW.labels?.associatedVkf || 'Associated / Partnered with VKF'}
-                          </label>
-                        </div>
-
-                        <div style={{ background: '#FFF7ED', border: '1.5px solid #FFEDD5', padding: '0.8rem 1.4rem', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', userSelect: 'none' }}>
-                          <input
-                            type="checkbox"
-                            id="test_one_rupee_mode"
-                            checked={isTestOneRupee}
-                            onChange={(e) => setIsTestOneRupee(e.target.checked)}
-                            style={{ width: '18px', height: '18px', accentColor: '#EA580C', cursor: 'pointer' }}
-                          />
-                          <label htmlFor="test_one_rupee_mode" style={{ fontSize: '0.92rem', fontWeight: 700, color: '#C2410C', cursor: 'pointer', margin: 0 }}>
-                            <FlaskConical size={16} strokeWidth={1.75} style={{ display: 'inline', verticalAlign: '-3px', marginRight: 6 }} />{tW.labels?.testRupeeMode || 'Test ₹1 Payment Mode (Live Razorpay Receipt Test)'}
                           </label>
                         </div>
                       </div>

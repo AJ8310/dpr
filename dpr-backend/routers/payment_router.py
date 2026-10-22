@@ -45,20 +45,17 @@ PRICING_MATRIX = {
 }
 
 def determine_dpr_price(dpr_type: Optional[str], category: Optional[str], fallback_amount: Optional[float] = None) -> float:
-    if fallback_amount is not None and fallback_amount > 0:
-        return float(fallback_amount)
-
     norm_type = "govt"
     if dpr_type:
         dt = dpr_type.lower()
-        if "bank" in dt:
+        if "bank" in dt or "loan" in dt or "nbfc" in dt:
             norm_type = "bank"
-        elif "inv" in dt or "pitch" in dt or "equity" in dt:
+        elif "inv" in dt or "pitch" in dt or "equity" in dt or "vc" in dt:
             norm_type = "inv"
         elif "govt" in dt or "subsidy" in dt:
             norm_type = "govt"
 
-    norm_cat = "entry"
+    norm_cat = "core"
     if category:
         cat = category.lower().strip()
         if cat in ["entry", "basic", "summary"]:
@@ -79,10 +76,13 @@ def determine_dpr_price(dpr_type: Optional[str], category: Optional[str], fallba
             norm_cat = "ent"
 
     price = PRICING_MATRIX.get(norm_type, {}).get(norm_cat)
-    if price is not None:
+    if price is not None and price > 0:
         return float(price)
     
-    return float(settings.DPR_REPORT_PRICE)
+    if fallback_amount is not None and fallback_amount in [3999, 4999, 7999, 9999, 14999, 19999, 24999, 29999]:
+        return float(fallback_amount)
+
+    return 7999.0
 
 class CreateOrderRequest(BaseModel):
     amount: Optional[float] = None
