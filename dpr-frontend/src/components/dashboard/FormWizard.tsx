@@ -1470,28 +1470,6 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
           <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap' }}>
             <button
               type="button"
-              onClick={handleLoadSampleData}
-              style={{
-                background: 'linear-gradient(135deg, #FF7A00 0%, #D97706 100%)',
-                color: '#FFFFFF',
-                border: 'none',
-                padding: '0.8rem 1.4rem',
-                borderRadius: '12px',
-                fontWeight: 800,
-                fontSize: '0.9rem',
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.6rem',
-                boxShadow: '0 4px 14px rgba(255, 122, 0, 0.35)',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              <i className="fas fa-magic"></i> {tW.autoFill.loadSampleBtn || '⚡ Auto-Fill Sample Data (1-Click Demo)'}
-            </button>
-
-            <button
-              type="button"
               onClick={handleClearFormAndDraft}
               style={{
                 background: '#FFFFFF',
