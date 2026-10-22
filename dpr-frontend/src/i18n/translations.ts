@@ -431,7 +431,7 @@ export const translations: Record<Language, Translations> = {
       title: 'Choose your',
       highlight: 'funding route',
       subtitle: 'Select how you plan to raise capital for your project. On the next screen, pick a DPR plan sized for your project.',
-      tagPill: '3 Funding Routes • Prices start at ₹3,999',
+      tagPill: '3 Funding Routes • Plans: ₹399, ₹799, ₹999 & Custom',
       viewPlansBtn: 'View Plans by Project Size →',
       routes: {
         govt: {
@@ -481,7 +481,7 @@ export const translations: Record<Language, Translations> = {
         entry: { name: 'Entry', sub: 'Early-stage projects (₹5L – ₹25L)', cta: 'Create DPR' },
         core: { name: 'Core', sub: 'Standard MSME projects (₹25L – ₹2Cr)', cta: 'Create DPR' },
         team: { name: 'Team', sub: 'Medium enterprises (₹2Cr – ₹10Cr)', cta: 'Create DPR' },
-        ent: { name: 'Enterprise', sub: 'Large scale projects (₹10Cr+)', cta: 'Create DPR' },
+        ent: { name: 'Custom', sub: 'Large scale & specialized projects (₹10Cr+)', cta: 'Create DPR' },
       },
     },
     contact: {
@@ -778,7 +778,7 @@ export const translations: Record<Language, Translations> = {
       title: 'ನಿಮ್ಮ ಸೂಕ್ತವಾದ',
       highlight: 'ಬಂಡವಾಳ ಮಾರ್ಗವನ್ನು ಆಯ್ಕೆಮಾಡಿ',
       subtitle: 'ನಿಮ್ಮ ಯೋಜನೆಗೆ ಬಂಡವಾಳ ಸಂಗ್ರಹಿಸಲು ಬಯಸುವ ಮಾರ್ಗವನ್ನು ಆರಿಸಿ. ಮುಂದಿನ ಪರದೆಯಲ್ಲಿ, ಯೋಜನಾ ಗಾತ್ರಕ್ಕೆ ತಕ್ಕ ಡಿಪಿಆರ್ ಪ್ಲಾನ್ ಆಯ್ಕೆಮಾಡಿ.',
-      tagPill: '3 ಬಂಡವಾಳ ಮಾರ್ಗಗಳು • ಬೆಲೆಗಳು ₹3,999 ರಿಂದ ಪ್ರಾರಂಭ',
+      tagPill: '3 ಬಂಡವಾಳ ಮಾರ್ಗಗಳು • ಯೋಜನೆಗಳು: ₹399, ₹799, ₹999 ಮತ್ತು ಕಸ್ಟಮ್',
       viewPlansBtn: 'ಯೋಜನೆಗಳನ್ನು ವೀಕ್ಷಿಸಿ & ಡಿಪಿಆರ್ ರಚಿಸಿ →',
       routes: {
         govt: {
@@ -828,7 +828,7 @@ export const translations: Record<Language, Translations> = {
         entry: { name: 'ಪ್ರಾರಂಭಿಕ (Entry)', sub: 'ಆರಂಭಿಕ ಹಂತದ ಯೋಜನೆಗಳು (₹5 ಲಕ್ಷ – ₹25 ಲಕ್ಷ)', cta: 'ಡಿಪಿಆರ್ ರಚಿಸಿ' },
         core: { name: 'ಮುಖ್ಯ (Core)', sub: 'ಪ್ರಮಾಣಿತ MSME ಯೋಜನೆಗಳು (₹25 ಲಕ್ಷ – ₹2 ಕೋಟಿ)', cta: 'ಡಿಪಿಆರ್ ರಚಿಸಿ' },
         team: { name: 'ಟೀಮ್ (Team)', sub: 'ಮಧ್ಯಮ ಗಾತ್ರದ ಉದ್ಯಮಗಳು (₹2 ಕೋಟಿ – ₹10 ಕೋಟಿ)', cta: 'ಡಿಪಿಆರ್ ರಚಿಸಿ' },
-        ent: { name: 'ಎಂಟರ್‌ಪ್ರೈಸ್', sub: 'ದೊಡ್ಡ ಪ್ರಮಾಣದ ಯೋಜನೆಗಳು (₹10 ಕೋಟಿ+)', cta: 'ಡಿಪಿಆರ್ ರಚಿಸಿ' },
+        ent: { name: 'ಕಸ್ಟಮ್ (Custom)', sub: 'ದೊಡ್ಡ ಪ್ರಮಾಣದ ಮತ್ತು ವಿಶೇಷ ಯೋಜನೆಗಳು (₹10 ಕೋಟಿ+)', cta: 'ಡಿಪಿಆರ್ ರಚಿಸಿ' },
       },
     },
     contact: {
@@ -1125,7 +1125,7 @@ export const translations: Record<Language, Translations> = {
       title: 'अपना पसंदीदा',
       highlight: 'फंडिंग मार्ग चुनें',
       subtitle: 'चुनें कि आप अपनी परियोजना के लिए पूंजी कैसे जुटाना चाहते हैं। अगली स्क्रीन पर, परियोजना आकार के अनुसार डीपीआर प्लान चुनें।',
-      tagPill: '3 फंडिंग मार्ग • कीमतें ₹3,999 से शुरू',
+      tagPill: '3 फंडिंग मार्ग • योजनाएं: ₹399, ₹799, ₹999 एवं कस्टम',
       viewPlansBtn: 'परियोजना आकार के अनुसार प्लान देखें →',
       routes: {
         govt: {
@@ -1175,7 +1175,7 @@ export const translations: Record<Language, Translations> = {
         entry: { name: 'प्रारंभिक (Entry)', sub: 'शुरुआती परियोजनाएं (₹5 लाख – ₹25 लाख)', cta: 'डीपीआर बनाएं' },
         core: { name: 'कोर (Core)', sub: 'मानक एमएसएमई परियोजनाएं (₹25 लाख – ₹2 करोड़)', cta: 'डीपीआर बनाएं' },
         team: { name: 'टीम (Team)', sub: 'मध्यम आकार के उद्यम (₹2 करोड़ – ₹10 करोड़)', cta: 'डीपीआर बनाएं' },
-        ent: { name: 'एंटरप्राइज', sub: 'बड़े पैमाने की परियोजनाएं (₹10 करोड़+)', cta: 'डीपीआर बनाएं' },
+        ent: { name: 'कस्टम (Custom)', sub: 'बड़े पैमाने एवं विशेष परियोजनाएं (₹10 करोड़+)', cta: 'डीपीआर बनाएं' },
       },
     },
     contact: {

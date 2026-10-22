@@ -620,19 +620,17 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
   };
 
   const getPlanPrice = (planId?: string): number => {
-    const dt = (formData.dpr_type || '').toLowerCase();
-    const isInv = dt.includes('inv') || dt.includes('pitch') || dt.includes('equity');
     const depth = (planId || formData.dpr_depth || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_selected_plan') : null) || 'entry').toLowerCase().trim();
     if (depth === 'core' || depth === 'standard') {
-      return isInv ? 9999 : 7999;
+      return 799;
     }
     if (depth === 'team' || depth === 'advanced' || depth === 'detailed' || depth === 'comprehensive') {
-      return isInv ? 19999 : 14999;
+      return 999;
     }
-    if (depth === 'ent' || depth === 'enterprise' || depth === 'premium') {
-      return isInv ? 29999 : 24999;
+    if (depth === 'ent' || depth === 'enterprise' || depth === 'premium' || depth === 'custom') {
+      return 999;
     }
-    return isInv ? 4999 : 3999;
+    return 399;
   };
 
   const getDisplayPrice = (): string => {
@@ -2739,7 +2737,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                       name: tW.labels?.entryPlanName || 'Entry Plan',
                       pages: tW.labels?.entryPages || '15 – 20 Pages',
                       projects: tW.labels?.entryProjects || 'Projects ₹5L – ₹25L',
-                      price: getPlanPrice('entry'),
+                      price: 399,
+                      priceDisplay: '₹399',
                       desc: tW.labels?.entryDesc || '16 Core Chapters, 5-Yr Financials, DSCR Analysis, Standard Bankable PDF.',
                       accent: '#008C95',
                       bgSoft: '#F0FDFA',
@@ -2750,7 +2749,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                       name: tW.labels?.corePlanName || 'Core Plan',
                       pages: tW.labels?.corePages || '25 – 35 Pages',
                       projects: tW.labels?.coreProjects || 'Projects ₹25L – ₹1Cr',
-                      price: getPlanPrice('core'),
+                      price: 799,
+                      priceDisplay: '₹799',
                       desc: tW.labels?.coreDesc || '22 Chapters, 36-Mo Cash Flow, Tandon Assessment, Risk Matrix, Credit Appraisal Norms.',
                       accent: '#0071E3',
                       bgSoft: '#F0F7FF',
@@ -2761,7 +2761,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                       name: tW.labels?.teamPlanName || 'Team Plan (Advanced)',
                       pages: tW.labels?.teamPages || '35 – 45 Pages',
                       projects: tW.labels?.teamProjects || 'Projects ₹1Cr – ₹5Cr',
-                      price: getPlanPrice('team'),
+                      price: 999,
+                      priceDisplay: '₹999',
                       desc: tW.labels?.teamDesc || 'Advanced DPR with sensitivity stress tests, milestone roadmap, and subsidy claims.',
                       badge: tW.labels?.mostUsedBadge || 'MOST USED',
                       accent: '#FF7A00',
@@ -2770,12 +2771,13 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                     },
                     {
                       id: 'enterprise',
-                      name: tW.labels?.enterprisePlanName || 'Enterprise Bankable',
+                      name: 'Custom',
                       pages: tW.labels?.enterprisePages || '45 – 60 Pages',
                       projects: tW.labels?.enterpriseProjects || 'Projects ₹5Cr – ₹25Cr+',
-                      price: getPlanPrice('enterprise'),
-                      desc: tW.labels?.enterpriseDesc || '30 Chapters + 10 Annexure Schedules, 10-Yr Extended Modeling, Raw Material BOQ, ESG.',
-                      badge: tW.labels?.enterpriseBadge || 'ENTERPRISE GRADE',
+                      price: 999,
+                      priceDisplay: 'Custom',
+                      desc: tW.labels?.enterpriseDesc || 'Custom DPR scope, 30 Chapters + 10 Annexure Schedules, 10-Yr Extended Modeling, Raw Material BOQ, ESG.',
+                      badge: 'CUSTOM',
                       accent: '#7C3AED',
                       bgSoft: '#F5F3FF',
                       borderSoft: '#DDD6FE'
@@ -2831,7 +2833,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                             <div>
                               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
                                 <span style={{ fontWeight: 800, color: '#0F172A', fontSize: '1rem' }}>{p.name}</span>
-                                <span style={{ fontWeight: 900, color: p.accent, fontSize: '1.15rem' }}>₹{p.price.toLocaleString('en-IN')}</span>
+                                <span style={{ fontWeight: 900, color: p.accent, fontSize: '1.15rem' }}>{p.priceDisplay}</span>
                               </div>
                               <div style={{ fontSize: '0.8rem', color: p.accent, fontWeight: 700, margin: '2px 0 6px 0' }}>
                                 {p.pages} • <span style={{ color: '#64748B', fontWeight: 600 }}>{p.projects}</span>
@@ -2879,7 +2881,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                       projects: tW.labels?.teamProjects || 'Projects ₹1Cr – ₹5Cr'
                     },
                     enterprise: {
-                      name: tW.labels?.enterprisePlanName || 'Enterprise Bankable',
+                      name: tW.labels?.enterprisePlanName || 'Custom Plan',
                       pages: tW.labels?.enterprisePages || '45 – 60 Pages',
                       projects: tW.labels?.enterpriseProjects || 'Projects ₹5Cr – ₹25Cr+'
                     }

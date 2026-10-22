@@ -129,7 +129,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
         amount: orderData.amount,
         currency: orderData.currency || 'INR',
         name: 'Vision Karnataka Foundation (VKF) DPR',
-        description: `${planTitle} — ${canonicalService} (₹${(orderData.amount_inr || planPrice || 3999).toLocaleString('en-IN')})`,
+        description: `${planTitle} — ${canonicalService} (₹${(orderData.amount_inr || planPrice || 799).toLocaleString('en-IN')})`,
         order_id: orderData.order_id,
         handler: async function (response: any) {
           try {
@@ -1585,7 +1585,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                 ],
                 projectSizeText: 'Project sizes from ₹5L to ₹25Cr+',
                 modalTitle: 'Govt Scheme & Subsidy DPR Plans',
-                prices: { entry: 3999, core: 7999, team: 14999 }
+                prices: { entry: 399, core: 799, team: 999 }
               },
               {
                 id: 'bank' as const,
@@ -1606,7 +1606,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                 ],
                 projectSizeText: 'Project sizes from ₹5L to ₹25Cr+',
                 modalTitle: 'Bank & NBFC Loan DPR Plans',
-                prices: { entry: 3999, core: 7999, team: 14999 }
+                prices: { entry: 399, core: 799, team: 999 }
               },
               {
                 id: 'inv' as const,
@@ -1627,7 +1627,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                 ],
                 projectSizeText: 'Project sizes from ₹5L to ₹25Cr+',
                 modalTitle: 'Investor Pitch DPR Plans',
-                prices: { entry: 4999, core: 9999, team: 19999 }
+                prices: { entry: 399, core: 799, team: 999 }
               }
             ].map((route) => (
               <div
@@ -1887,7 +1887,7 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                 },
                 {
                   id: 'ent',
-                  name: 'Enterprise',
+                  name: 'Custom',
                   sub: 'Established & large businesses',
                   size: '₹5Cr – ₹25Cr+',
                   cta: 'Contact Team',
@@ -1907,9 +1907,9 @@ export default function LandingPage({ onLoginSuccess }: LandingPageProps) {
                 }
               ].map((plan) => {
                 const routePrices: Record<string, Record<string, number>> = {
-                  govt: { entry: 3999, core: 7999, team: 14999 },
-                  bank: { entry: 3999, core: 7999, team: 14999 },
-                  inv: { entry: 4999, core: 9999, team: 19999 },
+                  govt: { entry: 399, core: 799, team: 999 },
+                  bank: { entry: 399, core: 799, team: 999 },
+                  inv: { entry: 399, core: 799, team: 999 },
                 };
                 const accentColors: Record<string, string> = {
                   govt: '#008C95',

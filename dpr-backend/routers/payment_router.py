@@ -10,37 +10,40 @@ router = APIRouter(prefix="/api/payment", tags=["Razorpay Payment Gateway"])
 # Server-side pricing matrix (DPR Type x Category)
 PRICING_MATRIX = {
     "govt": {
-        "basic": 3999,
-        "entry": 3999,
-        "standard": 7999,
-        "core": 7999,
-        "advanced": 14999,
-        "team": 14999,
-        "premium": 24999,
-        "enterprise": 24999,
-        "ent": 24999,
+        "basic": 399,
+        "entry": 399,
+        "standard": 799,
+        "core": 799,
+        "advanced": 999,
+        "team": 999,
+        "premium": 999,
+        "enterprise": 999,
+        "ent": 999,
+        "custom": 999,
     },
     "bank": {
-        "basic": 3999,
-        "entry": 3999,
-        "standard": 7999,
-        "core": 7999,
-        "advanced": 14999,
-        "team": 14999,
-        "premium": 24999,
-        "enterprise": 24999,
-        "ent": 24999,
+        "basic": 399,
+        "entry": 399,
+        "standard": 799,
+        "core": 799,
+        "advanced": 999,
+        "team": 999,
+        "premium": 999,
+        "enterprise": 999,
+        "ent": 999,
+        "custom": 999,
     },
     "inv": {
-        "basic": 4999,
-        "entry": 4999,
-        "standard": 9999,
-        "core": 9999,
-        "advanced": 19999,
-        "team": 19999,
-        "premium": 29999,
-        "enterprise": 29999,
-        "ent": 29999,
+        "basic": 399,
+        "entry": 399,
+        "standard": 799,
+        "core": 799,
+        "advanced": 999,
+        "team": 999,
+        "premium": 999,
+        "enterprise": 999,
+        "ent": 999,
+        "custom": 999,
     },
 }
 
@@ -64,7 +67,7 @@ def determine_dpr_price(dpr_type: Optional[str], category: Optional[str], fallba
             norm_cat = "core"
         elif cat in ["team", "advanced", "detailed", "comprehensive"]:
             norm_cat = "team"
-        elif cat in ["ent", "enterprise", "premium"]:
+        elif cat in ["ent", "enterprise", "premium", "custom"]:
             norm_cat = "ent"
         elif "entry" in cat or "basic" in cat:
             norm_cat = "entry"
@@ -72,17 +75,17 @@ def determine_dpr_price(dpr_type: Optional[str], category: Optional[str], fallba
             norm_cat = "core"
         elif "team" in cat or "advanced" in cat:
             norm_cat = "team"
-        elif "enterprise" in cat or "premium" in cat:
+        elif "enterprise" in cat or "premium" in cat or "custom" in cat:
             norm_cat = "ent"
 
     price = PRICING_MATRIX.get(norm_type, {}).get(norm_cat)
     if price is not None and price > 0:
         return float(price)
     
-    if fallback_amount is not None and fallback_amount in [3999, 4999, 7999, 9999, 14999, 19999, 24999, 29999]:
+    if fallback_amount is not None and fallback_amount in [399, 799, 999]:
         return float(fallback_amount)
 
-    return 7999.0
+    return 799.0
 
 class CreateOrderRequest(BaseModel):
     amount: Optional[float] = None
