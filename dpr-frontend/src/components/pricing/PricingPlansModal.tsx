@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import { createRazorpayOrder, verifyRazorpayPayment } from '@/lib/api';
 
 export interface PricingPlansModalProps {
   isOpen: boolean;
@@ -26,7 +25,6 @@ export default function PricingPlansModal({
   const { language, t } = useLanguage();
   const [selectedRouteKey, setSelectedRouteKey] = useState<'govt' | 'bank' | 'inv'>(initialRouteKey);
   const [selectedPlanId, setSelectedPlanId] = useState<string>(initialPlanId);
-  const [isProcessingPayment, setIsProcessingPayment] = useState<boolean>(false);
 
   useEffect(() => {
     if (initialRouteKey) setSelectedRouteKey(initialRouteKey);
@@ -185,76 +183,7 @@ export default function PricingPlansModal({
     }
   };
 
-  const loadRazorpayScript = () => {
-    return new Promise((resolve) => {
-      if (typeof window !== 'undefined' && (window as any).Razorpay) {
-        resolve(true);
-        return;
-      }
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
-  };
 
-  const handleInstantPay = async (plan: typeof plans[0]) => {
-    try {
-      setIsProcessingPayment(true);
-      const isLoaded = await loadRazorpayScript();
-      if (!isLoaded) {
-        alert('Failed to load Razorpay SDK. Please check your internet connection.');
-        return;
-      }
-      const orderData = await createRazorpayOrder(plan.price, undefined, activeRoute.serviceName, plan.id);
-      if (!orderData.success || !orderData.order_id) {
-        alert('Order creation failed: ' + (orderData.detail || 'Could not initiate checkout.'));
-        return;
-      }
-
-      const options = {
-        key: orderData.key_id,
-        amount: orderData.amount,
-        currency: orderData.currency || 'INR',
-        name: 'Vision Karnataka Foundation (VKF) DPR',
-        description: `${plan.name} — ${activeRoute.serviceName} (₹${(orderData.amount_inr || plan.price).toLocaleString('en-IN')})`,
-        order_id: orderData.order_id,
-        handler: async function (response: any) {
-          try {
-            const verification = await verifyRazorpayPayment({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-            });
-            if (verification.verified || verification.success) {
-              if (typeof window !== 'undefined') {
-                sessionStorage.setItem('dpr_payment_unlocked', 'true');
-                sessionStorage.setItem('dpr_selected_plan', plan.id);
-                sessionStorage.setItem('dpr_selected_service', activeRoute.serviceName);
-              }
-              alert('Payment Successful! Your official DPR report is fully unlocked.');
-              if (onPaymentSuccess) onPaymentSuccess();
-              handleSelect(plan.id);
-              onClose();
-            } else {
-              alert('Payment verification could not be confirmed: ' + (verification.detail || 'Unknown error'));
-            }
-          } catch (e: any) {
-            alert('Verification error: ' + (e.message || 'Payment verification failed.'));
-          }
-        },
-        theme: { color: activeRoute.accentColor },
-      };
-
-      const rzp = new (window as any).Razorpay(options);
-      rzp.open();
-    } catch (err: any) {
-      alert('Payment initialization failed: ' + (err.message || 'Error'));
-    } finally {
-      setIsProcessingPayment(false);
-    }
-  };
 
   return (
     <div
@@ -500,35 +429,6 @@ export default function PricingPlansModal({
                       ? `✓ ${language === 'kn' ? 'ಆಯ್ಕೆಮಾಡಲಾಗಿದೆ - ಮುಂದುವರಿಯಿರಿ' : language === 'hi' ? 'चयनित - आगे बढ़ें' : 'Select & Continue to DPR'}`
                       : `${language === 'kn' ? 'ಪ್ಲಾನ್ ಆಯ್ಕೆಮಾಡಿ' : language === 'hi' ? 'प्लान चुनें' : 'Choose'} ${plan.name}`}
                   </button>
-
-                  {plan.priceDisplay !== 'Custom' && (
-                    <button
-                      type="button"
-                      disabled={isProcessingPayment}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleInstantPay(plan);
-                      }}
-                      style={{
-                        width: '100%',
-                        background: '#FFFFFF',
-                        border: `1.5px solid ${activeRoute.borderSoft}`,
-                        color: activeRoute.accentColor,
-                        borderRadius: '12px',
-                        padding: '0.55rem 1rem',
-                        fontWeight: 800,
-                        fontSize: '0.78rem',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '6px',
-                        transition: 'all 0.2s ease',
-                      }}
-                    >
-                      <i className="fas fa-lock-open" /> {language === 'kn' ? `ತಕ್ಷಣ ಪಾವತಿಸಿ ಅನ್‌ಲಾಕ್ ಮಾಡಿ (${plan.priceDisplay})` : language === 'hi' ? `तुरंत भुगतान कर अनलॉक करें (${plan.priceDisplay})` : `Instant Unlock (${plan.priceDisplay})`}
-                    </button>
-                  )}
                 </div>
               </div>
             );
