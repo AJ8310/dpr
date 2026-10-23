@@ -338,9 +338,96 @@ class CalculationService:
             matplotlib.use('Agg')
             import matplotlib.pyplot as plt
 
-            plt.rcParams['font.sans-serif'] = 'DejaVu Sans'
+            plt.rcParams['font.sans-serif'] = [
+                'Nirmala UI',
+                'Noto Sans Kannada',
+                'Noto Sans Devanagari',
+                'Tunga',
+                'Mangal',
+                'Arial Unicode MS',
+                'DejaVu Sans',
+                'sans-serif'
+            ]
+            plt.rcParams['axes.unicode_minus'] = False
             plt.rcParams['figure.autolayout'] = True
-            
+
+            calc_chart_i18n = {
+                "en": {
+                    "yr": "Yr",
+                    "capex_title": "CAPITAL EXPENDITURE (CAPEX) BREAKDOWN",
+                    "land": "Land & Site",
+                    "building": "Building Shed",
+                    "machinery": "Plant & Machinery",
+                    "elec": "Electrification",
+                    "furn": "Furniture & Office",
+                    "wc": "Working Capital",
+                    "preop": "Pre-operative",
+                    "finance_title": "MEANS OF FINANCE COMPOSITION",
+                    "promoter": "Promoter Equity",
+                    "bank_loan": "Bank Term Loan",
+                    "subsidy": "Govt Subsidy Grant",
+                    "rev_title": "5-YEAR REVENUE, EBITDA & PAT TRAJECTORY",
+                    "rev_l": "Revenue (₹L)",
+                    "ebitda_l": "EBITDA (₹L)",
+                    "pat_l": "PAT (₹L)",
+                    "y_lakhs": "₹ in Lakhs",
+                    "dscr_title": "DEBT SERVICE COVERAGE RATIO (DSCR) TRAJECTORY",
+                    "dscr_label": "Project DSCR",
+                    "dscr_bench": "Banking Benchmark (1.50x)",
+                    "dscr_y": "DSCR Ratio (x)"
+                },
+                "kn": {
+                    "yr": "ವರ್ಷ",
+                    "capex_title": "ಬಂಡವಾಳ ವೆಚ್ಚ (CAPEX) ವಿಭಜನೆ",
+                    "land": "ಭೂಮಿ ಮತ್ತು ನಿವೇಶನ",
+                    "building": "ಕಟ್ಟಡ ಮತ್ತು ಶೆಡ್",
+                    "machinery": "ಯಂತ್ರೋಪಕರಣಗಳು",
+                    "elec": "ವಿದ್ಯುದ್ದೀಕರಣ",
+                    "furn": "ಪೀಠೋಪಕರಣ",
+                    "wc": "ಕಾರ್ಯಕಾರಿ ಬಂಡವಾಳ",
+                    "preop": "ಪೂರ್ವ ಕಾರ್ಯಾಚರಣೆ",
+                    "finance_title": "ಹಣಕಾಸು ಮೂಲಗಳ ವಿವರ",
+                    "promoter": "ಪ್ರವರ್ತಕರ ಬಂಡವಾಳ",
+                    "bank_loan": "ಬ್ಯಾಂಕ್ ಅವಧಿ ಸಾಲ",
+                    "subsidy": "ಸರ್ಕಾರಿ ಸಬ್ಸಿಡಿ / ಅನುದಾನ",
+                    "rev_title": "5-ವರ್ಷಗಳ ಅಂದಾಜು ಆದಾಯ, ಇಬಿಐಟಿಡಿಎ ಮತ್ತು ಲಾಭ",
+                    "rev_l": "ಆದಾಯ (₹ಲಕ್ಷ)",
+                    "ebitda_l": "ಇಬಿಐಟಿಡಿಎ (₹ಲಕ್ಷ)",
+                    "pat_l": "ನಿವ್ವಳ ಲಾಭ (₹ಲಕ್ಷ)",
+                    "y_lakhs": "₹ ಲಕ್ಷಗಳಲ್ಲಿ",
+                    "dscr_title": "ಸಾಲ ಸೇವಾ ವ್ಯಾಪ್ತಿ ಅನುಪಾತ (DSCR) ಪ್ರವೃತ್ತಿ",
+                    "dscr_label": "ಯೋಜನಾ DSCR",
+                    "dscr_bench": "ಬ್ಯಾಂಕಿಂಗ್ ಮಾನದಂಡ (1.50x)",
+                    "dscr_y": "DSCR ಅನುಪಾತ (x)"
+                },
+                "hi": {
+                    "yr": "वर्ष",
+                    "capex_title": "पूंजीगत व्यय (CAPEX) संरचना विवरण",
+                    "land": "भूमि एवं स्थल",
+                    "building": "भवन एवं शेड",
+                    "machinery": "संयंत्र एवं मशीनरी",
+                    "elec": "विद्युतीकरण",
+                    "furn": "फर्नीचर एवं कार्यालय",
+                    "wc": "कार्यशील पूंजी",
+                    "preop": "पूर्व-परिचालन व्यय",
+                    "finance_title": "वित्त के साधन एवं पूंजी संरचना",
+                    "promoter": "प्रवर्तक इक्विटी",
+                    "bank_loan": "बैंक मियादी ऋण",
+                    "subsidy": "सरकारी सब्सिडी अनुदान",
+                    "rev_title": "5-वर्षीय अनुमानित राजस्व, एबिटा एवं लाभ",
+                    "rev_l": "राजस्व (₹लाख)",
+                    "ebitda_l": "एबिटा (₹लाख)",
+                    "pat_l": "शुद्ध लाभ (₹लाख)",
+                    "y_lakhs": "₹ लाख में",
+                    "dscr_title": "ऋण सेवा कवरेज अनुपात (DSCR) रुझान",
+                    "dscr_label": "परियोजना DSCR",
+                    "dscr_bench": "बैंकिंग मानक (1.50x)",
+                    "dscr_y": "डीएससीआर अनुपात (x)"
+                }
+            }
+
+            ci = calc_chart_i18n.get('kn' if 'kn' in lang else ('hi' if 'hi' in lang else 'en'))
+
             c_navy = '#1E3A8A'
             c_blue = '#2563EB'
             c_green = '#059669'
@@ -350,16 +437,16 @@ class CalculationService:
             # 1. CAPEX Donut Chart
             try:
                 fig, ax = plt.subplots(figsize=(6, 3.8), dpi=90)
-                labels = ['Building Shed', 'Plant & Machinery', 'Electrification', 'Furniture & Office', 'Working Capital', 'Pre-operative']
+                labels = [ci["building"], ci["machinery"], ci["elec"], ci["furn"], ci["wc"], ci["preop"]]
                 vals = [building_cost, machinery_total, 1200000.0, furniture_cost, working_capital, other_cost]
                 if land_cost > 0:
-                    labels.insert(0, 'Land & Site')
+                    labels.insert(0, ci["land"])
                     vals.insert(0, land_cost)
 
                 colors = [c_navy, c_blue, c_green, c_amber, c_purple, '#0891B2', '#E11D48']
                 ax.pie(vals, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors[:len(vals)], textprops=dict(fontsize=7.5, fontweight='bold'))
                 ax.axis('equal')
-                ax.set_title('CAPITAL EXPENDITURE (CAPEX) BREAKDOWN', fontsize=9.5, fontweight='bold', color='#0F172A', pad=10)
+                ax.set_title(ci["capex_title"], fontsize=9.5, fontweight='bold', color='#0F172A', pad=10)
                 
                 buf = io.BytesIO()
                 plt.savefig(buf, format='png', bbox_inches='tight', dpi=90)
@@ -372,17 +459,17 @@ class CalculationService:
             # 2. Means of Finance Donut Chart
             try:
                 fig, ax = plt.subplots(figsize=(6, 3.8), dpi=90)
-                f_labels = ['Promoter Equity', 'Bank Term Loan']
+                f_labels = [ci["promoter"], ci["bank_loan"]]
                 f_vals = [promoter_contrib, bank_loan]
                 f_colors = ['#059669', '#1E3A8A']
                 if subsidy > 0:
-                    f_labels.append('Govt Subsidy Grant')
+                    f_labels.append(ci["subsidy"])
                     f_vals.append(subsidy)
                     f_colors.append('#D97706')
 
                 ax.pie(f_vals, labels=f_labels, autopct='%1.1f%%', startangle=140, colors=f_colors, textprops=dict(fontsize=7.5, fontweight='bold'))
                 ax.axis('equal')
-                ax.set_title('MEANS OF FINANCE COMPOSITION', fontsize=9.5, fontweight='bold', color='#0F172A', pad=10)
+                ax.set_title(ci["finance_title"], fontsize=9.5, fontweight='bold', color='#0F172A', pad=10)
                 
                 buf = io.BytesIO()
                 plt.savefig(buf, format='png', bbox_inches='tight', dpi=90)
@@ -396,19 +483,19 @@ class CalculationService:
             try:
                 fig, ax = plt.subplots(figsize=(6.5, 3.8), dpi=90)
                 if len(projections) >= 5:
-                    years = [f"Yr {p['year']}" for p in projections[:5]]
+                    years = [f"{ci['yr']} {p['year']}" for p in projections[:5]]
                     revs = [p['revenue'] / 100000.0 for p in projections[:5]]
                     ebitdas = [p.get('ebitda', p.get('pbdit', 0)) / 100000.0 for p in projections[:5]]
                     pats = [p['pat'] / 100000.0 for p in projections[:5]]
                     
                     x = list(range(len(years)))
                     width = 0.25
-                    ax.bar([i - width for i in x], revs, width=width, label='Revenue (₹L)', color='#059669')
-                    ax.bar(x, ebitdas, width=width, label='EBITDA (₹L)', color='#1E3A8A')
-                    ax.bar([i + width for i in x], pats, width=width, label='PAT (₹L)', color='#D97706')
+                    ax.bar([i - width for i in x], revs, width=width, label=ci["rev_l"], color='#059669')
+                    ax.bar(x, ebitdas, width=width, label=ci["ebitda_l"], color='#1E3A8A')
+                    ax.bar([i + width for i in x], pats, width=width, label=ci["pat_l"], color='#D97706')
                     
-                    ax.set_ylabel('₹ in Lakhs', fontsize=8, fontweight='bold')
-                    ax.set_title('5-YEAR REVENUE, EBITDA & PAT TRAJECTORY', fontsize=9.5, fontweight='bold', color='#0F172A', pad=10)
+                    ax.set_ylabel(ci["y_lakhs"], fontsize=8, fontweight='bold')
+                    ax.set_title(ci["rev_title"], fontsize=9.5, fontweight='bold', color='#0F172A', pad=10)
                     ax.set_xticks(x)
                     ax.set_xticklabels(years, fontsize=8, fontweight='bold')
                     ax.legend(fontsize=7.5, loc='upper left')
@@ -425,17 +512,17 @@ class CalculationService:
             try:
                 fig, ax = plt.subplots(figsize=(6.5, 3.8), dpi=90)
                 if len(projections) >= 5:
-                    years = [f"Yr {p['year']}" for p in projections[:5]]
+                    years = [f"{ci['yr']} {p['year']}" for p in projections[:5]]
                     dscrs = [p['dscr'] for p in projections[:5]]
                     
-                    ax.plot(years, dscrs, marker='o', color='#059669', linewidth=2.5, label='Project DSCR')
-                    ax.axhline(y=1.50, color='#DC2626', linestyle='--', linewidth=1.5, label='Banking Benchmark (1.50x)')
+                    ax.plot(years, dscrs, marker='o', color='#059669', linewidth=2.5, label=ci["dscr_label"])
+                    ax.axhline(y=1.50, color='#DC2626', linestyle='--', linewidth=1.5, label=ci["dscr_bench"])
                     
                     for i, txt in enumerate(dscrs):
                         ax.annotate(f"{txt:.2f}x", (years[i], dscrs[i]), textcoords="offset points", xytext=(0,6), ha='center', fontsize=7.5, fontweight='bold', color='#059669')
                         
-                    ax.set_ylabel('DSCR Ratio (x)', fontsize=8, fontweight='bold')
-                    ax.set_title('DEBT SERVICE COVERAGE RATIO (DSCR) TRAJECTORY', fontsize=9.5, fontweight='bold', color='#0F172A', pad=10)
+                    ax.set_ylabel(ci["dscr_y"], fontsize=8, fontweight='bold')
+                    ax.set_title(ci["dscr_title"], fontsize=9.5, fontweight='bold', color='#0F172A', pad=10)
                     ax.legend(fontsize=7.5, loc='lower right')
                     max_val = max(dscrs) if dscrs and max(dscrs) > 0 else 2.5
                     ax.set_ylim(bottom=0.5, top=max(3.0, max_val * 1.3))

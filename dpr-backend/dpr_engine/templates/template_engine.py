@@ -1046,9 +1046,9 @@ class DPRTemplateCompositionEngine:
 
         # Generate High-Impact Vector SVG Charts
         projections_list = [p.model_dump() if hasattr(p, 'model_dump') else p for p in doc.projections] if doc.projections else []
-        context["chart_financial_trend_svg"] = ChartRenderer.render_financial_trend_chart(projections_list)
-        context["chart_means_of_finance_svg"] = ChartRenderer.render_means_of_finance_chart(doc.total_cost, doc.bank_loan, doc.promoter_contribution, getattr(doc, 'subsidy', 0))
-        context["chart_dscr_trend_svg"] = ChartRenderer.render_dscr_trend_chart(projections_list)
+        context["chart_financial_trend_svg"] = ChartRenderer.render_financial_trend_chart(projections_list, lang=lang_code)
+        context["chart_means_of_finance_svg"] = ChartRenderer.render_means_of_finance_chart(doc.total_cost, doc.bank_loan, doc.promoter_contribution, getattr(doc, 'subsidy', 0), lang=lang_code)
+        context["chart_dscr_trend_svg"] = ChartRenderer.render_dscr_trend_chart(projections_list, lang=lang_code)
 
         if not context.get("hr_summary"):
             m_cost = (doc.mgmt_count * doc.mgmt_salary) + (doc.sup_count * doc.sup_salary) + (doc.skill_count * doc.skill_salary) + (doc.unskill_count * doc.unskill_salary) + (doc.admin_count * doc.admin_salary)
