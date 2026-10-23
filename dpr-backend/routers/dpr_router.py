@@ -202,11 +202,25 @@ async def upload_dpr_image(image: UploadFile = File(...)):
 
 @router.post("/generate-pdf")
 async def generate_pdf_report(payload: DPRDataPayload, db: Session = Depends(get_db)):
+    # Validation: Ensure essential business information is present before generating PDF
+    b_name = (payload.business_name or "").strip()
+    p_cost = float(payload.total_cost or 0)
+    p_loan = float(payload.bank_loan or payload.term_loan or 0)
+    p_promoter = float(payload.promoter_contribution or 0)
+    machinery_sum = sum(float(m.get("total", 0) or 0) for m in (payload.machinery or [])) if payload.machinery else 0
+    total_effective = p_cost + p_loan + p_promoter + machinery_sum
+
+    if not b_name or b_name.lower() in ["enterprise", "untitled business"]:
+        if total_effective <= 0:
+            raise HTTPException(
+                status_code=400,
+                detail="Cannot generate DPR report: Essential business information is missing. Please provide your Business Name, Product Details, and Project Cost."
+            )
+
     data_dict = payload.model_dump()
     calculated_data = CalculationService.calculate_all(data_dict)
     
     # Save submission record in database
-    b_name = payload.business_name or "Untitled Business"
     d_type = payload.dpr_type or "Bank Loan DPR"
     try:
         submission = DPRSubmissionDB(

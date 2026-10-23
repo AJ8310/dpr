@@ -625,8 +625,108 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
     }
   };
 
+  interface ValidationResult {
+    isValid: boolean;
+    errors: string[];
+    stepToRedirect: number;
+  }
+
+  const validateProjectDetails = (): ValidationResult => {
+    const errors: string[] = [];
+    let stepToRedirect = -1;
+
+    // 1. Business Name check
+    const bName = (formData.business_name || '').trim();
+    if (!bName || bName.toLowerCase() === 'enterprise' || bName.length < 2) {
+      const err = language === 'kn'
+        ? 'ವ್ಯಾಪಾರ / ಘಟಕದ ಹೆಸರು (Business Name) ಅಗತ್ಯವಿದೆ (ಹಂತ 1: ಮೂಲ ವಿವರಗಳು)'
+        : language === 'hi'
+        ? 'व्यापार / इकाई का नाम (Business Name) आवश्यक है (चरण 1: मूल विवरण)'
+        : 'Business / Enterprise Name is required (Step 1: Basic Information)';
+      errors.push(err);
+      if (stepToRedirect === -1) stepToRedirect = 0;
+    }
+
+    // 2. Promoter / Contact Name check
+    const contactName = (formData.contact_name || formData.declarant_name || '').trim();
+    if (!contactName || contactName.length < 2) {
+      const err = language === 'kn'
+        ? 'ಮುಖ್ಯ ಪ್ರವರ್ತಕರು / ಸಂಪರ್ಕ ವ್ಯಕ್ತಿಯ ಹೆಸರು (Promoter / Contact Name) ಅಗತ್ಯವಿದೆ (ಹಂತ 1)'
+        : language === 'hi'
+        ? 'मुख्य प्रमोटर / संपर्क व्यक्ति का नाम (Promoter / Contact Name) आवश्यक है (चरण 1)'
+        : 'Chief Promoter / Contact Person Name is required (Step 1)';
+      errors.push(err);
+      if (stepToRedirect === -1) stepToRedirect = 0;
+    }
+
+    // 3. Contact Info check (phone or email)
+    const phone = (formData.contact_number || '').trim();
+    const email = (formData.email || '').trim();
+    if (!phone && !email) {
+      const err = language === 'kn'
+        ? 'ಸಂಪರ್ಕ ದೂರವಾಣಿ ಸಂಖ್ಯೆ ಅಥವಾ ಇಮೇಲ್ (Phone / Email) ಅಗತ್ಯವಿದೆ (ಹಂತ 1)'
+        : language === 'hi'
+        ? 'संपर्क फ़ोन नंबर या ईमेल (Phone / Email) आवश्यक है (चरण 1)'
+        : 'Contact Phone Number or Email is required (Step 1)';
+      errors.push(err);
+      if (stepToRedirect === -1) stepToRedirect = 0;
+    }
+
+    // 4. Product / Service Details check
+    const product = (formData.primary_product || '').trim();
+    const desc = (formData.business_desc || '').trim();
+    if (!product && !desc) {
+      const err = language === 'kn'
+        ? 'ಪ್ರಮುಖ ಉತ್ಪನ್ನ / ಸೇವಾ ವಿವರ (Primary Product or Business Description) ಅಗತ್ಯವಿದೆ (ಹಂತ 2)'
+        : language === 'hi'
+        ? 'मुख्य उत्पाद / सेवा विवरण (Primary Product or Business Description) आवश्यक है (चरण 2)'
+        : 'Primary Product Name or Business Description is required (Step 2: Product & Market)';
+      errors.push(err);
+      if (stepToRedirect === -1) stepToRedirect = 1;
+    }
+
+    // 5. Project Cost / Means of Finance check
+    const machinerySum = (formData.machinery || []).reduce((acc: number, m: any) => acc + (Number(m.total) || 0), 0);
+    const totalCost = Number(formData.total_cost || 0) + Number(formData.land_cost || 0) + Number(formData.building_cost || 0) + Number(formData.working_capital || 0) + machinerySum;
+    const totalFunding = Number(formData.bank_loan || 0) + Number(formData.promoter_contribution || 0);
+
+    if (totalCost <= 0 && totalFunding <= 0) {
+      const err = language === 'kn'
+        ? 'ಯೋಜನಾ ವೆಚ್ಚ ಅಥವಾ ಯಂತ್ರೋಪಕರಣ ಅಥವಾ ಬ್ಯಾಂಕ್ ಸಾಲ ಮೊತ್ತ (Project Cost / Machinery / Bank Loan) ನಮೂದಿಸಬೇಕು (ಹಂತ 4)'
+        : language === 'hi'
+        ? 'परियोजना लागत, मशीनरी या बैंक ऋण राशि (Project Cost / Machinery / Bank Loan) दर्ज करना आवश्यक है (चरण 4)'
+        : 'Project Cost, Machinery, or Bank Financing must be configured (Step 4: Project Cost & Means of Finance)';
+      errors.push(err);
+      if (stepToRedirect === -1) stepToRedirect = 3;
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+      stepToRedirect: stepToRedirect === -1 ? 0 : stepToRedirect,
+    };
+  };
 
   const handleGeneratePDF = async () => {
+    const validation = validateProjectDetails();
+    if (!validation.isValid) {
+      const header = language === 'kn'
+        ? '⚠️ ವರದಿ ರಚಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ - ಅಗತ್ಯ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿಲ್ಲ:'
+        : language === 'hi'
+        ? '⚠️ रिपोर्ट तैयार नहीं की जा सकती - आवश्यक विवरण छूटे हुए हैं:'
+        : '⚠️ Cannot compile DPR report - Essential project details are missing:';
+
+      const footer = language === 'kn'
+        ? '\n\nದಯವಿಟ್ಟು ಈ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿ, ಅಥವಾ ಮಾದರಿ ಯೋಜನೆಯೊಂದಿಗೆ ಪರೀಕ್ಷಿಸಲು ಮೊದಲ ಹಂತದಲ್ಲಿ "Auto-Fill Sample Project" ಬಟನ್ ಬಳಸಿ.'
+        : language === 'hi'
+        ? '\n\nकृपया इन विवरणों को भरें, या नमूना परियोजना के साथ परीक्षण करने के लिए पहले चरण में "Auto-Fill Sample Project" बटन का उपयोग करें।'
+        : '\n\nPlease fill in these project details, or click "Auto-Fill Sample Project" on Step 1 if you wish to test report generation with sample data.';
+
+      alert(`${header}\n\n• ${validation.errors.join('\n• ')}${footer}`);
+      setActiveStep(validation.stepToRedirect);
+      return;
+    }
+
     setGenerating(true);
     const progressInterval = startProgressSimulation();
 
@@ -694,6 +794,26 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
   };
 
   const handlePayAndGeneratePDF = async () => {
+    // 0. Enforce field validation before initiating checkout or creating payment order
+    const validation = validateProjectDetails();
+    if (!validation.isValid) {
+      const header = language === 'kn'
+        ? '⚠️ ಪಾವತಿ ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ - ಅಗತ್ಯ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿಲ್ಲ:'
+        : language === 'hi'
+        ? '⚠️ भुगतान शुरू नहीं किया जा सकता - आवश्यक विवरण छूटे हुए हैं:'
+        : '⚠️ Cannot proceed to checkout - Essential project details are missing:';
+
+      const footer = language === 'kn'
+        ? '\n\nದಯವಿಟ್ಟು ಈ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿ, ಅಥವಾ ಮಾದರಿ ಯೋಜನೆಯೊಂದಿಗೆ ಪರೀಕ್ಷಿಸಲು ಮೊದಲ ಹಂತದಲ್ಲಿ "Auto-Fill Sample Project" ಬಟನ್ ಬಳಸಿ.'
+        : language === 'hi'
+        ? '\n\nकृपया इन विवरणों को भरें, या नमूना परियोजना के साथ परीक्षण करने के लिए पहले चरण में "Auto-Fill Sample Project" बटन का उपयोग करें।'
+        : '\n\nPlease fill in these project details, or click "Auto-Fill Sample Project" on Step 1 if you wish to test payment with sample data.';
+
+      alert(`${header}\n\n• ${validation.errors.join('\n• ')}${footer}`);
+      setActiveStep(validation.stepToRedirect);
+      return;
+    }
+
     if (paymentUnlocked) {
       await handleGeneratePDF();
       return;
@@ -1598,6 +1718,28 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
           </div>
 
           <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              onClick={handleLoadSampleData}
+              style={{
+                background: '#FFFFFF',
+                color: '#008C95',
+                border: '1.5px solid #008C95',
+                padding: '0.8rem 1.3rem',
+                borderRadius: '12px',
+                fontWeight: 700,
+                fontSize: '0.88rem',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                transition: 'all 0.2s ease',
+                boxShadow: '0 2px 8px rgba(0, 140, 149, 0.1)',
+              }}
+            >
+              <i className="fas fa-magic"></i> {tW.autoFill.loadSampleBtn || '⚡ Auto-Fill Sample Project (1-Click Demo)'}
+            </button>
+
             <button
               type="button"
               onClick={handleClearFormAndDraft}
@@ -3063,6 +3205,56 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
                           </label>
                         </div>
                       </div>
+
+                      {/* SAMPLE DATA TEST OPTION HELPER */}
+                      {(!formData.business_name || formData.business_name.toLowerCase() === 'enterprise' || !formData.primary_product) && (
+                        <div
+                          style={{
+                            background: '#FFFBEB',
+                            border: '1.5px dashed #F59E0B',
+                            borderRadius: '12px',
+                            padding: '0.9rem 1.2rem',
+                            maxWidth: '680px',
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            flexWrap: 'wrap',
+                            gap: '0.8rem',
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                            <i className="fas fa-flask" style={{ color: '#D97706', fontSize: '1.1rem' }}></i>
+                            <span style={{ fontSize: '0.82rem', color: '#92400E', fontWeight: 600 }}>
+                              {language === 'kn'
+                                ? 'ಪಾವತಿ & ಪೂರ್ಣ ವರದಿ ಪ್ರಕ್ರಿಯೆಯನ್ನು ನೈಜ ಮಾದರಿ ಪ್ರಾಜೆಕ್ಟ್‌ನೊಂದಿಗೆ ಪರೀಕ್ಷಿಸಲು ಬಯಸುವಿರಾ?'
+                                : language === 'hi'
+                                ? 'क्या आप नमूना परियोजना के साथ भुगतान और पूर्ण रिपोर्ट का परीक्षण करना चाहते हैं?'
+                                : 'Testing payment & report compilation with realistic sample data?'}
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={handleLoadSampleData}
+                            style={{
+                              background: '#D97706',
+                              color: '#FFFFFF',
+                              border: 'none',
+                              padding: '0.5rem 1rem',
+                              borderRadius: '8px',
+                              fontWeight: 700,
+                              fontSize: '0.8rem',
+                              cursor: 'pointer',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.4rem',
+                            }}
+                          >
+                            <i className="fas fa-magic"></i>
+                            {language === 'kn' ? 'ಮಾದರಿ ಡೇಟಾ ಭರ್ತಿ ಮಾಡಿ' : language === 'hi' ? 'नमूना डेटा भरें' : 'Auto-Fill Sample Project'}
+                          </button>
+                        </div>
+                      )}
 
                       {paymentUnlocked && (
                         <div style={{ padding: '0.8rem 1.6rem', background: '#F0FDFA', border: '1.5px solid #008C95', borderRadius: '0.75rem', color: '#008C95', fontWeight: 800, fontSize: '0.98rem', textAlign: 'center' }}>
