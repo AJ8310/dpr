@@ -136,10 +136,9 @@ def get_razorpay_client():
 
 @router.get("/config")
 async def get_payment_config():
-    """Returns public Razorpay Key ID, pricing matrix, and default details."""
+    """Returns pricing matrix, currency, and default details (no secrets exposed)."""
     return {
         "success": True,
-        "key_id": settings.RAZORPAY_KEY_ID,
         "default_amount": settings.DPR_REPORT_PRICE,
         "pricing_matrix": PRICING_MATRIX,
         "currency": "INR"
