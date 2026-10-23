@@ -77,7 +77,6 @@ export default function PricingPlansModal({
       id: 'entry',
       name: language === 'kn' ? 'ಪ್ರಾರಂಭಿಕ (Entry)' : language === 'hi' ? 'प्रारंभिक (Entry)' : 'Entry Plan',
       sub: language === 'kn' ? 'ಆರಂಭಿಕ ಹಂತದ ಯೋಜನೆಗಳು' : language === 'hi' ? 'शुरुआती परियोजनाएं' : 'Early-Stage Projects',
-      size: '₹5L – ₹25L',
       price: 399,
       priceDisplay: '₹399',
       pages: '15 – 20 Pages',
@@ -100,7 +99,6 @@ export default function PricingPlansModal({
       id: 'core',
       name: language === 'kn' ? 'ಮುಖ್ಯ (Core)' : language === 'hi' ? 'कोर (Core)' : 'Core Plan',
       sub: language === 'kn' ? 'ಬೆಳೆಯುತ್ತಿರುವ MSME ಗಳು' : language === 'hi' ? 'बढ़ते एमएसएमई' : 'Growing MSME Businesses',
-      size: '₹25L – ₹1Cr',
       price: 799,
       priceDisplay: '₹799',
       pages: '25 – 35 Pages',
@@ -124,7 +122,6 @@ export default function PricingPlansModal({
       id: 'team',
       name: language === 'kn' ? 'ಟೀಮ್ (Team)' : language === 'hi' ? 'टीम (Team)' : 'Team Plan (Advanced)',
       sub: language === 'kn' ? 'ಮಧ್ಯಮ ಗಾತ್ರದ ಉದ್ಯಮಗಳು' : language === 'hi' ? 'मध्यम आकार के उद्यम' : 'Growth MSMEs & Institutions',
-      size: '₹1Cr – ₹5Cr',
       price: 999,
       priceDisplay: '₹999',
       pages: '35 – 45 Pages',
@@ -148,7 +145,6 @@ export default function PricingPlansModal({
       id: 'enterprise',
       name: language === 'kn' ? 'ಕಸ್ಟಮ್ (Custom)' : language === 'hi' ? 'कस्टम (Custom)' : 'Custom Plan',
       sub: language === 'kn' ? 'ದೊಡ್ಡ ಪ್ರಮಾಣದ ಯೋಜನೆಗಳು' : language === 'hi' ? 'बड़े पैमाने की परियोजनाएं' : 'Large Scale & Specialized',
-      size: '₹5Cr – ₹25Cr+',
       price: 999,
       priceDisplay: 'Custom',
       pages: '45 – 60+ Pages',
@@ -297,10 +293,10 @@ export default function PricingPlansModal({
           </div>
           <p style={{ fontSize: '0.9rem', color: '#64748B', margin: '6px 0 0 0' }}>
             {language === 'kn'
-              ? 'ನಿಮ್ಮ ಯೋಜನಾ ಗಾತ್ರಕ್ಕೆ ಅನುಗುಣವಾಗಿ ಸೂಕ್ತವಾದ ಡಿಪಿಆರ್ ಯೋಜನೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ:'
+              ? 'ನಿಮ್ಮ ಯೋಜನೆಗೆ ಅನುಗುಣವಾಗಿ ಸೂಕ್ತವಾದ ಡಿಪಿಆರ್ ಯೋಜನೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ:'
               : language === 'hi'
-              ? 'अपनी परियोजना के निवेश आकार के अनुसार उपयुक्त डीपीआर योजना चुनें:'
-              : 'Select the DPR plan sized for your enterprise investment requirement:'}
+              ? 'अपनी परियोजना की आवश्यकता के अनुसार उपयुक्त डीपीआर योजना चुनें:'
+              : 'Select the DPR plan best suited for your project requirement:'}
           </p>
         </div>
 
@@ -379,7 +375,7 @@ export default function PricingPlansModal({
                       </div>
                     )}
                     <div style={{ fontSize: '0.76rem', color: '#64748B', fontWeight: 600, marginTop: '6px' }}>
-                      {plan.pages} • <strong style={{ color: '#123B4A' }}>{plan.size}</strong>
+                      <strong style={{ color: '#123B4A' }}>{plan.pages}</strong>
                     </div>
                   </div>
 

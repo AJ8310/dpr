@@ -1501,7 +1501,7 @@ export default function LandingPage({ onLoginSuccess, initialShowPlans = false }
                   'Lender & nodal agency submission ready',
                   'Detailed 5–10 year financial projections'
                 ],
-                projectSizeText: 'Project sizes from ₹5L to ₹25Cr+',
+                projectSizeText: 'All Project Sizes Supported',
                 modalTitle: 'Govt Scheme & Subsidy DPR Plans',
                 prices: { entry: 399, core: 799, team: 999 }
               },
@@ -1522,7 +1522,7 @@ export default function LandingPage({ onLoginSuccess, initialShowPlans = false }
                   '36-month cash flow & CMA-style schedules',
                   'IRR, NPV, BEP & sensitivity analysis'
                 ],
-                projectSizeText: 'Project sizes from ₹5L to ₹25Cr+',
+                projectSizeText: 'All Project Sizes Supported',
                 modalTitle: 'Bank & NBFC Loan DPR Plans',
                 prices: { entry: 399, core: 799, team: 999 }
               },
@@ -1543,7 +1543,7 @@ export default function LandingPage({ onLoginSuccess, initialShowPlans = false }
                   'Valuation benchmarks & cap table summary',
                   'Use of funds & exit strategy outline'
                 ],
-                projectSizeText: 'Project sizes from ₹5L to ₹25Cr+',
+                projectSizeText: 'All Project Sizes Supported',
                 modalTitle: 'Investor Pitch DPR Plans',
                 prices: { entry: 399, core: 799, team: 999 }
               }
@@ -1734,7 +1734,7 @@ export default function LandingPage({ onLoginSuccess, initialShowPlans = false }
                 {t.pricing.routes[selectedRouteKey]?.modalTitle || (selectedRouteKey === 'govt' ? 'Govt Scheme & Subsidy DPR Plans' : selectedRouteKey === 'bank' ? 'Bank & NBFC Loan DPR Plans' : 'Investor Pitch DPR Plans')}
               </h3>
               <p style={{ fontSize: '0.9rem', color: '#64748B', margin: 0 }}>
-                {language === 'kn' ? 'ದರಗಳು ಪ್ರತಿ ಡಿಪಿಆರ್ ವರದಿಗೆ ಅನ್ವಯಿಸುತ್ತವೆ. ನಿಮ್ಮ ಯೋಜನಾ ಹೂಡಿಕೆಯ ಗಾತ್ರಕ್ಕೆ ಸೂಕ್ತವಾದ ಪ್ಲಾನ್ ಆಯ್ಕೆಮಾಡಿ:' : language === 'hi' ? 'कीमतें प्रति डीपीआर रिपोर्ट हैं। अपनी परियोजना निवेश आकार के अनुसार योजना चुनें:' : 'Prices are per DPR report. Choose the plan that matches your project investment size:'}
+                {language === 'kn' ? 'ದರಗಳು ಪ್ರತಿ ಡಿಪಿಆರ್ ವರದಿಗೆ ಅನ್ವಯಿಸುತ್ತವೆ. ನಿಮ್ಮ ಯೋಜನೆಗೆ ಸೂಕ್ತವಾದ ಪ್ಲಾನ್ ಆಯ್ಕೆಮಾಡಿ:' : language === 'hi' ? 'कीमतें प्रति डीपीआर रिपोर्ट हैं। अपनी आवश्यकता के अनुसार योजना चुनें:' : 'Prices are per DPR report. Choose the plan that matches your project requirements:'}
               </p>
             </div>
 
@@ -1745,7 +1745,7 @@ export default function LandingPage({ onLoginSuccess, initialShowPlans = false }
                   id: 'entry',
                   name: 'Entry',
                   sub: 'Early-stage projects',
-                  size: '₹5L – ₹25L',
+                  size: '15 – 20 Pages',
                   cta: 'Create DPR',
                   desc: 'A standard DPR for early-stage projects and smaller funding requirements.',
                   inc: [
@@ -1763,7 +1763,7 @@ export default function LandingPage({ onLoginSuccess, initialShowPlans = false }
                   id: 'core',
                   name: 'Core',
                   sub: 'Growing businesses',
-                  size: '₹25L – ₹1Cr',
+                  size: '25 – 35 Pages',
                   cta: 'Create DPR',
                   desc: 'A complete DPR with projections and funding analysis for growing businesses.',
                   inc: [
@@ -1782,7 +1782,7 @@ export default function LandingPage({ onLoginSuccess, initialShowPlans = false }
                   id: 'team',
                   name: 'Team',
                   sub: 'Growth-stage businesses & MSMEs',
-                  size: '₹1Cr – ₹5Cr',
+                  size: '35 – 45 Pages',
                   cta: 'Create Advanced DPR',
                   badge: 'MOST USED',
                   desc: 'Advanced DPR with detailed financial analysis and funding requirement analysis.',
@@ -1803,7 +1803,7 @@ export default function LandingPage({ onLoginSuccess, initialShowPlans = false }
                   id: 'ent',
                   name: 'Custom',
                   sub: 'Established & large businesses',
-                  size: '₹5Cr – ₹25Cr+',
+                  size: '45 – 60+ Pages',
                   cta: 'Contact Team',
                   contact: true,
                   desc: 'Custom DPR depth, detailed projections and analysis based on project scope.',
@@ -1905,7 +1905,7 @@ export default function LandingPage({ onLoginSuccess, initialShowPlans = false }
                           </div>
                         )}
                         <div style={{ fontSize: '0.75rem', color: '#94A3B8', fontWeight: 600, marginTop: '6px' }}>
-                          {language === 'kn' ? 'ಯೋಜನಾ ಗಾತ್ರ:' : language === 'hi' ? 'परियोजना का दायरा:' : 'For projects of'} <strong style={{ color: '#123B4A' }}>{plan.size}</strong>
+                          {language === 'kn' ? 'ವರದಿ ವ್ಯಾಪ್ತಿ:' : language === 'hi' ? 'रिपोर्ट का दायरा:' : 'Report Scope:'} <strong style={{ color: '#123B4A' }}>{plan.size}</strong>
                         </div>
                       </div>
 

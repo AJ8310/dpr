@@ -2714,7 +2714,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                       id: 'entry',
                       name: tW.labels?.entryPlanName || 'Entry Plan',
                       pages: tW.labels?.entryPages || '15 – 20 Pages',
-                      projects: tW.labels?.entryProjects || 'Projects ₹5L – ₹25L',
+                      projects: tW.labels?.entryProjects || 'Early-Stage Scope',
                       price: 399,
                       priceDisplay: '₹399',
                       desc: tW.labels?.entryDesc || '16 Core Chapters, 5-Yr Financials, DSCR Analysis, Standard Bankable PDF.',
@@ -2726,7 +2726,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                       id: 'core',
                       name: tW.labels?.corePlanName || 'Core Plan',
                       pages: tW.labels?.corePages || '25 – 35 Pages',
-                      projects: tW.labels?.coreProjects || 'Projects ₹25L – ₹1Cr',
+                      projects: tW.labels?.coreProjects || 'Standard MSME Scope',
                       price: 799,
                       priceDisplay: '₹799',
                       desc: tW.labels?.coreDesc || '22 Chapters, 36-Mo Cash Flow, Tandon Assessment, Risk Matrix, Credit Appraisal Norms.',
@@ -2738,7 +2738,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                       id: 'team',
                       name: tW.labels?.teamPlanName || 'Team Plan (Advanced)',
                       pages: tW.labels?.teamPages || '35 – 45 Pages',
-                      projects: tW.labels?.teamProjects || 'Projects ₹1Cr – ₹5Cr',
+                      projects: tW.labels?.teamProjects || 'Growth Scale Scope',
                       price: 999,
                       priceDisplay: '₹999',
                       desc: tW.labels?.teamDesc || 'Advanced DPR with sensitivity stress tests, milestone roadmap, and subsidy claims.',
@@ -2751,7 +2751,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                       id: 'enterprise',
                       name: 'Custom',
                       pages: tW.labels?.enterprisePages || '45 – 60 Pages',
-                      projects: tW.labels?.enterpriseProjects || 'Projects ₹5Cr – ₹25Cr+',
+                      projects: tW.labels?.enterpriseProjects || 'Large Scale & Custom',
                       price: 999,
                       priceDisplay: 'Custom',
                       desc: tW.labels?.enterpriseDesc || 'Custom DPR scope, 30 Chapters + 10 Annexure Schedules, 10-Yr Extended Modeling, Raw Material BOQ, ESG.',
@@ -2846,22 +2846,22 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                     entry: {
                       name: tW.labels?.entryPlanName || 'Entry Plan',
                       pages: tW.labels?.entryPages || '15 – 20 Pages',
-                      projects: tW.labels?.entryProjects || 'Projects ₹5L – ₹25L'
+                      projects: tW.labels?.entryProjects || 'Early-Stage Scope'
                     },
                     core: {
                       name: tW.labels?.corePlanName || 'Core Plan',
                       pages: tW.labels?.corePages || '25 – 35 Pages',
-                      projects: tW.labels?.coreProjects || 'Projects ₹25L – ₹1Cr'
+                      projects: tW.labels?.coreProjects || 'Standard MSME Scope'
                     },
                     team: {
                       name: tW.labels?.teamPlanName || 'Team Plan (Advanced)',
                       pages: tW.labels?.teamPages || '35 – 45 Pages',
-                      projects: tW.labels?.teamProjects || 'Projects ₹1Cr – ₹5Cr'
+                      projects: tW.labels?.teamProjects || 'Growth Scale Scope'
                     },
                     enterprise: {
                       name: tW.labels?.enterprisePlanName || 'Custom Plan',
                       pages: tW.labels?.enterprisePages || '45 – 60 Pages',
-                      projects: tW.labels?.enterpriseProjects || 'Projects ₹5Cr – ₹25Cr+'
+                      projects: tW.labels?.enterpriseProjects || 'Large Scale & Custom'
                     }
                   };
                   const activePlanMeta = planNameMap[normalizedDepth] || planNameMap.entry;

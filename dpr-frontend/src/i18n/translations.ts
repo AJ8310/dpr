@@ -445,7 +445,7 @@ export const translations: Record<Language, Translations> = {
             'Lender & nodal agency submission ready',
             'Detailed 5–10 year financial projections'
           ],
-          projectSizeText: 'Project sizes from ₹5L to ₹25Cr+',
+          projectSizeText: 'All Project Sizes Supported',
           modalTitle: 'Govt Scheme & Subsidy DPR Plans'
         },
         bank: {
@@ -459,7 +459,7 @@ export const translations: Record<Language, Translations> = {
             '36-month cash flow & CMA-style schedules',
             'IRR, NPV, BEP & sensitivity analysis'
           ],
-          projectSizeText: 'Project sizes from ₹5L to ₹25Cr+',
+          projectSizeText: 'All Project Sizes Supported',
           modalTitle: 'Bank & NBFC Loan DPR Plans'
         },
         inv: {
@@ -473,15 +473,15 @@ export const translations: Record<Language, Translations> = {
             'Valuation benchmarks & cap table summary',
             'Use of funds & exit strategy outline'
           ],
-          projectSizeText: 'Project sizes from ₹5L to ₹25Cr+',
+          projectSizeText: 'All Project Sizes Supported',
           modalTitle: 'Investor Pitch DPR Plans'
         }
       },
       plans: {
-        entry: { name: 'Entry', sub: 'Early-stage projects (₹5L – ₹25L)', cta: 'Create DPR' },
-        core: { name: 'Core', sub: 'Standard MSME projects (₹25L – ₹2Cr)', cta: 'Create DPR' },
-        team: { name: 'Team', sub: 'Medium enterprises (₹2Cr – ₹10Cr)', cta: 'Create DPR' },
-        ent: { name: 'Custom', sub: 'Large scale & specialized projects (₹10Cr+)', cta: 'Create DPR' },
+        entry: { name: 'Entry', sub: 'Early-stage projects', cta: 'Create DPR' },
+        core: { name: 'Core', sub: 'Standard MSME projects', cta: 'Create DPR' },
+        team: { name: 'Team', sub: 'Medium enterprises', cta: 'Create DPR' },
+        ent: { name: 'Custom', sub: 'Large scale & specialized projects', cta: 'Create DPR' },
       },
     },
     contact: {
@@ -792,7 +792,7 @@ export const translations: Record<Language, Translations> = {
             'ಬ್ಯಾಂಕ್ ಮತ್ತು ನೋಡಲ್ ಏಜೆನ್ಸಿ ಸಲ್ಲಿಕೆಗೆ ಸಿದ್ಧ',
             '5-10 ವರ್ಷಗಳ ವಿವರವಾದ ಹಣಕಾಸು ಮುನ್ಸೂಚನೆ'
           ],
-          projectSizeText: 'ಯೋಜನೆಯ ಗಾತ್ರ ₹5 ಲಕ್ಷದಿಂದ ₹25 ಕೋಟಿ+',
+          projectSizeText: 'ಎಲ್ಲಾ ಹೂಡಿಕೆ ಗಾತ್ರಗಳಿಗೂ ಸೂಕ್ತ',
           modalTitle: 'ಸರ್ಕಾರಿ ಯೋಜನೆ ಮತ್ತು ಸಬ್ಸಿಡಿ ಡಿಪಿಆರ್ ಪ್ಲಾನ್‌ಗಳು'
         },
         bank: {
@@ -806,7 +806,7 @@ export const translations: Record<Language, Translations> = {
             '36-ತಿಂಗಳ ನಗದು ಹರಿವು & CMA ವೇಳಾಪಟ್ಟಿ',
             'IRR, NPV, BEP & ಸಂವೇದನಾಶೀಲತೆಯ ವಿಶ್ಲೇಷಣೆ'
           ],
-          projectSizeText: 'ಯೋಜನೆಯ ಗಾತ್ರ ₹5 ಲಕ್ಷದಿಂದ ₹25 ಕೋಟಿ+',
+          projectSizeText: 'ಎಲ್ಲಾ ಹೂಡಿಕೆ ಗಾತ್ರಗಳಿಗೂ ಸೂಕ್ತ',
           modalTitle: 'ಬ್ಯಾಂಕ್ & NBFC ಸಾಲ ಡಿಪಿಆರ್ ಪ್ಲಾನ್‌ಗಳು'
         },
         inv: {
@@ -820,15 +820,15 @@ export const translations: Record<Language, Translations> = {
             'ಮೌಲ್ಯಮಾಪನ ಮಾನದಂಡಗಳು & ಕ್ಯಾಪ್ ಟೇಬಲ್',
             'ನಿಧಿಗಳ ಬಳಕೆ & ಎಕ್ಸಿಟ್ ತಂತ್ರ'
           ],
-          projectSizeText: 'ಯೋಜನೆಯ ಗಾತ್ರ ₹5 ಲಕ್ಷದಿಂದ ₹25 ಕೋಟಿ+',
+          projectSizeText: 'ಎಲ್ಲಾ ಹೂಡಿಕೆ ಗಾತ್ರಗಳಿಗೂ ಸೂಕ್ತ',
           modalTitle: 'ಹೂಡಿಕೆದಾರರ ಪಿಚ್ ಡಿಪಿಆರ್ ಪ್ಲಾನ್‌ಗಳು'
         }
       },
       plans: {
-        entry: { name: 'ಪ್ರಾರಂಭಿಕ (Entry)', sub: 'ಆರಂಭಿಕ ಹಂತದ ಯೋಜನೆಗಳು (₹5 ಲಕ್ಷ – ₹25 ಲಕ್ಷ)', cta: 'ಡಿಪಿಆರ್ ರಚಿಸಿ' },
-        core: { name: 'ಮುಖ್ಯ (Core)', sub: 'ಪ್ರಮಾಣಿತ MSME ಯೋಜನೆಗಳು (₹25 ಲಕ್ಷ – ₹2 ಕೋಟಿ)', cta: 'ಡಿಪಿಆರ್ ರಚಿಸಿ' },
-        team: { name: 'ಟೀಮ್ (Team)', sub: 'ಮಧ್ಯಮ ಗಾತ್ರದ ಉದ್ಯಮಗಳು (₹2 ಕೋಟಿ – ₹10 ಕೋಟಿ)', cta: 'ಡಿಪಿಆರ್ ರಚಿಸಿ' },
-        ent: { name: 'ಕಸ್ಟಮ್ (Custom)', sub: 'ದೊಡ್ಡ ಪ್ರಮಾಣದ ಮತ್ತು ವಿಶೇಷ ಯೋಜನೆಗಳು (₹10 ಕೋಟಿ+)', cta: 'ಡಿಪಿಆರ್ ರಚಿಸಿ' },
+        entry: { name: 'ಪ್ರಾರಂಭಿಕ (Entry)', sub: 'ಆರಂಭಿಕ ಹಂತದ ಯೋಜನೆಗಳು', cta: 'ಡಿಪಿಆರ್ ರಚಿಸಿ' },
+        core: { name: 'ಮುಖ್ಯ (Core)', sub: 'ಪ್ರಮಾಣಿತ MSME ಯೋಜನೆಗಳು', cta: 'ಡಿಪಿಆರ್ ರಚಿಸಿ' },
+        team: { name: 'ಟೀಮ್ (Team)', sub: 'ಮಧ್ಯಮ ಗಾತ್ರದ ಉದ್ಯಮಗಳು', cta: 'ಡಿಪಿಆರ್ ರಚಿಸಿ' },
+        ent: { name: 'ಕಸ್ಟಮ್ (Custom)', sub: 'ದೊಡ್ಡ ಪ್ರಮಾಣದ ಮತ್ತು ವಿಶೇಷ ಯೋಜನೆಗಳು', cta: 'ಡಿಪಿಆರ್ ರಚಿಸಿ' },
       },
     },
     contact: {
@@ -1139,7 +1139,7 @@ export const translations: Record<Language, Translations> = {
             'बैंक एवं नोडल एजेंसी प्रस्तुति हेतु तैयार',
             'विस्तृत 5-10 वर्ष का वित्तीय अनुमान'
           ],
-          projectSizeText: 'परियोजना आकार ₹5 लाख से ₹25 करोड़+',
+          projectSizeText: 'सभी परियोजना आकार समर्थित',
           modalTitle: 'सरकारी योजना एवं सब्सिडी डीपीआर प्लान'
         },
         bank: {
@@ -1153,7 +1153,7 @@ export const translations: Record<Language, Translations> = {
             '36-माह का कैश फ्लो एवं सीएमए अनुसूचियां',
             'आईआरआर, एनपीवी, बीईपी एवं संवेदनशीलता विश्लेषण'
           ],
-          projectSizeText: 'परियोजना आकार ₹5 लाख से ₹25 करोड़+',
+          projectSizeText: 'सभी परियोजना आकार समर्थित',
           modalTitle: 'बैंक एवं एनबीएफसी ऋण डीपीआर प्लान'
         },
         inv: {
@@ -1167,15 +1167,15 @@ export const translations: Record<Language, Translations> = {
             'मूल्यांकन मानक एवं कैप टेबल सारांश',
             'धन का उपयोग एवं निकास रणनीति'
           ],
-          projectSizeText: 'परियोजना आकार ₹5 लाख से ₹25 करोड़+',
+          projectSizeText: 'सभी परियोजना आकार समर्थित',
           modalTitle: 'इन्वेस्टर पिच डीपीआर प्लान'
         }
       },
       plans: {
-        entry: { name: 'प्रारंभिक (Entry)', sub: 'शुरुआती परियोजनाएं (₹5 लाख – ₹25 लाख)', cta: 'डीपीआर बनाएं' },
-        core: { name: 'कोर (Core)', sub: 'मानक एमएसएमई परियोजनाएं (₹25 लाख – ₹2 करोड़)', cta: 'डीपीआर बनाएं' },
-        team: { name: 'टीम (Team)', sub: 'मध्यम आकार के उद्यम (₹2 करोड़ – ₹10 करोड़)', cta: 'डीपीआर बनाएं' },
-        ent: { name: 'कस्टम (Custom)', sub: 'बड़े पैमाने एवं विशेष परियोजनाएं (₹10 करोड़+)', cta: 'डीपीआर बनाएं' },
+        entry: { name: 'प्रारंभिक (Entry)', sub: 'शुरुआती परियोजनाएं', cta: 'डीपीआर बनाएं' },
+        core: { name: 'कोर (Core)', sub: 'मानक एमएसएमई परियोजनाएं', cta: 'डीपीआर बनाएं' },
+        team: { name: 'टीम (Team)', sub: 'मध्यम आकार के उद्यम', cta: 'डीपीआर बनाएं' },
+        ent: { name: 'कस्टम (Custom)', sub: 'बड़े पैमाने एवं विशेष परियोजनाएं', cta: 'डीपीआर बनाएं' },
       },
     },
     contact: {
