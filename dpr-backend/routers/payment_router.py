@@ -1,9 +1,21 @@
 import time
-from typing import Optional
-from fastapi import APIRouter, HTTPException
+from datetime import datetime
+from typing import Optional, List, Dict, Any
+from fastapi import APIRouter, HTTPException, Depends, Query
 from pydantic import BaseModel
 import razorpay
+from sqlalchemy.orm import Session
+from sqlalchemy import desc
+
 from config import settings
+from database import get_db, engine, Base
+from models.database_models import PaymentOrderDB
+
+# Ensure table is created
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"[Database] Notice during PaymentOrderDB table check: {e}")
 
 router = APIRouter(prefix="/api/payment", tags=["Razorpay Payment Gateway"])
 
@@ -87,6 +99,7 @@ def determine_dpr_price(dpr_type: Optional[str], category: Optional[str], fallba
 
     return 799.0
 
+# Request Models
 class CreateOrderRequest(BaseModel):
     amount: Optional[float] = None
     currency: str = "INR"
@@ -94,12 +107,27 @@ class CreateOrderRequest(BaseModel):
     project_id: Optional[str] = None
     dpr_type: Optional[str] = None
     category: Optional[str] = None
+    user_id: Optional[str] = None
+    user_email: Optional[str] = None
+    user_phone: Optional[str] = None
+    business_name: Optional[str] = None
 
 class VerifyPaymentRequest(BaseModel):
     razorpay_order_id: str
     razorpay_payment_id: str
     razorpay_signature: str
     project_id: Optional[str] = None
+    user_id: Optional[str] = None
+    user_email: Optional[str] = None
+
+class RecordFailureRequest(BaseModel):
+    razorpay_order_id: str
+    razorpay_payment_id: Optional[str] = None
+    error_code: Optional[str] = None
+    error_description: Optional[str] = None
+    error_source: Optional[str] = None
+    error_step: Optional[str] = None
+    error_reason: Optional[str] = None
 
 def get_razorpay_client():
     if not settings.RAZORPAY_KEY_ID or not settings.RAZORPAY_KEY_SECRET:
@@ -118,10 +146,10 @@ async def get_payment_config():
     }
 
 @router.post("/create-order")
-async def create_razorpay_order(payload: CreateOrderRequest):
+async def create_razorpay_order(payload: CreateOrderRequest, db: Session = Depends(get_db)):
     """
-    Creates an official Razorpay Order ID based on the user's selected DPR Type and Category.
-    Follows: Select DPR Type -> Select Category -> Determine Price -> Create Razorpay Order.
+    Creates an official Razorpay Order ID based on the user's selected DPR Type and Category,
+    and registers the order in the database for lifecycle management.
     """
     try:
         amount_to_charge = determine_dpr_price(payload.dpr_type, payload.category, payload.amount)
@@ -137,10 +165,38 @@ async def create_razorpay_order(payload: CreateOrderRequest):
             "payment_capture": 1  # Auto-capture payment upon checkout
         }
         order = client.order.create(data=order_data)
+        order_id = order.get("id")
+
+        # Persist order in database for order management and audit
+        try:
+            db_order = PaymentOrderDB(
+                order_id=order_id,
+                receipt=receipt_id,
+                user_id=payload.user_id,
+                user_email=payload.user_email,
+                user_phone=payload.user_phone,
+                business_name=payload.business_name,
+                dpr_type=payload.dpr_type or "Bank Loan DPR",
+                plan_category=payload.category or "core",
+                amount_inr=amount_to_charge,
+                amount_paise=amount_in_paise,
+                currency=currency,
+                status="CREATED",
+                metadata_json={
+                    "project_id": payload.project_id,
+                    "razorpay_order": order
+                }
+            )
+            db.add(db_order)
+            db.commit()
+            db.refresh(db_order)
+        except Exception as db_err:
+            db.rollback()
+            print(f"[Payment] Notice: Failed to persist order in DB: {db_err}")
 
         return {
             "success": True,
-            "order_id": order.get("id"),
+            "order_id": order_id,
             "amount": order.get("amount"),
             "currency": order.get("currency"),
             "amount_inr": amount_to_charge,
@@ -155,8 +211,11 @@ async def create_razorpay_order(payload: CreateOrderRequest):
         raise HTTPException(status_code=400, detail=f"Failed to create Razorpay Order: {str(e)}")
 
 @router.post("/verify-payment")
-async def verify_razorpay_payment(payload: VerifyPaymentRequest):
-    """Verifies HMAC SHA256 signature from Razorpay checkout popup and unlocks DPR generation."""
+async def verify_razorpay_payment(payload: VerifyPaymentRequest, db: Session = Depends(get_db)):
+    """
+    Verifies HMAC SHA256 signature from Razorpay checkout popup,
+    updates order status to PAID in the database, and unlocks DPR generation.
+    """
     try:
         client = get_razorpay_client()
         params_dict = {
@@ -167,21 +226,101 @@ async def verify_razorpay_payment(payload: VerifyPaymentRequest):
         # Throws SignatureVerificationError if signature is invalid
         client.utility.verify_payment_signature(params_dict)
 
+        # Update order in database to PAID
+        order_record = db.query(PaymentOrderDB).filter(PaymentOrderDB.order_id == payload.razorpay_order_id).first()
+        now = datetime.utcnow()
+        if order_record:
+            order_record.status = "PAID"
+            order_record.payment_id = payload.razorpay_payment_id
+            order_record.signature = payload.razorpay_signature
+            order_record.paid_at = now
+            if payload.user_email and not order_record.user_email:
+                order_record.user_email = payload.user_email
+            db.commit()
+        else:
+            # Fallback create record if order was created earlier or outside current session
+            new_record = PaymentOrderDB(
+                order_id=payload.razorpay_order_id,
+                payment_id=payload.razorpay_payment_id,
+                signature=payload.razorpay_signature,
+                status="PAID",
+                user_email=payload.user_email,
+                paid_at=now
+            )
+            db.add(new_record)
+            db.commit()
+
         return {
             "success": True,
             "unlocked": True,
+            "status": "PAID",
             "message": "Payment verified successfully! DPR application unlocked.",
             "order_id": payload.razorpay_order_id,
             "payment_id": payload.razorpay_payment_id
         }
     except razorpay.errors.SignatureVerificationError:
+        # Mark order as failed verification in database
+        try:
+            order_record = db.query(PaymentOrderDB).filter(PaymentOrderDB.order_id == payload.razorpay_order_id).first()
+            if order_record:
+                order_record.status = "FAILED"
+                order_record.error_code = "INVALID_SIGNATURE"
+                order_record.error_description = "Razorpay HMAC SHA256 signature verification failed."
+                db.commit()
+        except Exception:
+            db.rollback()
         raise HTTPException(status_code=400, detail="Invalid Razorpay signature. Verification failed.")
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Payment verification failed: {str(e)}")
 
+@router.post("/record-failure")
+async def record_payment_failure(payload: RecordFailureRequest, db: Session = Depends(get_db)):
+    """
+    Records a payment failure or checkout cancellation from Razorpay SDK,
+    updating the order status in the database so failures can be audited and managed.
+    """
+    try:
+        order_record = db.query(PaymentOrderDB).filter(PaymentOrderDB.order_id == payload.razorpay_order_id).first()
+        if order_record:
+            order_record.status = "FAILED" if payload.error_code != "PAYMENT_DISMISSED" else "CANCELLED"
+            if payload.razorpay_payment_id:
+                order_record.payment_id = payload.razorpay_payment_id
+            order_record.error_code = payload.error_code
+            order_record.error_description = payload.error_description
+            db.commit()
+            return {
+                "success": True,
+                "order_id": payload.razorpay_order_id,
+                "status": order_record.status,
+                "message": "Payment failure recorded successfully."
+            }
+        else:
+            # Create a placeholder record
+            failed_record = PaymentOrderDB(
+                order_id=payload.razorpay_order_id,
+                payment_id=payload.razorpay_payment_id,
+                status="FAILED",
+                error_code=payload.error_code,
+                error_description=payload.error_description
+            )
+            db.add(failed_record)
+            db.commit()
+            return {
+                "success": True,
+                "order_id": payload.razorpay_order_id,
+                "status": "FAILED",
+                "message": "Payment failure logged."
+            }
+    except Exception as e:
+        db.rollback()
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
 @router.get("/check-status/{order_id}")
-async def check_order_status(order_id: str):
-    """Directly checks Razorpay live servers for payment status on an order ID."""
+async def check_order_status(order_id: str, db: Session = Depends(get_db)):
+    """Directly checks Razorpay live servers for payment status on an order ID and syncs database."""
     try:
         client = get_razorpay_client()
         order = client.order.fetch(order_id)
@@ -189,17 +328,38 @@ async def check_order_status(order_id: str):
         
         payments = client.order.payments(order_id)
         items = payments.get("items", [])
-        is_paid = (
-            order_status == "paid" or
-            any(p.get("status") in ["captured", "authorized"] for p in items)
-        )
         
+        captured_payment = next((p for p in items if p.get("status") in ["captured", "authorized"]), None)
+        is_paid = (order_status == "paid" or captured_payment is not None)
+        
+        # Synchronize status in database
+        try:
+            order_record = db.query(PaymentOrderDB).filter(PaymentOrderDB.order_id == order_id).first()
+            if order_record:
+                if is_paid and order_record.status != "PAID":
+                    order_record.status = "PAID"
+                    if captured_payment:
+                        order_record.payment_id = captured_payment.get("id")
+                    order_record.paid_at = datetime.utcnow()
+                    db.commit()
+                elif not is_paid and items:
+                    failed_p = next((p for p in items if p.get("status") == "failed"), None)
+                    if failed_p and order_record.status not in ["PAID"]:
+                        order_record.status = "FAILED"
+                        order_record.error_code = failed_p.get("error_code")
+                        order_record.error_description = failed_p.get("error_description")
+                        db.commit()
+        except Exception as db_sync_err:
+            print(f"[Payment] DB sync error on check-status: {db_sync_err}")
+
         return {
             "success": True,
             "paid": is_paid,
             "order_status": order_status,
             "payment_count": len(items),
-            "order_id": order_id
+            "order_id": order_id,
+            "amount_inr": order.get("amount", 0) / 100.0,
+            "currency": order.get("currency", "INR")
         }
     except Exception as e:
         return {
@@ -207,3 +367,93 @@ async def check_order_status(order_id: str):
             "paid": False,
             "error": str(e)
         }
+
+@router.get("/orders")
+async def list_payment_orders(
+    status: Optional[str] = None,
+    user_email: Optional[str] = None,
+    dpr_type: Optional[str] = None,
+    limit: int = 50,
+    offset: int = 0,
+    db: Session = Depends(get_db)
+):
+    """
+    Lists payment orders stored in the database for order management and audit.
+    """
+    try:
+        query = db.query(PaymentOrderDB)
+        if status and isinstance(status, str):
+            query = query.filter(PaymentOrderDB.status == status.upper().strip())
+        if user_email and isinstance(user_email, str):
+            query = query.filter(PaymentOrderDB.user_email.ilike(f"%{user_email.strip()}%"))
+        if dpr_type and isinstance(dpr_type, str):
+            query = query.filter(PaymentOrderDB.dpr_type.ilike(f"%{dpr_type.strip()}%"))
+
+        total = query.count()
+        actual_limit = limit if isinstance(limit, int) else 50
+        actual_offset = offset if isinstance(offset, int) else 0
+        orders = query.order_by(desc(PaymentOrderDB.created_at)).offset(actual_offset).limit(actual_limit).all()
+
+        return {
+            "success": True,
+            "total": total,
+            "limit": limit,
+            "offset": offset,
+            "orders": [
+                {
+                    "id": o.id,
+                    "order_id": o.order_id,
+                    "receipt": o.receipt,
+                    "user_email": o.user_email,
+                    "business_name": o.business_name,
+                    "dpr_type": o.dpr_type,
+                    "plan_category": o.plan_category,
+                    "amount_inr": o.amount_inr,
+                    "currency": o.currency,
+                    "status": o.status,
+                    "payment_id": o.payment_id,
+                    "error_code": o.error_code,
+                    "error_description": o.error_description,
+                    "created_at": o.created_at.isoformat() if o.created_at else None,
+                    "paid_at": o.paid_at.isoformat() if o.paid_at else None
+                }
+                for o in orders
+            ]
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch orders: {str(e)}")
+
+@router.get("/orders/{order_id}")
+async def get_payment_order_details(order_id: str, db: Session = Depends(get_db)):
+    """
+    Returns full details of a specific payment order by its Razorpay Order ID.
+    """
+    order = db.query(PaymentOrderDB).filter(PaymentOrderDB.order_id == order_id).first()
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
+    return {
+        "success": True,
+        "order": {
+            "id": order.id,
+            "order_id": order.order_id,
+            "receipt": order.receipt,
+            "user_email": order.user_email,
+            "user_phone": order.user_phone,
+            "business_name": order.business_name,
+            "dpr_type": order.dpr_type,
+            "plan_category": order.plan_category,
+            "amount_inr": order.amount_inr,
+            "amount_paise": order.amount_paise,
+            "currency": order.currency,
+            "status": order.status,
+            "payment_id": order.payment_id,
+            "signature": order.signature,
+            "error_code": order.error_code,
+            "error_description": order.error_description,
+            "metadata": order.metadata_json,
+            "created_at": order.created_at.isoformat() if order.created_at else None,
+            "updated_at": order.updated_at.isoformat() if order.updated_at else None,
+            "paid_at": order.paid_at.isoformat() if order.paid_at else None
+        }
+    }

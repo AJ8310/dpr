@@ -18,6 +18,7 @@ import {
   resolveMasterBlueprint,
   createRazorpayOrder,
   verifyRazorpayPayment,
+  recordPaymentFailure,
   checkPaymentOrderStatus,
 } from '@/lib/api';
 import { compressImageClientSide } from '@/lib/imageCompressor';
@@ -710,7 +711,11 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
       const effectiveDepth = (typeof window !== 'undefined' ? (sessionStorage.getItem('dpr_selected_plan') || localStorage.getItem('dpr_selected_plan')) : null) || formData.dpr_depth || 'core';
       const planPrice = getPlanPrice(effectiveDepth);
       console.log(`[Payment] Creating Razorpay order for Plan: ${effectiveDepth}, DPR Type: ${formData.dpr_type}, Price: ₹${planPrice}`);
-      const orderData = await createRazorpayOrder(planPrice, undefined, formData.dpr_type, effectiveDepth);
+      const orderData = await createRazorpayOrder(planPrice, undefined, formData.dpr_type, effectiveDepth, {
+        email: formData.email,
+        phone: formData.contact_number,
+        business_name: formData.business_name,
+      });
       setGenerating(false);
 
       if (!orderData.success || !orderData.order_id) {
@@ -748,6 +753,7 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
+              user_email: formData.email,
             });
 
             if (verification.success) {
@@ -777,19 +783,69 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
         notes: {
           business_name: formData.business_name || '',
           dpr_type: formData.dpr_type || '',
+          plan_depth: effectiveDepth,
         },
         theme: {
           color: '#008C95',
         },
         modal: {
-          ondismiss: function () {
+          ondismiss: async function () {
             setGenerating(false);
             setStepName('');
+            console.log('[Payment Modal Dismissed]');
+            try {
+              await recordPaymentFailure({
+                razorpay_order_id: orderData.order_id,
+                error_code: 'PAYMENT_DISMISSED',
+                error_description: 'User closed payment window before completing checkout.',
+              });
+            } catch (e) {
+              // Ignore dismissal logging error
+            }
           },
         },
       };
 
       const rzp = new (window as any).Razorpay(options);
+
+      rzp.on('payment.failed', async function (failResp: any) {
+        console.error('[Payment Failed Event]', failResp?.error);
+        setGenerating(false);
+        setStepName('');
+
+        const err = failResp?.error || {};
+        const errDesc = err.description || err.reason || 'Payment was unsuccessful or declined by issuing bank.';
+        const errCode = err.code || 'PAYMENT_FAILED';
+
+        try {
+          await recordPaymentFailure({
+            razorpay_order_id: err.metadata?.order_id || orderData.order_id,
+            razorpay_payment_id: err.metadata?.payment_id,
+            error_code: errCode,
+            error_description: errDesc,
+            error_source: err.source,
+            error_step: err.step,
+            error_reason: err.reason,
+          });
+        } catch (e) {
+          console.warn('[Payment] Failed to log failure to backend:', e);
+        }
+
+        const failAlertTitle = language === 'kn'
+          ? 'ಪಾವತಿ ವಿಫಲವಾಗಿದೆ'
+          : language === 'hi'
+          ? 'भुगतान विफल रहा'
+          : 'Payment Failed';
+
+        const failAlertMsg = language === 'kn'
+          ? `ಪಾವತಿ ಪ್ರಕ್ರಿಯೆ ವಿಫಲವಾಗಿದೆ: ${errDesc}\n\nನಿಮ್ಮ ಖಾತೆಯಿಂದ ಹಣ ಕಡಿತಗೊಂಡಿಲ್ಲ. ದಯವಿಟ್ಟು UPI, ನೆಟ್ ಬ್ಯಾಂಕಿಂಗ್ ಅಥವಾ ಬೇರೆ ಕಾರ್ಡ್ ಬಳಸಿ ಪುನಃ ಪ್ರಯತ್ನಿಸಿ.`
+          : language === 'hi'
+          ? `भुगतान प्रक्रिया विफल रही: ${errDesc}\n\nआपके खाते से कोई राशि नहीं काटी गई है। कृपया UPI, नेट बैंकिंग या अन्य कार्ड का उपयोग करके पुनः प्रयास करें।`
+          : `Payment could not be completed: ${errDesc}\n\nNo amount was charged to your account. You can retry anytime with UPI, NetBanking, or another Card.`;
+
+        alert(`${failAlertTitle}\n\n${failAlertMsg}`);
+      });
+
       rzp.open();
     } catch (err: any) {
       setGenerating(false);
@@ -1211,15 +1267,31 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
         const res = await checkPaymentOrderStatus(lastOrderId);
         if (res && res.paid) {
           setPaymentUnlocked(true);
-          alert('Payment verified from Razorpay live server! Your report is now unlocked.');
+          const successMsg = language === 'kn'
+            ? 'ರೇಜರ್‌ಪೇ ಲೈವ್ ಸರ್ವರ್‌ನಿಂದ ಪಾವತಿ ಯಶಸ್ವಿಯಾಗಿದೆ! ನಿಮ್ಮ ಅಧಿಕೃತ ಡಿಪಿಆರ್ ವರದಿ ಅನ್‌ಲಾಕ್ ಆಗಿದೆ.'
+            : language === 'hi'
+            ? 'रेज़रपे लाइव सर्वर से भुगतान सत्यापित हो गया है! आपकी आधिकारिक डीपीआर रिपोर्ट अनलॉक हो गई है।'
+            : 'Payment verified from Razorpay live server! Your report is now unlocked.';
+          alert(successMsg);
+          return;
+        } else {
+          const unpaidMsg = language === 'kn'
+            ? `ಈ ಆರ್ಡರ್‌ಗೆ ಪಾವತಿ ಇನ್ನೂ ಪೂರ್ಣಗೊಂಡಿಲ್ಲ (ಸ್ಥಿತಿ: ${res?.order_status || 'ಬಾಕಿ'}). ದಯವಿಟ್ಟು "ಪಾವತಿಸಿ & ಅಧಿಕೃತ PDF ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ" ಕ್ಲಿಕ್ ಮಾಡಿ.`
+            : language === 'hi'
+            ? `इस ऑर्डर के लिए भुगतान अभी पूरा नहीं हुआ है (स्थिति: ${res?.order_status || 'लंबित'})। कृपया "भुगतान करें एवं पीडीएफ डाउनलोड करें" पर क्लिक करें।`
+            : `Payment has not yet been completed for this order (Status: ${res?.order_status || 'Unpaid'}). Please click "Pay & Download Official PDF" to proceed.`;
+          alert(unpaidMsg);
           return;
         }
       }
-      setPaymentUnlocked(true);
-      alert('Payment status unlocked! You can now download your official DPR PDF report.');
-    } catch (e) {
-      setPaymentUnlocked(true);
-      alert('Payment status unlocked! You can now download your official DPR PDF report.');
+      const noOrderMsg = language === 'kn'
+        ? 'ಯಾವುದೇ ಪಾವತಿ ಆರ್ಡರ್ ಕಂಡುಬಂದಿಲ್ಲ. ದಯವಿಟ್ಟು "ಪಾವತಿಸಿ & ಅಧಿಕೃತ PDF ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ" ಕ್ಲಿಕ್ ಮಾಡಿ.'
+        : language === 'hi'
+        ? 'कोई सक्रिय भुगतान ऑर्डर नहीं मिला। कृपया "भुगतान करें एवं पीडीएफ डाउनलोड करें" पर क्लिक करें।'
+        : 'No pending payment order found. Please click "Pay & Download Official PDF" to initiate checkout.';
+      alert(noOrderMsg);
+    } catch (e: any) {
+      alert('Error verifying payment status: ' + (e?.message || 'Server error'));
     } finally {
       setCheckingPayment(false);
     }

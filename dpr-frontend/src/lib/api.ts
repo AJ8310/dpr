@@ -239,13 +239,26 @@ export async function getPaymentConfig() {
   return response.data;
 }
 
-export async function createRazorpayOrder(amount?: number, projectId?: string, dprType?: string, category?: string) {
+export async function createRazorpayOrder(
+  amount?: number,
+  projectId?: string,
+  dprType?: string,
+  category?: string,
+  userDetails?: {
+    email?: string;
+    phone?: string;
+    business_name?: string;
+  }
+) {
   const response = await api.post('/api/payment/create-order', {
     amount,
     currency: 'INR',
     project_id: projectId,
     dpr_type: dprType,
-    category: category
+    category: category,
+    user_email: userDetails?.email,
+    user_phone: userDetails?.phone,
+    business_name: userDetails?.business_name
   });
   return response.data;
 }
@@ -255,13 +268,43 @@ export async function verifyRazorpayPayment(paymentData: {
   razorpay_payment_id: string;
   razorpay_signature: string;
   project_id?: string;
+  user_email?: string;
 }) {
   const response = await api.post('/api/payment/verify-payment', paymentData);
   return response.data;
 }
 
+export async function recordPaymentFailure(failureData: {
+  razorpay_order_id: string;
+  razorpay_payment_id?: string;
+  error_code?: string;
+  error_description?: string;
+  error_source?: string;
+  error_step?: string;
+  error_reason?: string;
+}) {
+  const response = await api.post('/api/payment/record-failure', failureData);
+  return response.data;
+}
+
 export async function checkPaymentOrderStatus(orderId: string) {
   const response = await api.get(`/api/payment/check-status/${orderId}`);
+  return response.data;
+}
+
+export async function getPaymentOrders(params?: {
+  status?: string;
+  user_email?: string;
+  dpr_type?: string;
+  limit?: number;
+  offset?: number;
+}) {
+  const response = await api.get('/api/payment/orders', { params });
+  return response.data;
+}
+
+export async function getPaymentOrderDetails(orderId: string) {
+  const response = await api.get(`/api/payment/orders/${orderId}`);
   return response.data;
 }
 

@@ -456,3 +456,29 @@ class DPRFeatureFlagDB(Base):
     metadata_json = Column(JSON, nullable=True)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
+class PaymentOrderDB(Base):
+    __tablename__ = "payment_orders"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    order_id = Column(String(100), unique=True, index=True, nullable=False)  # Razorpay order ID
+    receipt = Column(String(100), index=True, nullable=True)
+    user_id = Column(String(36), ForeignKey("users.id"), nullable=True, index=True)
+    user_email = Column(String(255), nullable=True, index=True)
+    user_phone = Column(String(50), nullable=True)
+    business_name = Column(String(255), nullable=True)
+    dpr_type = Column(String(100), nullable=False, default="Bank Loan DPR")
+    plan_category = Column(String(50), nullable=False, default="core")  # entry, core, team, enterprise / custom
+    amount_inr = Column(Float, nullable=False, default=799.0)
+    amount_paise = Column(Integer, nullable=False, default=79900)
+    currency = Column(String(10), default="INR")
+    status = Column(String(50), default="CREATED", index=True)  # CREATED, ATTEMPTED, PAID, FAILED, CANCELLED
+    payment_id = Column(String(100), nullable=True, index=True)  # Razorpay payment ID
+    signature = Column(String(255), nullable=True)
+    error_code = Column(String(100), nullable=True)
+    error_description = Column(Text, nullable=True)
+    metadata_json = Column(JSON, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
+    paid_at = Column(DateTime(timezone=True), nullable=True)
+
+
