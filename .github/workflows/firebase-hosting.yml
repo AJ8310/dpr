@@ -5,14 +5,30 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Only one deploy at a time; a newer push cancels an older queued/running one.
+concurrency:
+  group: firebase-hosting-live
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: dpr-frontend
     steps:
       - uses: actions/checkout@v4
+
+      - name: Verify Firebase secret is configured
+        working-directory: .
+        env:
+          FIREBASE_SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DPR_FRONTEND_BADCF }}
+        run: |
+          if [ -z "$FIREBASE_SA" ]; then
+            echo "::error::Repo secret FIREBASE_SERVICE_ACCOUNT_DPR_FRONTEND_BADCF is missing. Add it in Settings > Secrets and variables > Actions."
+            exit 1
+          fi
 
       - uses: actions/setup-node@v4
         with:
