@@ -1,8 +1,9 @@
 import os
 import uuid
-from fastapi import APIRouter, File, UploadFile, HTTPException, Depends
+from fastapi import APIRouter, File, UploadFile, HTTPException, Depends, BackgroundTasks
 from fastapi.responses import FileResponse, JSONResponse
 from sqlalchemy.orm import Session
+from pydantic import BaseModel
 
 from database import get_db
 from models.database_models import DPRSubmissionDB
@@ -10,6 +11,7 @@ from models.dpr_models import DPRDataPayload
 from services.calculation_service import CalculationService
 from services.balance_sheet_parser import BalanceSheetParser
 from services.pdf_service import PDFService
+from services.email_service import EmailService
 
 router = APIRouter(prefix="/api/dpr", tags=["DPR Calculations & Reports"])
 
@@ -200,8 +202,20 @@ async def upload_dpr_image(image: UploadFile = File(...)):
         "url": f"/uploads/{filename}"
     }
 
+class SendReportEmailRequest(BaseModel):
+    recipient_email: str
+    business_name: Optional[str] = "Enterprise"
+    pdf_filename: Optional[str] = None
+    language: Optional[str] = "en"
+    order_id: Optional[str] = None
+
 @router.post("/generate-pdf")
-async def generate_pdf_report(payload: DPRDataPayload, db: Session = Depends(get_db)):
+async def generate_pdf_report(
+    payload: DPRDataPayload,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db),
+    current_user: Optional[UserDB] = Depends(get_optional_user)
+):
     # Validation: Ensure essential business information is present before generating PDF
     b_name = (payload.business_name or "").strip()
     p_cost = float(payload.total_cost or 0)
@@ -241,10 +255,76 @@ async def generate_pdf_report(payload: DPRDataPayload, db: Session = Depends(get
     
     if not os.path.exists(generated_path):
         raise HTTPException(status_code=500, detail="DPR Report generation failed.")
-        
+
+    # Automatically dispatch the official DPR report to the user's registered email
+    recipient_email = (payload.email or "").strip()
+    if not recipient_email and current_user:
+        recipient_email = (current_user.email or "").strip()
+
+    if recipient_email and "@" in recipient_email:
+        background_tasks.add_task(
+            EmailService.send_dpr_report_email,
+            recipient_email=recipient_email,
+            business_name=b_name,
+            pdf_path=generated_path,
+            language=payload.language or "en",
+            dpr_type=d_type
+        )
+        print(f"[DPR Engine] Scheduled email delivery of DPR report to registered email: {recipient_email}")
+
     media_type = "application/pdf" if generated_path.endswith(".pdf") else "text/html"
+    headers = {}
+    if recipient_email:
+        headers["X-DPR-Email-Sent-To"] = recipient_email
+
     return FileResponse(
         generated_path,
         media_type=media_type,
-        filename=f"{payload.business_name or 'DPR'}_Report" + (".pdf" if generated_path.endswith(".pdf") else ".html")
+        filename=f"{payload.business_name or 'DPR'}_Report" + (".pdf" if generated_path.endswith(".pdf") else ".html"),
+        headers=headers
     )
+
+@router.post("/send-report-email")
+async def send_report_email(
+    request: SendReportEmailRequest,
+    current_user: Optional[UserDB] = Depends(get_optional_user)
+):
+    target_email = request.recipient_email.strip()
+    if not target_email and current_user:
+        target_email = current_user.email.strip()
+        
+    if not target_email or "@" not in target_email:
+        raise HTTPException(status_code=400, detail="A valid recipient email address is required.")
+
+    # Locate target PDF
+    pdf_path = None
+    if request.pdf_filename:
+        candidate = os.path.join(UPLOAD_DIR, os.path.basename(request.pdf_filename))
+        if os.path.exists(candidate):
+            pdf_path = candidate
+
+    if not pdf_path:
+        # Pick the most recently compiled PDF
+        pdf_files = [os.path.join(UPLOAD_DIR, f) for f in os.listdir(UPLOAD_DIR) if f.startswith("DPR_") and f.endswith(".pdf")]
+        if pdf_files:
+            pdf_files.sort(key=os.path.getmtime, reverse=True)
+            pdf_path = pdf_files[0]
+
+    if not pdf_path or not os.path.exists(pdf_path):
+        raise HTTPException(status_code=404, detail="No generated DPR PDF found to send.")
+
+    result = EmailService.send_dpr_report_email(
+        recipient_email=target_email,
+        business_name=request.business_name or "Enterprise",
+        pdf_path=pdf_path,
+        language=request.language or "en",
+        order_id=request.order_id
+    )
+
+    return {
+        "success": result.get("success", False),
+        "status": result.get("status", "SENT"),
+        "recipient": target_email,
+        "detail": result.get("notice") or "Report email successfully processed."
+    }
+

@@ -22,6 +22,16 @@ class Settings(BaseSettings):
     # Gemini AI (Optional)
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
     
+    # SMTP / Email Configuration
+    SMTP_HOST: str = os.getenv("SMTP_HOST", "")
+    SMTP_PORT: int = int(os.getenv("SMTP_PORT", 587))
+    SMTP_USER: str = os.getenv("SMTP_USER", "")
+    SMTP_PASSWORD: str = os.getenv("SMTP_PASSWORD", "")
+    SMTP_FROM_NAME: str = os.getenv("SMTP_FROM_NAME", "Vision Karnataka Foundation (VKF) DPR Studio")
+    SMTP_FROM_EMAIL: str = os.getenv("SMTP_FROM_EMAIL", "")
+    SMTP_USE_TLS: bool = os.getenv("SMTP_USE_TLS", "true").lower() in ["true", "1", "yes"]
+    SMTP_USE_SSL: bool = os.getenv("SMTP_USE_SSL", "false").lower() in ["true", "1", "yes"]
+    
     # Allowed CORS Origins
     CORS_ORIGINS: list[str] = [
         o.strip().strip("[]\"'") for o in os.getenv(

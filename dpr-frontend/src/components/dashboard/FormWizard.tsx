@@ -738,7 +738,13 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
       const blob = await generatePDF(payloadWithLanguage);
       clearInterval(progressInterval);
       setProgressPercent(100);
-      setStepName(language === 'kn' ? 'ಅಂತಿಮಗೊಳಿಸಲಾಗುತ್ತಿದೆ: PDF ವರದಿ ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ!' : language === 'hi' ? 'अंतिम रूप दिया जा रहा है: पीडीएफ रिपोर्ट सफलतापूर्वक तैयार!' : 'Finalizing: PDF Report generated successfully!');
+      setStepName(
+        language === 'kn'
+          ? `ಅಂತಿಮಗೊಳಿಸಲಾಗುತ್ತಿದೆ: PDF ವರದಿ ರಚಿಸಲಾಗಿದೆ${formData.email ? ` & ${formData.email} ಗೆ ಕಳುಹಿಸಲಾಗಿದೆ!` : '!'}`
+          : language === 'hi'
+          ? `अंतिम रूप दिया जा रहा है: पीडीएफ रिपोर्ट तैयार की गई${formData.email ? ` और ${formData.email} पर भेजी गई!` : '!'}`
+          : `Finalizing: Official DPR Report generated successfully${formData.email ? ` and sent to ${formData.email}` : ''}!`
+      );
       
       await new Promise((res) => setTimeout(res, 150));
 
@@ -749,6 +755,16 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
       document.body.appendChild(link);
       link.click();
       link.remove();
+
+      if (formData.email) {
+        const emailNotice = language === 'kn'
+          ? `✅ ಅಧಿಕೃತ ಡಿಪಿಆರ್ ವರದಿ ಸಿದ್ಧವಾಗಿದೆ!\n\nವರದಿಯನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಲಾಗಿದೆ ಮತ್ತು ನಿಮ್ಮ ನೋಂದಾಯಿತ ಇಮೇಲ್ ವಿಳಾಸಕ್ಕೆ (${formData.email}) ಕಳುಹಿಸಲಾಗಿದೆ.`
+          : language === 'hi'
+          ? `✅ आधिकारिक डीपीआर रिपोर्ट तैयार है!\n\nरिपोर्ट डाउनलोड कर दी गई है और आपके पंजीकृत ईमेल पते (${formData.email}) पर भी भेज दी गई है।`
+          : `✅ Official DPR Report Compiled!\n\nYour bankable report has been downloaded and also dispatched to your registered email (${formData.email}).`;
+
+        setTimeout(() => alert(emailNotice), 500);
+      }
     } catch (err: any) {
       clearInterval(progressInterval);
       console.error('PDF Generation Exception:', err);
@@ -884,7 +900,13 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
                 sessionStorage.setItem('dpr_paid_payment_id', response.razorpay_payment_id);
                 localStorage.setItem(`dpr_paid_${formData.business_name || 'session'}`, 'true');
               }
-              setStepName('Payment verified! Compiling official PDF report...');
+              setStepName(
+                language === 'kn'
+                  ? `ಪಾವತಿ ದೃಢೀಕರಿಸಲಾಗಿದೆ! ಅಧಿಕೃತ PDF ವರದಿ ರಚಿಸಲಾಗುತ್ತಿದೆ & ${formData.email || 'ನೋಂದಾಯಿತ ಇಮೇಲ್‌'} ಗೆ ಕಳುಹಿಸಲಾಗುತ್ತಿದೆ...`
+                  : language === 'hi'
+                  ? `भुगतान सत्यापित! आधिकारिक पीडीएफ रिपोर्ट तैयार की जा रही है और ${formData.email || 'पंजीकृत ईमेल'} पर भेजी जा रही है...`
+                  : `Payment verified! Compiling official PDF report & sending to ${formData.email || 'your registered email'}...`
+              );
               await handleGeneratePDF();
             } else {
               alert('Payment signature verification failed.');
@@ -3178,10 +3200,27 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
                             <span style={{ color: '#64748B' }}>{tW.labels?.reportScopeLabel || 'Report Scope:'}</span>
                             <span style={{ color: '#334155', fontWeight: 600 }}>{activePlanMeta.pages} ({activePlanMeta.projects})</span>
                           </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0' }}>
+                            <span style={{ color: '#64748B' }}>
+                              {language === 'kn' ? 'ವರದಿ ಕಳುಹಿಸುವ ಇಮೇಲ್:' : language === 'hi' ? 'रिपोर्ट भेजने का ईमेल:' : 'Report Dispatch Email:'}
+                            </span>
+                            <strong style={{ color: '#008C95', wordBreak: 'break-all' }}>{formData.email || 'Registered User Email'}</strong>
+                          </div>
                           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderTop: '1px dashed #E2E8F0', marginTop: '4px', paddingTop: '8px' }}>
                             <span style={{ color: '#0F172A', fontWeight: 700, fontSize: '0.95rem' }}>{tW.labels?.totalPayableLabel || 'Total Amount Payable:'}</span>
                             <strong style={{ fontSize: '1.25rem', color: '#008C95' }}>₹{getDisplayPrice()}</strong>
                           </div>
+                        </div>
+
+                        <div style={{ fontSize: '0.78rem', color: '#008C95', display: 'flex', alignItems: 'center', gap: '8px', background: '#F0FDFA', padding: '8px 12px', borderRadius: '8px', border: '1px solid #CCFBF1', marginTop: '2px' }}>
+                          <i className="fas fa-envelope-open-text" style={{ color: '#008C95', fontSize: '0.95rem' }} />
+                          <span>
+                            {language === 'kn'
+                              ? `ಪಾವತಿ ಯಶಸ್ವಿಯಾದ ತಕ್ಷಣ, ಅಧಿಕೃತ PDF ವರದಿಯನ್ನು ನಿಮ್ಮ ನೋಂದಾಯಿತ ಇಮೇಲ್ (${formData.email || 'ಖಾತೆಗೆ'}) ಗೆ ಕಳುಹಿಸಲಾಗುವುದು.`
+                              : language === 'hi'
+                              ? `भुगतान सफल होते ही, आधिकारिक पीडीएफ रिपोर्ट आपके पंजीकृत ईमेल (${formData.email || 'खाते'}) पर भेज दी जाएगी।`
+                              : `As soon as payment succeeds, the official DPR report will be automatically dispatched to your email (${formData.email || 'registered address'}).`}
+                          </span>
                         </div>
 
                         <div style={{ fontSize: '0.76rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '8px', background: '#F8FAFC', padding: '8px 12px', borderRadius: '8px', border: '1px solid #E2E8F0', marginTop: '2px' }}>

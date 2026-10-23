@@ -35,6 +35,7 @@ dpr-backend/uploads/*.jpeg
 dpr-backend/uploads/visual_cards/
 dpr-backend/uploads/charts/
 dpr-backend/uploads/documents/
+dpr-backend/uploads/emails/
 scratch/
 
 # IDE & OS Files

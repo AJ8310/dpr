@@ -481,4 +481,18 @@ class PaymentOrderDB(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
     paid_at = Column(DateTime(timezone=True), nullable=True)
 
+class EmailLogDB(Base):
+    __tablename__ = "email_logs"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    recipient_email = Column(String(255), nullable=False, index=True)
+    business_name = Column(String(255), nullable=True)
+    subject = Column(String(255), nullable=False)
+    status = Column(String(50), default="SENT", index=True)  # SENT, LOCAL_ARCHIVED, FAILED
+    order_id = Column(String(100), nullable=True, index=True)
+    pdf_filename = Column(String(255), nullable=True)
+    error_message = Column(Text, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)
+
+
 
