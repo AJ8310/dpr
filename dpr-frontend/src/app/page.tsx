@@ -43,8 +43,8 @@ export default function Home() {
           setSession(null);
         } else {
           setSession(parsed);
-          const storedService = sessionStorage.getItem('dpr_selected_service') || 'Bank Loan DPR';
-          const storedPlan = sessionStorage.getItem('dpr_selected_plan') || 'core';
+          const storedService = sessionStorage.getItem('dpr_selected_service') || localStorage.getItem('dpr_selected_service') || 'Bank Loan DPR';
+          const storedPlan = sessionStorage.getItem('dpr_selected_plan') || localStorage.getItem('dpr_selected_plan') || 'core';
           setSelectedService(storedService);
           setCurrentPlanId(storedPlan);
         }
@@ -66,13 +66,14 @@ export default function Home() {
 
   const handleSelectService = (serviceName: string) => {
     sessionStorage.setItem('dpr_selected_service', serviceName);
+    localStorage.setItem('dpr_selected_service', serviceName);
     setSelectedService(serviceName);
     setActiveStepIndex(0);
   };
 
   const handleLoginSuccess = (sess: UserSession) => {
-    const storedService = sessionStorage.getItem('dpr_selected_service') || 'Bank Loan DPR';
-    const storedPlan = sessionStorage.getItem('dpr_selected_plan') || 'core';
+    const storedService = sessionStorage.getItem('dpr_selected_service') || localStorage.getItem('dpr_selected_service') || 'Bank Loan DPR';
+    const storedPlan = sessionStorage.getItem('dpr_selected_plan') || localStorage.getItem('dpr_selected_plan') || 'core';
     setSelectedService(storedService);
     setCurrentPlanId(storedPlan);
     setSession(sess);
@@ -191,6 +192,7 @@ export default function Home() {
 
         <FormWizard
           initialService={selectedService || 'Bank Loan DPR'}
+          currentPlanId={currentPlanId}
           activeStep={activeStepIndex}
           setActiveStep={(step) => setActiveStepIndex(step)}
           onNextStep={() => setActiveStepIndex((prev) => Math.min(prev + 1, 13))}
@@ -221,7 +223,10 @@ export default function Home() {
           setCurrentPlanId(planId);
           if (typeof window !== 'undefined') {
             sessionStorage.setItem('dpr_selected_service', svc);
+            localStorage.setItem('dpr_selected_service', svc);
             sessionStorage.setItem('dpr_selected_plan', planId);
+            localStorage.setItem('dpr_selected_plan', planId);
+            window.dispatchEvent(new CustomEvent('dpr_plan_changed', { detail: planId }));
           }
         }}
       />

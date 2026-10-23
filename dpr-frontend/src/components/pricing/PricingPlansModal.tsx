@@ -171,8 +171,11 @@ export default function PricingPlansModal({
     setSelectedPlanId(planId);
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('dpr_selected_plan', planId);
+      localStorage.setItem('dpr_selected_plan', planId);
       sessionStorage.setItem('dpr_selected_service', activeRoute.serviceName);
+      localStorage.setItem('dpr_selected_service', activeRoute.serviceName);
       sessionStorage.setItem('dpr_plan_chosen', 'true');
+      window.dispatchEvent(new CustomEvent('dpr_plan_changed', { detail: planId }));
     }
     if (onSelectPlan) {
       onSelectPlan(selectedRouteKey, planId);
@@ -309,7 +312,7 @@ export default function PricingPlansModal({
             return (
               <div
                 key={plan.id}
-                onClick={() => setSelectedPlanId(plan.id)}
+                onClick={() => handleSelect(plan.id)}
                 style={{
                   background: '#FFFFFF',
                   borderRadius: '20px',
@@ -439,7 +442,12 @@ export default function PricingPlansModal({
           </div>
           <button
             type="button"
-            onClick={onClose}
+            onClick={() => {
+              if (selectedPlanId) {
+                handleSelect(selectedPlanId);
+              }
+              onClose();
+            }}
             style={{
               background: '#0F172A',
               color: '#FFFFFF',

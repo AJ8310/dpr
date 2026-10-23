@@ -29,16 +29,29 @@ import { wizardTranslations } from '@/i18n/wizardTranslations';
 
 interface FormWizardProps {
   initialService: string;
+  currentPlanId?: string;
   activeStep: number;
   setActiveStep: (step: number) => void;
   onNextStep: () => void;
 }
 
-export default function FormWizard({ initialService, activeStep, setActiveStep }: FormWizardProps) {
+export default function FormWizard({ initialService, currentPlanId, activeStep, setActiveStep }: FormWizardProps) {
   const { language } = useLanguage();
   const tW = wizardTranslations[language] || wizardTranslations.en;
+
+  const getRecentSelection = () => {
+    if (typeof window !== 'undefined') {
+      const plan = sessionStorage.getItem('dpr_selected_plan') || localStorage.getItem('dpr_selected_plan') || currentPlanId || 'core';
+      const svc = sessionStorage.getItem('dpr_selected_service') || localStorage.getItem('dpr_selected_service') || initialService || 'Bank Loan DPR';
+      return { plan, svc };
+    }
+    return { plan: currentPlanId || 'core', svc: initialService || 'Bank Loan DPR' };
+  };
+
+  const initialMeta = getRecentSelection();
+
   const [formData, setFormData] = useState<DPRFormData>({
-    dpr_type: initialService || 'Bank Loan DPR',
+    dpr_type: initialMeta.svc,
     sector_id: 'manufacturing',
     activity_id: 'cnc_machining',
     project_type_id: 'new_project',
@@ -153,7 +166,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
     designation: '',
     place: '',
     declaration_date: new Date().toISOString().split('T')[0],
-    dpr_depth: 'entry',
+    dpr_depth: initialMeta.plan,
     associated_with_vkf: false
   });
 
@@ -203,9 +216,13 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
     getLatestDraft()
       .then((res) => {
         if (res && res.has_draft && res.data) {
+          const recentPlan = typeof window !== 'undefined' ? (sessionStorage.getItem('dpr_selected_plan') || localStorage.getItem('dpr_selected_plan') || currentPlanId) : currentPlanId;
+          const recentService = typeof window !== 'undefined' ? (sessionStorage.getItem('dpr_selected_service') || localStorage.getItem('dpr_selected_service') || initialService) : initialService;
           setFormData((prev) => ({
             ...prev,
             ...res.data,
+            ...(recentPlan ? { dpr_depth: recentPlan } : {}),
+            ...(recentService ? { dpr_type: recentService } : {}),
           }));
           if (typeof res.data.activeStep === 'number' && res.data.activeStep >= 0 && res.data.activeStep <= 13) {
             setActiveStep(res.data.activeStep);
@@ -218,7 +235,14 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
             try {
               const parsed = JSON.parse(localBackup);
               if (parsed) {
-                setFormData((prev) => ({ ...prev, ...parsed }));
+                const recentPlan = sessionStorage.getItem('dpr_selected_plan') || localStorage.getItem('dpr_selected_plan') || currentPlanId;
+                const recentService = sessionStorage.getItem('dpr_selected_service') || localStorage.getItem('dpr_selected_service') || initialService;
+                setFormData((prev) => ({
+                  ...prev,
+                  ...parsed,
+                  ...(recentPlan ? { dpr_depth: recentPlan } : {}),
+                  ...(recentService ? { dpr_type: recentService } : {}),
+                }));
                 if (typeof parsed.activeStep === 'number' && parsed.activeStep >= 0 && parsed.activeStep <= 13) {
                   setActiveStep(parsed.activeStep);
                 }
@@ -236,7 +260,14 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
             try {
               const parsed = JSON.parse(localBackup);
               if (parsed) {
-                setFormData((prev) => ({ ...prev, ...parsed }));
+                const recentPlan = sessionStorage.getItem('dpr_selected_plan') || localStorage.getItem('dpr_selected_plan') || currentPlanId;
+                const recentService = sessionStorage.getItem('dpr_selected_service') || localStorage.getItem('dpr_selected_service') || initialService;
+                setFormData((prev) => ({
+                  ...prev,
+                  ...parsed,
+                  ...(recentPlan ? { dpr_depth: recentPlan } : {}),
+                  ...(recentService ? { dpr_type: recentService } : {}),
+                }));
                 if (typeof parsed.activeStep === 'number' && parsed.activeStep >= 0 && parsed.activeStep <= 13) {
                   setActiveStep(parsed.activeStep);
                 }
@@ -248,15 +279,40 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       });
   }, []);
 
-  // Synchronize formData.dpr_type and dpr_depth whenever initialService changes or on mount
+  // Listen for real-time plan selection changes from anywhere in the application
+  React.useEffect(() => {
+    const handleSyncPlan = (e?: any) => {
+      if (typeof window !== 'undefined') {
+        const plan = (e && e.detail) || sessionStorage.getItem('dpr_selected_plan') || localStorage.getItem('dpr_selected_plan');
+        const svc = sessionStorage.getItem('dpr_selected_service') || localStorage.getItem('dpr_selected_service');
+        if (plan) {
+          setFormData((prev) => (prev.dpr_depth !== plan ? { ...prev, dpr_depth: plan } : prev));
+        }
+        if (svc) {
+          setFormData((prev) => (prev.dpr_type !== svc ? { ...prev, dpr_type: svc } : prev));
+        }
+      }
+    };
+    if (typeof window !== 'undefined') {
+      window.addEventListener('storage', handleSyncPlan);
+      window.addEventListener('dpr_plan_changed', handleSyncPlan);
+      return () => {
+        window.removeEventListener('storage', handleSyncPlan);
+        window.removeEventListener('dpr_plan_changed', handleSyncPlan);
+      };
+    }
+  }, []);
+
+  // Synchronize formData.dpr_type and dpr_depth whenever initialService or currentPlanId changes
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
-      const storedPlan = sessionStorage.getItem('dpr_selected_plan');
+      const storedPlan = sessionStorage.getItem('dpr_selected_plan') || localStorage.getItem('dpr_selected_plan') || currentPlanId;
       if (storedPlan) {
-        setFormData((prev) => ({
-          ...prev,
-          dpr_depth: storedPlan,
-        }));
+        setFormData((prev) => (prev.dpr_depth !== storedPlan ? { ...prev, dpr_depth: storedPlan } : prev));
+      }
+      const storedService = sessionStorage.getItem('dpr_selected_service') || localStorage.getItem('dpr_selected_service');
+      if (storedService) {
+        setFormData((prev) => (prev.dpr_type !== storedService ? { ...prev, dpr_type: storedService } : prev));
       }
     }
     if (initialService) {
@@ -266,12 +322,9 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       } else if (initialService.includes('Investor') || initialService.includes('Pitch')) {
         canonicalType = 'Investor / Business Pitch DPR';
       }
-      setFormData((prev) => ({
-        ...prev,
-        dpr_type: canonicalType
-      }));
+      setFormData((prev) => (prev.dpr_type !== canonicalType ? { ...prev, dpr_type: canonicalType } : prev));
     }
-  }, [initialService]);
+  }, [initialService, currentPlanId]);
 
   // Dynamically load activities when sector_id changes
   React.useEffect(() => {
@@ -620,7 +673,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
   };
 
   const getPlanPrice = (planId?: string): number => {
-    const depth = (planId || formData.dpr_depth || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_selected_plan') : null) || 'entry').toLowerCase().trim();
+    const raw = (planId || (typeof window !== 'undefined' ? (sessionStorage.getItem('dpr_selected_plan') || localStorage.getItem('dpr_selected_plan')) : null) || formData.dpr_depth || 'core');
+    const depth = raw.toLowerCase().trim();
     if (depth === 'core' || depth === 'standard') {
       return 799;
     }
@@ -634,7 +688,7 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
   };
 
   const getDisplayPrice = (): string => {
-    const currentDepth = formData.dpr_depth || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_selected_plan') : null) || 'core';
+    const currentDepth = (typeof window !== 'undefined' ? (sessionStorage.getItem('dpr_selected_plan') || localStorage.getItem('dpr_selected_plan')) : null) || formData.dpr_depth || 'core';
     return getPlanPrice(currentDepth).toLocaleString('en-IN');
   };
 
@@ -653,8 +707,9 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
       setGenerating(true);
       setStepName('Initializing Razorpay Order...');
 
-      const effectiveDepth = formData.dpr_depth || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_selected_plan') : null) || 'core';
+      const effectiveDepth = (typeof window !== 'undefined' ? (sessionStorage.getItem('dpr_selected_plan') || localStorage.getItem('dpr_selected_plan')) : null) || formData.dpr_depth || 'core';
       const planPrice = getPlanPrice(effectiveDepth);
+      console.log(`[Payment] Creating Razorpay order for Plan: ${effectiveDepth}, DPR Type: ${formData.dpr_type}, Price: ₹${planPrice}`);
       const orderData = await createRazorpayOrder(planPrice, undefined, formData.dpr_type, effectiveDepth);
       setGenerating(false);
 
@@ -669,9 +724,12 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
         core: tW.labels?.corePlanName || 'Core Plan',
         standard: tW.labels?.corePlanName || 'Core Plan',
         team: tW.labels?.teamPlanName || 'Team Plan',
+        advanced: tW.labels?.teamPlanName || 'Team Plan',
+        detailed: tW.labels?.teamPlanName || 'Team Plan',
         comprehensive: tW.labels?.teamPlanName || 'Team Plan',
         ent: tW.labels?.enterprisePlanName || 'Enterprise Bankable',
         enterprise: tW.labels?.enterprisePlanName || 'Enterprise Bankable',
+        custom: tW.labels?.enterprisePlanName || 'Custom Plan',
       };
       const planTitle = planNameMap[effectiveDepth.toLowerCase()] || 'DPR Plan';
 
@@ -2706,8 +2764,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                 title: tW.sectors[13]?.questions?.report_depth?.title || 'Target DPR Report Length & Depth',
                 description: tW.sectors[13]?.questions?.report_depth?.desc || 'Choose Entry (15-20 Pgs), Core (25-35 Pgs), Team (35-45 Pgs), or Enterprise (45-60 Pgs)',
                 content: (() => {
-                  const currentPlanKey = (formData.dpr_depth || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_selected_plan') : null) || 'entry').toLowerCase().trim();
-                  const normalizedDepth = (currentPlanKey === 'core' || currentPlanKey === 'standard') ? 'core' : (currentPlanKey === 'team' || currentPlanKey === 'advanced' || currentPlanKey === 'detailed' || currentPlanKey === 'comprehensive') ? 'team' : (currentPlanKey === 'enterprise' || currentPlanKey === 'ent' || currentPlanKey === 'premium') ? 'enterprise' : 'entry';
+                  const currentPlanKey = ((typeof window !== 'undefined' ? (sessionStorage.getItem('dpr_selected_plan') || localStorage.getItem('dpr_selected_plan')) : null) || formData.dpr_depth || 'core').toLowerCase().trim();
+                  const normalizedDepth = (currentPlanKey === 'core' || currentPlanKey === 'standard') ? 'core' : (currentPlanKey === 'team' || currentPlanKey === 'advanced' || currentPlanKey === 'detailed' || currentPlanKey === 'comprehensive') ? 'team' : (currentPlanKey === 'enterprise' || currentPlanKey === 'ent' || currentPlanKey === 'premium' || currentPlanKey === 'custom') ? 'enterprise' : 'entry';
 
                   const plans = [
                     {
@@ -2773,6 +2831,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                               setFormData((prev) => ({ ...prev, dpr_depth: p.id }));
                               if (typeof window !== 'undefined') {
                                 sessionStorage.setItem('dpr_selected_plan', p.id);
+                                localStorage.setItem('dpr_selected_plan', p.id);
+                                window.dispatchEvent(new CustomEvent('dpr_plan_changed', { detail: p.id }));
                               }
                             }}
                             style={{
@@ -2839,8 +2899,8 @@ export default function FormWizard({ initialService, activeStep, setActiveStep }
                 title: tW.sectors[13]?.questions?.approve_compile?.title || 'User Approval & Report Generation',
                 description: tW.sectors[13]?.questions?.approve_compile?.desc || 'Compile publication-ready official bankable PDF report',
                 content: (() => {
-                  const currentPlanKey = (formData.dpr_depth || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_selected_plan') : null) || 'entry').toLowerCase().trim();
-                  const normalizedDepth = (currentPlanKey === 'core' || currentPlanKey === 'standard') ? 'core' : (currentPlanKey === 'team' || currentPlanKey === 'advanced' || currentPlanKey === 'detailed' || currentPlanKey === 'comprehensive') ? 'team' : (currentPlanKey === 'enterprise' || currentPlanKey === 'ent' || currentPlanKey === 'premium') ? 'enterprise' : 'entry';
+                  const currentPlanKey = ((typeof window !== 'undefined' ? (sessionStorage.getItem('dpr_selected_plan') || localStorage.getItem('dpr_selected_plan')) : null) || formData.dpr_depth || 'core').toLowerCase().trim();
+                  const normalizedDepth = (currentPlanKey === 'core' || currentPlanKey === 'standard') ? 'core' : (currentPlanKey === 'team' || currentPlanKey === 'advanced' || currentPlanKey === 'detailed' || currentPlanKey === 'comprehensive') ? 'team' : (currentPlanKey === 'enterprise' || currentPlanKey === 'ent' || currentPlanKey === 'premium' || currentPlanKey === 'custom') ? 'enterprise' : 'entry';
 
                   const planNameMap: Record<string, { name: string; pages: string; projects: string }> = {
                     entry: {

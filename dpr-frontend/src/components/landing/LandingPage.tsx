@@ -90,8 +90,13 @@ export default function LandingPage({ onLoginSuccess, initialShowPlans = false }
     };
     const canonicalService = serviceMap[routeKey] || 'Bank Loan DPR';
     sessionStorage.setItem('dpr_selected_service', canonicalService);
+    localStorage.setItem('dpr_selected_service', canonicalService);
     if (planId) {
       sessionStorage.setItem('dpr_selected_plan', planId);
+      localStorage.setItem('dpr_selected_plan', planId);
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('dpr_plan_changed', { detail: planId }));
+      }
     }
   };
 
