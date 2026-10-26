@@ -2437,7 +2437,7 @@ export default function LandingPage({ onLoginSuccess, initialShowPlans = false }
 
           <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', color: '#86868B' }}>
             <div>&copy; {new Date().getFullYear()} {t.footer.rights}</div>
-            <div>{t.footer.institution}</div>
+            <div>{t.footer.institution} • <span style={{ color: '#008C95', fontWeight: 600 }}>Powered by Infopace Management Pvt Ltd</span></div>
           </div>
 
         </div>

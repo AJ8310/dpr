@@ -208,6 +208,25 @@ export default function RegisterCard({ onRegisterSuccess, onSwitchToLogin }: Reg
             {t.common.signIn}
           </button>
         </div>
+
+        {/* Powered by Infopace Management Pvt Ltd */}
+        <div
+          style={{
+            marginTop: '1.4rem',
+            paddingTop: '0.9rem',
+            borderTop: '1px solid #E2E8F0',
+            textAlign: 'center',
+            fontSize: '0.78rem',
+            color: '#64748B',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.35rem',
+          }}
+        >
+          <span>Powered by</span>
+          <strong style={{ color: '#008C95', fontWeight: 700 }}>Infopace Management Pvt Ltd</strong>
+        </div>
       </form>
     </div>
   );
