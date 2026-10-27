@@ -28,7 +28,7 @@ export interface WizardTranslations {
     desc: string;
     resetBtn: string;
     uploadBtn: string;
-    loadSampleBtn: string;
+    loadSampleBtn?: string;
     parsing: string;
   };
   progressive: {
@@ -136,7 +136,6 @@ export const wizardTranslations: Record<Language, WizardTranslations> = {
       desc: 'Upload GST Certificate, Udyam MSME, Quotations, Bank Statements, or Proposal PDF/Image. The engine will auto-fill your fields below!',
       resetBtn: 'Reset Form',
       uploadBtn: 'Upload Document to Auto-Fill',
-      loadSampleBtn: '⚡ Auto-Fill Sample Data (1-Click Demo)',
       parsing: 'Parsing & Auto-Filling...',
     },
     progressive: {
@@ -526,7 +525,6 @@ export const wizardTranslations: Record<Language, WizardTranslations> = {
       desc: 'ಜಿಎಸ್‌ಟಿ ಪ್ರಮಾಣಪತ್ರ, ಉದ್ಯಮ್ ಎಂಎಸ್‌ಎಂಇ, ಕೊಟೇಶನ್‌ಗಳು, ಬ್ಯಾಂಕ್ ಸ್ಟೇಟ್‌ಮೆಂಟ್‌ಗಳು ಅಥವಾ ಪ್ರಸ್ತಾವನೆ ಪಿಡಿಎಫ್/ಚಿತ್ರವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ. ಇಂಜಿನ್ ನಿಮ್ಮ ಕ್ಷೇತ್ರಗಳನ್ನು ಕೆಳಗೆ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಭರ್ತಿ ಮಾಡುತ್ತದೆ!',
       resetBtn: 'ಫಾರ್ಮ್ ಮರುಹೊಂದಿಸಿ',
       uploadBtn: 'ದಾಖಲೆ ಅಪ್‌ಲೋಡ್ ಮೂಲಕ ಸ್ವಯಂ ಭರ್ತಿ',
-      loadSampleBtn: '⚡ ಮಾದರಿ ಮಾಹಿತಿ ಭರ್ತಿ ಮಾಡಿ (ಪರೀಕ್ಷೆ & ಮುನ್ನೋಟ)',
       parsing: 'ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ & ಭರ್ತಿ ಮಾಡಲಾಗುತ್ತಿದೆ...',
     },
     progressive: {
@@ -916,7 +914,6 @@ export const wizardTranslations: Record<Language, WizardTranslations> = {
       desc: 'जीएसटी प्रमाणपत्र, उद्यम एमएसएमई, कोटेशन, बैंक विवरण या प्रस्ताव पीडीएफ/छवि अपलोड करें। इंजन नीचे आपके फ़ील्ड को स्वचालित रूप से भर देगा!',
       resetBtn: 'फ़ॉर्म रीसेट करें',
       uploadBtn: 'ऑटो-फ़िल के लिए दस्तावेज़ अपलोड करें',
-      loadSampleBtn: '⚡ नमूना डेटा भरें (परीक्षण एवं पूर्वावलोकन)',
       parsing: 'विश्लेषण एवं ऑटो-फ़िल जारी है...',
     },
     progressive: {
