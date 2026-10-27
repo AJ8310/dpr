@@ -269,8 +269,19 @@ export async function verifyRazorpayPayment(paymentData: {
   razorpay_signature: string;
   project_id?: string;
   user_email?: string;
+  user_phone?: string;
+  business_name?: string;
+  customer_name?: string;
+  language?: string;
 }) {
   const response = await api.post('/api/payment/verify-payment', paymentData);
+  return response.data;
+}
+
+export async function downloadPaymentInvoice(orderId: string): Promise<Blob> {
+  const response = await api.get(`/api/payment/invoice/${orderId}`, {
+    responseType: 'blob',
+  });
   return response.data;
 }
 

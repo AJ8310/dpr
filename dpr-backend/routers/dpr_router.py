@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
 from database import get_db
-from models.database_models import DPRSubmissionDB
+from models.database_models import DPRSubmissionDB, PaymentOrderDB
 from models.dpr_models import DPRDataPayload
 from services.calculation_service import CalculationService
 from services.balance_sheet_parser import BalanceSheetParser
@@ -256,10 +256,19 @@ async def generate_pdf_report(
     if not os.path.exists(generated_path):
         raise HTTPException(status_code=500, detail="DPR Report generation failed.")
 
-    # Automatically dispatch the official DPR report to the user's registered email
+    # Automatically dispatch the official DPR report (and Tax Invoice if present) to the user's registered email
     recipient_email = (payload.email or "").strip()
     if not recipient_email and current_user:
         recipient_email = (current_user.email or "").strip()
+
+    invoice_path = None
+    if recipient_email:
+        recent_order = db.query(PaymentOrderDB).filter(
+            PaymentOrderDB.user_email.ilike(recipient_email),
+            PaymentOrderDB.status == "PAID"
+        ).order_by(PaymentOrderDB.created_at.desc()).first()
+        if recent_order and recent_order.invoice_path and os.path.exists(recent_order.invoice_path):
+            invoice_path = recent_order.invoice_path
 
     if recipient_email and "@" in recipient_email:
         background_tasks.add_task(
@@ -268,7 +277,8 @@ async def generate_pdf_report(
             business_name=b_name,
             pdf_path=generated_path,
             language=payload.language or "en",
-            dpr_type=d_type
+            dpr_type=d_type,
+            invoice_path=invoice_path
         )
         print(f"[DPR Engine] Scheduled email delivery of DPR report to registered email: {recipient_email}")
 

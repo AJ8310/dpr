@@ -1,7 +1,9 @@
 import time
+import os
 from datetime import datetime
 from typing import Optional, List, Dict, Any
-from fastapi import APIRouter, HTTPException, Depends, Query
+from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 import razorpay
 from sqlalchemy.orm import Session
@@ -10,6 +12,8 @@ from sqlalchemy import desc
 from config import settings
 from database import get_db, engine, Base
 from models.database_models import PaymentOrderDB
+from services.invoice_service import InvoiceService
+from services.email_service import EmailService
 
 # Ensure table is created
 try:
@@ -119,6 +123,10 @@ class VerifyPaymentRequest(BaseModel):
     project_id: Optional[str] = None
     user_id: Optional[str] = None
     user_email: Optional[str] = None
+    user_phone: Optional[str] = None
+    business_name: Optional[str] = None
+    customer_name: Optional[str] = None
+    language: Optional[str] = "en"
 
 class RecordFailureRequest(BaseModel):
     razorpay_order_id: str
@@ -210,10 +218,16 @@ async def create_razorpay_order(payload: CreateOrderRequest, db: Session = Depen
         raise HTTPException(status_code=400, detail=f"Failed to create Razorpay Order: {str(e)}")
 
 @router.post("/verify-payment")
-async def verify_razorpay_payment(payload: VerifyPaymentRequest, db: Session = Depends(get_db)):
+async def verify_razorpay_payment(
+    payload: VerifyPaymentRequest,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db)
+):
     """
     Verifies HMAC SHA256 signature from Razorpay checkout popup,
-    updates order status to PAID in the database, and unlocks DPR generation.
+    updates order status to PAID, generates an official Tax Invoice PDF,
+    dispatches the invoice to the user's registered email via background task,
+    and unlocks DPR generation.
     """
     try:
         client = get_razorpay_client()
@@ -235,27 +249,79 @@ async def verify_razorpay_payment(payload: VerifyPaymentRequest, db: Session = D
             order_record.paid_at = now
             if payload.user_email and not order_record.user_email:
                 order_record.user_email = payload.user_email
-            db.commit()
+            if payload.user_phone and not order_record.user_phone:
+                order_record.user_phone = payload.user_phone
+            if payload.business_name and not order_record.business_name:
+                order_record.business_name = payload.business_name
         else:
             # Fallback create record if order was created earlier or outside current session
-            new_record = PaymentOrderDB(
+            order_record = PaymentOrderDB(
                 order_id=payload.razorpay_order_id,
                 payment_id=payload.razorpay_payment_id,
                 signature=payload.razorpay_signature,
                 status="PAID",
                 user_email=payload.user_email,
+                user_phone=payload.user_phone,
+                business_name=payload.business_name or "Enterprise",
                 paid_at=now
             )
-            db.add(new_record)
+            db.add(order_record)
+        
+        db.commit()
+        db.refresh(order_record)
+
+        # Generate Official Tax Invoice PDF
+        recipient_email = (order_record.user_email or payload.user_email or "").strip()
+        invoice_data = {
+            "order_id": payload.razorpay_order_id,
+            "payment_id": payload.razorpay_payment_id,
+            "user_email": recipient_email,
+            "user_phone": order_record.user_phone or payload.user_phone,
+            "customer_name": payload.customer_name or order_record.business_name,
+            "business_name": order_record.business_name or payload.business_name or "Enterprise",
+            "dpr_type": order_record.dpr_type,
+            "plan_category": order_record.plan_category,
+            "amount_inr": order_record.amount_inr or 799.0,
+            "currency": order_record.currency or "INR",
+            "paid_at": order_record.paid_at or now
+        }
+
+        try:
+            invoice_no, invoice_path = await InvoiceService.generate_invoice_pdf(invoice_data)
+            order_record.invoice_number = invoice_no
+            order_record.invoice_path = invoice_path
             db.commit()
+        except Exception as inv_err:
+            print(f"[Payment] Notice: Invoice PDF generation error: {inv_err}")
+            invoice_no = InvoiceService.generate_invoice_number(payload.razorpay_order_id)
+            invoice_path = None
+
+        # Automatically email the Tax Invoice to the user's registered email
+        if recipient_email and "@" in recipient_email:
+            background_tasks.add_task(
+                EmailService.send_invoice_email,
+                recipient_email=recipient_email,
+                business_name=order_record.business_name or "Enterprise",
+                invoice_number=invoice_no,
+                invoice_pdf_path=invoice_path,
+                order_id=payload.razorpay_order_id,
+                payment_id=payload.razorpay_payment_id,
+                amount_inr=order_record.amount_inr or 799.0,
+                dpr_type=order_record.dpr_type,
+                language=payload.language or "en"
+            )
+            print(f"[Payment] Scheduled Tax Invoice email to registered email: {recipient_email}")
 
         return {
             "success": True,
             "unlocked": True,
             "status": "PAID",
-            "message": "Payment verified successfully! DPR application unlocked.",
+            "message": "Payment verified successfully! Tax invoice generated and dispatched to your registered email.",
             "order_id": payload.razorpay_order_id,
-            "payment_id": payload.razorpay_payment_id
+            "payment_id": payload.razorpay_payment_id,
+            "invoice_number": invoice_no,
+            "invoice_url": f"/api/payment/invoice/{payload.razorpay_order_id}",
+            "recipient_email": recipient_email
         }
     except razorpay.errors.SignatureVerificationError:
         # Mark order as failed verification in database
@@ -318,7 +384,11 @@ async def record_payment_failure(payload: RecordFailureRequest, db: Session = De
         }
 
 @router.get("/check-status/{order_id}")
-async def check_order_status(order_id: str, db: Session = Depends(get_db)):
+async def check_order_status(
+    order_id: str,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db)
+):
     """Directly checks Razorpay live servers for payment status on an order ID and syncs database."""
     try:
         client = get_razorpay_client()
@@ -340,6 +410,41 @@ async def check_order_status(order_id: str, db: Session = Depends(get_db)):
                     if captured_payment:
                         order_record.payment_id = captured_payment.get("id")
                     order_record.paid_at = datetime.utcnow()
+                    
+                    # Generate invoice if missing
+                    if not order_record.invoice_path:
+                        try:
+                            invoice_data = {
+                                "order_id": order_record.order_id,
+                                "payment_id": order_record.payment_id or "PAID",
+                                "user_email": order_record.user_email,
+                                "user_phone": order_record.user_phone,
+                                "business_name": order_record.business_name or "Enterprise",
+                                "dpr_type": order_record.dpr_type,
+                                "plan_category": order_record.plan_category,
+                                "amount_inr": order_record.amount_inr,
+                                "currency": order_record.currency,
+                                "paid_at": order_record.paid_at
+                            }
+                            inv_no, inv_path = await InvoiceService.generate_invoice_pdf(invoice_data)
+                            order_record.invoice_number = inv_no
+                            order_record.invoice_path = inv_path
+                            
+                            if order_record.user_email and "@" in order_record.user_email:
+                                background_tasks.add_task(
+                                    EmailService.send_invoice_email,
+                                    recipient_email=order_record.user_email,
+                                    business_name=order_record.business_name or "Enterprise",
+                                    invoice_number=inv_no,
+                                    invoice_pdf_path=inv_path,
+                                    order_id=order_record.order_id,
+                                    payment_id=order_record.payment_id or "PAID",
+                                    amount_inr=order_record.amount_inr or 799.0,
+                                    dpr_type=order_record.dpr_type
+                                )
+                        except Exception as inv_e:
+                            print(f"[Payment] check_order_status invoice generation notice: {inv_e}")
+
                     db.commit()
                 elif not is_paid and items:
                     failed_p = next((p for p in items if p.get("status") == "failed"), None)
@@ -451,8 +556,51 @@ async def get_payment_order_details(order_id: str, db: Session = Depends(get_db)
             "error_code": order.error_code,
             "error_description": order.error_description,
             "metadata": order.metadata_json,
+            "invoice_number": order.invoice_number,
             "created_at": order.created_at.isoformat() if order.created_at else None,
             "updated_at": order.updated_at.isoformat() if order.updated_at else None,
             "paid_at": order.paid_at.isoformat() if order.paid_at else None
         }
     }
+
+@router.get("/invoice/{order_id}")
+async def download_invoice_pdf(order_id: str, db: Session = Depends(get_db)):
+    """
+    Downloads or renders the official Tax Invoice & Payment Receipt PDF for a paid order.
+    Generates it on-the-fly if not already generated.
+    """
+    order = db.query(PaymentOrderDB).filter(PaymentOrderDB.order_id == order_id).first()
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
+    if order.status != "PAID":
+        raise HTTPException(status_code=400, detail="Cannot generate invoice for unpaid or failed payment orders.")
+
+    invoice_path = order.invoice_path
+    invoice_no = order.invoice_number
+
+    if not invoice_path or not os.path.exists(invoice_path):
+        invoice_data = {
+            "order_id": order.order_id,
+            "payment_id": order.payment_id or "PAID",
+            "user_email": order.user_email,
+            "user_phone": order.user_phone,
+            "business_name": order.business_name or "Enterprise",
+            "dpr_type": order.dpr_type or "Detailed Project Report (DPR)",
+            "plan_category": order.plan_category or "Core Plan",
+            "amount_inr": order.amount_inr or 799.0,
+            "currency": order.currency or "INR",
+            "paid_at": order.paid_at or datetime.utcnow(),
+            "invoice_number": invoice_no
+        }
+        invoice_no, invoice_path = await InvoiceService.generate_invoice_pdf(invoice_data)
+        order.invoice_number = invoice_no
+        order.invoice_path = invoice_path
+        db.commit()
+
+    return FileResponse(
+        invoice_path,
+        media_type="application/pdf",
+        filename=f"{invoice_no or 'Tax_Invoice'}.pdf",
+        headers={"Content-Disposition": f'inline; filename="{invoice_no or "Tax_Invoice"}.pdf"'}
+    )

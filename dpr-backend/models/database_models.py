@@ -477,6 +477,8 @@ class PaymentOrderDB(Base):
     error_code = Column(String(100), nullable=True)
     error_description = Column(Text, nullable=True)
     metadata_json = Column(JSON, nullable=True)
+    invoice_number = Column(String(100), nullable=True, index=True)
+    invoice_path = Column(String(500), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)
     updated_at = Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
     paid_at = Column(DateTime(timezone=True), nullable=True)

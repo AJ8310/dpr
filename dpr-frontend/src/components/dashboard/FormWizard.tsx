@@ -20,6 +20,7 @@ import {
   verifyRazorpayPayment,
   recordPaymentFailure,
   checkPaymentOrderStatus,
+  downloadPaymentInvoice,
 } from '@/lib/api';
 import { compressImageClientSide } from '@/lib/imageCompressor';
 import DPRGenerationModal from './DPRGenerationModal';
@@ -174,6 +175,8 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
   const [generating, setGenerating] = useState(false);
   const [paymentUnlocked, setPaymentUnlocked] = useState(false);
   const [lastOrderId, setLastOrderId] = useState<string>('');
+  const [invoiceNumber, setInvoiceNumber] = useState<string>('');
+  const [downloadingInvoice, setDownloadingInvoice] = useState(false);
   const [checkingPayment, setCheckingPayment] = useState(false);
   const [allowTrackChange, setAllowTrackChange] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
@@ -707,6 +710,31 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
     };
   };
 
+    const handleDownloadInvoice = async () => {
+    const orderIdToUse = lastOrderId || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_paid_order_id') : '');
+    if (!orderIdToUse) {
+      alert(language === 'kn' ? 'ಯಾವುದೇ ಪಾವತಿ ಆರ್ಡರ್ ಕಂಡುಬಂದಿಲ್ಲ.' : language === 'hi' ? 'कोई सक्रिय भुगतान ऑर्डर नहीं मिला।' : 'No payment order found to download invoice.');
+      return;
+    }
+    setDownloadingInvoice(true);
+    try {
+      const blob = await downloadPaymentInvoice(orderIdToUse);
+      const url = window.URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+      const link = document.createElement('a');
+      link.href = url;
+      const invNum = invoiceNumber || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_invoice_number') : '') || 'Tax_Invoice';
+      link.setAttribute('download', `${invNum}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err: any) {
+      console.error('Invoice download exception:', err);
+      alert('Invoice Download Notice: ' + (err?.response?.data?.detail || err?.message || 'Failed to download invoice.'));
+    } finally {
+      setDownloadingInvoice(false);
+    }
+  };
+
   const handleGeneratePDF = async () => {
     const validation = validateProjectDetails();
     if (!validation.isValid) {
@@ -758,10 +786,10 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
 
       if (formData.email) {
         const emailNotice = language === 'kn'
-          ? `✅ ಅಧಿಕೃತ ಡಿಪಿಆರ್ ವರದಿ ಸಿದ್ಧವಾಗಿದೆ!\n\nವರದಿಯನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಲಾಗಿದೆ ಮತ್ತು ನಿಮ್ಮ ನೋಂದಾಯಿತ ಇಮೇಲ್ ವಿಳಾಸಕ್ಕೆ (${formData.email}) ಕಳುಹಿಸಲಾಗಿದೆ.`
+          ? `✅ ಅಧಿಕೃತ ಡಿಪಿಆರ್ ವರದಿ ಸಿದ್ಧವಾಗಿದೆ!\n\nವರದಿಯನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಲಾಗಿದೆ ಮತ್ತು ಅಧಿಕೃತ ತೆರಿಗೆ ಇನ್‌ವಾಯ್ಸ್‌ನೊಂದಿಗೆ ನಿಮ್ಮ ನೋಂದಾಯಿತ ಇಮೇಲ್ ವಿಳಾಸಕ್ಕೆ (${formData.email}) ಕಳುಹಿಸಲಾಗಿದೆ.`
           : language === 'hi'
-          ? `✅ आधिकारिक डीपीआर रिपोर्ट तैयार है!\n\nरिपोर्ट डाउनलोड कर दी गई है और आपके पंजीकृत ईमेल पते (${formData.email}) पर भी भेज दी गई है।`
-          : `✅ Official DPR Report Compiled!\n\nYour bankable report has been downloaded and also dispatched to your registered email (${formData.email}).`;
+          ? `✅ आधिकारिक डीपीआर रिपोर्ट तैयार है!\n\nरिपोर्ट डाउनलोड कर दी गई है और आधिकारिक टैक्स इनवॉइस के साथ आपके पंजीकृत ईमेल पते (${formData.email}) पर भी भेज दी गई है।`
+          : `✅ Official DPR Report Compiled!\n\nYour bankable report has been downloaded and dispatched along with your official Tax Invoice to your registered email (${formData.email}).`;
 
         setTimeout(() => alert(emailNotice), 500);
       }
@@ -890,7 +918,18 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
               user_email: formData.email,
+              user_phone: formData.contact_number,
+              business_name: formData.business_name,
+              customer_name: formData.contact_name || formData.declarant_name,
+              language: formData.language || language || 'en',
             });
+
+            if (verification && verification.invoice_number) {
+              setInvoiceNumber(verification.invoice_number);
+              if (typeof window !== 'undefined') {
+                sessionStorage.setItem('dpr_invoice_number', verification.invoice_number);
+              }
+            }
 
             if (verification.success) {
               setPaymentUnlocked(true);
@@ -1409,6 +1448,10 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
         const res = await checkPaymentOrderStatus(lastOrderId);
         if (res && res.paid) {
           setPaymentUnlocked(true);
+          try {
+            const invBlob = await downloadPaymentInvoice(lastOrderId);
+            setInvoiceNumber(`INV-VKF-${lastOrderId.slice(-6).toUpperCase()}`);
+          } catch(e) {}
           const successMsg = language === 'kn'
             ? 'ರೇಜರ್‌ಪೇ ಲೈವ್ ಸರ್ವರ್‌ನಿಂದ ಪಾವತಿ ಯಶಸ್ವಿಯಾಗಿದೆ! ನಿಮ್ಮ ಅಧಿಕೃತ ಡಿಪಿಆರ್ ವರದಿ ಅನ್‌ಲಾಕ್ ಆಗಿದೆ.'
             : language === 'hi'
@@ -3296,22 +3339,55 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
                       )}
 
                       {paymentUnlocked && (
-                        <div style={{ padding: '0.8rem 1.6rem', background: '#F0FDFA', border: '1.5px solid #008C95', borderRadius: '0.75rem', color: '#008C95', fontWeight: 800, fontSize: '0.98rem', textAlign: 'center' }}>
-                          <i className="fas fa-check-circle" style={{ marginRight: '8px' }}></i>
-                          {tW.labels?.paymentVerified || 'PAYMENT VERIFIED! YOUR REPORT IS FULLY UNLOCKED'}
+                        <div style={{
+                          padding: '1rem 1.6rem',
+                          background: '#F0FDFA',
+                          border: '1.5px solid #008C95',
+                          borderRadius: '0.75rem',
+                          color: '#0F766E',
+                          textAlign: 'center',
+                          width: '100%',
+                          maxWidth: '680px'
+                        }}>
+                          <div style={{ fontWeight: 800, fontSize: '1rem', color: '#008C95', marginBottom: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                            <i className="fas fa-check-circle" style={{ color: '#10B981' }}></i>
+                            {tW.labels?.paymentVerified || 'PAYMENT VERIFIED! YOUR REPORT IS FULLY UNLOCKED'}
+                          </div>
+                          <div style={{ fontSize: '0.84rem', color: '#475569' }}>
+                            {language === 'kn'
+                              ? `ಅಧಿಕೃತ ತೆರಿಗೆ ಇನ್‌ವಾಯ್ಸ್${invoiceNumber ? ` (${invoiceNumber})` : ''} ರಚಿಸಲಾಗಿದ್ದು, ನಿಮ್ಮ ನೋಂದಾಯಿತ ಇಮೇಲ್ (${formData.email || 'ಖಾತೆಗೆ'}) ಗೆ ಕಳುಹಿಸಲಾಗಿದೆ.`
+                              : language === 'hi'
+                              ? `आधिकारिक टैक्स इनवॉइस${invoiceNumber ? ` (${invoiceNumber})` : ''} जारी कर दिया गया है और आपके पंजीकृत ईमेल (${formData.email || 'खाते'}) पर भेज दिया गया है।`
+                              : `Official Tax Invoice${invoiceNumber ? ` (${invoiceNumber})` : ''} has been generated and dispatched to your registered email (${formData.email || 'address'}).`}
+                          </div>
                         </div>
                       )}
 
-                      <div style={{ display: 'flex', justifyContent: 'center', gap: '1.2rem', flexWrap: 'wrap', width: '100%' }}>
+                      <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap', width: '100%' }}>
                         <button
                           type="button"
                           onClick={handlePayAndGeneratePDF}
                           disabled={generating}
                           className="btn-next-spacious"
-                          style={{ padding: '1.2rem 2.6rem', fontSize: '1.05rem', background: paymentUnlocked ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #008C95 0%, #006F78 100%)', boxShadow: '0 8px 25px rgba(0, 140, 149, 0.35)', minWidth: '320px' }}
+                          style={{ padding: '1.2rem 2.4rem', fontSize: '1.02rem', background: paymentUnlocked ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #008C95 0%, #006F78 100%)', boxShadow: '0 8px 25px rgba(0, 140, 149, 0.35)', minWidth: '280px' }}
                         >
                           <i className={paymentUnlocked ? "fas fa-download" : "fas fa-lock-open"} style={{ marginRight: '8px' }}></i> {generating ? (tW.labels?.compilingPdf || 'Compiling PDF Engine Report...') : paymentUnlocked ? (tW.labels?.downloadPdfUnlocked || 'DOWNLOAD OFFICIAL PDF REPORT (UNLOCKED)') : `${tW.labels?.payPdf || 'PAY & DOWNLOAD OFFICIAL PDF REPORT'} (₹${getDisplayPrice()})`}
                         </button>
+
+                        {paymentUnlocked && (
+                          <button
+                            type="button"
+                            onClick={handleDownloadInvoice}
+                            disabled={downloadingInvoice}
+                            className="btn-next-spacious"
+                            style={{ padding: '1.2rem 2rem', fontSize: '1.02rem', background: '#FFFFFF', color: '#008C95', border: '2px solid #008C95', boxShadow: '0 4px 15px rgba(0, 140, 149, 0.15)', minWidth: '240px', cursor: 'pointer' }}
+                          >
+                            <i className="fas fa-file-invoice-dollar" style={{ marginRight: '8px', color: '#008C95' }}></i>
+                            {downloadingInvoice
+                              ? (language === 'kn' ? 'ಇನ್‌ವಾಯ್ಸ್ ಡೌನ್‌ಲೋಡ್ ಆಗುತ್ತಿದೆ...' : language === 'hi' ? 'इनवॉइस डाउनलोड हो रहा है...' : 'Downloading Invoice...')
+                              : (language === 'kn' ? 'ತೆರಿಗೆ ಇನ್‌ವಾಯ್ಸ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ (PDF)' : language === 'hi' ? 'टैक्स इनवॉइस डाउनलोड करें (PDF)' : 'DOWNLOAD TAX INVOICE (PDF)')}
+                          </button>
+                        )}
                       </div>
 
                       {!paymentUnlocked && (
