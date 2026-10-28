@@ -198,6 +198,17 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
       .then((res) => setMasterProjectTypes(res.project_types || []))
       .catch((err) => console.warn('Master project types fallback:', err));
 
+    if (typeof window !== 'undefined') {
+      const isPaid = sessionStorage.getItem('dpr_payment_unlocked') === 'true';
+      if (isPaid) {
+        setPaymentUnlocked(true);
+        const savedOrderId = sessionStorage.getItem('dpr_paid_order_id');
+        if (savedOrderId) setLastOrderId(savedOrderId);
+        const savedInv = sessionStorage.getItem('dpr_invoice_number');
+        if (savedInv) setInvoiceNumber(savedInv);
+      }
+    }
+
     const stored = sessionStorage.getItem('dpr_session') || localStorage.getItem('dpr_session');
     if (stored) {
       try {
@@ -796,7 +807,16 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
     } catch (err: any) {
       clearInterval(progressInterval);
       console.error('PDF Generation Exception:', err);
-      const errorDetail = err?.response?.data?.detail || err?.message || 'Server did not return a valid PDF response.';
+      let errorDetail = err?.message || 'Server did not return a valid PDF response.';
+      if (err?.response?.data instanceof Blob) {
+        try {
+          const textData = await err.response.data.text();
+          const json = JSON.parse(textData);
+          if (json.detail) errorDetail = json.detail;
+        } catch (_) {}
+      } else if (err?.response?.data?.detail) {
+        errorDetail = err.response.data.detail;
+      }
       alert(`PDF Report Generation Notice: ${errorDetail}`);
     } finally {
       setGenerating(false);
@@ -1043,9 +1063,17 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
         const res = await checkPaymentOrderStatus(lastOrderId);
         if (res && res.paid) {
           setPaymentUnlocked(true);
+          if (typeof window !== 'undefined') {
+            sessionStorage.setItem('dpr_payment_unlocked', 'true');
+            sessionStorage.setItem('dpr_paid_order_id', lastOrderId);
+          }
           try {
             const invBlob = await downloadPaymentInvoice(lastOrderId);
-            setInvoiceNumber(`INV-VKF-${lastOrderId.slice(-6).toUpperCase()}`);
+            const genInv = `INV-VKF-${lastOrderId.slice(-6).toUpperCase()}`;
+            setInvoiceNumber(genInv);
+            if (typeof window !== 'undefined') {
+              sessionStorage.setItem('dpr_invoice_number', genInv);
+            }
           } catch(e) {}
           const successMsg = language === 'kn'
             ? 'ರೇಜರ್‌ಪೇ ಲೈವ್ ಸರ್ವರ್‌ನಿಂದ ಪಾವತಿ ಯಶಸ್ವಿಯಾಗಿದೆ! ನಿಮ್ಮ ಅಧಿಕೃತ ಡಿಪಿಆರ್ ವರದಿ ಅನ್‌ಲಾಕ್ ಆಗಿದೆ.'

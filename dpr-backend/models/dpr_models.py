@@ -16,8 +16,18 @@ class MachineryItem(BaseModel):
     total: float = 0.0
 
 class DPRDataPayload(BaseModel):
+    model_config = {"extra": "allow"}
+
     dpr_type: Optional[str] = "Bank Loan DPR"
+    dpr_depth: Optional[str] = "core"
     language: Optional[str] = "en"
+    sector_id: Optional[str] = ""
+    activity_id: Optional[str] = ""
+    project_type_id: Optional[str] = ""
+    project_scale: Optional[str] = "medium"
+    geography_id: Optional[str] = "IN-KA"
+    total_cost: Optional[float] = 0.0
+    term_loan: Optional[float] = 0.0
     
     # Section 01: Basic Information
     business_name: Optional[str] = "Enterprise"
