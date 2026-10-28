@@ -1,7 +1,11 @@
 import os
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
+from pathlib import Path
 
+_backend_env = Path(__file__).resolve().parent / ".env"
+if _backend_env.exists():
+    load_dotenv(dotenv_path=_backend_env)
 load_dotenv()
 
 class Settings(BaseSettings):

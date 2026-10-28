@@ -492,16 +492,20 @@ Support: support@infopaceindia.com | info@visionkarnataka.org
                         server.sendmail(from_addr, [recipient_email], msg.as_string())
 
                 print(f"[Email Service] Successfully sent Tax Invoice email to {recipient_email}!")
-                log_entry = EmailLogDB(
-                    recipient_email=recipient_email,
-                    business_name=business_name,
-                    subject=subject,
-                    status="SENT",
-                    order_id=order_id,
-                    pdf_filename=attachment_filename
-                )
-                db.add(log_entry)
-                db.commit()
+                try:
+                    log_entry = EmailLogDB(
+                        recipient_email=recipient_email,
+                        business_name=business_name,
+                        subject=subject,
+                        status="SENT",
+                        order_id=order_id,
+                        pdf_filename=attachment_filename
+                    )
+                    db.add(log_entry)
+                    db.commit()
+                except Exception as log_err:
+                    print(f"[Email Service] Notice: Could not write email log to db: {log_err}")
+                    db.rollback()
                 return {"success": True, "status": "SENT", "recipient": recipient_email, "invoice_number": invoice_number}
             else:
                 # Local Archival
@@ -667,16 +671,20 @@ Support: support@infopaceindia.com | info@visionkarnataka.org
                         server.sendmail(from_addr, [recipient_email], msg.as_string())
 
                 print(f"[Email Service] Successfully sent live DPR report email to {recipient_email}!")
-                log_entry = EmailLogDB(
-                    recipient_email=recipient_email,
-                    business_name=business_name,
-                    subject=subject,
-                    status="SENT",
-                    order_id=order_id,
-                    pdf_filename=attachment_filename
-                )
-                db.add(log_entry)
-                db.commit()
+                try:
+                    log_entry = EmailLogDB(
+                        recipient_email=recipient_email,
+                        business_name=business_name,
+                        subject=subject,
+                        status="SENT",
+                        order_id=order_id,
+                        pdf_filename=attachment_filename
+                    )
+                    db.add(log_entry)
+                    db.commit()
+                except Exception as log_err:
+                    print(f"[Email Service] Notice: Could not write email log to db: {log_err}")
+                    db.rollback()
                 return {"success": True, "status": "SENT", "recipient": recipient_email}
             else:
                 # Local Archival
