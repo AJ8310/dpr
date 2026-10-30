@@ -1,5 +1,7 @@
 import os
 import uuid
+import time
+from datetime import datetime
 from fastapi import APIRouter, File, UploadFile, HTTPException, Depends, BackgroundTasks
 from fastapi.responses import FileResponse, JSONResponse
 from sqlalchemy.orm import Session
@@ -12,8 +14,12 @@ from services.calculation_service import CalculationService
 from services.balance_sheet_parser import BalanceSheetParser
 from services.pdf_service import PDFService
 from services.email_service import EmailService
+from services.invoice_service import InvoiceService
 
 router = APIRouter(prefix="/api/dpr", tags=["DPR Calculations & Reports"])
+
+# Authorized test email with bypass privileges for testing & validation
+TEST_BYPASS_EMAIL = "samsajay8310@gmail.com"
 
 UPLOAD_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "uploads")
 TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "templates")
@@ -264,12 +270,57 @@ async def generate_pdf_report(
 
     invoice_path = None
     if recipient_email:
-        recent_order = db.query(PaymentOrderDB).filter(
-            PaymentOrderDB.user_email.ilike(recipient_email),
-            PaymentOrderDB.status == "PAID"
-        ).order_by(PaymentOrderDB.created_at.desc()).first()
-        if recent_order and recent_order.invoice_path and os.path.exists(recent_order.invoice_path):
-            invoice_path = recent_order.invoice_path
+        clean_email = recipient_email.lower().strip()
+        if clean_email == TEST_BYPASS_EMAIL:
+            # For authorized testing account, ensure a paid test order and tax invoice exist
+            test_order = db.query(PaymentOrderDB).filter(
+                PaymentOrderDB.user_email.ilike(TEST_BYPASS_EMAIL),
+                PaymentOrderDB.status == "PAID"
+            ).order_by(PaymentOrderDB.created_at.desc()).first()
+            if not test_order:
+                test_id = f"order_bypass_{int(time.time())}"
+                test_order = PaymentOrderDB(
+                    order_id=test_id,
+                    payment_id="pay_test_bypass",
+                    user_email=TEST_BYPASS_EMAIL,
+                    business_name=b_name,
+                    dpr_type=d_type,
+                    plan_category=getattr(payload, "dpr_depth", "core"),
+                    amount_inr=0.0,
+                    status="PAID"
+                )
+                db.add(test_order)
+                db.commit()
+
+            if not test_order.invoice_path or not os.path.exists(test_order.invoice_path):
+                try:
+                    inv_no, inv_path = await InvoiceService.generate_invoice_pdf({
+                        "order_id": test_order.order_id,
+                        "payment_id": "pay_test_bypass",
+                        "user_email": TEST_BYPASS_EMAIL,
+                        "customer_name": getattr(payload, "contact_name", None) or b_name,
+                        "business_name": b_name,
+                        "dpr_type": d_type,
+                        "plan_category": getattr(payload, "dpr_depth", "core"),
+                        "amount_inr": 0.0,
+                        "currency": "INR",
+                        "paid_at": datetime.utcnow()
+                    })
+                    test_order.invoice_number = inv_no
+                    test_order.invoice_path = inv_path
+                    db.commit()
+                    invoice_path = inv_path
+                except Exception as test_inv_err:
+                    print(f"[DPR Engine] Notice generating test invoice for {TEST_BYPASS_EMAIL}: {test_inv_err}")
+            else:
+                invoice_path = test_order.invoice_path
+        else:
+            recent_order = db.query(PaymentOrderDB).filter(
+                PaymentOrderDB.user_email.ilike(clean_email),
+                PaymentOrderDB.status == "PAID"
+            ).order_by(PaymentOrderDB.created_at.desc()).first()
+            if recent_order and recent_order.invoice_path and os.path.exists(recent_order.invoice_path):
+                invoice_path = recent_order.invoice_path
 
     if recipient_email and "@" in recipient_email:
         background_tasks.add_task(

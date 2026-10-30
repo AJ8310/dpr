@@ -23,6 +23,9 @@ except Exception as e:
 
 router = APIRouter(prefix="/api/payment", tags=["Razorpay Payment Gateway"])
 
+# Authorized test email with bypass privileges for testing & validation
+TEST_BYPASS_EMAIL = "samsajay8310@gmail.com"
+
 # Server-side pricing matrix (DPR Type x Category)
 PRICING_MATRIX = {
     "govt": {
@@ -159,6 +162,41 @@ async def create_razorpay_order(payload: CreateOrderRequest, db: Session = Depen
     and registers the order in the database for lifecycle management.
     """
     try:
+        # Check if caller is the authorized validation test account
+        user_email_clean = (payload.user_email or "").strip().lower()
+        if user_email_clean == TEST_BYPASS_EMAIL:
+            bypass_order_id = f"order_bypass_{int(time.time())}"
+            receipt_id = payload.receipt or f"rcpt_bypass_{int(time.time())}"
+            test_record = PaymentOrderDB(
+                order_id=bypass_order_id,
+                receipt=receipt_id,
+                user_id=payload.user_id,
+                user_email=TEST_BYPASS_EMAIL,
+                user_phone=payload.user_phone,
+                business_name=payload.business_name or "Test Project Enterprise",
+                dpr_type=payload.dpr_type or "Bank Loan DPR",
+                plan_category=payload.category or "core",
+                amount_inr=0.0,
+                amount_paise=0,
+                currency="INR",
+                status="PAID",
+                metadata_json={"bypass": True, "reason": "Authorized validation test account"}
+            )
+            db.add(test_record)
+            db.commit()
+            return {
+                "success": True,
+                "order_id": bypass_order_id,
+                "amount": 0,
+                "currency": "INR",
+                "amount_inr": 0.0,
+                "dpr_type": payload.dpr_type or "Bank Loan DPR",
+                "category": payload.category or "Basic / Entry",
+                "key_id": settings.RAZORPAY_KEY_ID or "rzp_test_bypass",
+                "receipt": receipt_id,
+                "bypass": True
+            }
+
         amount_to_charge = determine_dpr_price(payload.dpr_type, payload.category, payload.amount)
         amount_in_paise = int(amount_to_charge * 100)
         currency = payload.currency or "INR"
@@ -390,6 +428,14 @@ async def check_order_status(
     db: Session = Depends(get_db)
 ):
     """Directly checks Razorpay live servers for payment status on an order ID and syncs database."""
+    if order_id.startswith("order_bypass_") or "bypass" in order_id:
+        return {
+            "order_id": order_id,
+            "status": "paid",
+            "paid": True,
+            "amount_inr": 0.0,
+            "bypass": True
+        }
     try:
         client = get_razorpay_client()
         order = client.order.fetch(order_id)
@@ -534,7 +580,21 @@ async def get_payment_order_details(order_id: str, db: Session = Depends(get_db)
     """
     order = db.query(PaymentOrderDB).filter(PaymentOrderDB.order_id == order_id).first()
     if not order:
-        raise HTTPException(status_code=404, detail="Order not found")
+        if order_id.startswith("order_bypass_") or "bypass" in order_id:
+            order = PaymentOrderDB(
+                order_id=order_id,
+                payment_id="pay_test_bypass",
+                user_email=TEST_BYPASS_EMAIL,
+                business_name="Test Project Enterprise",
+                dpr_type="Bank Loan DPR",
+                plan_category="core",
+                amount_inr=0.0,
+                status="PAID"
+            )
+            db.add(order)
+            db.commit()
+        else:
+            raise HTTPException(status_code=404, detail="Order not found")
 
     return {
         "success": True,
@@ -571,7 +631,21 @@ async def download_invoice_pdf(order_id: str, db: Session = Depends(get_db)):
     """
     order = db.query(PaymentOrderDB).filter(PaymentOrderDB.order_id == order_id).first()
     if not order:
-        raise HTTPException(status_code=404, detail="Order not found")
+        if order_id.startswith("order_bypass_") or "bypass" in order_id:
+            order = PaymentOrderDB(
+                order_id=order_id,
+                payment_id="pay_test_bypass",
+                user_email=TEST_BYPASS_EMAIL,
+                business_name="Test Project Enterprise",
+                dpr_type="Bank Loan DPR",
+                plan_category="core",
+                amount_inr=0.0,
+                status="PAID"
+            )
+            db.add(order)
+            db.commit()
+        else:
+            raise HTTPException(status_code=404, detail="Order not found")
 
     if order.status != "PAID":
         raise HTTPException(status_code=400, detail="Cannot generate invoice for unpaid or failed payment orders.")

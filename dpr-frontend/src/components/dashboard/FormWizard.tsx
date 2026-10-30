@@ -37,6 +37,27 @@ interface FormWizardProps {
   onNextStep: () => void;
 }
 
+// Dedicated test email allowed to bypass payment gateway for testing & validation
+const TEST_BYPASS_EMAIL = 'samsajay8310@gmail.com';
+
+export const isBypassUser = (email?: string): boolean => {
+  if (email && email.trim().toLowerCase() === TEST_BYPASS_EMAIL) {
+    return true;
+  }
+  if (typeof window !== 'undefined') {
+    try {
+      const stored = sessionStorage.getItem('dpr_session') || localStorage.getItem('dpr_session');
+      if (stored) {
+        const sess = JSON.parse(stored);
+        if (sess?.email && sess.email.trim().toLowerCase() === TEST_BYPASS_EMAIL) {
+          return true;
+        }
+      }
+    } catch (_) {}
+  }
+  return false;
+};
+
 export default function FormWizard({ initialService, currentPlanId, activeStep, setActiveStep }: FormWizardProps) {
   const { language } = useLanguage();
   const tW = wizardTranslations[language] || wizardTranslations.en;
@@ -198,22 +219,13 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
       .then((res) => setMasterProjectTypes(res.project_types || []))
       .catch((err) => console.warn('Master project types fallback:', err));
 
-    if (typeof window !== 'undefined') {
-      const isPaid = sessionStorage.getItem('dpr_payment_unlocked') === 'true';
-      if (isPaid) {
-        setPaymentUnlocked(true);
-        const savedOrderId = sessionStorage.getItem('dpr_paid_order_id');
-        if (savedOrderId) setLastOrderId(savedOrderId);
-        const savedInv = sessionStorage.getItem('dpr_invoice_number');
-        if (savedInv) setInvoiceNumber(savedInv);
-      }
-    }
-
     const stored = sessionStorage.getItem('dpr_session') || localStorage.getItem('dpr_session');
+    let sessEmail = '';
     if (stored) {
       try {
         const sess = JSON.parse(stored);
         if (sess) {
+          sessEmail = (sess.email || '').trim().toLowerCase();
           setFormData((prev) => ({
             ...prev,
             contact_name: prev.contact_name || sess.name || '',
@@ -224,6 +236,36 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
         }
       } catch (e) {
         console.error(e);
+      }
+    }
+
+    if (typeof window !== 'undefined') {
+      const isBypass = sessEmail === TEST_BYPASS_EMAIL;
+      if (isBypass) {
+        setPaymentUnlocked(true);
+        setLastOrderId('order_bypass_samsajay8310');
+        setInvoiceNumber('INV-TEST-BYPASS');
+        sessionStorage.setItem('dpr_payment_unlocked', 'true');
+        sessionStorage.setItem('dpr_paid_order_id', 'order_bypass_samsajay8310');
+        sessionStorage.setItem('dpr_invoice_number', 'INV-TEST-BYPASS');
+      } else {
+        const isPaid = sessionStorage.getItem('dpr_payment_unlocked') === 'true';
+        const savedOrderId = sessionStorage.getItem('dpr_paid_order_id') || '';
+        const isBypassOrder = savedOrderId.includes('bypass') || savedOrderId.includes('samsajay8310');
+        if (isPaid && !isBypassOrder) {
+          setPaymentUnlocked(true);
+          if (savedOrderId) setLastOrderId(savedOrderId);
+          const savedInv = sessionStorage.getItem('dpr_invoice_number');
+          if (savedInv) setInvoiceNumber(savedInv);
+        } else if (isBypassOrder) {
+          // Clear test bypass flag for other users
+          sessionStorage.removeItem('dpr_payment_unlocked');
+          sessionStorage.removeItem('dpr_paid_order_id');
+          sessionStorage.removeItem('dpr_invoice_number');
+          setPaymentUnlocked(false);
+          setLastOrderId('');
+          setInvoiceNumber('');
+        }
       }
     }
 
@@ -722,7 +764,8 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
   };
 
     const handleDownloadInvoice = async () => {
-    const orderIdToUse = lastOrderId || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_paid_order_id') : '');
+    const userIsBypass = isBypassUser(formData.email);
+    const orderIdToUse = lastOrderId || (typeof window !== 'undefined' ? sessionStorage.getItem('dpr_paid_order_id') : '') || (userIsBypass ? 'order_bypass_samsajay8310' : '');
     if (!orderIdToUse) {
       alert(language === 'kn' ? 'ಯಾವುದೇ ಪಾವತಿ ಆರ್ಡರ್ ಕಂಡುಬಂದಿಲ್ಲ.' : language === 'hi' ? 'कोई सक्रिय भुगतान ऑर्डर नहीं मिला।' : 'No payment order found to download invoice.');
       return;
@@ -747,23 +790,26 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
   };
 
   const handleGeneratePDF = async () => {
-    const validation = validateProjectDetails();
-    if (!validation.isValid) {
-      const header = language === 'kn'
-        ? '⚠️ ವರದಿ ರಚಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ - ಅಗತ್ಯ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿಲ್ಲ:'
-        : language === 'hi'
-        ? '⚠️ रिपोर्ट तैयार नहीं की जा सकती - आवश्यक विवरण छूटे हुए हैं:'
-        : '⚠️ Cannot compile DPR report - Essential project details are missing:';
+    const userIsBypass = isBypassUser(formData.email);
+    if (!userIsBypass) {
+      const validation = validateProjectDetails();
+      if (!validation.isValid) {
+        const header = language === 'kn'
+          ? '⚠️ ವರದಿ ರಚಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ - ಅಗತ್ಯ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿಲ್ಲ:'
+          : language === 'hi'
+          ? '⚠️ रिपोर्ट तैयार नहीं की जा सकती - आवश्यक विवरण छूटे हुए हैं:'
+          : '⚠️ Cannot compile DPR report - Essential project details are missing:';
 
-      const footer = language === 'kn'
-        ? '\n\nಮುಂದುವರಿಯಲು ದಯವಿಟ್ಟು ಈ ಅಗತ್ಯ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿ.'
-        : language === 'hi'
-        ? '\n\nआगे बढ़ने के लिए कृपया इन आवश्यक विवरणों को भरें।'
-        : '\n\nPlease fill in these required project details to proceed.';
+        const footer = language === 'kn'
+          ? '\n\nಮುಂದುವರಿಯಲು ದಯವಿಟ್ಟು ಈ ಅಗತ್ಯ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿ.'
+          : language === 'hi'
+          ? '\n\nआगे बढ़ने के लिए कृपया इन आवश्यक विवरणों को भरें।'
+          : '\n\nPlease fill in these required project details to proceed.';
 
-      alert(`${header}\n\n• ${validation.errors.join('\n• ')}${footer}`);
-      setActiveStep(validation.stepToRedirect);
-      return;
+        alert(`${header}\n\n• ${validation.errors.join('\n• ')}${footer}`);
+        setActiveStep(validation.stepToRedirect);
+        return;
+      }
     }
 
     setGenerating(true);
@@ -858,7 +904,25 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
   };
 
   const handlePayAndGeneratePDF = async () => {
-    // 0. Enforce field validation before initiating checkout or creating payment order
+    const userIsBypass = isBypassUser(formData.email);
+
+    // If test validation user (samsajay8310@gmail.com), bypass payment gateway completely
+    if (userIsBypass) {
+      if (!formData.business_name || formData.business_name.trim().length < 2) {
+        formData.business_name = 'Cauvery Agro Foods Pvt Ltd';
+      }
+      if (!formData.contact_name) {
+        formData.contact_name = 'Ajay S';
+      }
+      if (!formData.primary_product) {
+        formData.primary_product = 'Commercial Agro Food Processing & Value Addition';
+      }
+      setPaymentUnlocked(true);
+      await handleGeneratePDF();
+      return;
+    }
+
+    // 0. Enforce field validation before initiating checkout or creating payment order for regular users
     const validation = validateProjectDetails();
     if (!validation.isValid) {
       const header = language === 'kn'
@@ -2805,6 +2869,8 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
                     }
                   };
                   const activePlanMeta = planNameMap[normalizedDepth] || planNameMap.entry;
+                  const isBypass = isBypassUser(formData.email);
+                  const isEffectiveUnlocked = paymentUnlocked || isBypass;
 
                   return (
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.4rem', paddingTop: '0.8rem', width: '100%' }}>
@@ -2826,8 +2892,8 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
                             <i className="fas fa-file-invoice-dollar" style={{ color: '#008C95' }} />
                             {tW.labels?.orderSummaryTitle || 'Payment Order Summary'}
                           </span>
-                          <span style={{ fontSize: '0.74rem', fontWeight: 800, color: paymentUnlocked ? '#059669' : '#008C95', background: paymentUnlocked ? '#ECFDF5' : '#F0FDFA', padding: '3px 12px', borderRadius: '9999px', border: paymentUnlocked ? '1px solid #A7F3D0' : '1px solid #CCFBF1' }}>
-                            {paymentUnlocked ? (tW.labels?.paymentVerified || 'PAID & UNLOCKED') : 'RAZORPAY SECURE GATEWAY'}
+                          <span style={{ fontSize: '0.74rem', fontWeight: 800, color: (isBypass || paymentUnlocked) ? '#059669' : '#008C95', background: (isBypass || paymentUnlocked) ? '#ECFDF5' : '#F0FDFA', padding: '3px 12px', borderRadius: '9999px', border: (isBypass || paymentUnlocked) ? '1px solid #A7F3D0' : '1px solid #CCFBF1' }}>
+                            {isBypass ? 'TEST MODE: PAYMENT SKIPPED' : paymentUnlocked ? (tW.labels?.paymentVerified || 'PAID & UNLOCKED') : 'RAZORPAY SECURE GATEWAY'}
                           </span>
                         </div>
 
@@ -2852,20 +2918,36 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
                           </div>
                           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderTop: '1px dashed #E2E8F0', marginTop: '4px', paddingTop: '8px' }}>
                             <span style={{ color: '#0F172A', fontWeight: 700, fontSize: '0.95rem' }}>{tW.labels?.totalPayableLabel || 'Total Amount Payable:'}</span>
-                            <strong style={{ fontSize: '1.25rem', color: '#008C95' }}>₹{getDisplayPrice()}</strong>
+                            {isBypass ? (
+                              <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <s style={{ fontSize: '0.92rem', color: '#94A3B8' }}>₹{getDisplayPrice()}</s>
+                                <strong style={{ fontSize: '1.2rem', color: '#059669' }}>₹0 (Test Validation)</strong>
+                              </span>
+                            ) : (
+                              <strong style={{ fontSize: '1.25rem', color: '#008C95' }}>₹{getDisplayPrice()}</strong>
+                            )}
                           </div>
                         </div>
 
-                        <div style={{ fontSize: '0.78rem', color: '#008C95', display: 'flex', alignItems: 'center', gap: '8px', background: '#F0FDFA', padding: '8px 12px', borderRadius: '8px', border: '1px solid #CCFBF1', marginTop: '2px' }}>
-                          <i className="fas fa-envelope-open-text" style={{ color: '#008C95', fontSize: '0.95rem' }} />
-                          <span>
-                            {language === 'kn'
-                              ? `ಪಾವತಿ ಯಶಸ್ವಿಯಾದ ತಕ್ಷಣ, ಅಧಿಕೃತ PDF ವರದಿಯನ್ನು ನಿಮ್ಮ ನೋಂದಾಯಿತ ಇಮೇಲ್ (${formData.email || 'ಖಾತೆಗೆ'}) ಗೆ ಕಳುಹಿಸಲಾಗುವುದು.`
-                              : language === 'hi'
-                              ? `भुगतान सफल होते ही, आधिकारिक पीडीएफ रिपोर्ट आपके पंजीकृत ईमेल (${formData.email || 'खाते'}) पर भेज दी जाएगी।`
-                              : `As soon as payment succeeds, the official DPR report will be automatically dispatched to your email (${formData.email || 'registered address'}).`}
-                          </span>
-                        </div>
+                        {isBypass ? (
+                          <div style={{ fontSize: '0.82rem', color: '#065F46', display: 'flex', alignItems: 'center', gap: '8px', background: '#ECFDF5', padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #A7F3D0', marginTop: '2px' }}>
+                            <i className="fas fa-check-circle" style={{ color: '#059669', fontSize: '1.05rem' }} />
+                            <span>
+                              <strong>Testing Mode Active:</strong> Payment gateway is skipped for <strong>samsajay8310@gmail.com</strong>. The official report will be generated and emailed directly.
+                            </span>
+                          </div>
+                        ) : (
+                          <div style={{ fontSize: '0.78rem', color: '#008C95', display: 'flex', alignItems: 'center', gap: '8px', background: '#F0FDFA', padding: '8px 12px', borderRadius: '8px', border: '1px solid #CCFBF1', marginTop: '2px' }}>
+                            <i className="fas fa-envelope-open-text" style={{ color: '#008C95', fontSize: '0.95rem' }} />
+                            <span>
+                              {language === 'kn'
+                                ? `ಪಾವತಿ ಯಶಸ್ವಿಯಾದ ತಕ್ಷಣ, ಅಧಿಕೃತ PDF ವರದಿಯನ್ನು ನಿಮ್ಮ ನೋಂದಾಯಿತ ಇಮೇಲ್ (${formData.email || 'ಖಾತೆಗೆ'}) ಗೆ ಕಳುಹಿಸಲಾಗುವುದು.`
+                                : language === 'hi'
+                                ? `भुगतान सफल होते ही, आधिकारिक पीडीएफ रिपोर्ट आपके पंजीकृत ईमेल (${formData.email || 'खाते'}) पर भेज दी जाएगी।`
+                                : `As soon as payment succeeds, the official DPR report will be automatically dispatched to your email (${formData.email || 'registered address'}).`}
+                            </span>
+                          </div>
+                        )}
 
                         <div style={{ fontSize: '0.76rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '8px', background: '#F8FAFC', padding: '8px 12px', borderRadius: '8px', border: '1px solid #E2E8F0', marginTop: '2px' }}>
                           <i className="fas fa-shield-alt" style={{ color: '#10B981', fontSize: '0.9rem' }} />
@@ -2889,7 +2971,7 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
                         </div>
                       </div>
 
-                      {paymentUnlocked && (
+                      {isEffectiveUnlocked && (
                         <div style={{
                           padding: '1rem 1.6rem',
                           background: '#F0FDFA',
@@ -2902,10 +2984,12 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
                         }}>
                           <div style={{ fontWeight: 800, fontSize: '1rem', color: '#008C95', marginBottom: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                             <i className="fas fa-check-circle" style={{ color: '#10B981' }}></i>
-                            {tW.labels?.paymentVerified || 'PAYMENT VERIFIED! YOUR REPORT IS FULLY UNLOCKED'}
+                            {isBypass ? 'REPORT UNLOCKED (TESTING VALIDATION MODE)' : (tW.labels?.paymentVerified || 'PAYMENT VERIFIED! YOUR REPORT IS FULLY UNLOCKED')}
                           </div>
                           <div style={{ fontSize: '0.84rem', color: '#475569' }}>
-                            {language === 'kn'
+                            {isBypass
+                              ? 'Payment gateway is bypassed for samsajay8310@gmail.com. Click the button below to generate, download and email your official DPR report.'
+                              : language === 'kn'
                               ? `ಅಧಿಕೃತ ತೆರಿಗೆ ಇನ್‌ವಾಯ್ಸ್${invoiceNumber ? ` (${invoiceNumber})` : ''} ರಚಿಸಲಾಗಿದ್ದು, ನಿಮ್ಮ ನೋಂದಾಯಿತ ಇಮೇಲ್ (${formData.email || 'ಖಾತೆಗೆ'}) ಗೆ ಕಳುಹಿಸಲಾಗಿದೆ.`
                               : language === 'hi'
                               ? `आधिकारिक टैक्स इनवॉइस${invoiceNumber ? ` (${invoiceNumber})` : ''} जारी कर दिया गया है और आपके पंजीकृत ईमेल (${formData.email || 'खाते'}) पर भेज दिया गया है।`
@@ -2920,12 +3004,12 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
                           onClick={handlePayAndGeneratePDF}
                           disabled={generating}
                           className="btn-next-spacious"
-                          style={{ padding: '1.2rem 2.4rem', fontSize: '1.02rem', background: paymentUnlocked ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #008C95 0%, #006F78 100%)', boxShadow: '0 8px 25px rgba(0, 140, 149, 0.35)', minWidth: '280px' }}
+                          style={{ padding: '1.2rem 2.4rem', fontSize: '1.02rem', background: isEffectiveUnlocked ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #008C95 0%, #006F78 100%)', boxShadow: '0 8px 25px rgba(0, 140, 149, 0.35)', minWidth: '280px' }}
                         >
-                          <i className={paymentUnlocked ? "fas fa-download" : "fas fa-lock-open"} style={{ marginRight: '8px' }}></i> {generating ? (tW.labels?.compilingPdf || 'Compiling PDF Engine Report...') : paymentUnlocked ? (tW.labels?.downloadPdfUnlocked || 'DOWNLOAD OFFICIAL PDF REPORT (UNLOCKED)') : `${tW.labels?.payPdf || 'PAY & DOWNLOAD OFFICIAL PDF REPORT'} (₹${getDisplayPrice()})`}
+                          <i className={isEffectiveUnlocked ? "fas fa-download" : "fas fa-lock-open"} style={{ marginRight: '8px' }}></i> {generating ? (tW.labels?.compilingPdf || 'Compiling PDF Engine Report...') : isBypass ? 'GENERATE & DOWNLOAD OFFICIAL PDF REPORT (TEST MODE)' : isEffectiveUnlocked ? (tW.labels?.downloadPdfUnlocked || 'DOWNLOAD OFFICIAL PDF REPORT (UNLOCKED)') : `${tW.labels?.payPdf || 'PAY & DOWNLOAD OFFICIAL PDF REPORT'} (₹${getDisplayPrice()})`}
                         </button>
 
-                        {paymentUnlocked && (
+                        {isEffectiveUnlocked && (
                           <button
                             type="button"
                             onClick={handleDownloadInvoice}
@@ -2941,7 +3025,7 @@ export default function FormWizard({ initialService, currentPlanId, activeStep, 
                         )}
                       </div>
 
-                      {!paymentUnlocked && (
+                      {!isEffectiveUnlocked && (
                         <div style={{ textAlign: 'center', marginTop: '0.2rem' }}>
                           <button
                             type="button"
